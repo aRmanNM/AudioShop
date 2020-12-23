@@ -72,12 +72,7 @@ namespace API
             app.UseHttpsRedirection();
 
             app.UseRouting();
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                FileProvider = new PhysicalFileProvider(
-                    Path.Combine(env.ContentRootPath, "Data/StaticFiles")),
-                RequestPath = "/StaticFiles"
-            });
+            app.UseStaticFiles();
             // app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseAuthentication();
             app.UseAuthorization();
