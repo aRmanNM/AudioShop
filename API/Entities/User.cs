@@ -8,5 +8,6 @@ namespace API.Entities
     {
         public string DisplayName { get; set; }
         public ICollection<UserRole> UserRoles { get; set; }
+        public ICollection<Order> Orders { get; set; }
     }
 }

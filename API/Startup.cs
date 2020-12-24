@@ -39,8 +39,9 @@ namespace API
             services.AddControllers();
             services.AddScoped<IStoreService, StoreService>();
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IOrderService, OrderService>();
             services.AddAutoMapper(typeof(MappingProfiles));
-            services.AddDbContext<StoreContext>(x => x.UseSqlite(_config.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<StoreContext>(x => x.UseSqlServer(_config.GetConnectionString("DefaultConnection")));
 
             services.AddIdentityCore<User>().AddRoles<Role>().
                 AddRoleValidator<RoleValidator<Role>>().AddRoleManager<RoleManager<Role>>().

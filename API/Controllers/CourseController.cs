@@ -13,7 +13,6 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize]
     public class CourseController : ControllerBase
     {
         private readonly IStoreService _storeService;
@@ -32,7 +31,6 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<CourseDto>> GetCourseById(int id)
         {
             var course = await _storeService.GetCourseById(id);
