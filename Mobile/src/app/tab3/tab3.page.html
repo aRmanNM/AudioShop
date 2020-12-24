@@ -1,0 +1,28 @@
+<ion-content [fullscreen]="true">
+  <ion-list dir="rtl" *ngIf="basket">
+    <ion-item *ngFor="let course of basket.courses">
+      <ion-avatar slot="start">
+        <ion-icon name="headset-outline" size="large"></ion-icon>
+      </ion-avatar>
+      <ion-label>
+        <h2>{{course.name}}</h2>
+        <p>
+          {{course.description}}
+          <span style="float: left">{{course.price}} تومان</span>
+        </p>
+      </ion-label>
+      <ion-button (click)="removeCourseFromBasket(course)">حذف</ion-button>
+    </ion-item>
+  </ion-list>
+</ion-content>
+
+<ion-footer *ngIf="basket.courses.length > 0">
+  <div class="footer">
+    <ion-button slot="" (click)="addCoursesToUser()">
+      نهایی کردن خرید
+    </ion-button>
+    <ion-label color="primary">
+      {{totalPrice}} هزینه مجموعه:
+    </ion-label>
+  </div>
+</ion-footer>
