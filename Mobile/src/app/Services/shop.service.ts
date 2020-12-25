@@ -47,7 +47,7 @@ export class ShopService {
     }
 
     let user: User = JSON.parse(localStorage.getItem('user'));
-    courses.courses.forEach(element => {
+    courses.forEach(element => {
       if (!user.courses.find(c => c.id === element.courseId)) {
         user.courses.push(element);
       }
