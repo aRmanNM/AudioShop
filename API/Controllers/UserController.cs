@@ -1,6 +1,9 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using API.Dtos;
 using API.Entities;
 using API.Services;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,15 +15,18 @@ namespace API.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
-        public UserController(IUserService userService)
+        private readonly IMapper _mapper;
+        public UserController(IUserService userService, IMapper mapper)
         {
+            _mapper = mapper;
             _userService = userService;
         }
 
         [HttpGet("{userId}")]
-        public async Task<ActionResult<Course>> GetUserCourses(string userId){
+        public async Task<ActionResult<CourseDto>> GetUserCourses(string userId)
+        {
             var courses = await _userService.GetUserCourses(userId);
-            return Ok(courses);
+            return Ok(_mapper.Map<IEnumerable<Course>, IEnumerable<CourseDto>>(courses));
         }
     }
 }
