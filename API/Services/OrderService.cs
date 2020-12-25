@@ -18,12 +18,21 @@ namespace API.Services
         public async Task CreateOrder(Order order)
         {
             await _context.AddAsync(order);
-            await _context.SaveChangesAsync();
+            await SaveChanges();
         }
 
         public async Task CreateBasketItems(IEnumerable<BasketItem> basketItems)
         {
             await _context.AddRangeAsync(basketItems);
+            await SaveChanges();
+        }
+
+        public async Task<Order> GetOrderById(int orderId)
+        {
+            return await _context.Orders.FindAsync(orderId);
+        }
+
+        public async Task SaveChanges(){
             await _context.SaveChangesAsync();
         }
     }

@@ -13,8 +13,8 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize]
-    public class OrderController : ControllerBase
+
+    public class OrderController : Controller
     {
         private readonly IOrderService _orderService;
         private readonly IConfiguration _config;
@@ -25,6 +25,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult> CreateOrder(BasketDto basketDto)
         {
             var order = new Order
@@ -50,6 +51,7 @@ namespace API.Controllers
         }
 
         [HttpPost("payorder")]
+        [Authorize]
         public ActionResult PayOrder(Order order)
         {
             if (order.Status)
@@ -59,7 +61,7 @@ namespace API.Controllers
 
             var payment = new Payment(order.TotalPrice);
             var result = payment.PaymentRequest($"پرداخت فاکتور شماره {order.Id}",
-                _config["ApiUrl"] + "Order/PaymentResult/" + order.Id);
+                _config["ApiUrl"] + "api/Order/PaymentResult/" + order.Id);
 
             if(result.Result.Status == 100)
             {
@@ -69,6 +71,33 @@ namespace API.Controllers
             {
                 return BadRequest();
             }
+        }
+
+        [HttpGet("PaymentResult/{orderId}")]
+        public async Task<ActionResult<PaymentResultDto>> PaymentResult(int orderId)
+        {
+            if(HttpContext.Request.Query["Status"] != "" &&
+               HttpContext.Request.Query["Status"].ToString().ToLower() == "ok" &&
+               HttpContext.Request.Query["Authority"] != "")
+            {
+                var authority = HttpContext.Request.Query["Authority"].ToString();
+                var order = await _orderService.GetOrderById(orderId);
+                var payment = new Payment(order.TotalPrice);
+                var result = payment.Verification(authority).Result;
+
+                if(result.Status != 100)
+                {
+                    return BadRequest();
+                }
+                    order.Status = true;
+                    await _orderService.SaveChanges();
+                    return View(new PaymentResultDto{
+                        RefId = result.RefId
+                    });
+
+            }
+
+            return BadRequest();
         }
     }
 }
