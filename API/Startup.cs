@@ -81,8 +81,8 @@ namespace API
 
             app.UseEndpoints(endpoints =>
             {
-                // endpoints.MapControllers();
-                endpoints.MapDefaultControllerRoute();
+                endpoints.MapControllers();
+                // endpoints.MapDefaultControllerRoute();
             });
         }
     }
