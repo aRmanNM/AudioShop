@@ -47,57 +47,9 @@ namespace API.Controllers
 
             await _orderService.CreateBasketItems(basketItems);
 
-            return RedirectToAction(nameof(PayOrder), order);
+            return Ok(order);
         }
 
-        [HttpPost("payorder")]
-        [Authorize]
-        public ActionResult PayOrder(Order order)
-        {
-            if (order.Status)
-            {
-                return BadRequest();
-            }
 
-            var payment = new Payment(order.TotalPrice);
-            var result = payment.PaymentRequest($"پرداخت فاکتور شماره {order.Id}",
-                _config["ApiUrl"] + "api/Order/PaymentResult/" + order.Id);
-
-            if(result.Result.Status == 100)
-            {
-                return Redirect("https://sandbox.zarinpal.com/pg/StartPay/" + result.Result.Authority);
-            }
-            else
-            {
-                return BadRequest();
-            }
-        }
-
-        [HttpGet("PaymentResult/{orderId}")]
-        public async Task<ActionResult<PaymentResultDto>> PaymentResult(int orderId)
-        {
-            if(HttpContext.Request.Query["Status"] != "" &&
-               HttpContext.Request.Query["Status"].ToString().ToLower() == "ok" &&
-               HttpContext.Request.Query["Authority"] != "")
-            {
-                var authority = HttpContext.Request.Query["Authority"].ToString();
-                var order = await _orderService.GetOrderById(orderId);
-                var payment = new Payment(order.TotalPrice);
-                var result = payment.Verification(authority).Result;
-
-                if(result.Status != 100)
-                {
-                    return BadRequest();
-                }
-                    order.Status = true;
-                    await _orderService.SaveChanges();
-                    return View(new PaymentResultDto{
-                        RefId = result.RefId
-                    });
-
-            }
-
-            return BadRequest();
-        }
     }
 }

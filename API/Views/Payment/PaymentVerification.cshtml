@@ -1,0 +1,22 @@
+@using API.Entities
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model Order
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <p>@Model.Id</p>
+    <form asp-action="PayOrder" method="post">
+        <input type="text" asp-for="Id">
+        <input type="text" asp-for="TotalPrice">
+        <input type="text" asp-for="Status">
+        <input type="text" asp-for="UserId">
+        <button type="submit">تایید نهایی سفارش</button>
+    </form>
+</body>
+</html>
