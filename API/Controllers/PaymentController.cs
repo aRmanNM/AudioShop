@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
-using API.Dtos;
-using API.Entities;
-using API.Services;
+using Core.Dtos;
+using Core.Entities;
+using Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -12,12 +12,12 @@ namespace API.Controllers
     [Route("api/[controller]")]
     public class PaymentController : Controller
     {
-        private readonly IOrderService _orderService;
+        private readonly IOrderRepository _orderRepository;
         private readonly IConfiguration _config;
-        public PaymentController(IOrderService orderService, IConfiguration config)
+        public PaymentController(IOrderRepository orderRepository, IConfiguration config)
         {
             _config = config;
-            _orderService = orderService;
+            _orderRepository = orderRepository;
         }
 
         public IActionResult Index() {
@@ -28,7 +28,7 @@ namespace API.Controllers
         [Route("PaymentVerification/{orderId}")]
         public async Task<IActionResult> PaymentVerification(int orderId)
         {
-            var order = await _orderService.GetOrderById(orderId);
+            var order = await _orderRepository.GetOrderById(orderId);
             return View(order);
         }
 
@@ -63,7 +63,7 @@ namespace API.Controllers
                HttpContext.Request.Query["Authority"] != "")
             {
                 var authority = HttpContext.Request.Query["Authority"].ToString();
-                var order = await _orderService.GetOrderById(orderId);
+                var order = await _orderRepository.GetOrderById(orderId);
                 var payment = new Payment(order.TotalPrice);
                 var result = payment.Verification(authority).Result;
 
@@ -72,7 +72,7 @@ namespace API.Controllers
                     return BadRequest();
                 }
                 order.Status = true;
-                await _orderService.SaveChanges();
+                await _orderRepository.SaveChanges();
                 return View(new PaymentResultDto
                 {
                     RefId = result.RefId

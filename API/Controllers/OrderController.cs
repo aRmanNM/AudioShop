@@ -1,9 +1,9 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using API.Dtos;
-using API.Entities;
-using API.Services;
+using Core.Dtos;
+using Core.Entities;
+using Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -16,12 +16,12 @@ namespace API.Controllers
 
     public class OrderController : Controller
     {
-        private readonly IOrderService _orderService;
+        private readonly IOrderRepository _orderRepository;
         private readonly IConfiguration _config;
-        public OrderController(IOrderService orderService, IConfiguration config)
+        public OrderController(IOrderRepository orderRepository, IConfiguration config)
         {
             _config = config;
-            _orderService = orderService;
+            _orderRepository = orderRepository;
         }
 
         [HttpPost]
@@ -36,7 +36,7 @@ namespace API.Controllers
                 Date = DateTime.Now
             };
 
-            await _orderService.CreateOrder(order);
+            await _orderRepository.CreateOrder(order);
 
             var basketItems = basketDto.CourseDtos?.Select(c => new BasketItem
             {
@@ -45,7 +45,7 @@ namespace API.Controllers
                 Price = c.Price
             });
 
-            await _orderService.CreateBasketItems(basketItems);
+            await _orderRepository.CreateBasketItems(basketItems);
 
             return Ok(order);
         }

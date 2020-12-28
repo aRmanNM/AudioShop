@@ -1,6 +1,5 @@
-using API.Dtos;
-using API.Entities;
-using API.Services;
+using Core.Dtos;
+using Core.Entities;
 using AutoMapper;
 
 namespace API.Helpers

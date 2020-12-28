@@ -1,0 +1,12 @@
+C:\Users\DonAlex\Desktop\DotNet\Projects\DotNet Core\CourseStore\Infrastructure\bin\Debug\netcoreapp3.1\Infrastructure.deps.json
+C:\Users\DonAlex\Desktop\DotNet\Projects\DotNet Core\CourseStore\Infrastructure\bin\Debug\netcoreapp3.1\Infrastructure.dll
+C:\Users\DonAlex\Desktop\DotNet\Projects\DotNet Core\CourseStore\Infrastructure\bin\Debug\netcoreapp3.1\Infrastructure.pdb
+C:\Users\DonAlex\Desktop\DotNet\Projects\DotNet Core\CourseStore\Infrastructure\bin\Debug\netcoreapp3.1\Core.dll
+C:\Users\DonAlex\Desktop\DotNet\Projects\DotNet Core\CourseStore\Infrastructure\bin\Debug\netcoreapp3.1\Core.pdb
+C:\Users\DonAlex\Desktop\DotNet\Projects\DotNet Core\CourseStore\Infrastructure\obj\Debug\netcoreapp3.1\Infrastructure.csprojAssemblyReference.cache
+C:\Users\DonAlex\Desktop\DotNet\Projects\DotNet Core\CourseStore\Infrastructure\obj\Debug\netcoreapp3.1\Infrastructure.AssemblyInfoInputs.cache
+C:\Users\DonAlex\Desktop\DotNet\Projects\DotNet Core\CourseStore\Infrastructure\obj\Debug\netcoreapp3.1\Infrastructure.AssemblyInfo.cs
+C:\Users\DonAlex\Desktop\DotNet\Projects\DotNet Core\CourseStore\Infrastructure\obj\Debug\netcoreapp3.1\Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\DonAlex\Desktop\DotNet\Projects\DotNet Core\CourseStore\Infrastructure\obj\Debug\netcoreapp3.1\Infrastructure.csproj.CopyComplete
+C:\Users\DonAlex\Desktop\DotNet\Projects\DotNet Core\CourseStore\Infrastructure\obj\Debug\netcoreapp3.1\Infrastructure.dll
+C:\Users\DonAlex\Desktop\DotNet\Projects\DotNet Core\CourseStore\Infrastructure\obj\Debug\netcoreapp3.1\Infrastructure.pdb

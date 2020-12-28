@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
-using API.Dtos;
-using API.Entities;
-using API.Services;
 using AutoMapper;
+using Core.Dtos;
+using Core.Entities;
+using Core.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 

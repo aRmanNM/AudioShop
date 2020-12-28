@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using API.Dtos;
-using API.Entities;
-using API.Services;
 using AutoMapper;
+using Core.Dtos;
+using Core.Entities;
+using Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,12 +14,12 @@ namespace API.Controllers
     [Authorize]
     public class UserController : ControllerBase
     {
-        private readonly IUserService _userService;
+        private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
-        public UserController(IUserService userService, IMapper mapper)
+        public UserController(IUserRepository userRepository, IMapper mapper)
         {
             _mapper = mapper;
-            _userService = userService;
+            _userRepository = userRepository;
         }
 
         /// <summary>Returns all courses purchased by user.
@@ -27,7 +27,7 @@ namespace API.Controllers
         [HttpGet("Courses/{userId}")]
         public async Task<ActionResult<CourseDto>> GetUserCourses(string userId)
         {
-            var courses = await _userService.GetUserCourses(userId);
+            var courses = await _userRepository.GetUserCourses(userId);
             return Ok(_mapper.Map<IEnumerable<Course>, IEnumerable<CourseDto>>(courses));
         }
 
@@ -37,7 +37,7 @@ namespace API.Controllers
         [HttpGet("RefineRepetitiveCourses")]
         public async Task<ActionResult<BasketDto>> RefineRepetitiveCourses(BasketDto basketDto)
         {
-            var courseIds = await _userService.GetUserCourseIds(basketDto.UserId);
+            var courseIds = await _userRepository.GetUserCourseIds(basketDto.UserId);
 
             foreach(var courseId in courseIds)
             {
@@ -58,7 +58,7 @@ namespace API.Controllers
         [HttpGet("CheckIfCourseIsRepetitive/{userId}/{courseId}")]
         public async Task<ActionResult<bool>> CheckIfCourseIsRepetitive(string userId, int courseId)
         {
-            var courseIds = await _userService.GetUserCourseIds(userId);
+            var courseIds = await _userRepository.GetUserCourseIds(userId);
 
             foreach(var tempCourseId in courseIds)
             {
