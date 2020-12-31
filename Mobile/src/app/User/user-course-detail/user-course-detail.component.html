@@ -1,0 +1,25 @@
+<ion-content [fullscreen]="true">
+
+    <div class="spinner" *ngIf="!courseEpisodes">
+        <ion-spinner></ion-spinner>
+    </div>
+
+    <!-- episodes -->
+    <ion-list dir="rtl" *ngIf="courseEpisodes">
+        <ion-item *ngFor="let episode of courseEpisodes">
+            <ion-avatar slot="start">
+                <ion-icon name="headset-outline" size="large"></ion-icon>
+            </ion-avatar>
+            <ion-label>
+                <h2>{{episode.name}}</h2>
+                <p>
+                    {{episode.description}}
+                </p>
+                <audio controls style="width: 100%;">
+                    <source src="{{episode.fileUrl}}" type="audio/mpeg">
+                </audio>
+            </ion-label>
+        </ion-item>
+    </ion-list>
+
+</ion-content>

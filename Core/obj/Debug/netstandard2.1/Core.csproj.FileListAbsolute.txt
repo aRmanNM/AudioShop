@@ -1,9 +1,0 @@
-C:\Users\DonAlex\Desktop\DotNet\Projects\DotNet Core\CourseStore\Core\bin\Debug\netstandard2.1\Core.deps.json
-C:\Users\DonAlex\Desktop\DotNet\Projects\DotNet Core\CourseStore\Core\bin\Debug\netstandard2.1\Core.dll
-C:\Users\DonAlex\Desktop\DotNet\Projects\DotNet Core\CourseStore\Core\bin\Debug\netstandard2.1\Core.pdb
-C:\Users\DonAlex\Desktop\DotNet\Projects\DotNet Core\CourseStore\Core\obj\Debug\netstandard2.1\Core.csprojAssemblyReference.cache
-C:\Users\DonAlex\Desktop\DotNet\Projects\DotNet Core\CourseStore\Core\obj\Debug\netstandard2.1\Core.AssemblyInfoInputs.cache
-C:\Users\DonAlex\Desktop\DotNet\Projects\DotNet Core\CourseStore\Core\obj\Debug\netstandard2.1\Core.AssemblyInfo.cs
-C:\Users\DonAlex\Desktop\DotNet\Projects\DotNet Core\CourseStore\Core\obj\Debug\netstandard2.1\Core.csproj.CoreCompileInputs.cache
-C:\Users\DonAlex\Desktop\DotNet\Projects\DotNet Core\CourseStore\Core\obj\Debug\netstandard2.1\Core.dll
-C:\Users\DonAlex\Desktop\DotNet\Projects\DotNet Core\CourseStore\Core\obj\Debug\netstandard2.1\Core.pdb

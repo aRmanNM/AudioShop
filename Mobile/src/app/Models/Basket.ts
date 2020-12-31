@@ -1,10 +1,7 @@
-import { Course } from "./course";
+import {Course} from './course';
 
 export interface Basket {
-    id: number;
-    courses: Course[];
+    userId?: string;
+    courseDtos: Course[];
+    totalPrice: number;
 }
-
-// maybe i should add another class
-// for adding courses to basket
-// and not using course class directly

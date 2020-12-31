@@ -1,0 +1,40 @@
+<ion-header *ngIf="course">
+    <ion-item>
+        <ion-thumbnail slot="start">
+            <img src="{{ course.pictureUrl }}">
+        </ion-thumbnail>
+        <ion-label>
+            <h2>{{ course.name }}</h2>
+            <p>
+                {{ course.description }}
+            </p>
+        </ion-label>
+    </ion-item>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+    <div class="spinner" *ngIf="!courseEpisodes">
+        <ion-spinner></ion-spinner>
+    </div>
+
+    <!-- episodes -->
+    <ion-list dir="rtl" *ngIf="courseEpisodes">
+        <ion-item *ngFor="let episode of courseEpisodes">
+            <ion-avatar slot="start">
+                <ion-icon name="headset-outline" size="large"></ion-icon>
+            </ion-avatar>
+            <ion-label>
+                <h2>{{ episode.name }}</h2>
+                <p>
+                    {{ episode.description }}
+                </p>
+            </ion-label>
+        </ion-item>
+    </ion-list>
+</ion-content>
+
+<ion-footer mode="ios" transculent="true" *ngIf="course" dir="rtl">
+    <ion-button style="margin: 1em" expand="full" (click)="addCourseToBasket()">
+         افزودن به سبد خرید({{ course.price | number }} تومان)
+    </ion-button>
+</ion-footer>

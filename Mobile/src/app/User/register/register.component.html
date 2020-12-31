@@ -1,0 +1,25 @@
+<ion-content>
+  <form [formGroup]="registerForm" (ngSubmit)="register()">
+    <p>{{error}}</p>
+    <ion-item>
+      <ion-label>نام</ion-label>
+      <ion-input type="text" formControlName="displayName"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>ایمیل</ion-label>
+      <ion-input type="email" formControlName="email"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>پسورد</ion-label>
+      <ion-input type="password" formControlName="password"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>تکرار پسورد</ion-label>
+      <ion-input type="password" formControlName="confirmPassword"></ion-input>
+    </ion-item>
+    <ion-button ion-button type="submit">ثبت نام</ion-button>
+  </form>
+
+  <ion-button [routerLink]="['/login']">ورود به حساب کاربری</ion-button>
+</ion-content>
+
