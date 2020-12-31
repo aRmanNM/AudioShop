@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Core.Dtos;
@@ -41,11 +42,13 @@ namespace API.Controllers
 
             foreach(var courseId in courseIds)
             {
-                foreach(var course in basketDto.CourseDtos)
+                for(int i = 0; i < basketDto.CourseDtos.Count; i++) //foreach(var course in basketDto.CourseDtos)
                 {
-                    if(courseId == course.Id)
+                    var courseDto = basketDto.CourseDtos.FirstOrDefault(x => x.Id != 0);
+                    if(courseId == courseDto.Id)
                     {
-                        basketDto.CourseDtos.Remove(course);
+                        basketDto.CourseDtos.Remove(courseDto);
+                        continue;
                     }
                 }
             }
