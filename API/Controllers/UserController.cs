@@ -34,7 +34,7 @@ namespace API.Controllers
         /// <summary>Checks the received basket items, and if among them any items have been
         ///purchased before removes it from the basket and returns basket.
         /// </summary>
-        [HttpGet("RefineRepetitiveCourses")]
+        [HttpPost("RefineRepetitiveCourses")]
         public async Task<ActionResult<BasketDto>> RefineRepetitiveCourses(BasketDto basketDto)
         {
             var courseIds = await _userRepository.GetUserCourseIds(basketDto.UserId);
