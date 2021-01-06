@@ -1,7 +1,0 @@
-{
-  "name": "PodcastStore",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "angular"
-}
