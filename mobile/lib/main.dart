@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/screens/home_page.dart';
 import 'package:mobile/screens/loading_screen.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:mobile/services/courses.dart';
 import 'package:persian_fonts/persian_fonts.dart';
 
 void main() {
@@ -16,9 +18,9 @@ void main() {
       ],
       theme: ThemeData(
         textTheme: PersianFonts.vazirTextTheme,
-        primaryColor: Colors.orangeAccent[300]
+        primaryColor: Colors.deepOrange[600]
       ),
-      home: LoadingScreen(),
+      home: HomePage.basic(),
     ),
   );
 }

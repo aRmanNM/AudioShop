@@ -33,7 +33,7 @@ class _NowPlayingState extends State<NowPlaying> {
     return Container(
       width: 300.0,
       child: Slider.adaptive(
-          activeColor: Colors.deepOrangeAccent,
+          activeColor: Colors.deepOrange[600],
           inactiveColor: Colors.grey[350],
           value: position.inSeconds.toDouble(),
           max: musicLength.inSeconds.toDouble(),
@@ -80,7 +80,7 @@ class _NowPlayingState extends State<NowPlaying> {
     String courseCover = widget.courseCoverUrl;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.deepOrangeAccent,
+        backgroundColor: Colors.deepOrange[600],
         title: Text(
             episode['course'],
             style: TextStyle(
@@ -97,8 +97,8 @@ class _NowPlayingState extends State<NowPlaying> {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                Colors.deepOrangeAccent,
-                Colors.deepOrangeAccent,
+                Colors.deepOrange[600],
+                Colors.deepOrange[600],
               ]),
         ),
         child: Container(
@@ -116,145 +116,155 @@ class _NowPlayingState extends State<NowPlaying> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // //Let's add some text title
-                    // Padding(
-                    //   padding: const EdgeInsets.only(right: 12.0),
-                    //   child: Text(
-                    //     episode['name'],
-                    //     style: TextStyle(
-                    //       color: Colors.white,
-                    //       fontSize: 38.0,
-                    //       fontWeight: FontWeight.bold,
-                    //     ),
-                    //   ),
-                    // ),
-                    Center(
-                      child: Text(
-                        episode['name'],
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 34.0,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 24.0,
-                    ),
-                    //Let's add the music cover
-                    Center(
-                      child: Container(
-                        width: 280.0,
-                        height: 280.0,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: NetworkImage(courseCover),
-                            fit: BoxFit.fill,
+                    Expanded(
+                      flex: 1,
+                      child: Center(
+                        child: Text(
+                          episode['name'],
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 24.0,
+                            fontWeight: FontWeight.w400,
                           ),
                         ),
                       ),
                     ),
-
-                    SizedBox(
-                      height: 8.0,
-                    ),
-                    Center(
-                      child: Text(
-                        "بیطرف",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 32.0,
-                          fontWeight: FontWeight.w600,
+                    Expanded(
+                      flex: 5,
+                      child: Center(
+                        child: Container(
+                          width: MediaQuery.of(context).size.width * 0.8,
+                          height: MediaQuery.of(context).size.width * 0.8,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: NetworkImage(courseCover),
+                              fit: BoxFit.fill,
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: 8.0,
+                    Expanded(
+                      flex: 1,
+                      child: Center(
+                        child: Text(
+                          "بیطرف",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 22.0,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
                     ),
                     Expanded(
+                      flex: 2,
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(30.0),
-                            topRight: Radius.circular(30.0),
+                            topLeft: Radius.circular(20.0),
+                            topRight: Radius.circular(20.0),
                           ),
                         ),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            //Let's start by adding the controller
-                            //let's add the time indicator text
-
-                            Container(
-                              width: 500.0,
+                            Expanded(
+                                flex: 1,
+                                child: SizedBox(
+                                )),
+                            Expanded(
+                              flex: 2,
+                              child: Container(
+                                width: 500.0,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Expanded(
+                                      flex: 2,
+                                      child: Center(
+                                        child: Text(
+                                          "${position.inMinutes}:${position.inSeconds.remainder(60)}",
+                                          style: TextStyle(
+                                            fontSize: 18.0,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                        flex: 8,
+                                        child: slider()),
+                                    Expanded(
+                                      flex: 2,
+                                      child: Center(
+                                        child: Text(
+                                          "${musicLength.inMinutes}:${musicLength.inSeconds.remainder(60)}",
+                                          style: TextStyle(
+                                            fontSize: 18.0,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Text(
-                                    "${position.inMinutes}:${position.inSeconds.remainder(60)}",
-                                    style: TextStyle(
-                                      fontSize: 18.0,
+                                  IconButton(
+                                    iconSize: 45.0,
+                                    color: Colors.deepOrange[600],
+                                    onPressed: () {},
+                                    icon: Icon(
+                                      Icons.skip_next,
                                     ),
                                   ),
-                                  slider(),
-                                  Text(
-                                    "${musicLength.inMinutes}:${musicLength.inSeconds.remainder(60)}",
-                                    style: TextStyle(
-                                      fontSize: 18.0,
+                                  IconButton(
+                                    iconSize: 62.0,
+                                    color: Colors.deepOrange[600],
+                                    onPressed: () {
+                                      //here we will add the functionality of the play button
+                                      if (!playing) {
+                                        //now let's play the song
+                                        _player.play(episode['fileUrl']);
+                                        setState(() {
+                                          playBtn = Icons.pause;
+                                          playing = true;
+                                        });
+                                      } else {
+                                        _player.pause();
+                                        setState(() {
+                                          playBtn = Icons.play_arrow;
+                                          playing = false;
+                                        });
+                                      }
+                                    },
+                                    icon: Icon(
+                                      playBtn,
+                                    ),
+                                  ),
+                                  IconButton(
+                                    iconSize: 45.0,
+                                    color: Colors.deepOrange[600],
+                                    onPressed: () {},
+                                    icon: Icon(
+                                      Icons.skip_previous,
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                IconButton(
-                                  iconSize: 45.0,
-                                  color: Colors.deepOrangeAccent,
-                                  onPressed: () {},
-                                  icon: Icon(
-                                    Icons.skip_next,
-                                  ),
-                                ),
-                                IconButton(
-                                  iconSize: 62.0,
-                                  color: Colors.deepOrangeAccent,
-                                  onPressed: () {
-                                    //here we will add the functionality of the play button
-                                    if (!playing) {
-                                      //now let's play the song
-                                      _player.play(episode['fileUrl']);
-                                      setState(() {
-                                        playBtn = Icons.pause;
-                                        playing = true;
-                                      });
-                                    } else {
-                                      _player.pause();
-                                      setState(() {
-                                        playBtn = Icons.play_arrow;
-                                        playing = false;
-                                      });
-                                    }
-                                  },
-                                  icon: Icon(
-                                    playBtn,
-                                  ),
-                                ),
-                                IconButton(
-                                  iconSize: 45.0,
-                                  color: Colors.deepOrangeAccent,
-                                  onPressed: () {},
-                                  icon: Icon(
-                                    Icons.skip_previous,
-                                  ),
-                                ),
-                              ],
-                            )
+                            Expanded(
+                              flex: 2,
+                                child: SizedBox(
+                                ))
                           ],
                         ),
                       ),

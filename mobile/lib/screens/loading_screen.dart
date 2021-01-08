@@ -3,18 +3,39 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:mobile/screens/home_page.dart';
 import 'package:mobile/services/courses.dart';
 
+import 'course_page.dart';
+
+// ignore: must_be_immutable
 class LoadingScreen extends StatefulWidget {
+
+  LoadingScreen(this.requestedPage, this.url);
+  LoadingScreen.episodes(this.requestedPage, this.url, this.course);
+
+  final String url;
+  final String requestedPage;
+  dynamic course;
+
   @override
   _LoadingScreenState createState() => _LoadingScreenState();
 }
 
 class _LoadingScreenState extends State<LoadingScreen> {
-  final String url = 'https://audioshoppp.ir/api/course';
+  String url = '';
+  String requestedPage = '';
+  dynamic course;
 
   @override
   void initState() {
     super.initState();
-    getCourses();
+    url = widget.url;
+    requestedPage = widget.requestedPage;
+    course = widget.course;
+    if(requestedPage == 'HomePage')
+      getCourses();
+    else if(requestedPage == 'CoursePage')
+      getCourseEpisodes();
+    else
+      skipLoading();
   }
 
   void getCourses() async {
@@ -24,6 +45,20 @@ class _LoadingScreenState extends State<LoadingScreen> {
     Navigator.push(context, MaterialPageRoute(builder: (context){
       return HomePage(courses);
     }));
+  }
+
+  void getCourseEpisodes() async{
+
+    CourseData courseEpisodeData = CourseData(url);
+    dynamic courseEpisodes = await courseEpisodeData.getData();
+
+    // Navigator.push(context, MaterialPageRoute(builder: (context) {
+    //   return CoursePage(course, courseEpisodes);
+    // }));
+  }
+
+  void skipLoading(){
+    Navigator.pop(context, false);
   }
 
   @override

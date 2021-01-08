@@ -7,7 +7,7 @@ class CourseData{
 
   final String url;
 
-  Future getData() async{
+  Future<dynamic> getData() async{
     http.Response response = await http.get(url);
     if(response.statusCode == 200){
       String data = response.body;

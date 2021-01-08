@@ -1,14 +1,13 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:mobile/screens/now_playing.dart';
 import 'package:mobile/services/courses.dart';
 
 class CoursePage extends StatefulWidget {
-  CoursePage(this.courseDetails, this.courseEpisodeDetails);
+  CoursePage(this.courseDetails);
 
   final dynamic courseDetails;
-  final dynamic courseEpisodeDetails;
 
   @override
   _CoursePageState createState() => _CoursePageState();
@@ -19,10 +18,24 @@ class _CoursePageState extends State<CoursePage> {
   double width;
   double height;
   List<Widget> episodesList = List<Widget>();
+  Future<dynamic> episodesFuture;
+  String url = 'https://audioshoppp.ir/api/course/episodes/';
 
   @override
   void initState() {
     super.initState();
+    episodesFuture = getCourseEpisodes();
+  }
+
+  Future<dynamic> getCourseEpisodes() async{
+    url += widget.courseDetails['id'].toString();
+    CourseData courseEpisodeData = CourseData(url);
+    var courseEpisodes = await courseEpisodeData.getData();
+
+    if(courseEpisodes != null)
+      updateUI(widget.courseDetails, courseEpisodes);
+
+    return courseEpisodes;
   }
 
   void updateUI(dynamic course, dynamic episodes) {
@@ -39,16 +52,17 @@ class _CoursePageState extends State<CoursePage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Expanded(
-                  flex: 2,
+                  flex: 6,
                   child: Image.network(
                     picUrl,
                     height: height/10,),
                 ),
                 Expanded(
-                  flex: 6,
+                  flex: 25,
                   child: Padding(
                     padding: const EdgeInsets.only(right: 12.0),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(episodeName),
                         Text(episodeDescription,
@@ -57,7 +71,7 @@ class _CoursePageState extends State<CoursePage> {
                   ),
                 ),
                 Expanded(
-                  flex: 2,
+                  flex: 4,
                   child: TextButton(
                     onPressed: (){
                       Navigator.push(context, MaterialPageRoute(builder: (context){
@@ -67,7 +81,7 @@ class _CoursePageState extends State<CoursePage> {
                     child: Icon(
                         Icons.play_arrow,
                         size: 55,
-                        color: Colors.deepOrange,
+                        color: Colors.deepOrange[600],
                     ),
                   ),
                 )
@@ -142,7 +156,22 @@ class _CoursePageState extends State<CoursePage> {
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
-    updateUI(widget.courseDetails, widget.courseEpisodeDetails);
-    return Scaffold(body: scrollView);
+    return FutureBuilder(
+        future: episodesFuture,
+        builder: (context, data){
+          if(data.hasData){
+            return Scaffold(body: scrollView);
+          }
+          else{
+            return Container(
+              color: Colors.white,
+              child: SpinKitWave(
+                color: Colors.deepOrange[600],
+                size: 100.0,
+              ),
+            );
+          }
+        }
+    );
   }
 }

@@ -9,6 +9,8 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
+  curved_navigation_bar: ^0.3.7
+  fluttertoast: ^7.1.6
   audioplayers: ^0.13.1
   persian_fonts: ^1.0.2
   flutter_localizations:
