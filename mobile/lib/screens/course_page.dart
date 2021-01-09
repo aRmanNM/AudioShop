@@ -80,7 +80,7 @@ class _CoursePageState extends State<CoursePage> {
                     },
                     child: Icon(
                         Icons.play_arrow,
-                        size: 55,
+                        size: 32,
                         color: Colors.deepOrange[600],
                     ),
                   ),

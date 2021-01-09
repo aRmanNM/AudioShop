@@ -118,7 +118,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     FirebaseAdMob.instance.initialize(appId: "ca-app-pub-6716792328957551~1144830596")
-      .then((value) => myBanner..load()..show());
+      .then((value) => myInterstitial..load()..show());
 
     double width = MediaQuery.of(context).size.width / 2;
     double height = (MediaQuery.of(context).size.width / 2) * 1.5;
@@ -129,8 +129,9 @@ class _HomePageState extends State<HomePage> {
             return WillPopScope(
                 child: Scaffold(
                   bottomNavigationBar: CurvedNavigationBar(
-                    height: 75,
-                    backgroundColor: Colors.black12,
+                    animationDuration: Duration(milliseconds: 200),
+                    height: 47,
+                    backgroundColor: Colors.deepOrange[200],
                     items: <Widget>[
                       Icon(Icons.person, size: 25, color: Colors.deepOrange[600]),
                       Icon(Icons.home, size: 25, color: Colors.deepOrange[600]),
@@ -192,14 +193,14 @@ MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
   keywords: <String>['podcast', 'hadi'],
   contentUrl: 'https://flutter.io',
   childDirected: false,
-  testDevices: <String>[], // Android emulators are considered test devices
+  testDevices: <String>['A36235BD5DAEAA4D6FA305A209159D2A'], // Android emulators are considered test devices
 );
 
 BannerAd myBanner = BannerAd(
   // Replace the testAdUnitId with an ad unit id from the AdMob dash.
   // https://developers.google.com/admob/android/test-ads
   // https://developers.google.com/admob/ios/test-ads
-  adUnitId: "ca-app-pub-6716792328957551/7299175406",
+  adUnitId: BannerAd.testAdUnitId,
   size: AdSize.banner,
   targetingInfo: targetingInfo,
   listener: (MobileAdEvent event) {
@@ -211,7 +212,7 @@ InterstitialAd myInterstitial = InterstitialAd(
   // Replace the testAdUnitId with an ad unit id from the AdMob dash.
   // https://developers.google.com/admob/android/test-ads
   // https://developers.google.com/admob/ios/test-ads
-  adUnitId: "ca-app-pub-6716792328957551/5351668917",
+  adUnitId: InterstitialAd.testAdUnitId,
   targetingInfo: targetingInfo,
   listener: (MobileAdEvent event) {
     print("InterstitialAd event is $event");
