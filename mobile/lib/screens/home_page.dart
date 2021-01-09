@@ -1,4 +1,5 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -72,13 +73,14 @@ class _HomePageState extends State<HomePage> {
                 Text(
                   courseName,
                   style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 12,
                       color: Colors.black),
                 ),
                 Text(
                     courseDescription,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
+                        fontSize: 10,
                       color: Colors.black26
                     ),
                 ),
@@ -88,15 +90,16 @@ class _HomePageState extends State<HomePage> {
         ),
       );
 
-      carouselSlider.add(TextButton(
-        onPressed: () {
-          goToCoursePage(course);
-        },
-        child: Container(
-            margin: EdgeInsets.symmetric(horizontal: 2.0),
-            child: Image.network(
-              picUrl,
-            )),
+      carouselSlider.add(Card(
+        child: TextButton(
+          onPressed: () {
+            goToCoursePage(course);
+          },
+          child: Container(
+              child: Image.network(
+                picUrl,
+              )),
+        ),
       ));
     }
   }
@@ -114,6 +117,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseAdMob.instance.initialize(appId: "ca-app-pub-6716792328957551~1144830596")
+      .then((value) => myBanner..load()..show());
+
     double width = MediaQuery.of(context).size.width / 2;
     double height = (MediaQuery.of(context).size.width / 2) * 1.5;
     return FutureBuilder(
@@ -123,11 +129,12 @@ class _HomePageState extends State<HomePage> {
             return WillPopScope(
                 child: Scaffold(
                   bottomNavigationBar: CurvedNavigationBar(
+                    height: 75,
                     backgroundColor: Colors.black12,
                     items: <Widget>[
-                      Icon(Icons.person, size: 40, color: Colors.deepOrange[600]),
-                      Icon(Icons.home, size: 40, color: Colors.deepOrange[600]),
-                      Icon(Icons.shopping_basket, size: 40, color: Colors.deepOrange[600]),
+                      Icon(Icons.person, size: 25, color: Colors.deepOrange[600]),
+                      Icon(Icons.home, size: 25, color: Colors.deepOrange[600]),
+                      Icon(Icons.shopping_basket, size: 25, color: Colors.deepOrange[600]),
                     ],
                     onTap: (index) => {
                       debugPrint('current index is $index')
@@ -137,17 +144,24 @@ class _HomePageState extends State<HomePage> {
                   body: Column(
                     children: <Widget>[
                       Expanded(
+                        flex: 2,
                         child: Card(
                           child: CarouselSlider(
                               options: CarouselOptions(
                                 height: height,
-                                enlargeCenterPage: true,
-                                viewportFraction: 0.7,
+                                viewportFraction: 0.6,
+                                reverse: false,
+                                autoPlay: true,
+                                autoPlayInterval: Duration(seconds: 3),
+                                autoPlayAnimationDuration: Duration(milliseconds: 800),
+                                autoPlayCurve: Curves.fastOutSlowIn,
+                                enlargeCenterPage: true
                               ),
                               items: carouselSlider),
                         ),
                       ),
                       Expanded(
+                        flex: 3,
                         child: Card(
                           child: GridView.count(
                             padding: const EdgeInsets.all(5),
@@ -173,3 +187,33 @@ class _HomePageState extends State<HomePage> {
         });
   }
 }
+
+MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
+  keywords: <String>['podcast', 'hadi'],
+  contentUrl: 'https://flutter.io',
+  childDirected: false,
+  testDevices: <String>[], // Android emulators are considered test devices
+);
+
+BannerAd myBanner = BannerAd(
+  // Replace the testAdUnitId with an ad unit id from the AdMob dash.
+  // https://developers.google.com/admob/android/test-ads
+  // https://developers.google.com/admob/ios/test-ads
+  adUnitId: "ca-app-pub-6716792328957551/7299175406",
+  size: AdSize.banner,
+  targetingInfo: targetingInfo,
+  listener: (MobileAdEvent event) {
+    print("BannerAd event is $event");
+  },
+);
+
+InterstitialAd myInterstitial = InterstitialAd(
+  // Replace the testAdUnitId with an ad unit id from the AdMob dash.
+  // https://developers.google.com/admob/android/test-ads
+  // https://developers.google.com/admob/ios/test-ads
+  adUnitId: "ca-app-pub-6716792328957551/5351668917",
+  targetingInfo: targetingInfo,
+  listener: (MobileAdEvent event) {
+    print("InterstitialAd event is $event");
+  },
+);
