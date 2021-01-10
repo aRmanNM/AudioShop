@@ -38,7 +38,7 @@ class _NowPlayingState extends State<NowPlaying> {
           max: musicLength.inSeconds.toDouble(),
           onChanged: (value) {
             seekToSec(value.toInt());
-          }),
+          })
     );
   }
 
@@ -77,6 +77,7 @@ class _NowPlayingState extends State<NowPlaying> {
   Widget build(BuildContext context) {
     dynamic episode = widget.episodeDetails;
     String courseCover = widget.courseCoverUrl;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.deepOrange[600],
@@ -172,49 +173,37 @@ class _NowPlayingState extends State<NowPlaying> {
                           children: [
                             Expanded(
                                 flex: 1,
-                                child: SizedBox(
-                                )),
-                            Expanded(
-                              flex: 2,
-                              child: Container(
-                                width: 500.0,
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Expanded(
-                                      flex: 2,
-                                      child: Center(
-                                        child: Text(
-                                          "${position.inMinutes}:${position.inSeconds.remainder(60)}",
-                                          style: TextStyle(
-                                            fontSize: 15.0,
+                                    Padding(
+                                      padding: const EdgeInsets.only(right: 14.0),
+                                      child: Text(
+                                        "${position.inMinutes}:${position.inSeconds.remainder(60)}",
+                                        style: TextStyle(
+                                            fontSize: 12.0,
                                             color: Colors.white
-                                          ),
                                         ),
                                       ),
                                     ),
-                                    Expanded(
-                                        flex: 8,
-                                        child: slider()),
-                                    Expanded(
-                                      flex: 2,
-                                      child: Center(
-                                        child: Text(
-                                          "${musicLength.inMinutes}:${musicLength.inSeconds.remainder(60)}",
-                                          style: TextStyle(
-                                            fontSize: 15.0,
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 14.0),
+                                      child: Text(
+                                        "${musicLength.inMinutes}:${musicLength.inSeconds.remainder(60)}",
+                                        style: TextStyle(
+                                            fontSize: 12.0,
                                             color: Colors.white
-                                          ),
                                         ),
                                       ),
                                     ),
                                   ],
-                                ),
-                              ),
+                                )),
+                            Expanded(
+                              flex: 1,
+                              child: slider(),
                             ),
                             Expanded(
-                              flex: 2,
+                              flex: 3,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,

@@ -118,7 +118,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     FirebaseAdMob.instance.initialize(appId: "ca-app-pub-6716792328957551~1144830596")
-      .then((value) => myInterstitial..load()..show());
+      .then((value) => myBanner..load()..show(anchorType: AnchorType.bottom));
 
     double width = MediaQuery.of(context).size.width / 2;
     double height = (MediaQuery.of(context).size.width / 2) * 1.5;
@@ -128,22 +128,26 @@ class _HomePageState extends State<HomePage> {
           if(data.hasData)
             return WillPopScope(
                 child: Scaffold(
-                  bottomNavigationBar: CurvedNavigationBar(
-                    animationDuration: Duration(milliseconds: 200),
-                    height: 47,
-                    backgroundColor: Colors.deepOrange[200],
-                    items: <Widget>[
-                      Icon(Icons.person, size: 25, color: Colors.deepOrange[600]),
-                      Icon(Icons.home, size: 25, color: Colors.deepOrange[600]),
-                      Icon(Icons.shopping_basket, size: 25, color: Colors.deepOrange[600]),
-                    ],
-                    onTap: (index) => {
-                      debugPrint('current index is $index')
-                    },
-                    index: 1,
+                  bottomNavigationBar: Padding(
+                    padding: const EdgeInsets.only(bottom: 59),
+                    child: CurvedNavigationBar(
+                      animationDuration: Duration(milliseconds: 200),
+                      height: 47,
+                      backgroundColor: Colors.deepOrange[200],
+                      items: <Widget>[
+                        Icon(Icons.person, size: 25, color: Colors.deepOrange[600]),
+                        Icon(Icons.home, size: 25, color: Colors.deepOrange[600]),
+                        Icon(Icons.shopping_basket, size: 25, color: Colors.deepOrange[600]),
+                      ],
+                      onTap: (index) => {
+                        debugPrint('current index is $index')
+                      },
+                      index: 1,
+                    ),
                   ),
                   body: Column(
                     children: <Widget>[
+                      Container(height: 20,),
                       Expanded(
                         flex: 2,
                         child: Card(
@@ -201,7 +205,7 @@ BannerAd myBanner = BannerAd(
   // https://developers.google.com/admob/android/test-ads
   // https://developers.google.com/admob/ios/test-ads
   adUnitId: BannerAd.testAdUnitId,
-  size: AdSize.banner,
+  size: AdSize.fullBanner,
   targetingInfo: targetingInfo,
   listener: (MobileAdEvent event) {
     print("BannerAd event is $event");

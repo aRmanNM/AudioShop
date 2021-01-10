@@ -64,9 +64,13 @@ class _CoursePageState extends State<CoursePage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(episodeName),
-                        Text(episodeDescription,
-                            overflow: TextOverflow.ellipsis)],
+                        Text(
+                          episodeName,
+                          style: TextStyle(fontSize: 14),),
+                        Text(
+                          episodeDescription,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(fontSize: 10),)],
                     ),
                   ),
                 ),
@@ -133,7 +137,7 @@ class _CoursePageState extends State<CoursePage> {
                 Expanded(
                   child: Text(
                     course['name'] + '  -  ' + course['description'],
-                    style: TextStyle(fontSize: 14),
+                    style: TextStyle(fontSize: 10),
                   ),
                 ),
               ],
