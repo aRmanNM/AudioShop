@@ -1,13 +1,15 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:mobile/screens/now_playing.dart';
 import 'package:mobile/services/courses.dart';
 
 class CoursePage extends StatefulWidget {
-  CoursePage(this.courseDetails);
+  CoursePage(this.courseDetails, this.courseCover);
 
   final dynamic courseDetails;
+  final courseCover;
 
   @override
   _CoursePageState createState() => _CoursePageState();
@@ -33,17 +35,19 @@ class _CoursePageState extends State<CoursePage> {
     var courseEpisodes = await courseEpisodeData.getData();
 
     if(courseEpisodes != null)
-      updateUI(widget.courseDetails, courseEpisodes);
+      await updateUI(widget.courseDetails, courseEpisodes);
 
     return courseEpisodes;
   }
 
-  void updateUI(dynamic course, dynamic episodes) {
+  Future updateUI(dynamic course, dynamic episodes) async {
     episodesList = List<Widget>();
     for (var episode in episodes) {
       String picUrl = course['pictureUrl'];
       String episodeName = episode['name'];
       String episodeDescription = episode['description'];
+      var picFile = widget.courseCover;
+
       episodesList.add(Padding(
         padding: const EdgeInsets.fromLTRB(8,8,8,0),
         child: Column(
@@ -53,8 +57,8 @@ class _CoursePageState extends State<CoursePage> {
               children: <Widget>[
                 Expanded(
                   flex: 6,
-                  child: Image.network(
-                    picUrl,
+                  child: Image.file(
+                    picFile,
                     height: height/10,),
                 ),
                 Expanded(
@@ -113,7 +117,7 @@ class _CoursePageState extends State<CoursePage> {
             background: Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: NetworkImage(course['pictureUrl']),
+                  image: FileImage(widget.courseCover),
                   fit: BoxFit.fill,
                 ),
               ),
@@ -129,8 +133,8 @@ class _CoursePageState extends State<CoursePage> {
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.fromLTRB(8.0, 8.0, 0, 0),
-                  child: Image.network(
-                    course['pictureUrl'],
+                  child: Image.file(
+                    widget.courseCover,
                     width: width / 6,
                   ),
                 ),

@@ -2,6 +2,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mobile/services/courses.dart';
@@ -37,36 +38,38 @@ class _HomePageState extends State<HomePage> {
     var course = await courseData.getData();
 
     if(course != null)
-      updateUI(course);
+      await updateUI(course);
     else
-      updateUI(widget.courses);
+      await updateUI(widget.courses);
 
     return course;
   }
 
-  void goToCoursePage(dynamic course) async {
+  void goToCoursePage(dynamic course, var courseCover) async {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return CoursePage(course);
+      return CoursePage(course, courseCover);
     }));
   }
 
-  void updateUI(dynamic coursesData) {
+  Future updateUI(dynamic coursesData) async {
     for (var course in coursesData) {
       String picUrl = course['pictureUrl'];
       String courseName = course['name'];
       String courseDescription = course['description'];
+      var pictureFile = await DefaultCacheManager().getSingleFile(picUrl);
       coursesList.add(
         Container(
           child: TextButton(
             onPressed: () {
-              goToCoursePage(course);
+              goToCoursePage(course, pictureFile);
             },
             child: Column(
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.only(bottom: 10.0),
-                  child: Image.network(
-                    picUrl,
+                  child: Image.file(
+                    //picUrl,
+                    pictureFile,
                     fit: BoxFit.fill,
                   ),
                 ),
@@ -93,11 +96,12 @@ class _HomePageState extends State<HomePage> {
       carouselSlider.add(Card(
         child: TextButton(
           onPressed: () {
-            goToCoursePage(course);
+            goToCoursePage(course, pictureFile);
           },
           child: Container(
-              child: Image.network(
-                picUrl,
+              child: Image.file(
+                //picUrl,
+                pictureFile,
               )),
         ),
       ));

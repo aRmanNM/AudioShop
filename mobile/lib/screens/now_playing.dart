@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 class NowPlaying extends StatefulWidget {
   NowPlaying(this.episodeDetails, this.courseCoverUrl);
@@ -31,15 +32,17 @@ class _NowPlayingState extends State<NowPlaying> {
 
   Widget slider() {
     return Container(
-      child: Slider(
-          activeColor: Colors.deepOrange[600],
-          inactiveColor: Colors.grey[350],
-          value: position.inSeconds.toDouble(),
-          max: musicLength.inSeconds.toDouble(),
-          onChanged: (value) {
-            seekToSec(value.toInt());
-          })
-    );
+        child: Slider(
+            activeColor: Colors.deepOrange[600],
+            inactiveColor: Colors.grey[350],
+            value: position.inSeconds.toDouble(),
+            max: musicLength.inSeconds.toDouble(),
+            onChanged: (value) {
+              seekToSec(value.toInt());
+              setState(() {
+                position = Duration(seconds: value.toInt());
+              });
+            }));
   }
 
   //let's create the seek function that will allow us to go to a certain position of the music
@@ -82,11 +85,11 @@ class _NowPlayingState extends State<NowPlaying> {
       appBar: AppBar(
         backgroundColor: Colors.deepOrange[600],
         title: Text(
-            episode['course'],
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 20.0,
-            ),
+          episode['course'],
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20.0,
+          ),
         ),
       ),
       //let's start by creating the main UI of the app
@@ -174,26 +177,27 @@ class _NowPlayingState extends State<NowPlaying> {
                             Expanded(
                                 flex: 1,
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Padding(
-                                      padding: const EdgeInsets.only(right: 14.0),
+                                      padding:
+                                          const EdgeInsets.only(right: 14.0),
                                       child: Text(
                                         "${position.inMinutes}:${position.inSeconds.remainder(60)}",
                                         style: TextStyle(
                                             fontSize: 12.0,
-                                            color: Colors.white
-                                        ),
+                                            color: Colors.white),
                                       ),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.only(left: 14.0),
+                                      padding:
+                                          const EdgeInsets.only(left: 14.0),
                                       child: Text(
                                         "${musicLength.inMinutes}:${musicLength.inSeconds.remainder(60)}",
                                         style: TextStyle(
                                             fontSize: 12.0,
-                                            color: Colors.white
-                                        ),
+                                            color: Colors.white),
                                       ),
                                     ),
                                   ],
@@ -219,11 +223,12 @@ class _NowPlayingState extends State<NowPlaying> {
                                   IconButton(
                                     iconSize: 45.0,
                                     color: Colors.white,
-                                    onPressed: () {
+                                    onPressed: () async {
                                       //here we will add the functionality of the play button
+                                      var audioFile = await DefaultCacheManager().getSingleFile(episode['fileUrl']);
                                       if (!playing) {
                                         //now let's play the song
-                                        _player.play(episode['fileUrl']);
+                                        _player.play(audioFile.path, isLocal: true);
                                         setState(() {
                                           playBtn = Icons.pause;
                                           playing = true;
@@ -251,10 +256,7 @@ class _NowPlayingState extends State<NowPlaying> {
                                 ],
                               ),
                             ),
-                            Expanded(
-                              flex: 2,
-                                child: SizedBox(
-                                ))
+                            Expanded(flex: 2, child: SizedBox())
                           ],
                         ),
                       ),
