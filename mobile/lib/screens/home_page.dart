@@ -7,6 +7,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mobile/models/course.dart';
 import 'package:mobile/services/course_service.dart';
+import 'package:mobile/store/course_store.dart';
+import 'package:provider/provider.dart';
 
 import 'course_page.dart';
 
@@ -21,11 +23,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  double width = 0;
+  double height = 0;
   List<Widget> coursesList = List<Widget>();
   List<Widget> carouselSlider = List<Widget>();
   final String url = 'https://audioshoppp.ir/api/course/';
   DateTime currentBackPressTime;
   Future<dynamic> courses;
+  CourseStore courseStore;
+  List<Course> courseList = List<Course>();
+  int tabIndex = 1;
 
   @override
   void initState() {
@@ -35,16 +42,18 @@ class _HomePageState extends State<HomePage> {
 
   Future<List<Course>> getCourses() async {
     CourseData courseData = CourseData(url);
-    List<Course> course = await courseData.getCourses();
-    if(course != null)
-      await updateUI(course);
+    courseList = await courseData.getCourses();
+
+    if (courseList != null)
+      await updateUI(courseList);
     else
       await updateUI(widget.courses);
 
-    return course;
+    return courseList;
   }
 
   void goToCoursePage(Course course, var courseCover) async {
+    courseStore.setCurrentCourse(course);
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return CoursePage(course, courseCover);
     }));
@@ -64,27 +73,24 @@ class _HomePageState extends State<HomePage> {
             },
             child: Column(
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 10.0),
-                  child: Image.file(
-                    //picUrl,
-                    pictureFile,
-                    fit: BoxFit.fill,
+                Expanded(
+                  flex: 3,
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 10.0),
+                    child: Image.file(
+                      //picUrl,
+                      pictureFile,
+                      fit: BoxFit.fill,
+                    ),
                   ),
                 ),
-                Text(
-                  courseName,
-                  style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.black),
-                ),
-                Text(
-                    courseDescription,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                        fontSize: 14,
-                      color: Colors.black26
-                    ),
+                Expanded(
+                  flex: 1,
+                  child: Text(
+                    courseName,
+                    overflow: TextOverflow.fade,
+                    style: TextStyle(fontSize: 16, color: Colors.white),
+                  ),
                 ),
               ],
             ),
@@ -99,9 +105,9 @@ class _HomePageState extends State<HomePage> {
           },
           child: Container(
               child: Image.file(
-                //picUrl,
-                pictureFile,
-              )),
+            //picUrl,
+            pictureFile,
+          )),
         ),
       ));
     }
@@ -118,71 +124,102 @@ class _HomePageState extends State<HomePage> {
     return Future.value(true);
   }
 
+  Widget navigationSelect(int tab) {
+    if (tab == 0)
+      return library();
+    else if (tab == 1)
+      return home();
+    else
+      return basket();
+  }
+
+  Widget home() {
+    return Column(
+      children: <Widget>[
+        Container(
+          height: 20,
+        ),
+        Expanded(
+          flex: 2,
+          child: Card(
+            child: CarouselSlider(
+                options: CarouselOptions(
+                    height: height,
+                    viewportFraction: 0.6,
+                    reverse: false,
+                    autoPlay: true,
+                    autoPlayInterval: Duration(seconds: 3),
+                    autoPlayAnimationDuration: Duration(milliseconds: 800),
+                    autoPlayCurve: Curves.fastOutSlowIn,
+                    enlargeCenterPage: true),
+                items: carouselSlider),
+          ),
+        ),
+        Expanded(
+          flex: 3,
+          child: Card(
+            child: GridView.count(
+              padding: const EdgeInsets.all(5),
+              crossAxisCount: 3,
+              childAspectRatio: (width / height),
+              children: coursesList,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget basket() {
+    return Column();
+  }
+
+  Widget library() {
+    return Column();
+  }
+
   @override
   Widget build(BuildContext context) {
-    FirebaseAdMob.instance.initialize(appId: "ca-app-pub-6716792328957551~1144830596")
-      .then((value) => myBanner..load()..show(anchorType: AnchorType.bottom));
+    courseStore = Provider.of<CourseStore>(context);
+    courseStore.setAllCourses(courseList);
 
-    double width = MediaQuery.of(context).size.width / 2;
-    double height = (MediaQuery.of(context).size.width / 2) * 1.5;
+    FirebaseAdMob.instance
+        .initialize(appId: "ca-app-pub-6716792328957551~1144830596")
+        .then((value) => myBanner
+          ..load()
+          ..show(anchorType: AnchorType.bottom));
+
+    width = MediaQuery.of(context).size.width / 2;
+    height = (MediaQuery.of(context).size.width / 2) * 1.5;
     return FutureBuilder(
         future: courses,
-        builder: (context, data){
-          if(data.hasData)
+        builder: (context, data) {
+          if (data.hasData)
             return WillPopScope(
                 child: Scaffold(
-                  bottomNavigationBar: Padding(
-                    padding: const EdgeInsets.only(bottom: 59),
-                    child: CurvedNavigationBar(
-                      animationDuration: Duration(milliseconds: 200),
-                      height: 47,
-                      backgroundColor: Colors.deepOrange[200],
-                      items: <Widget>[
-                        Icon(Icons.person, size: 25, color: Colors.deepOrange[600]),
-                        Icon(Icons.home, size: 25, color: Colors.deepOrange[600]),
-                        Icon(Icons.shopping_basket, size: 25, color: Colors.deepOrange[600]),
-                      ],
-                      onTap: (index) => {
-                        debugPrint('current index is $index')
-                      },
-                      index: 1,
+                    bottomNavigationBar: Padding(
+                      padding: const EdgeInsets.only(bottom: 59),
+                      child: CurvedNavigationBar(
+                        color: Color(0xFF1C3C54),
+                        buttonBackgroundColor: Color(0xFF386178),
+                        animationDuration: Duration(milliseconds: 200),
+                        height: 47,
+                        backgroundColor: Colors.white,
+                        items: <Widget>[
+                          Icon(Icons.person, size: 25, color: Colors.white),
+                          Icon(Icons.home, size: 25, color: Colors.white),
+                          Icon(Icons.shopping_basket,
+                              size: 25, color: Colors.white),
+                        ],
+                        onTap: (index) => {
+                          setState(() {
+                            tabIndex = index;
+                          })
+                        },
+                        index: 1,
+                      ),
                     ),
-                  ),
-                  body: Column(
-                    children: <Widget>[
-                      Container(height: 20,),
-                      Expanded(
-                        flex: 2,
-                        child: Card(
-                          child: CarouselSlider(
-                              options: CarouselOptions(
-                                height: height,
-                                viewportFraction: 0.6,
-                                reverse: false,
-                                autoPlay: true,
-                                autoPlayInterval: Duration(seconds: 3),
-                                autoPlayAnimationDuration: Duration(milliseconds: 800),
-                                autoPlayCurve: Curves.fastOutSlowIn,
-                                enlargeCenterPage: true
-                              ),
-                              items: carouselSlider),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 3,
-                        child: Card(
-                          child: GridView.count(
-                            padding: const EdgeInsets.all(5),
-
-                            crossAxisCount: 3,
-                            childAspectRatio: (width / height),
-                            children: coursesList,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                    body: navigationSelect(tabIndex)),
                 onWillPop: onWilPop);
           else
             return Container(
@@ -200,7 +237,9 @@ MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
   keywords: <String>['podcast', 'hadi'],
   contentUrl: 'https://flutter.io',
   childDirected: false,
-  testDevices: <String>['A36235BD5DAEAA4D6FA305A209159D2A'], // Android emulators are considered test devices
+  testDevices: <String>[
+    'A36235BD5DAEAA4D6FA305A209159D2A'
+  ], // Android emulators are considered test devices
 );
 
 BannerAd myBanner = BannerAd(

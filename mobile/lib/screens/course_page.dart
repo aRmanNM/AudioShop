@@ -1,10 +1,13 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mobile/models/course.dart';
 import 'package:mobile/models/course_episode.dart';
 import 'package:mobile/screens/now_playing.dart';
 import 'package:mobile/services/course_episode_service.dart';
+import 'package:mobile/store/course_store.dart';
+import 'package:provider/provider.dart';
 
 class CoursePage extends StatefulWidget {
   CoursePage(this.courseDetails, this.courseCover);
@@ -23,6 +26,7 @@ class _CoursePageState extends State<CoursePage> {
   List<Widget> episodesList = List<Widget>();
   Future<dynamic> episodesFuture;
   String url = 'https://audioshoppp.ir/api/course/episodes/';
+  CourseStore courseStore;
 
   @override
   void initState() {
@@ -90,7 +94,7 @@ class _CoursePageState extends State<CoursePage> {
                     child: Icon(
                         Icons.play_arrow,
                         size: 32,
-                        color: Colors.deepOrange[600],
+                        color: Colors.white,
                     ),
                   ),
                 )
@@ -129,23 +133,45 @@ class _CoursePageState extends State<CoursePage> {
                 ),
               ),
             ),
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(8.0, 8.0, 0, 0),
-                  child: Image.file(
-                    widget.courseCover,
-                    width: width / 6,
+            title: Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Expanded(
+                    flex: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(8.0, 8.0, 0, 0),
+                      child: Image.file(
+                        widget.courseCover,
+                        width: width / 6,
+                      ),
+                    ),
                   ),
-                ),
-                Expanded(
-                  child: Text(
-                    course.name + '  -  ' + course.description,
-                    style: TextStyle(fontSize: 14),
+                  Expanded(
+                    flex: 4,
+                    child: Text(
+                      course.name + '  -  ' + course.description,
+                      style: TextStyle(fontSize: 12),
+                    ),
                   ),
-                ),
-              ],
+                  Expanded(
+                    flex: 1,
+                      child: TextButton(
+                        onPressed: (){
+                          if(courseStore.addCourseToBasket(course))
+                            Fluttertoast.showToast(msg: 'دوره با موفقیت به سبد خرید اضافه شد');
+                          else
+                            Fluttertoast.showToast(msg: 'این دوره در سبد خرید شما موجود است');
+                        },
+                        child: Icon(
+                          Icons.shopping_basket,
+                          size: 32,
+                          color: Colors.white,
+                        ),
+                      ),)
+                ],
+              ),
             ),
           ),
         ),
@@ -163,6 +189,7 @@ class _CoursePageState extends State<CoursePage> {
 
   @override
   Widget build(BuildContext context) {
+    courseStore = Provider.of<CourseStore>(context);
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
     return FutureBuilder(
