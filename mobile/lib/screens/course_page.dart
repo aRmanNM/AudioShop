@@ -1,14 +1,15 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:mobile/models/course.dart';
+import 'package:mobile/models/course_episode.dart';
 import 'package:mobile/screens/now_playing.dart';
-import 'package:mobile/services/courses.dart';
+import 'package:mobile/services/course_episode_service.dart';
 
 class CoursePage extends StatefulWidget {
   CoursePage(this.courseDetails, this.courseCover);
 
-  final dynamic courseDetails;
+  final Course courseDetails;
   final courseCover;
 
   @override
@@ -29,10 +30,10 @@ class _CoursePageState extends State<CoursePage> {
     episodesFuture = getCourseEpisodes();
   }
 
-  Future<dynamic> getCourseEpisodes() async{
-    url += widget.courseDetails['id'].toString();
-    CourseData courseEpisodeData = CourseData(url);
-    var courseEpisodes = await courseEpisodeData.getData();
+  Future<List<CourseEpisode>> getCourseEpisodes() async{
+    url += widget.courseDetails.id.toString();
+    CourseEpisodeData courseEpisodeData = CourseEpisodeData(url);
+    List<CourseEpisode> courseEpisodes = await courseEpisodeData.getCourseEpisodes();
 
     if(courseEpisodes != null)
       await updateUI(widget.courseDetails, courseEpisodes);
@@ -40,12 +41,12 @@ class _CoursePageState extends State<CoursePage> {
     return courseEpisodes;
   }
 
-  Future updateUI(dynamic course, dynamic episodes) async {
+  Future updateUI(Course course, List<CourseEpisode> episodes) async {
     episodesList = List<Widget>();
     for (var episode in episodes) {
-      String picUrl = course['pictureUrl'];
-      String episodeName = episode['name'];
-      String episodeDescription = episode['description'];
+      String picUrl = course.pictureUrl;
+      String episodeName = episode.name;
+      String episodeDescription = episode.description;
       var picFile = widget.courseCover;
 
       episodesList.add(Padding(
@@ -70,11 +71,11 @@ class _CoursePageState extends State<CoursePage> {
                       children: <Widget>[
                         Text(
                           episodeName,
-                          style: TextStyle(fontSize: 14),),
+                          style: TextStyle(fontSize: 16),),
                         Text(
                           episodeDescription,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(fontSize: 10),)],
+                          style: TextStyle(fontSize: 12),)],
                     ),
                   ),
                 ),
@@ -140,8 +141,8 @@ class _CoursePageState extends State<CoursePage> {
                 ),
                 Expanded(
                   child: Text(
-                    course['name'] + '  -  ' + course['description'],
-                    style: TextStyle(fontSize: 10),
+                    course.name + '  -  ' + course.description,
+                    style: TextStyle(fontSize: 14),
                   ),
                 ),
               ],

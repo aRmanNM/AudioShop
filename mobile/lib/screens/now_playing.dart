@@ -1,14 +1,14 @@
 import 'dart:ui';
-
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:mobile/models/course_episode.dart';
 
 class NowPlaying extends StatefulWidget {
   NowPlaying(this.episodeDetails, this.courseCoverUrl);
 
-  final dynamic episodeDetails;
+  final CourseEpisode episodeDetails;
   final String courseCoverUrl;
 
   @override
@@ -62,33 +62,41 @@ class _NowPlayingState extends State<NowPlaying> {
     //now let's handle the audioplayer time
 
     //this function will allow you to get the music duration
-    _player.durationHandler = (d) {
+    _player.onDurationChanged.listen((d) {
       setState(() {
         musicLength = d;
       });
-    };
+    });
 
     //this function will allow us to move the cursor of the slider while we are playing the song
-    _player.positionHandler = (p) {
+    _player.onAudioPositionChanged.listen((p) {
       setState(() {
         position = p;
       });
-    };
+    }) ;
+
+    _player.onPlayerCompletion.listen((event) {
+      setState(() {
+        position = musicLength;
+        playBtn = Icons.play_arrow;
+        playing = false;
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    dynamic episode = widget.episodeDetails;
+    CourseEpisode episode = widget.episodeDetails;
     String courseCover = widget.courseCoverUrl;
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.deepOrange[600],
         title: Text(
-          episode['course'],
+          episode.course,
           style: TextStyle(
             color: Colors.white,
-            fontSize: 20.0,
+            fontSize: 24.0,
           ),
         ),
       ),
@@ -123,10 +131,10 @@ class _NowPlayingState extends State<NowPlaying> {
                       flex: 1,
                       child: Center(
                         child: Text(
-                          episode['name'],
+                          episode.name,
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 19.0,
+                            fontSize: 23.0,
                             fontWeight: FontWeight.w400,
                           ),
                         ),
@@ -154,7 +162,7 @@ class _NowPlayingState extends State<NowPlaying> {
                           "بیطرف",
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 19.0,
+                            fontSize: 23.0,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -186,7 +194,7 @@ class _NowPlayingState extends State<NowPlaying> {
                                       child: Text(
                                         "${position.inMinutes}:${position.inSeconds.remainder(60)}",
                                         style: TextStyle(
-                                            fontSize: 12.0,
+                                            fontSize: 14.0,
                                             color: Colors.white),
                                       ),
                                     ),
@@ -196,7 +204,7 @@ class _NowPlayingState extends State<NowPlaying> {
                                       child: Text(
                                         "${musicLength.inMinutes}:${musicLength.inSeconds.remainder(60)}",
                                         style: TextStyle(
-                                            fontSize: 12.0,
+                                            fontSize: 14.0,
                                             color: Colors.white),
                                       ),
                                     ),
@@ -225,7 +233,7 @@ class _NowPlayingState extends State<NowPlaying> {
                                     color: Colors.white,
                                     onPressed: () async {
                                       //here we will add the functionality of the play button
-                                      var audioFile = await DefaultCacheManager().getSingleFile(episode['fileUrl']);
+                                      var audioFile = await DefaultCacheManager().getSingleFile(episode.fileUrl);
                                       if (!playing) {
                                         //now let's play the song
                                         _player.play(audioFile.path, isLocal: true);

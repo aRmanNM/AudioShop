@@ -5,10 +5,10 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:mobile/services/courses.dart';
+import 'package:mobile/models/course.dart';
+import 'package:mobile/services/course_service.dart';
 
 import 'course_page.dart';
-import 'loading_screen.dart';
 
 class HomePage extends StatefulWidget {
   HomePage(this.courses);
@@ -33,10 +33,9 @@ class _HomePageState extends State<HomePage> {
     courses = getCourses();
   }
 
-  Future<dynamic> getCourses() async {
+  Future<List<Course>> getCourses() async {
     CourseData courseData = CourseData(url);
-    var course = await courseData.getData();
-
+    List<Course> course = await courseData.getCourses();
     if(course != null)
       await updateUI(course);
     else
@@ -45,17 +44,17 @@ class _HomePageState extends State<HomePage> {
     return course;
   }
 
-  void goToCoursePage(dynamic course, var courseCover) async {
+  void goToCoursePage(Course course, var courseCover) async {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return CoursePage(course, courseCover);
     }));
   }
 
-  Future updateUI(dynamic coursesData) async {
+  Future updateUI(List<Course> coursesData) async {
     for (var course in coursesData) {
-      String picUrl = course['pictureUrl'];
-      String courseName = course['name'];
-      String courseDescription = course['description'];
+      String picUrl = course.pictureUrl;
+      String courseName = course.name;
+      String courseDescription = course.description;
       var pictureFile = await DefaultCacheManager().getSingleFile(picUrl);
       coursesList.add(
         Container(
@@ -76,14 +75,14 @@ class _HomePageState extends State<HomePage> {
                 Text(
                   courseName,
                   style: TextStyle(
-                      fontSize: 12,
+                      fontSize: 16,
                       color: Colors.black),
                 ),
                 Text(
                     courseDescription,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                        fontSize: 10,
+                        fontSize: 14,
                       color: Colors.black26
                     ),
                 ),
