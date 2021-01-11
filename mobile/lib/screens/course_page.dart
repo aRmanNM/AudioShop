@@ -133,45 +133,47 @@ class _CoursePageState extends State<CoursePage> {
                 ),
               ),
             ),
-            title: Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Expanded(
-                    flex: 2,
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(8.0, 8.0, 0, 0),
-                      child: Image.file(
-                        widget.courseCover,
-                        width: width / 6,
-                      ),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              textBaseline: TextBaseline.alphabetic,
+              children: <Widget>[
+                Expanded(
+                  flex: 3,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(8.0, 8.0, 0, 0),
+                    child: Image.file(
+                      widget.courseCover,
+                      width: width / 6,
                     ),
                   ),
-                  Expanded(
-                    flex: 4,
+                ),
+                Expanded(
+                  flex: 4,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 10.0, top: 10.0),
                     child: Text(
                       course.name + '  -  ' + course.description,
-                      style: TextStyle(fontSize: 12),
+                      style: TextStyle(fontSize: 14),
                     ),
                   ),
-                  Expanded(
-                    flex: 1,
-                      child: TextButton(
-                        onPressed: (){
-                          if(courseStore.addCourseToBasket(course))
-                            Fluttertoast.showToast(msg: 'دوره با موفقیت به سبد خرید اضافه شد');
-                          else
-                            Fluttertoast.showToast(msg: 'این دوره در سبد خرید شما موجود است');
-                        },
-                        child: Icon(
-                          Icons.shopping_basket,
-                          size: 32,
-                          color: Colors.white,
-                        ),
-                      ),)
-                ],
-              ),
+                ),
+                Expanded(
+                  flex: 2,
+                    child: TextButton(
+                      onPressed: (){
+                        if(courseStore.addCourseToBasket(course))
+                          Fluttertoast.showToast(msg: 'دوره با موفقیت به سبد خرید اضافه شد');
+                        else
+                          Fluttertoast.showToast(msg: 'این دوره در سبد خرید شما موجود است');
+                      },
+                      child: Icon(
+                        Icons.shopping_basket,
+                        size: 22,
+                        color: Colors.white,
+                      ),
+                    ),)
+              ],
             ),
           ),
         ),

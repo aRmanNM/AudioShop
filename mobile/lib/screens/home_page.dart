@@ -5,6 +5,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:mobile/models/course.dart';
 import 'package:mobile/services/course_service.dart';
 import 'package:mobile/store/course_store.dart';
@@ -33,6 +34,7 @@ class _HomePageState extends State<HomePage> {
   CourseStore courseStore;
   List<Course> courseList = List<Course>();
   int tabIndex = 1;
+  bool delete = false;
 
   @override
   void initState() {
@@ -77,10 +79,13 @@ class _HomePageState extends State<HomePage> {
                   flex: 3,
                   child: Padding(
                     padding: const EdgeInsets.only(bottom: 10.0),
-                    child: Image.file(
-                      //picUrl,
-                      pictureFile,
-                      fit: BoxFit.fill,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(15),
+                      child: Image.file(
+                        //picUrl,
+                        pictureFile,
+                        fit: BoxFit.fill,
+                      ),
                     ),
                   ),
                 ),
@@ -104,9 +109,12 @@ class _HomePageState extends State<HomePage> {
             goToCoursePage(course, pictureFile);
           },
           child: Container(
-              child: Image.file(
-            //picUrl,
-            pictureFile,
+              child: ClipRRect(
+            borderRadius: BorderRadius.circular(15),
+            child: Image.file(
+              //picUrl,
+              pictureFile,
+            ),
           )),
         ),
       ));
@@ -171,11 +179,113 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget basket() {
-    return Column();
+    return courseStore.basket.length > 0
+        ? ListView.builder(
+            itemCount: courseStore.basket.length,
+            itemBuilder: (BuildContext context, int index) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  child: IntrinsicHeight(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        Expanded(
+                            flex: 2,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(15),
+                              child: Image.network(
+                                  courseStore.basket[index].pictureUrl),
+                            )),
+                        Expanded(
+                            flex: 4,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Text(
+                                    courseStore.basket[index].name,
+                                    style: TextStyle(
+                                      fontSize: 21
+                                    ),),
+                                Text(NumberFormat('#,###')
+                                    .format(courseStore.basket[index].price) +
+                                    ' تومان',
+                                    style: TextStyle(fontSize: 17),),
+                              ],
+                            ),),
+                        Expanded(
+                            flex: 1,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(15),
+                                  bottomLeft: Radius.circular(15),
+                              ),
+                              child: Container(
+                                color: Colors.red,
+                                child: TextButton(
+                                  child: Icon(Icons.delete_outline_sharp, size: 35, color: Colors.white),
+                                  onPressed: (){
+                                    showAlertDialog(context, courseStore.basket[index]);
+                                  },
+                                ),
+                              ),
+                            ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            })
+        : Center(
+            child: Text('دوره ای در سبد خرید شما موجود نمی باشد'),
+          );
   }
 
   Widget library() {
     return Column();
+  }
+
+  showAlertDialog(BuildContext context, Course course) {
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text("خیر"),
+      onPressed:  () {
+        setState(() {
+          Navigator.of(context).pop();
+        });
+      },
+    );
+    Widget continueButton = FlatButton(
+      child: Text("بله"),
+      onPressed:  () {
+        setState(() {
+          Navigator.of(context).pop(); // dismiss dialog
+          courseStore.deleteCourseFromBasket(course);
+        });
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("هشدار"),
+      content: Text("آیا از حذف دوره از سبد خرید مطمئنید؟"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 
   @override
@@ -183,11 +293,11 @@ class _HomePageState extends State<HomePage> {
     courseStore = Provider.of<CourseStore>(context);
     courseStore.setAllCourses(courseList);
 
-    FirebaseAdMob.instance
-        .initialize(appId: "ca-app-pub-6716792328957551~1144830596")
-        .then((value) => myBanner
-          ..load()
-          ..show(anchorType: AnchorType.bottom));
+    // FirebaseAdMob.instance
+    //     .initialize(appId: "ca-app-pub-6716792328957551~1144830596")
+    //     .then((value) => myBanner
+    //       ..load()
+    //       ..show(anchorType: AnchorType.bottom));
 
     width = MediaQuery.of(context).size.width / 2;
     height = (MediaQuery.of(context).size.width / 2) * 1.5;
@@ -232,35 +342,35 @@ class _HomePageState extends State<HomePage> {
         });
   }
 }
-
-MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
-  keywords: <String>['podcast', 'hadi'],
-  contentUrl: 'https://flutter.io',
-  childDirected: false,
-  testDevices: <String>[
-    'A36235BD5DAEAA4D6FA305A209159D2A'
-  ], // Android emulators are considered test devices
-);
-
-BannerAd myBanner = BannerAd(
-  // Replace the testAdUnitId with an ad unit id from the AdMob dash.
-  // https://developers.google.com/admob/android/test-ads
-  // https://developers.google.com/admob/ios/test-ads
-  adUnitId: BannerAd.testAdUnitId,
-  size: AdSize.fullBanner,
-  targetingInfo: targetingInfo,
-  listener: (MobileAdEvent event) {
-    print("BannerAd event is $event");
-  },
-);
-
-InterstitialAd myInterstitial = InterstitialAd(
-  // Replace the testAdUnitId with an ad unit id from the AdMob dash.
-  // https://developers.google.com/admob/android/test-ads
-  // https://developers.google.com/admob/ios/test-ads
-  adUnitId: InterstitialAd.testAdUnitId,
-  targetingInfo: targetingInfo,
-  listener: (MobileAdEvent event) {
-    print("InterstitialAd event is $event");
-  },
-);
+//
+// MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
+//   keywords: <String>['podcast', 'hadi'],
+//   contentUrl: 'https://flutter.io',
+//   childDirected: false,
+//   testDevices: <String>[
+//     'A36235BD5DAEAA4D6FA305A209159D2A'
+//   ], // Android emulators are considered test devices
+// );
+//
+// BannerAd myBanner = BannerAd(
+//   // Replace the testAdUnitId with an ad unit id from the AdMob dash.
+//   // https://developers.google.com/admob/android/test-ads
+//   // https://developers.google.com/admob/ios/test-ads
+//   adUnitId: BannerAd.testAdUnitId,
+//   size: AdSize.fullBanner,
+//   targetingInfo: targetingInfo,
+//   listener: (MobileAdEvent event) {
+//     print("BannerAd event is $event");
+//   },
+// );
+//
+// InterstitialAd myInterstitial = InterstitialAd(
+//   // Replace the testAdUnitId with an ad unit id from the AdMob dash.
+//   // https://developers.google.com/admob/android/test-ads
+//   // https://developers.google.com/admob/ios/test-ads
+//   adUnitId: InterstitialAd.testAdUnitId,
+//   targetingInfo: targetingInfo,
+//   listener: (MobileAdEvent event) {
+//     print("InterstitialAd event is $event");
+//   },
+// );

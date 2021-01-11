@@ -23,15 +23,20 @@ class CourseStore extends ChangeNotifier{
     this._currentCourse = tapedCourse;
   }
 
-  bool addCourseToBasket(Course addedCourse){
+  bool addCourseToBasket(Course toBeAddedCourse){
     Course similarCourse = _basket
-        .firstWhere((x) => x.id == addedCourse.id, orElse: () => null);
+        .firstWhere((x) => x.id == toBeAddedCourse.id, orElse: () => null);
 
     if(similarCourse == null) {
-      basket.add(addedCourse);
+      basket.add(toBeAddedCourse);
       notifyListeners();
       return true;
     }
     return false;
+  }
+
+  deleteCourseFromBasket(Course toBeDeletedCourse){
+    basket.remove(toBeDeletedCourse);
+    notifyListeners();
   }
 }
