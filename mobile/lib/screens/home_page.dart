@@ -35,6 +35,7 @@ class _HomePageState extends State<HomePage> {
   List<Course> courseList = List<Course>();
   int tabIndex = 1;
   bool delete = false;
+  double totalBasketPrice = 0;
 
   @override
   void initState() {
@@ -80,7 +81,7 @@ class _HomePageState extends State<HomePage> {
                   child: Padding(
                     padding: const EdgeInsets.only(bottom: 10.0),
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(15),
+                      borderRadius: BorderRadius.circular(10),
                       child: Image.file(
                         //picUrl,
                         pictureFile,
@@ -103,20 +104,18 @@ class _HomePageState extends State<HomePage> {
         ),
       );
 
-      carouselSlider.add(Card(
-        child: TextButton(
-          onPressed: () {
-            goToCoursePage(course, pictureFile);
-          },
-          child: Container(
-              child: ClipRRect(
-            borderRadius: BorderRadius.circular(15),
-            child: Image.file(
-              //picUrl,
-              pictureFile,
-            ),
-          )),
-        ),
+      carouselSlider.add(TextButton(
+        onPressed: () {
+          goToCoursePage(course, pictureFile);
+        },
+        child: Container(
+            child: ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: Image.file(
+            //picUrl,
+            pictureFile,
+          ),
+        )),
       ));
     }
   }
@@ -179,70 +178,147 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget basket() {
+    totalBasketPrice = 0;
     return courseStore.basket.length > 0
-        ? ListView.builder(
-            itemCount: courseStore.basket.length,
-            itemBuilder: (BuildContext context, int index) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                  ),
-                  child: IntrinsicHeight(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        Expanded(
-                            flex: 2,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(15),
-                              child: Image.network(
-                                  courseStore.basket[index].pictureUrl),
-                            )),
-                        Expanded(
-                            flex: 4,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Text(
-                                    courseStore.basket[index].name,
-                                    style: TextStyle(
-                                      fontSize: 21
-                                    ),),
-                                Text(NumberFormat('#,###')
-                                    .format(courseStore.basket[index].price) +
-                                    ' تومان',
-                                    style: TextStyle(fontSize: 17),),
-                              ],
-                            ),),
-                        Expanded(
-                            flex: 1,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(15),
-                                  bottomLeft: Radius.circular(15),
-                              ),
-                              child: Container(
-                                color: Colors.red,
-                                child: TextButton(
-                                  child: Icon(Icons.delete_outline_sharp, size: 35, color: Colors.white),
-                                  onPressed: (){
-                                    showAlertDialog(context, courseStore.basket[index]);
-                                  },
+        ? Column(
+            children: <Widget>[
+              Expanded(
+                flex: 8,
+                child: ListView.builder(
+                    itemCount: courseStore.basket.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 2, horizontal: 8),
+                        child: Card(
+                          elevation: 8,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                          child: IntrinsicHeight(
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: <Widget>[
+                                Expanded(
+                                    flex: 2,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(15),
+                                      child: Image.network(
+                                          courseStore.basket[index].pictureUrl),
+                                    )),
+                                Expanded(
+                                  flex: 6,
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Text(
+                                        courseStore.basket[index].name,
+                                        style: TextStyle(fontSize: 19),
+                                      ),
+                                      Text(
+                                        NumberFormat('#,###').format(courseStore
+                                                .basket[index].price) +
+                                            ' تومان',
+                                        style: TextStyle(fontSize: 15),
+                                      ),
+                                    ],
+                                  ),
                                 ),
+                                Expanded(
+                                  flex: 1,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(15),
+                                      bottomLeft: Radius.circular(15),
+                                    ),
+                                    child: Container(
+                                      color: Colors.red,
+                                      child: TextButton(
+                                        child: Icon(Icons.delete_outline_sharp,
+                                            size: 25, color: Colors.white),
+                                        onPressed: () {
+                                          showAlertDialog(context,
+                                              courseStore.basket[index]);
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    }),
+              ),
+              Expanded(
+                flex: 3,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    Expanded(
+                      flex: 2,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 0, horizontal: 15.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.only(right: 5),
+                              child: Text('مجموع دوره های انتخاب شده: '),
+                            ),
+                            Card(
+                                color: Color(0xFF202028),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15.0),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.fromLTRB(8,8,8,8),
+                                  child: Text(basketPrice(),),
+                                )),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 3,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(15,0,15,20),
+                        child: Card(
+                          color: Color(0xFF20BFA9),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                          child: TextButton(
+                            child: Center(
+                              child: Text(
+                                  'ادامه خرید',
+                                  style: TextStyle(
+                                      fontSize: 23,
+                                      color: Colors.white,
+                                  ),
                               ),
                             ),
-                        )
-                      ],
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-              );
-            })
+              )
+            ],
+          )
         : Center(
             child: Text('دوره ای در سبد خرید شما موجود نمی باشد'),
           );
+  }
+
+  String basketPrice() {
+    for (var course in courseStore.basket) totalBasketPrice += course.price;
+
+    return NumberFormat('#,###').format(totalBasketPrice) + ' تومان';
   }
 
   Widget library() {
@@ -253,7 +329,7 @@ class _HomePageState extends State<HomePage> {
     // set up the buttons
     Widget cancelButton = FlatButton(
       child: Text("خیر"),
-      onPressed:  () {
+      onPressed: () {
         setState(() {
           Navigator.of(context).pop();
         });
@@ -261,7 +337,7 @@ class _HomePageState extends State<HomePage> {
     );
     Widget continueButton = FlatButton(
       child: Text("بله"),
-      onPressed:  () {
+      onPressed: () {
         setState(() {
           Navigator.of(context).pop(); // dismiss dialog
           courseStore.deleteCourseFromBasket(course);
@@ -308,18 +384,19 @@ class _HomePageState extends State<HomePage> {
             return WillPopScope(
                 child: Scaffold(
                     bottomNavigationBar: Padding(
-                      padding: const EdgeInsets.only(bottom: 59),
+                      padding: const EdgeInsets.only(bottom: 0),
                       child: CurvedNavigationBar(
-                        color: Color(0xFF1C3C54),
-                        buttonBackgroundColor: Color(0xFF386178),
+                        color: Color(0xFF202028),
+                        buttonBackgroundColor: Color(0xFF202028),
                         animationDuration: Duration(milliseconds: 200),
-                        height: 47,
-                        backgroundColor: Colors.white,
+                        height: 50,
+                        backgroundColor: Color(0xFF34333A),
                         items: <Widget>[
-                          Icon(Icons.person, size: 25, color: Colors.white),
-                          Icon(Icons.home, size: 25, color: Colors.white),
+                          Icon(Icons.person,
+                              size: 25, color: Color(0xFF20BFA9)),
+                          Icon(Icons.home, size: 25, color: Color(0xFF20BFA9)),
                           Icon(Icons.shopping_basket,
-                              size: 25, color: Colors.white),
+                              size: 25, color: Color(0xFF20BFA9)),
                         ],
                         onTap: (index) => {
                           setState(() {
@@ -333,9 +410,9 @@ class _HomePageState extends State<HomePage> {
                 onWillPop: onWilPop);
           else
             return Container(
-              color: Colors.white,
+              color: Color(0xFF202028),
               child: SpinKitWave(
-                color: Colors.deepOrange[600],
+                color: Color(0xFF20BFA9),
                 size: 100.0,
               ),
             );
