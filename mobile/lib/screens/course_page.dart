@@ -62,9 +62,12 @@ class _CoursePageState extends State<CoursePage> {
               children: <Widget>[
                 Expanded(
                   flex: 6,
-                  child: Image.file(
-                    picFile,
-                    height: height/10,),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.file(
+                      picFile,
+                      height: height/10,),
+                  ),
                 ),
                 Expanded(
                   flex: 25,
@@ -94,7 +97,7 @@ class _CoursePageState extends State<CoursePage> {
                     child: Icon(
                         Icons.play_arrow,
                         size: 32,
-                        color: Colors.white,
+                        color: Color(0xFFFFFFFF),
                     ),
                   ),
                 )
@@ -139,22 +142,25 @@ class _CoursePageState extends State<CoursePage> {
               textBaseline: TextBaseline.alphabetic,
               children: <Widget>[
                 Expanded(
-                  flex: 3,
+                  flex: 4,
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(8.0, 8.0, 0, 0),
-                    child: Image.file(
-                      widget.courseCover,
-                      width: width / 6,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(3),
+                      child: Image.file(
+                        widget.courseCover,
+                        width: width / 6,
+                      ),
                     ),
                   ),
                 ),
                 Expanded(
                   flex: 4,
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 10.0, top: 10.0),
+                    padding: const EdgeInsets.only(left: 8.0, top: 8.0),
                     child: Text(
                       course.name + '  -  ' + course.description,
-                      style: TextStyle(fontSize: 14),
+                      style: TextStyle(fontSize: 11),
                     ),
                   ),
                 ),
@@ -201,12 +207,9 @@ class _CoursePageState extends State<CoursePage> {
             return Scaffold(body: scrollView);
           }
           else{
-            return Container(
-              color: Colors.white,
-              child: SpinKitWave(
-                color: Colors.deepOrange[600],
-                size: 100.0,
-              ),
+            return SpinKitWave(
+              color: Color(0xFF20BFA9),
+              size: 100.0,
             );
           }
         }

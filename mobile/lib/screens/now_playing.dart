@@ -33,7 +33,7 @@ class _NowPlayingState extends State<NowPlaying> {
   Widget slider() {
     return Container(
         child: Slider(
-            activeColor: Colors.deepOrange[600],
+            activeColor: Color(0xFF20BFA9),
             inactiveColor: Colors.grey[350],
             value: position.inSeconds.toDouble(),
             max: musicLength.inSeconds.toDouble(),
@@ -91,7 +91,7 @@ class _NowPlayingState extends State<NowPlaying> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.deepOrange[600],
+        backgroundColor: Color(0xFF202028),
         title: Text(
           episode.course,
           style: TextStyle(
@@ -108,7 +108,7 @@ class _NowPlayingState extends State<NowPlaying> {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                Colors.deepOrange[600],
+                Color(0xFF20BFA9),
                 Colors.deepOrange[600],
               ]),
         ),
