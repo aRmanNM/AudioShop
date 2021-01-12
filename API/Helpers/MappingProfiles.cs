@@ -14,8 +14,7 @@ namespace API.Helpers
             CreateMap<Course, CourseDto>().
                 ForMember(x => x.PictureUrl, y => y.MapFrom<CourseUrlResolver>());
             CreateMap<RegisterDto, User>()
-                .ForMember(x => x.Email, y => y.MapFrom(z => z.Email))
-                .ForMember(x => x.UserName, y => y.MapFrom(z => z.Email))
+                .ForMember(x => x.UserName, y => y.MapFrom(z => z.PhoneNumber))
                 .ForMember(x => x.DisplayName, y => y.MapFrom(z => z.DisplayName));
         }
     }

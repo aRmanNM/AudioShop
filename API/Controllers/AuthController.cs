@@ -16,9 +16,11 @@ namespace API.Controllers
         private readonly SignInManager<User> _signInManager;
         private readonly ITokenService _tokenService;
         private readonly IMapper _mapper;
-        public AuthController(UserManager<User> userManager, SignInManager<User> signInManager,
-        ITokenService tokenService, IMapper mapper)
+        private readonly ISMSService _smsService;
+
+        public AuthController(UserManager<User> userManager, SignInManager<User> signInManager, ITokenService tokenService, IMapper mapper, ISMSService smsService)
         {
+            _smsService = smsService;
             _mapper = mapper;
             _tokenService = tokenService;
             _signInManager = signInManager;
@@ -26,43 +28,67 @@ namespace API.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
+        public async Task<ActionResult> Login(LoginDto loginDto)
         {
-            var user = await _userManager.FindByEmailAsync(loginDto.Email);
+            var user = await _userManager.FindByNameAsync(loginDto.PhoneNumber); // used phoneNumber as userName! :|
             if (user == null) return Unauthorized("ورود نامعتبر");
-            var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, true);
-            if (result.IsLockedOut) return Unauthorized("اکانت به مدت پنج دقیقه مسدود شد");
-            if (!result.Succeeded) return Unauthorized("ورود نامعتبر");
-            var userDto = MapAppUserToUserDto(user);
-            return Ok(userDto.Result);
+            var authToken = _smsService.GenerateAuthToken();
+            var res = _smsService.SendSMS(user.PhoneNumber, authToken);
+
+            if (!res)
+            {
+                return BadRequest("ارسال پیامک با مشکل روبرو شد");
+            }
+
+            user.VerificationToken = authToken;
+            await _userManager.UpdateAsync(user);
+            return Ok();
         }
 
         [HttpPost("register")]
         public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
         {
-            if (CheckEmailExistsAsync(registerDto.Email).Result.Value)
+            var user = _mapper.Map<RegisterDto, User>(registerDto);
+            var authToken = _smsService.GenerateAuthToken();
+            var res = _smsService.SendSMS(user.PhoneNumber, authToken);
+            if (!res)
             {
-                return BadRequest("این ایمیل رزرو شده است");
+                return BadRequest("ارسال پیامک با مشکل روبرو شد");
             }
 
-            var appUser = _mapper.Map<RegisterDto, User>(registerDto);
-            var result = await _userManager.CreateAsync(appUser, registerDto.Password);
-            if (!result.Succeeded) return BadRequest();
-            var userDto = await MapAppUserToUserDto(appUser);
-            return userDto;
+            user.VerificationToken = authToken;
+            var result = await _userManager.CreateAsync(user);
+            if (!result.Succeeded) return BadRequest("ساخت اکانت با مشکل روبرو شد");
+            await _userManager.AddToRoleAsync(user, "Member");
+
+            return Ok();
         }
 
-        [HttpGet("emailexists")]
-        public async Task<ActionResult<bool>> CheckEmailExistsAsync([FromQuery] string email)
+        [HttpPost("smsverification")]
+        public async Task<ActionResult> SMSVerification(VerificationDto verificationDto)
         {
-            return await _userManager.FindByEmailAsync(email) != null;
+            var user = await _userManager.FindByNameAsync(verificationDto.PhoneNumber); // used phoneNumber as userName!
+            if (verificationDto.AuthToken != user.VerificationToken)
+            {
+                return Unauthorized("not authorized!");
+            }
+
+            user.VerificationToken = "";
+            await _userManager.UpdateAsync(user);
+            var userDto = MapAppUserToUserDto(user);
+            return Ok(userDto.Result);
+        }
+
+        [HttpGet("phoneexists")]
+        public async Task<ActionResult<bool>> CheckPhoneNumberExistsAsync([FromQuery] string phoneNumber)
+        {
+            return await _userManager.FindByNameAsync(phoneNumber) != null;
         }
 
         public async Task<UserDto> MapAppUserToUserDto(User user)
         {
             return new UserDto
             {
-                Email = user.Email,
                 Token = await _tokenService.CreateToken(user),
                 DisplayName = user.DisplayName
             };

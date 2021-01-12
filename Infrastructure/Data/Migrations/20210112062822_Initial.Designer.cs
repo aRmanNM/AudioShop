@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace API.Data.Migrations
+namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20201224195747_initial")]
-    partial class initial
+    [Migration("20210112062822_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,7 +21,7 @@ namespace API.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("API.Entities.BasketItem", b =>
+            modelBuilder.Entity("Core.Entities.BasketItem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -46,7 +46,7 @@ namespace API.Data.Migrations
                     b.ToTable("BasketItems");
                 });
 
-            modelBuilder.Entity("API.Entities.Course", b =>
+            modelBuilder.Entity("Core.Entities.Course", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -70,7 +70,7 @@ namespace API.Data.Migrations
                     b.ToTable("Courses");
                 });
 
-            modelBuilder.Entity("API.Entities.CourseEpisode", b =>
+            modelBuilder.Entity("Core.Entities.CourseEpisode", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -102,7 +102,7 @@ namespace API.Data.Migrations
                     b.ToTable("CourseEpisode");
                 });
 
-            modelBuilder.Entity("API.Entities.Order", b =>
+            modelBuilder.Entity("Core.Entities.Order", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -128,7 +128,7 @@ namespace API.Data.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("API.Entities.User", b =>
+            modelBuilder.Entity("Core.Entities.User", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -182,6 +182,9 @@ namespace API.Data.Migrations
                     b.Property<string>("UserName")
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
+
+                    b.Property<string>("VerificationToken")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -339,14 +342,14 @@ namespace API.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("API.Entities.Role", b =>
+            modelBuilder.Entity("Core.Entities.Role", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityRole");
 
                     b.HasDiscriminator().HasValue("Role");
                 });
 
-            modelBuilder.Entity("API.Entities.UserRole", b =>
+            modelBuilder.Entity("Core.Entities.UserRole", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUserRole<string>");
 
@@ -363,33 +366,33 @@ namespace API.Data.Migrations
                     b.HasDiscriminator().HasValue("UserRole");
                 });
 
-            modelBuilder.Entity("API.Entities.BasketItem", b =>
+            modelBuilder.Entity("Core.Entities.BasketItem", b =>
                 {
-                    b.HasOne("API.Entities.Course", null)
+                    b.HasOne("Core.Entities.Course", null)
                         .WithMany("BasketItems")
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("API.Entities.Order", null)
+                    b.HasOne("Core.Entities.Order", null)
                         .WithMany("BasketItems")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("API.Entities.CourseEpisode", b =>
+            modelBuilder.Entity("Core.Entities.CourseEpisode", b =>
                 {
-                    b.HasOne("API.Entities.Course", "Course")
+                    b.HasOne("Core.Entities.Course", "Course")
                         .WithMany()
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("API.Entities.Order", b =>
+            modelBuilder.Entity("Core.Entities.Order", b =>
                 {
-                    b.HasOne("API.Entities.User", null)
+                    b.HasOne("Core.Entities.User", null)
                         .WithMany("Orders")
                         .HasForeignKey("UserId");
                 });
@@ -405,7 +408,7 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("API.Entities.User", null)
+                    b.HasOne("Core.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -414,7 +417,7 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("API.Entities.User", null)
+                    b.HasOne("Core.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -429,7 +432,7 @@ namespace API.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("API.Entities.User", null)
+                    b.HasOne("Core.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -438,20 +441,20 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("API.Entities.User", null)
+                    b.HasOne("Core.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("API.Entities.UserRole", b =>
+            modelBuilder.Entity("Core.Entities.UserRole", b =>
                 {
-                    b.HasOne("API.Entities.Role", "Role")
+                    b.HasOne("Core.Entities.Role", "Role")
                         .WithMany("UserRoles")
                         .HasForeignKey("RoleId1");
 
-                    b.HasOne("API.Entities.User", "User")
+                    b.HasOne("Core.Entities.User", "User")
                         .WithMany("UserRoles")
                         .HasForeignKey("UserId1");
                 });
