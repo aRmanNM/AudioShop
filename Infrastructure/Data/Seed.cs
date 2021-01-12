@@ -9,7 +9,7 @@ namespace Infrastructure.Data
     {
         public static void SeedUsers(UserManager<User> userManager, RoleManager<Role> roleManager)
         {
-            if (!userManager.Users.Any())
+            if (!userManager.Users.Any() || !roleManager.Roles.Any())
             {
                 var user = new User{
                   DisplayName = "Arman",

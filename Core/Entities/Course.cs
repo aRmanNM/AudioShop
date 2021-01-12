@@ -10,5 +10,11 @@ namespace Core.Entities
         public string PictureUrl { get; set; }
         public string Description { get; set; }
         public ICollection<BasketItem> BasketItems { get; set; }
+
+        // category
+
+        // IsOnSlider
+        // SliderBannerCaption
+        // SliderBannerPicUrl
     }
 }

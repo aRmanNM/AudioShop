@@ -12,6 +12,7 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+
     public class CourseController : ControllerBase
     {
         private readonly IStoreRepository _storeRepository;
@@ -22,6 +23,9 @@ namespace API.Controllers
             _storeRepository = storeRepository;
         }
 
+        // TODO:
+        // pagination
+        //
         [HttpGet]
         public async Task<ActionResult<List<CourseDto>>> GetCourses()
         {
