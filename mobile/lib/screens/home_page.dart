@@ -3,14 +3,16 @@ import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile/models/course.dart';
+import 'package:mobile/screens/checkout_page.dart';
+import 'package:mobile/screens/login_page.dart';
 import 'package:mobile/services/course_service.dart';
 import 'package:mobile/store/course_store.dart';
 import 'package:provider/provider.dart';
-
 import 'course_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -24,6 +26,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final secureStorage = FlutterSecureStorage();
   double width = 0;
   double height = 0;
   List<Widget> coursesList = List<Widget>();
@@ -41,6 +44,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     courses = getCourses();
+    loginStatement();
   }
 
   Future<List<Course>> getCourses() async {
@@ -292,6 +296,17 @@ class _HomePageState extends State<HomePage> {
                             borderRadius: BorderRadius.circular(15.0),
                           ),
                           child: TextButton(
+                            onPressed: (){
+                              if(courseStore.isLoggedIn)
+                                Navigator.push(context, MaterialPageRoute(builder: (context){
+                                  return CheckOutPage();
+                                }));
+                              else{
+                                Navigator.push(context, MaterialPageRoute(builder: (context){
+                                  return LoginPage();
+                                }));
+                              }
+                            },
                             child: Center(
                               child: Text(
                                   'ادامه خرید',
@@ -364,10 +379,17 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Future loginStatement() async{
+    String token = await secureStorage.read(key: 'token');
+    if(token.isNotEmpty && !courseStore.isTokenExpired(token))
+      courseStore.setUserDetails(token);
+  }
+
   @override
   Widget build(BuildContext context) {
     courseStore = Provider.of<CourseStore>(context);
     courseStore.setAllCourses(courseList);
+
 
     // FirebaseAdMob.instance
     //     .initialize(appId: "ca-app-pub-6716792328957551~1144830596")
