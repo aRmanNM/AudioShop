@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:mobile/store/course_store.dart';
+import 'package:async/async.dart';
+import 'package:mobile/services/authentication_service.dart';
 
 enum FormName{
   SignIn,
@@ -19,6 +24,47 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController phoneNumberController = new TextEditingController();
   TextEditingController nameController = new TextEditingController();
   TextEditingController verificationCodeController = new TextEditingController();
+  final secureStorage = FlutterSecureStorage();
+  CourseStore courseStore;
+  Duration _timerDuration = new Duration(seconds: 60);
+  RestartableTimer _timer;
+  bool sentCode = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = new RestartableTimer(Duration(seconds: 1), null);
+  }
+
+  Future receiveCode() async{
+    AuthenticationService authService = AuthenticationService();
+    bool isRepetitiveUser = await authService.isPhoneNumberRegistered(
+        'https://localhost:5001/api/auth/phoneexists?phoneNumber='
+        + phoneNumberController.text);
+    {
+      if(formName == FormName.SignIn){
+        if(isRepetitiveUser){
+          sentCode = await authService.
+          signIn('https://localhost:5001/api/auth/login',
+              phoneNumberController.toString());
+        }
+        else{
+          Fluttertoast.showToast(msg: 'کاربری با این شماره تلفن یافت نشد. لطفا ثبت نام کنید.');
+        }
+      }
+      else{
+        if(!isRepetitiveUser){
+          sentCode = await authService.
+          signUp('https://localhost:5001/api/auth/register',
+              phoneNumberController.toString(), nameController.toString());
+        }
+        else {
+          Fluttertoast.showToast(msg: 'شماره همراه تکراری است. کافی است وارد شوید.');}
+        }
+      }
+    _timer = new RestartableTimer(_timerDuration, receiveCode);
+    }
+
 
   Widget authForm(FormName formName){
     if(formName == FormName.SignIn)
@@ -72,8 +118,10 @@ class _LoginPageState extends State<LoginPage> {
                             color: Colors.red,
                             child: TextButton(
                               onPressed: (){
-                                setState(() {
-                                  //TODO Receive Token Verification Code
+                                setState(() async {
+                                  if(!_timer.isActive){
+                                    await receiveCode();
+                                  }
                                 });
                               },
                               child: Text(
@@ -258,7 +306,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: TextButton(
                       onPressed: (){
                         setState(() {
-                          //TODO SignIn Method
+                          //TODO SignUp Method
                         });
                       },
                       child: Text(
