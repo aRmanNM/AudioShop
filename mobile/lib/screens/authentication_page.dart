@@ -6,8 +6,7 @@ import 'package:async/async.dart';
 import 'package:mobile/services/authentication_service.dart';
 
 enum FormName{
-  SignInThroughUserName,
-  SignInThroughPhoneNumber,
+  SignIn,
   SignUp,
   RegisterPhoneNumber,
 }
@@ -21,7 +20,6 @@ class AuthenticationPage extends StatefulWidget {
 }
 
 class _AuthenticationPageState extends State<AuthenticationPage> {
-  var representer;
   var formName = FormName.SignUp;
   TextEditingController phoneNumberController = new TextEditingController();
   TextEditingController nameController = new TextEditingController();
@@ -37,6 +35,10 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
   bool sentCode = false;
   bool isTimerActive = false;
   bool isCheckingUserName = false;
+  String phoneNumberError = '';
+  String verificationCodeError = '';
+  String userNameError = '';
+  String passwordError = '';
 
   @override
   void initState() {
@@ -57,7 +59,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
         'https://audioshoppp.ir/api/auth/phoneexists?phoneNumber='
         + phoneNumberController.text);
     {
-      if(formName == FormName.SignInThroughPhoneNumber){
+      if(formName == FormName.SignIn){
         if(isRepetitiveUser){
           sentCode = await authService.
           signIn('https://audioshoppp.ir/api/auth/login',
@@ -79,6 +81,12 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
       }
     }
 
+    if(sentCode)
+      Fluttertoast.showToast(msg: 'کد تایید برای شما ارسال شد');
+    else
+      Fluttertoast.showToast(msg: 'کد تایید ارسال نشد. لطفا مجددا امتحان کنید');
+
+    sentCode = false;
   }
   
   Future<bool> isUserNameRepetitive(String userName) async{
@@ -117,48 +125,54 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
 
 
   Widget authForm(FormName formName){
-    if(formName == FormName.SignInThroughPhoneNumber)
+    if(formName == FormName.SignIn)
       return SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(45,65,45,0),
-          child: IntrinsicWidth(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Center(
-                  child: Text(
-                    'برای ورود به حساب کاربری، شماره همراه خود را وارد کنید',
-                    style: TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold
+          padding: const EdgeInsets.fromLTRB(45,60,45,0),
+          child: Center(
+            child: IntrinsicWidth(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Center(
+                    child: Text(
+                      'برای ورود به حساب کاربری، شماره همراه خود را وارد کنید',
+                      style: TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold
+                      ),
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 28.0),
-                  child: TextField(
-                    style: TextStyle(
-                      decorationColor: Colors.black,
-                      color: Colors.white
-                    ),
-                    keyboardType: TextInputType.phone,
-                    decoration: InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white, width: 2.0),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 28.0),
+                    child: TextField(
+                      style: TextStyle(
+                        decorationColor: Colors.black,
+                        color: Colors.white
                       ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white, width: 2.0),
+                      keyboardType: TextInputType.phone,
+                      decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white, width: 2.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white, width: 2.0),
+                        ),
+                        border: OutlineInputBorder(),
+                        labelStyle: TextStyle(color: Colors.white,),
+                        labelText: 'شماره همراه',
                       ),
-                      border: OutlineInputBorder(),
-                      labelStyle: TextStyle(color: Colors.white,),
-                      labelText: 'شماره همراه',
+                      controller: phoneNumberController,
                     ),
-                    controller: phoneNumberController,
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 28.0),
-                  child: IntrinsicHeight(
+                  SizedBox(
+                    height: 30,
+                    child: Text(
+                      phoneNumberError,
+                      style: TextStyle(color: Colors.red[200]),
+                    ),
+                  ),
+                  IntrinsicHeight(
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
@@ -190,14 +204,25 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                       ],
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 28.0),
-                  child: Card(
+                  SizedBox(
+                    height: 20,
+                    child: Text(
+                      verificationCodeError,
+                      style: TextStyle(color: Colors.red[200]),
+                    ),
+                  ),
+                  Card(
                     color: Color(0xFF20BFA9),
                     child: TextButton(
                       onPressed: (){
                         setState(() {
+                          phoneNumberError = verificationCodeError = '';
+                          if(phoneNumberController.text.isEmpty)
+                            phoneNumberError = 'شماره موبایل الزامی است';
+                          if(verificationCodeController.text.isEmpty)
+                            verificationCodeError = 'کد ارسال شده به همراهتان را وارد کنید';
+                          // if(phoneNumberController.text.isNotEmpty &&
+                          // verificationCodeController.text.isNotEmpty)
                           //TODO SignIn Method
                         });
                       },
@@ -211,8 +236,8 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -220,182 +245,215 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
     else if(formName == FormName.RegisterPhoneNumber)
       return SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(45,65,45,0),
-          child: IntrinsicWidth(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Center(
-                  child: Text(
-                    'لطفا شماره همراه خود را جهت بازیابی وارد کنید',
-                    style: TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold
+          padding: const EdgeInsets.fromLTRB(45,60,45,0),
+          child: Center(
+            child: IntrinsicWidth(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Center(
+                    child: Text(
+                      'لطفا شماره همراه خود را جهت بازیابی وارد کنید',
+                      style: TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold
+                      ),
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 28.0),
-                  child: TextField(
-                    style: TextStyle(
-                        decorationColor: Colors.black,
-                        color: Colors.white
-                    ),
-                    keyboardType: TextInputType.phone,
-                    decoration: InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white, width: 2.0),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 28.0),
+                    child: TextField(
+                      style: TextStyle(
+                          decorationColor: Colors.black,
+                          color: Colors.white
                       ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white, width: 2.0),
-                      ),
-                      border: OutlineInputBorder(),
-                      labelStyle: TextStyle(color: Colors.white,),
-                      labelText: 'شماره همراه',
-                    ),
-                    controller: phoneNumberController,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 28.0),
-                  child: IntrinsicHeight(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        Expanded(
-                          flex: 1,
-                          child: sendCodeButton(),
+                      keyboardType: TextInputType.phone,
+                      decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white, width: 2.0),
                         ),
-                        Expanded(
-                          flex: 2,
-                          child: TextField(
-                            style: TextStyle(
-                                color: Colors.white
-                            ),
-                            keyboardType: TextInputType.phone,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white, width: 2.0),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white, width: 2.0),
+                        ),
+                        border: OutlineInputBorder(),
+                        labelStyle: TextStyle(color: Colors.white,),
+                        labelText: 'شماره همراه',
+                      ),
+                      controller: phoneNumberController,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                    child: Text(
+                      phoneNumberError,
+                      style: TextStyle(color: Colors.red[200]),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 28.0),
+                    child: IntrinsicHeight(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: <Widget>[
+                          Expanded(
+                            flex: 1,
+                            child: sendCodeButton(),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: TextField(
+                              style: TextStyle(
+                                  color: Colors.white
                               ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white, width: 2.0),
+                              keyboardType: TextInputType.phone,
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.white, width: 2.0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.white, width: 2.0),
+                                ),
+                                labelText: 'کد دریافتی',
+                                labelStyle: TextStyle(color: Colors.white,),
                               ),
-                              labelText: 'کد دریافتی',
-                              labelStyle: TextStyle(color: Colors.white,),
+                              controller: verificationCodeController,
                             ),
-                            controller: verificationCodeController,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                    child: Text(
+                      verificationCodeError,
+                      style: TextStyle(color: Colors.red[200]),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 28.0),
+                    child: Card(
+                      color: Color(0xFF20BFA9),
+                      child: TextButton(
+                        onPressed: (){
+                          setState(() {
+                            phoneNumberError = verificationCodeError = '';
+                            if(phoneNumberController.text.isEmpty)
+                              phoneNumberError = 'شماره موبایل الزامی است';
+                            if(verificationCodeController.text.isEmpty)
+                              verificationCodeError = 'کد ارسال شده به همراهتان را وارد کنید';
+                            // if(phoneNumberController.text.isNotEmpty &&
+                            // verificationCodeController.text.isNotEmpty)
+                            //TODO Register Phone Number Method
+                          });
+                        },
+                        child: Text(
+                          'تایید',
+                          style: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 28.0),
-                  child: Card(
-                    color: Color(0xFF20BFA9),
-                    child: TextButton(
-                      onPressed: (){
-                        setState(() {
-                          //TODO SignUp Method
-                        });
-                      },
-                      child: Text(
-                        'تایید',
-                        style: TextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
       );
-    else if (formName == FormName.SignUp)
+    else
       return SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(45,65,45,0),
-          child: IntrinsicWidth(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Center(
-                  child: Text(
-                    'جهت ثبت نام موارد زیر را کامل کنید',
-                    style: TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold
+          padding: const EdgeInsets.fromLTRB(45,60,45,0),
+          child: Center(
+            child: IntrinsicWidth(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Center(
+                    child: Text(
+                      'جهت ثبت نام موارد زیر را کامل کنید',
+                      style: TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold
+                      ),
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 28.0),
-                  child: IntrinsicHeight(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Expanded(
-                          flex: 5,
-                          child: TextField(
-                            style: TextStyle(
-                                decorationColor: Colors.black,
-                                color: Colors.white
-                            ),
-                            keyboardType: TextInputType.phone,
-                            decoration: InputDecoration(
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white, width: 2.0),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white, width: 2.0),
-                              ),
-                              border: OutlineInputBorder(),
-                              labelStyle: TextStyle(color: Colors.white,),
-                              labelText: 'نام کاربری',
-                            ),
-                            controller: userNameController,
-                          ),
-                        ),
-                        Expanded(
-                          flex: 2,
-                          child: Card(
-                          color: !isCheckingUserName ?
-                                  Colors.red[700] : Colors.red[400],
-                          child: TextButton(
-                            onPressed: (){
-                              setState(() async {
-                                if(!isCheckingUserName){
-                                  isCheckingUserName = true;
-                                  if(await isUserNameRepetitive(userNameController.text))
-                                    Fluttertoast.showToast(msg: 'نام کاربری تکراری است. لطفا آن را تغییر دهید');
-                                  isCheckingUserName = false;
-                                }
-                              });
-                            },
-                            child: Text((!isCheckingUserName) ?
-                            'بررسی کن' : 'در حال بررسی',
+                  Padding(
+                    padding: const EdgeInsets.only(top: 28.0),
+                    child: IntrinsicHeight(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Expanded(
+                            flex: 5,
+                            child: TextField(
                               style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
+                                  decorationColor: Colors.black,
+                                  color: Colors.white
+                              ),
+                              keyboardType: TextInputType.phone,
+                              decoration: InputDecoration(
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.white, width: 2.0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.white, width: 2.0),
+                                ),
+                                border: OutlineInputBorder(),
+                                labelStyle: TextStyle(color: Colors.white,),
+                                labelText: 'نام کاربری',
+                              ),
+                              controller: userNameController,
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Card(
+                            color: !isCheckingUserName ?
+                                    Colors.red[700] : Colors.red[400],
+                            child: TextButton(
+                              onPressed: (){
+                                setState(() async {
+                                  if(!isCheckingUserName){
+                                    isCheckingUserName = true;
+                                    if(await isUserNameRepetitive(userNameController.text))
+                                      Fluttertoast.showToast(msg:
+                                      'نام کاربری تکراری است. لطفا آن را تغییر دهید');
+                                    else
+                                      Fluttertoast.showToast(msg:
+                                      'نام کاربری در دسترس است');
+                                    isCheckingUserName = false;
+                                  }
+                                });
+                              },
+                              child: Text((!isCheckingUserName) ?
+                              'بررسی کن' : 'در حال بررسی',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        ),
-                      ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 28.0),
-                  child: IntrinsicHeight(
+                  SizedBox(
+                    height: 25,
+                    child: Text(
+                      userNameError,
+                      style: TextStyle(color: Colors.red[200]),
+                    ),
+                  ),
+                  IntrinsicHeight(
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
@@ -448,14 +506,28 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                       ],
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 28.0),
-                  child: Card(
+                  SizedBox(
+                    height: 20,
+                    child: Text(
+                      passwordError,
+                      style: TextStyle(color: Colors.red[200]),
+                    ),
+                  ),
+                  Card(
                     color: Color(0xFF20BFA9),
                     child: TextButton(
                       onPressed: (){
                         setState(() {
+                          userNameError = passwordError = '';
+                          if(userNameController.text.isEmpty)
+                            userNameError = 'نام کاربری الزامی است';
+                          if(passwordController.text.isEmpty)
+                            passwordError = 'رمز عبور الزامی است';
+                          else if(confirmPasswordController.text.isEmpty ||
+                            passwordController.text != confirmPasswordController.text)
+                            passwordError = 'رمز عبور مطابقت ندارد';
+                          // if(phoneNumberController.text.isNotEmpty &&
+                          // verificationCodeController.text.isNotEmpty)
                           //TODO SignUp Method
                         });
                       },
@@ -469,100 +541,13 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
       );
-    else
-      return SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(45,65,45,0),
-          child: IntrinsicWidth(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Center(
-                  child: Text(
-                    'نام کاربری و رمز عبور خود را وارد کنید',
-                    style: TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 28.0),
-                  child: TextField(
-                    style: TextStyle(
-                        decorationColor: Colors.black,
-                        color: Colors.white
-                    ),
-                    keyboardType: TextInputType.phone,
-                    decoration: InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white, width: 2.0),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white, width: 2.0),
-                      ),
-                      border: OutlineInputBorder(),
-                      labelStyle: TextStyle(color: Colors.white,),
-                      labelText: 'نام کاربری',
-                    ),
-                    controller: userNameController,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 28.0),
-                  child: Expanded(
-                    child: TextField(
-                      style: TextStyle(
-                          color: Colors.white
-                      ),
-                      keyboardType: TextInputType.phone,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white, width: 2.0),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white, width: 2.0),
-                        ),
-                        labelText: 'رمز عبور',
-                        labelStyle: TextStyle(color: Colors.white,),
-                      ),
-                      controller: passwordController,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 28.0),
-                  child: Card(
-                    color: Color(0xFF20BFA9),
-                    child: TextButton(
-                      onPressed: (){
-                        setState(() {
-                          //TODO SignUp Method
-                        });
-                      },
-                      child: Text(
-                        'تایید',
-                        style: TextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
+
   }
 
   @override
@@ -573,13 +558,12 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
         SizedBox(
           width: MediaQuery.of(context).size.width / 2 - 12,
           child: Card(
-            color: (formName == FormName.SignInThroughPhoneNumber ||
-                    formName == FormName.SignInThroughUserName) ?
+            color: formName == FormName.SignIn  ?
             Color(0xFF20BFA9) : Color(0xFF202028),
             child: TextButton(
               onPressed: (){
                 setState(() {
-                  formName = FormName.SignInThroughUserName;
+                  formName = FormName.SignIn;
                 });
               },
               child: Text(
