@@ -30,7 +30,7 @@ namespace Infrastructure.Services
         {
             var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.GivenName, user.DisplayName),
+                new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName),
                 new Claim(JwtRegisteredClaimNames.NameId, user.Id)
             };
 
@@ -46,7 +46,7 @@ namespace Infrastructure.Services
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddDays(7),  // TODO: never expire this
+                Expires = DateTime.Now.AddDays(30),
                 SigningCredentials = creds,
                 Issuer = _configuration["Token:Issuer"]
             };

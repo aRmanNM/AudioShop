@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Core.Entities;
 
 namespace Core.Interfaces
 {
@@ -6,5 +7,6 @@ namespace Core.Interfaces
     {
         bool SendSMS(string receptor, string authToken);
         string GenerateAuthToken();
+        Task<User> FindUserByPhoneNumberAsync(string phoneNumber);
     }
 }

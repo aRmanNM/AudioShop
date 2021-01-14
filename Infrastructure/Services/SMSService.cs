@@ -4,6 +4,10 @@ using Microsoft.Extensions.Options;
 using Core.Interfaces;
 using Microsoft.Extensions.Logging;
 using Kavenegar;
+using System.Threading.Tasks;
+using Core.Entities;
+using Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Services
 {
@@ -11,11 +15,18 @@ namespace Infrastructure.Services
     {
         private readonly SMSOptions _options;
         private readonly ILogger<SMSService> _logger;
+        private readonly StoreContext _storeContext;
 
-        public SMSService(IOptions<SMSOptions> options, ILogger<SMSService> logger)
+        public SMSService(IOptions<SMSOptions> options, ILogger<SMSService> logger, StoreContext storeContext)
         {
+            _storeContext = storeContext;
             _logger = logger;
             _options = options.Value;
+        }
+
+        public async Task<User> FindUserByPhoneNumberAsync(string phoneNumber)
+        {
+            return await _storeContext.Users.FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
         }
 
         public string GenerateAuthToken()
