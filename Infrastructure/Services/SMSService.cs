@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.Extensions.Options;
 using Core.Interfaces;
 using Microsoft.Extensions.Logging;
+using Kavenegar;
 
 namespace Infrastructure.Services
 {
@@ -26,23 +27,23 @@ namespace Infrastructure.Services
 
         public bool SendSMS(string receptor, string authToken)
         {
-            // try
-            // {
-            //     var sender = _options.SMSSender;
-            //     var message = $"سلام\nکد عضویت در نرم افزار:\n{authToken}";
-            //     var api = new KavenegarApi(_options.SMSAPIKey);
-            //     api.Send(sender, receptor, message);
-            // }
-            // catch (Kavenegar.Exceptions.ApiException ex)
-            // {
-            //     _logger.LogError("warning", ex.Message);
-            //     return false;
-            // }
-            // catch (Kavenegar.Exceptions.HttpException ex)
-            // {
-            //     _logger.LogError("warning", ex.Message);
-            //     return false;
-            // }
+            try
+            {
+                var sender = _options.SMSSender;
+                var message = $"سلام\nکد عضویت در نرم افزار:\n{authToken}";
+                var api = new KavenegarApi(_options.SMSAPIKey);
+                api.Send(sender, receptor, message);
+            }
+            catch (Kavenegar.Exceptions.ApiException ex)
+            {
+                _logger.LogError("warning", ex.Message);
+                return false;
+            }
+            catch (Kavenegar.Exceptions.HttpException ex)
+            {
+                _logger.LogError("warning", ex.Message);
+                return false;
+            }
 
             _logger.LogInformation(authToken);
 
