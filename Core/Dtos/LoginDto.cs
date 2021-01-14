@@ -8,11 +8,8 @@ namespace Core.Dtos
 {
     public class LoginDto
     {
-        // public string Email { get; set; }
-        // public string Password { get; set; }
-
-        [Required(ErrorMessage = "وارد کردن شماره تماس ضروریست")]
-        [RegularExpression("^(\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$")]
+        public string UserName { get; set; }
+        public string Password { get; set; }
         public string PhoneNumber { get; set; }
     }
 }
