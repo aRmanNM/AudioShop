@@ -9,7 +9,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile/models/course.dart';
 import 'package:mobile/screens/checkout_page.dart';
-import 'package:mobile/screens/login_page.dart';
+import 'package:mobile/screens/authentication_page.dart';
 import 'package:mobile/services/course_service.dart';
 import 'package:mobile/store/course_store.dart';
 import 'package:provider/provider.dart';
@@ -153,6 +153,7 @@ class _HomePageState extends State<HomePage> {
         Expanded(
           flex: 2,
           child: Card(
+            color: Color(0xFF403F44),
             child: CarouselSlider(
                 options: CarouselOptions(
                     height: height,
@@ -169,6 +170,7 @@ class _HomePageState extends State<HomePage> {
         Expanded(
           flex: 3,
           child: Card(
+            color: Color(0xFF403F44),
             child: GridView.count(
               padding: const EdgeInsets.all(5),
               crossAxisCount: 3,
@@ -195,6 +197,7 @@ class _HomePageState extends State<HomePage> {
                         padding: const EdgeInsets.symmetric(
                             vertical: 2, horizontal: 8),
                         child: Card(
+                          color: Color(0xFF403F44),
                           elevation: 8,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15.0),
@@ -303,7 +306,7 @@ class _HomePageState extends State<HomePage> {
                                 }));
                               else{
                                 Navigator.push(context, MaterialPageRoute(builder: (context){
-                                  return LoginPage();
+                                  return AuthenticationPage();
                                 }));
                               }
                             },

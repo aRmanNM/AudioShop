@@ -23,11 +23,11 @@ void main() {
           primaryColor: Color(0xFF202028),
           scaffoldBackgroundColor: Color(0xFF34333A),
           accentColor: Color(0xFF20BFA9),
-          cardColor: Color(0xFF403F44),
+          //cardColor: Color(0xFF403F44),
           textTheme: TextTheme(
             bodyText2: TextStyle(color: Colors.white),
             bodyText1: TextStyle(color: Colors.white),
-          )
+          ),
         ),
         home: HomePage.basic(),
       ),
