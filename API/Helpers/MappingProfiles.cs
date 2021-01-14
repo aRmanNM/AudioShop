@@ -1,6 +1,8 @@
 using Core.Dtos;
 using Core.Entities;
 using AutoMapper;
+using Core.Interfaces;
+using System.Threading.Tasks;
 
 namespace API.Helpers
 {
@@ -13,9 +15,7 @@ namespace API.Helpers
                 .ForMember(x => x.FileUrl, y => y.MapFrom<CourseEpisodeUrlResolver>());
             CreateMap<Course, CourseDto>().
                 ForMember(x => x.PictureUrl, y => y.MapFrom<CourseUrlResolver>());
-            CreateMap<RegisterDto, User>()
-                .ForMember(x => x.UserName, y => y.MapFrom(z => z.PhoneNumber))
-                .ForMember(x => x.DisplayName, y => y.MapFrom(z => z.DisplayName));
+            CreateMap<RegisterDto, User>();
         }
     }
 }
