@@ -11,17 +11,16 @@ namespace Infrastructure.Data
         {
             if (!userManager.Users.Any() || !roleManager.Roles.Any())
             {
-                var user = new User{
-                  DisplayName = "Arman",
-                  UserName = "Arman",
-                  Email = "arman@test.com"
+                var user = new User
+                {
+                    UserName = "Arman",
                 };
 
                 var roles = new List<Role>
                 {
-                    new Role{Name = "Member"},
-                    new Role{Name = "Admin"},
-                    new Role{Name = "SalesPerson"}
+                    new Role{Name = "Member", NormalizedName = "MEMBER"},
+                    new Role{Name = "Admin", NormalizedName = "ADMIN"},
+                    new Role{Name = "SalesPerson", NormalizedName = "SALESPERSON"}
                 };
 
                 foreach (var role in roles)
@@ -31,13 +30,12 @@ namespace Infrastructure.Data
 
 
                 userManager.CreateAsync(user, "P@ssw0rd").Wait();
-                userManager.AddToRoleAsync(user, "Member").Wait();
+                userManager.AddToRoleAsync(user, "SalesPerson").Wait();
 
 
                 var adminUser = new User
                 {
                     UserName = "Admin",
-                    Email = "admin@test.com"
                 };
 
                 IdentityResult result = userManager.CreateAsync(adminUser, "P@ssw0rd").Result;
