@@ -9,7 +9,7 @@ class CourseStore extends ChangeNotifier{
   Course _currentCourse;
 
   String _userId;
-  String _displayName;
+  String _userName;
   String _token;
   bool _isLoggedIn = false;
 
@@ -22,7 +22,7 @@ class CourseStore extends ChangeNotifier{
   Course get currentCourse => _currentCourse;
 
   String get userId => _userId;
-  String get displayName => _displayName;
+  String get userName => _userName;
   String get token => _token;
   bool get isLoggedIn => _isLoggedIn;
 
@@ -61,7 +61,7 @@ class CourseStore extends ChangeNotifier{
     Map<String, dynamic> decodedToken = JwtDecoder.decode(receivedToken);
 
     _userId = decodedToken['nameid'];
-    _displayName = decodedToken['given_name'];
+    _userName = decodedToken['unique_name'];
     _token = receivedToken;
 
     notifyListeners();

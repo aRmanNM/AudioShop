@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:mobile/models/user.dart';
 import 'package:mobile/store/course_store.dart';
 import 'package:async/async.dart';
 import 'package:mobile/services/authentication_service.dart';
@@ -21,6 +22,7 @@ class AuthenticationPage extends StatefulWidget {
 
 class _AuthenticationPageState extends State<AuthenticationPage> {
   var formName = FormName.SignUp;
+  AuthenticationService authService = AuthenticationService();
   TextEditingController phoneNumberController = new TextEditingController();
   TextEditingController nameController = new TextEditingController();
   TextEditingController userNameController = new TextEditingController();
@@ -43,7 +45,6 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
   @override
   void initState() {
     super.initState();
-    //_timer = new RestartableTimer(Duration(seconds: 0), null);
   }
 
   Future receiveCode() async{
@@ -54,7 +55,6 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
       isTimerActive = true;
     });
 
-    AuthenticationService authService = AuthenticationService();
     bool isRepetitiveUser = await authService.isPhoneNumberRegistered(
         'https://audioshoppp.ir/api/auth/phoneexists?phoneNumber='
         + phoneNumberController.text);
@@ -70,14 +70,14 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
         }
       }
       else{
-        if(!isRepetitiveUser){
-          sentCode = await authService.
-          signUp('https://audioshoppp.ir/api/auth/register',
-              phoneNumberController.text, nameController.text);
-        }
-        else {
-          Fluttertoast.showToast(msg: 'شماره همراه تکراری است. کافی است وارد شوید.');
-        }
+        // if(!isRepetitiveUser){
+        //   sentCode = await authService.
+        //   signUp('https://audioshoppp.ir/api/auth/register',
+        //       phoneNumberController.text, nameController.text);
+        // }
+        // else {
+        //   Fluttertoast.showToast(msg: 'شماره همراه تکراری است. کافی است وارد شوید.');
+        // }
       }
     }
 
@@ -89,8 +89,18 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
     sentCode = false;
   }
   
-  Future<bool> isUserNameRepetitive(String userName) async{
-    return true;
+  Future<bool> isUserNameRepetitive(String username) async{
+    bool usernameExists = await authService.usernameExists(username);
+    if(usernameExists)
+      Fluttertoast.showToast(msg:
+      'نام کاربری تکراری است. لطفا آن را تغییر دهید');
+    else if(!usernameExists)
+      Fluttertoast.showToast(msg:
+      'نام کاربری در دسترس است');
+    else
+      Fluttertoast.showToast(msg:
+      'مشکل در برقراری ارتباط. لطفا مجددا تلاش کنید');
+    return usernameExists;
   }
 
   Widget sendCodeButton(){
@@ -421,12 +431,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                                 setState(() async {
                                   if(!isCheckingUserName){
                                     isCheckingUserName = true;
-                                    if(await isUserNameRepetitive(userNameController.text))
-                                      Fluttertoast.showToast(msg:
-                                      'نام کاربری تکراری است. لطفا آن را تغییر دهید');
-                                    else
-                                      Fluttertoast.showToast(msg:
-                                      'نام کاربری در دسترس است');
+                                    isUserNameRepetitive(userNameController.text);
                                     isCheckingUserName = false;
                                   }
                                 });
@@ -526,9 +531,26 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                           else if(confirmPasswordController.text.isEmpty ||
                             passwordController.text != confirmPasswordController.text)
                             passwordError = 'رمز عبور مطابقت ندارد';
-                          // if(phoneNumberController.text.isNotEmpty &&
-                          // verificationCodeController.text.isNotEmpty)
-                          //TODO SignUp Method
+                        });
+
+                        setState(() async {
+                          if(phoneNumberController.text.isNotEmpty &&
+                              verificationCodeController.text.isNotEmpty){
+                            if(await isUserNameRepetitive(userNameController.text)){
+                              User registeredUser = await authService.
+                                signUp(userNameController.text, passwordController.text);
+                              if(registeredUser == null)
+                                Fluttertoast.showToast(msg: 'ثبت نام با مشکل مواجه شد. لطفا مجددا تلاش کنید.');
+                              else{
+                                secureStorage.write(key: 'token',
+                                    value: registeredUser.token);
+                                secureStorage.write(key: 'hasPhoneNumber',
+                                    value: registeredUser.hasPhoneNumber.toString());
+                                courseStore.setUserDetails(registeredUser.toJson().toString());
+                                //TODO navigate to payment
+                              }
+                            }
+                          }
                         });
                       },
                       child: Text(
