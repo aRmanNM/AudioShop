@@ -13,6 +13,7 @@ class AuthenticationService {
       'https://audioshoppp.ir/api/auth/userexists?username=';
   String signUpUrl = 'https://audioshoppp.ir/api/auth/register?role=member';
   String refineUserBasketUrl = 'https://audioshoppp.ir/api/user/RefineRepetitiveCourses';
+  String getUserCoursesUrl = 'https://audioshoppp.ir/api/user/courses/';
 
   Future<bool> isPhoneNumberRegistered(String phoneNumber) async {
     http.Response response = await http.get(phoneNumberCheckUrl + phoneNumber);
@@ -100,5 +101,29 @@ class AuthenticationService {
       return null;
     }
 
+  }
+
+  Future<List<Course>> getUserCourses(String userId, String token) async {
+    http.Response response = await http.get(
+        Uri.encodeFull(getUserCoursesUrl + userId),
+        headers: {
+          "Accept": "application/json",
+          "content-type": "application/json",
+          "Authorization": "Bearer $token",
+        });
+
+    if(response.statusCode == 200){
+      String data = response.body;
+      var courseMap = jsonDecode(data);
+      List<Course> userCoursesList = List<Course>();
+      for(var course in courseMap){
+        userCoursesList.add(Course.fromJson(course));
+      }
+      return userCoursesList;
+    }
+    else{
+      print(response.statusCode);
+      return null;
+    }
   }
 }

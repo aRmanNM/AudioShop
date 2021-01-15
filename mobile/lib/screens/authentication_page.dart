@@ -135,16 +135,6 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
     });
   }
 
-  Future<List<Course>> refineBasket() async{
-    List<Course> refinedBasket = await authService.refineUserBasket(
-      courseStore.basket,
-      courseStore.totalBasketPrice,
-      courseStore.userId,
-      courseStore.token);
-
-    return refinedBasket;
-  }
-
   Future signUp() async{
     if(userNameController.text.isNotEmpty &&
         passwordController.text.isNotEmpty &&
@@ -157,25 +147,33 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
         if(registeredUser == null)
           Fluttertoast.showToast(msg: 'ثبت نام با مشکل مواجه شد. لطفا مجددا تلاش کنید.');
         else{
-          await secureStorage.write(key: 'token',
-              value: registeredUser.token);
+          await secureStorage.write(key: 'token', value: registeredUser.token);
           await secureStorage.write(key: 'hasPhoneNumber',
               value: registeredUser.hasPhoneNumber.toString());
+
           courseStore.setUserDetails(registeredUser.token);
 
-          Future<List<Course>> updatedBasket = refineBasket();
-          updateBasket(updatedBasket);
+          List<Course> userCourses = await authService
+              .getUserCourses(courseStore.userId, courseStore.token);
 
+          List<Course> tempBasket = List.from(courseStore.basket);
+
+          for(Course basketItem in courseStore.basket){
+            for(Course course in userCourses){
+              if (basketItem.id == course.id){
+                tempBasket.remove(basketItem);
+              }
+            }
+          }
+
+          courseStore.refineUserBasket(tempBasket);
+
+          Navigator.pop(context);
 
           //TODO navigate to payment
         }
       }
     }
-  }
-
-  updateBasket(Future<List<Course>> updatedBasket) {
-    courseStore.refineUserBasket(updatedBasket);
-    Navigator.pop(context);
   }
 
   Widget authForm(FormName formName){
@@ -450,7 +448,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                                   decorationColor: Colors.black,
                                   color: Colors.white
                               ),
-                              keyboardType: TextInputType.phone,
+                              keyboardType: TextInputType.text,
                               decoration: InputDecoration(
                                 enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.white, width: 2.0),
@@ -513,7 +511,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                               style: TextStyle(
                                   color: Colors.white
                               ),
-                              keyboardType: TextInputType.phone,
+                              keyboardType: TextInputType.text,
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(),
                                 enabledBorder: OutlineInputBorder(
@@ -536,7 +534,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                               style: TextStyle(
                                   color: Colors.white
                               ),
-                              keyboardType: TextInputType.phone,
+                              keyboardType: TextInputType.text,
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(),
                                 enabledBorder: OutlineInputBorder(
@@ -565,7 +563,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                   Card(
                     color: Color(0xFF20BFA9),
                     child: TextButton(
-                      onPressed: (){
+                      onPressed: () async {
                         setState(() {
                           userNameError = passwordError = '';
                           if(userNameController.text.isEmpty)
@@ -575,8 +573,8 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                           else if(confirmPasswordController.text.isEmpty ||
                             passwordController.text != confirmPasswordController.text)
                             passwordError = 'رمز عبور مطابقت ندارد';
-                          signUp();
                         });
+                        await signUp();
                       },
                       child: Text(
                         'تایید',

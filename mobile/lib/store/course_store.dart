@@ -73,7 +73,7 @@ class CourseStore extends ChangeNotifier{
     notifyListeners();
   }
 
-  Future refineUserBasket(Future<List<Course>> refinedBasket) async {
-    this._basket = await refinedBasket;
+  refineUserBasket(List<Course> refinedBasket) {
+    this._basket = refinedBasket;
   }
 }
