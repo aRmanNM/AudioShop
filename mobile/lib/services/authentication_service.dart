@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:mobile/models/course.dart';
 import 'dart:convert';
 
 import 'package:mobile/models/user.dart';
@@ -11,7 +11,8 @@ class AuthenticationService {
       'https://audioshoppp.ir/api/auth/phoneexists?phoneNumber=';
   String usernameCheckUrl =
       'https://audioshoppp.ir/api/auth/userexists?username=';
-  String signUpUrl = '/api/auth/register?role=member';
+  String signUpUrl = 'https://audioshoppp.ir/api/auth/register?role=member';
+  String refineUserBasketUrl = 'https://audioshoppp.ir/api/user/RefineRepetitiveCourses';
 
   Future<bool> isPhoneNumberRegistered(String phoneNumber) async {
     http.Response response = await http.get(phoneNumberCheckUrl + phoneNumber);
@@ -69,5 +70,35 @@ class AuthenticationService {
       print(response.statusCode);
       return null;
     }
+  }
+
+  Future<List<Course>> refineUserBasket(List<Course> courses, int totalPrice, String userId, String token) async{
+    var body = jsonEncode({
+      'userId': userId,
+      'totalPrice': totalPrice,
+      'courseDtos': courses});
+
+    http.Response response = await http.post(Uri.encodeFull(refineUserBasketUrl),
+        body: body,
+        headers: {
+          "Accept": "application/json",
+          "content-type": "application/json",
+          "Authorization": "Bearer $token",
+        });
+
+    if(response.statusCode == 200){
+      String data = response.body;
+      var courseMap = jsonDecode(data);
+      List<Course> coursesList = List<Course>();
+      for(var course in courseMap){
+        coursesList.add(Course.fromJson(course));
+      }
+      return coursesList;
+    }
+    else{
+      print(response.statusCode);
+      return null;
+    }
+
   }
 }

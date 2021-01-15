@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:mobile/models/course.dart';
 import 'package:mobile/models/user.dart';
 import 'package:mobile/store/course_store.dart';
 import 'package:async/async.dart';
 import 'package:mobile/services/authentication_service.dart';
+import 'package:provider/provider.dart';
 
 enum FormName{
   SignIn,
@@ -90,7 +92,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
   }
   
   Future<bool> isUserNameRepetitive(String username) async{
-    bool usernameExists = await authService.usernameExists(username);
+    var usernameExists = await authService.usernameExists(username);
     if(usernameExists)
       Fluttertoast.showToast(msg:
       'نام کاربری تکراری است. لطفا آن را تغییر دهید');
@@ -109,9 +111,9 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
       Colors.red[700] : Colors.red[400],
       child: TextButton(
         onPressed: (){
-          setState(() async {
+          setState(() {
             if(!isTimerActive){
-              await receiveCode();
+              receiveCode();
             }
           });
         },
@@ -133,6 +135,48 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
     });
   }
 
+  Future<List<Course>> refineBasket() async{
+    List<Course> refinedBasket = await authService.refineUserBasket(
+      courseStore.basket,
+      courseStore.totalBasketPrice,
+      courseStore.userId,
+      courseStore.token);
+
+    return refinedBasket;
+  }
+
+  Future signUp() async{
+    if(userNameController.text.isNotEmpty &&
+        passwordController.text.isNotEmpty &&
+        confirmPasswordController.text.isNotEmpty)
+    {
+      bool isUserNotOk = await isUserNameRepetitive(userNameController.text);
+      if(!isUserNotOk){
+        User registeredUser = await authService.
+          signUp(userNameController.text, passwordController.text);
+        if(registeredUser == null)
+          Fluttertoast.showToast(msg: 'ثبت نام با مشکل مواجه شد. لطفا مجددا تلاش کنید.');
+        else{
+          await secureStorage.write(key: 'token',
+              value: registeredUser.token);
+          await secureStorage.write(key: 'hasPhoneNumber',
+              value: registeredUser.hasPhoneNumber.toString());
+          courseStore.setUserDetails(registeredUser.token);
+
+          Future<List<Course>> updatedBasket = refineBasket();
+          updateBasket(updatedBasket);
+
+
+          //TODO navigate to payment
+        }
+      }
+    }
+  }
+
+  updateBasket(Future<List<Course>> updatedBasket) {
+    courseStore.refineUserBasket(updatedBasket);
+    Navigator.pop(context);
+  }
 
   Widget authForm(FormName formName){
     if(formName == FormName.SignIn)
@@ -428,7 +472,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                                     Colors.red[700] : Colors.red[400],
                             child: TextButton(
                               onPressed: (){
-                                setState(() async {
+                                setState(() {
                                   if(!isCheckingUserName){
                                     isCheckingUserName = true;
                                     isUserNameRepetitive(userNameController.text);
@@ -531,26 +575,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                           else if(confirmPasswordController.text.isEmpty ||
                             passwordController.text != confirmPasswordController.text)
                             passwordError = 'رمز عبور مطابقت ندارد';
-                        });
-
-                        setState(() async {
-                          if(phoneNumberController.text.isNotEmpty &&
-                              verificationCodeController.text.isNotEmpty){
-                            if(await isUserNameRepetitive(userNameController.text)){
-                              User registeredUser = await authService.
-                                signUp(userNameController.text, passwordController.text);
-                              if(registeredUser == null)
-                                Fluttertoast.showToast(msg: 'ثبت نام با مشکل مواجه شد. لطفا مجددا تلاش کنید.');
-                              else{
-                                secureStorage.write(key: 'token',
-                                    value: registeredUser.token);
-                                secureStorage.write(key: 'hasPhoneNumber',
-                                    value: registeredUser.hasPhoneNumber.toString());
-                                courseStore.setUserDetails(registeredUser.toJson().toString());
-                                //TODO navigate to payment
-                              }
-                            }
-                          }
+                          signUp();
                         });
                       },
                       child: Text(
@@ -574,6 +599,8 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
 
   @override
   Widget build(BuildContext context) {
+    courseStore = Provider.of<CourseStore>(context);
+
     return Scaffold(
       body: authForm(formName),
       persistentFooterButtons: <Widget>[

@@ -7,6 +7,7 @@ class CourseStore extends ChangeNotifier{
   List<Course> _courses = [];
   List<Course> _basket = [];
   Course _currentCourse;
+  int _totalBasketPrice = 0;
 
   String _userId;
   String _userName;
@@ -20,6 +21,7 @@ class CourseStore extends ChangeNotifier{
   List<Course> get courses => _courses;
   List<Course> get basket => _basket;
   Course get currentCourse => _currentCourse;
+  int get totalBasketPrice => _totalBasketPrice;
 
   String get userId => _userId;
   String get userName => _userName;
@@ -51,6 +53,10 @@ class CourseStore extends ChangeNotifier{
     notifyListeners();
   }
 
+  setTotalBasketPrice(int totalPrice){
+    this._totalBasketPrice = totalPrice;
+  }
+
   bool isTokenExpired(String receivedToken){
     _isLoggedIn = JwtDecoder.isExpired(receivedToken);
     return _isLoggedIn;
@@ -65,5 +71,9 @@ class CourseStore extends ChangeNotifier{
     _token = receivedToken;
 
     notifyListeners();
+  }
+
+  Future refineUserBasket(Future<List<Course>> refinedBasket) async {
+    this._basket = await refinedBasket;
   }
 }
