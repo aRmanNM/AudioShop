@@ -113,7 +113,16 @@ namespace API.Controllers
         [HttpPost("verifytoken")]
         public async Task<ActionResult> VerifyToken(VerificationDto verificationDto)
         {
-            var user = await _smsService.FindUserByPhoneNumberAsync(verificationDto.PhoneNumber);
+            var user = new User();
+            if (verificationDto.UserId != null)
+            {
+                user = await _userManager.FindByIdAsync(verificationDto.UserId);
+            }
+            else
+            {
+                user = await _smsService.FindUserByPhoneNumberAsync(verificationDto.PhoneNumber);
+            }
+
             if (user == null)
             {
                 return BadRequest("کاربر پیدا نشد");
