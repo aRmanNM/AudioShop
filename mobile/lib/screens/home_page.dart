@@ -300,7 +300,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                           child: TextButton(
                             onPressed: (){
-                              if(courseStore.isLoggedIn)
+                              if(courseStore.token != null)
                                 Navigator.push(context, MaterialPageRoute(builder: (context){
                                   return CheckOutPage();
                                 }));
@@ -334,7 +334,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   String basketPrice() {
-    for (var course in courseStore.basket) totalBasketPrice += course.price;
+    for (var course in courseStore.basket)
+      totalBasketPrice += course.price;
+
+    courseStore.setTotalBasketPrice(totalBasketPrice.toInt());
 
     return NumberFormat('#,###').format(totalBasketPrice) + ' تومان';
   }

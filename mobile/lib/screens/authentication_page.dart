@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:mobile/models/course.dart';
 import 'package:mobile/models/user.dart';
 import 'package:mobile/store/course_store.dart';
 import 'package:async/async.dart';
 import 'package:mobile/services/authentication_service.dart';
+import 'package:provider/provider.dart';
 
 enum FormName{
   SignIn,
@@ -90,7 +92,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
   }
   
   Future<bool> isUserNameRepetitive(String username) async{
-    bool usernameExists = await authService.usernameExists(username);
+    var usernameExists = await authService.usernameExists(username);
     if(usernameExists)
       Fluttertoast.showToast(msg:
       'نام کاربری تکراری است. لطفا آن را تغییر دهید');
@@ -109,9 +111,9 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
       Colors.red[700] : Colors.red[400],
       child: TextButton(
         onPressed: (){
-          setState(() async {
+          setState(() {
             if(!isTimerActive){
-              await receiveCode();
+              receiveCode();
             }
           });
         },
@@ -133,6 +135,46 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
     });
   }
 
+  Future signUp() async{
+    if(userNameController.text.isNotEmpty &&
+        passwordController.text.isNotEmpty &&
+        confirmPasswordController.text.isNotEmpty)
+    {
+      bool isUserNotOk = await isUserNameRepetitive(userNameController.text);
+      if(!isUserNotOk){
+        User registeredUser = await authService.
+          signUp(userNameController.text, passwordController.text);
+        if(registeredUser == null)
+          Fluttertoast.showToast(msg: 'ثبت نام با مشکل مواجه شد. لطفا مجددا تلاش کنید.');
+        else{
+          await secureStorage.write(key: 'token', value: registeredUser.token);
+          await secureStorage.write(key: 'hasPhoneNumber',
+              value: registeredUser.hasPhoneNumber.toString());
+
+          courseStore.setUserDetails(registeredUser.token);
+
+          List<Course> userCourses = await authService
+              .getUserCourses(courseStore.userId, courseStore.token);
+
+          List<Course> tempBasket = List.from(courseStore.basket);
+
+          for(Course basketItem in courseStore.basket){
+            for(Course course in userCourses){
+              if (basketItem.id == course.id){
+                tempBasket.remove(basketItem);
+              }
+            }
+          }
+
+          courseStore.refineUserBasket(tempBasket);
+
+          Navigator.pop(context);
+
+          //TODO navigate to payment
+        }
+      }
+    }
+  }
 
   Widget authForm(FormName formName){
     if(formName == FormName.SignIn)
@@ -406,7 +448,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                                   decorationColor: Colors.black,
                                   color: Colors.white
                               ),
-                              keyboardType: TextInputType.phone,
+                              keyboardType: TextInputType.text,
                               decoration: InputDecoration(
                                 enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.white, width: 2.0),
@@ -428,7 +470,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                                     Colors.red[700] : Colors.red[400],
                             child: TextButton(
                               onPressed: (){
-                                setState(() async {
+                                setState(() {
                                   if(!isCheckingUserName){
                                     isCheckingUserName = true;
                                     isUserNameRepetitive(userNameController.text);
@@ -469,7 +511,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                               style: TextStyle(
                                   color: Colors.white
                               ),
-                              keyboardType: TextInputType.phone,
+                              keyboardType: TextInputType.text,
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(),
                                 enabledBorder: OutlineInputBorder(
@@ -492,7 +534,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                               style: TextStyle(
                                   color: Colors.white
                               ),
-                              keyboardType: TextInputType.phone,
+                              keyboardType: TextInputType.text,
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(),
                                 enabledBorder: OutlineInputBorder(
@@ -521,7 +563,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                   Card(
                     color: Color(0xFF20BFA9),
                     child: TextButton(
-                      onPressed: (){
+                      onPressed: () async {
                         setState(() {
                           userNameError = passwordError = '';
                           if(userNameController.text.isEmpty)
@@ -532,26 +574,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                             passwordController.text != confirmPasswordController.text)
                             passwordError = 'رمز عبور مطابقت ندارد';
                         });
-
-                        setState(() async {
-                          if(phoneNumberController.text.isNotEmpty &&
-                              verificationCodeController.text.isNotEmpty){
-                            if(await isUserNameRepetitive(userNameController.text)){
-                              User registeredUser = await authService.
-                                signUp(userNameController.text, passwordController.text);
-                              if(registeredUser == null)
-                                Fluttertoast.showToast(msg: 'ثبت نام با مشکل مواجه شد. لطفا مجددا تلاش کنید.');
-                              else{
-                                secureStorage.write(key: 'token',
-                                    value: registeredUser.token);
-                                secureStorage.write(key: 'hasPhoneNumber',
-                                    value: registeredUser.hasPhoneNumber.toString());
-                                courseStore.setUserDetails(registeredUser.toJson().toString());
-                                //TODO navigate to payment
-                              }
-                            }
-                          }
-                        });
+                        await signUp();
                       },
                       child: Text(
                         'تایید',
@@ -574,6 +597,8 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
 
   @override
   Widget build(BuildContext context) {
+    courseStore = Provider.of<CourseStore>(context);
+
     return Scaffold(
       body: authForm(formName),
       persistentFooterButtons: <Widget>[
