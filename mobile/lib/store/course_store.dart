@@ -69,12 +69,15 @@ class CourseStore extends ChangeNotifier{
 
     Map<String, dynamic> decodedToken = JwtDecoder.decode(receivedToken);
 
-    _userId = decodedToken['nameid'];
-    _userName = decodedToken['unique_name'];
+    if(receivedToken != ""){
+      _userId = decodedToken['nameid'];
+      _userName = decodedToken['unique_name'];
+      AuthenticationService authService = AuthenticationService();
+      this._userCourses = await authService.getUserCourses(_userId, _token);
+    }
+
     _token = receivedToken;
 
-    AuthenticationService authService = AuthenticationService();
-    this._userCourses = await authService.getUserCourses(_userId, _token);
 
     notifyListeners();
   }

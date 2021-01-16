@@ -3,20 +3,17 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mobile/models/course.dart';
 import 'package:mobile/models/user.dart';
+import 'package:mobile/shared/enums.dart';
 import 'package:mobile/store/course_store.dart';
 import 'package:async/async.dart';
 import 'package:mobile/services/authentication_service.dart';
 import 'package:provider/provider.dart';
 
-enum FormName {
-  SignIn,
-  SignUp,
-  RegisterPhoneNumber,
-}
 
 class AuthenticationPage extends StatefulWidget {
-  AuthenticationPage();
+  AuthenticationPage(this.baseForm);
 
+  final baseForm;
   @override
   _AuthenticationPageState createState() => _AuthenticationPageState();
 }
@@ -47,6 +44,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
   @override
   void initState() {
     super.initState();
+    formName = widget.baseForm;
   }
 
   Future receiveCode() async {

@@ -1,5 +1,4 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -11,6 +10,7 @@ import 'package:mobile/models/course.dart';
 import 'package:mobile/screens/checkout_page.dart';
 import 'package:mobile/screens/authentication_page.dart';
 import 'package:mobile/services/course_service.dart';
+import 'package:mobile/shared/enums.dart';
 import 'package:mobile/store/course_store.dart';
 import 'package:provider/provider.dart';
 import 'course_page.dart';
@@ -39,6 +39,7 @@ class _HomePageState extends State<HomePage> {
   int tabIndex = 1;
   bool delete = false;
   double totalBasketPrice = 0;
+  Widget dropdownValue = Icon(Icons.person_pin, size: 50, color: Colors.white,);
 
   @override
   void initState() {
@@ -282,8 +283,11 @@ class _HomePageState extends State<HomePage> {
                                   borderRadius: BorderRadius.circular(15.0),
                                 ),
                                 child: Padding(
-                                  padding: const EdgeInsets.fromLTRB(8,8,8,8),
-                                  child: Text(basketPrice(),),
+                                  padding:
+                                      const EdgeInsets.fromLTRB(8, 8, 8, 8),
+                                  child: Text(
+                                    basketPrice(),
+                                  ),
                                 )),
                           ],
                         ),
@@ -292,31 +296,33 @@ class _HomePageState extends State<HomePage> {
                     Expanded(
                       flex: 3,
                       child: Padding(
-                        padding: const EdgeInsets.fromLTRB(15,0,15,20),
+                        padding: const EdgeInsets.fromLTRB(15, 0, 15, 20),
                         child: Card(
                           color: Color(0xFF20BFA9),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15.0),
                           ),
                           child: TextButton(
-                            onPressed: (){
-                              if(courseStore.token != null)
-                                Navigator.push(context, MaterialPageRoute(builder: (context){
+                            onPressed: () {
+                              if (courseStore.token != null)
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
                                   return CheckOutPage();
                                 }));
-                              else{
-                                Navigator.push(context, MaterialPageRoute(builder: (context){
-                                  return AuthenticationPage();
+                              else {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return AuthenticationPage(FormName.SignUp);
                                 }));
                               }
                             },
                             child: Center(
                               child: Text(
-                                  'ادامه خرید',
-                                  style: TextStyle(
-                                      fontSize: 23,
-                                      color: Colors.white,
-                                  ),
+                                'ادامه خرید',
+                                style: TextStyle(
+                                  fontSize: 23,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
                           ),
@@ -334,8 +340,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   String basketPrice() {
-    for (var course in courseStore.basket)
-      totalBasketPrice += course.price;
+    for (var course in courseStore.basket) totalBasketPrice += course.price;
 
     courseStore.setTotalBasketPrice(totalBasketPrice.toInt());
 
@@ -343,7 +348,124 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget library() {
-    return Column();
+    return (courseStore.token == null || courseStore.token == '')
+        ? Column(
+            children: <Widget>[
+              Expanded(
+                flex: 3,
+                child: Text('جهت استفاده از محتوای غیر رایگان برنامه لطفا'
+                    ' ثبت نام کنید یا اگر قبلا ثبت نامه کرده اید وارد شوید.'),
+              ),
+              Expanded(
+                  flex: 1,
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: TextButton(
+                          child: Text('ورود'),
+                          onPressed: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return AuthenticationPage(FormName.SignIn);
+                            }));
+                          },
+                        ),
+                      ),
+                      Expanded(
+                        child: TextButton(
+                          child: Text('ثبت نام'),
+                          onPressed: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return AuthenticationPage(FormName.SignUp);
+                            }));
+                          },
+                        ),
+                      ),
+                    ],
+                  ))
+            ],
+          )
+        : Column(
+            children: <Widget>[
+              Expanded(
+                flex: 1,
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                        flex: 1,
+                        child: Icon(
+                          Icons.person_pin,
+                          size: 50,
+                          color: Colors.white,
+                        ),
+                    ),
+                    Expanded(
+                        flex: 3,
+                        child: Text(courseStore.userName + '  خوش آمدید  '),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: TextButton(
+                        onPressed: () async {
+                          await secureStorage.write(key: 'token', value: '');
+                          await courseStore.setUserDetails('');
+
+                          setState(() {
+                            library();
+                          });
+                        },
+                        child: Icon(Icons.exit_to_app, size: 50, color: Colors.white,),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                flex: 7,
+                child: userCourses(),
+              )
+            ],
+          );
+  }
+
+  Widget userCourses(){
+    return ListView.builder(
+        itemCount: courseStore.userCourses.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(
+                vertical: 2, horizontal: 8),
+            child: Card(
+              color: Color(0xFF403F44),
+              elevation: 8,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              child: IntrinsicHeight(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    Expanded(
+                        flex: 2,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(15),
+                          child: Image.network(
+                              courseStore.userCourses[index].pictureUrl),
+                        )),
+                    Expanded(
+                      flex: 6,
+                      child: Text(
+                        courseStore.userCourses[index].name,
+                        style: TextStyle(fontSize: 19),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
   }
 
   showAlertDialog(BuildContext context, Course course) {
@@ -385,9 +507,9 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Future loginStatement() async{
+  Future loginStatement() async {
     String token = await secureStorage.read(key: 'token');
-    if(token.isNotEmpty && !courseStore.isTokenExpired(token))
+    if (token.isNotEmpty && !courseStore.isTokenExpired(token))
       await courseStore.setUserDetails(token);
   }
 
@@ -395,8 +517,8 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     courseStore = Provider.of<CourseStore>(context);
     courseStore.setAllCourses(courseList);
-
-
+    if(courseStore.token != null)
+      courseStore.setUserDetails(courseStore.token);
     // FirebaseAdMob.instance
     //     .initialize(appId: "ca-app-pub-6716792328957551~1144830596")
     //     .then((value) => myBanner

@@ -55,12 +55,13 @@ class _CoursePageState extends State<CoursePage> {
       String episodeDescription = episode.description;
       var picFile = widget.courseCover;
 
-
-      for(Course tempCourse in courseStore.userCourses){
-        if(tempCourse.id == course.id)
-        {
-          isCoursePurchasedBefore = true;
-          break;
+      if(courseStore.userCourses != null){
+        for(Course tempCourse in courseStore.userCourses){
+          if(tempCourse.id == course.id)
+          {
+            isCoursePurchasedBefore = true;
+            break;
+          }
         }
       }
 
@@ -185,11 +186,13 @@ class _CoursePageState extends State<CoursePage> {
                   flex: 2,
                     child: TextButton(
                       onPressed: (){
-                        for(Course tempCourse in courseStore.userCourses){
-                          if(tempCourse.id == course.id)
-                          {
-                            isCoursePurchasedBefore = true;
-                            break;
+                        if(courseStore.userCourses != null){
+                          for(Course tempCourse in courseStore.userCourses){
+                            if(tempCourse.id == course.id)
+                            {
+                              isCoursePurchasedBefore = true;
+                              break;
+                            }
                           }
                         }
                         if(!isCoursePurchasedBefore &&
