@@ -27,6 +27,8 @@ class _CoursePageState extends State<CoursePage> {
   Future<dynamic> episodesFuture;
   String url = 'https://audioshoppp.ir/api/course/episodes/';
   CourseStore courseStore;
+  bool isCoursePurchasedBefore = false;
+
 
   @override
   void initState() {
@@ -52,6 +54,15 @@ class _CoursePageState extends State<CoursePage> {
       String episodeName = episode.name;
       String episodeDescription = episode.description;
       var picFile = widget.courseCover;
+
+
+      for(Course tempCourse in courseStore.userCourses){
+        if(tempCourse.id == course.id)
+        {
+          isCoursePurchasedBefore = true;
+          break;
+        }
+      }
 
       episodesList.add(Padding(
         padding: const EdgeInsets.fromLTRB(8,8,8,0),
@@ -90,12 +101,18 @@ class _CoursePageState extends State<CoursePage> {
                   flex: 4,
                   child: TextButton(
                     onPressed: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context){
-                        return NowPlaying(episode, picUrl);
-                      }));
+                      if(isCoursePurchasedBefore ||
+                          (episode.price == 0 || episode.price == null)){
+                        Navigator.push(context, MaterialPageRoute(builder: (context){
+                          return NowPlaying(episode, picUrl);
+                        }));
+                      }
+                      else
+                        Fluttertoast.showToast(msg: 'جهت حمایت از صاحب اثر، لطفا دوره را خریداری کنید');
                     },
-                    child: Icon(
-                        Icons.play_arrow,
+                    child: Icon((isCoursePurchasedBefore ||
+                          (episode.price == 0 || episode.price == null)) ?
+                        Icons.play_arrow_outlined : Icons.add_shopping_cart,
                         size: 32,
                         color: Color(0xFFFFFFFF),
                     ),
@@ -168,7 +185,6 @@ class _CoursePageState extends State<CoursePage> {
                   flex: 2,
                     child: TextButton(
                       onPressed: (){
-                        bool isCoursePurchasedBefore = false;
                         for(Course tempCourse in courseStore.userCourses){
                           if(tempCourse.id == course.id)
                           {
@@ -185,7 +201,7 @@ class _CoursePageState extends State<CoursePage> {
                           Fluttertoast.showToast(msg: 'این دوره را قبلا خریداری کرده اید');
                       },
                       child: Icon(
-                        Icons.shopping_basket,
+                        Icons.add_shopping_cart,
                         size: 22,
                         color: Colors.white,
                       ),
@@ -211,6 +227,7 @@ class _CoursePageState extends State<CoursePage> {
     courseStore = Provider.of<CourseStore>(context);
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
+
     return FutureBuilder(
         future: episodesFuture,
         builder: (context, data){

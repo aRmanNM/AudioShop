@@ -1,3 +1,4 @@
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile/models/course.dart';
 import 'dart:convert';
@@ -12,6 +13,7 @@ class AuthenticationService {
   String usernameCheckUrl =
       'https://audioshoppp.ir/api/auth/userexists?username=';
   String signUpUrl = 'https://audioshoppp.ir/api/auth/register?role=member';
+  String verifyTokenUrl = 'https://audioshoppp.ir/api/auth/verifytoken';
   String refineUserBasketUrl = 'https://audioshoppp.ir/api/user/RefineRepetitiveCourses';
   String getUserCoursesUrl = 'https://audioshoppp.ir/api/user/courses/';
 
@@ -36,7 +38,7 @@ class AuthenticationService {
     }
   }
 
-  Future<bool> signIn(String url, String phoneNumber) async {
+  Future<bool> sendVerificationCode(String url, String phoneNumber) async {
     var body = jsonEncode({'phoneNumber': phoneNumber});
 
     http.Response response = await http.post(Uri.encodeFull(url),
@@ -61,9 +63,34 @@ class AuthenticationService {
         });
     if(response.statusCode == 200){
       String data = response.body;
-      var courseMap = jsonDecode(data);
+      var userMap = jsonDecode(data);
 
-      User registeredUser = User.fromJson(courseMap);
+      User registeredUser = User.fromJson(userMap);
+
+      return registeredUser;
+    }
+    else{
+      print(response.statusCode);
+      return null;
+    }
+  }
+
+  Future<User> signIn(String phoneNumber, String authToken) async {
+    var body =
+      jsonEncode({'phoneNumber': phoneNumber, 'authToken': authToken});
+
+    http.Response response = await http.post(Uri.encodeFull(verifyTokenUrl),
+        body: body,
+        headers: {
+          "Accept": "application/json",
+          "content-type": "application/json"
+        });
+
+    if(response.statusCode == 200){
+      String data = response.body;
+      var userMap = jsonDecode(data);
+
+      User registeredUser = User.fromJson(userMap);
 
       return registeredUser;
     }

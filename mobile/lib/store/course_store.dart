@@ -80,6 +80,9 @@ class CourseStore extends ChangeNotifier{
   }
 
   refineUserBasket(List<Course> refinedBasket) {
-    this._basket = refinedBasket;
+    if(refinedBasket.isNotEmpty && refinedBasket.length > 0)
+      this._basket = refinedBasket;
+    else
+      this._basket.clear();
   }
 }
