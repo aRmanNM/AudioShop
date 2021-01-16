@@ -9,15 +9,16 @@ class PaymentService{
 
   PaymentService();
 
-  String payOrderUrl = 'https://audioshoppp.ir/api/order';
+  String createOrderUrl = 'https://audioshoppp.ir/api/order';
+  String payOrderUrl = 'https://audioshoppp.ir/api/payment/payorder';
 
-  Future<int> createOrder(List<Course> basket, String userId, int totalPrice, String token) async {
+  Future<String> createOrder(List<Course> basket, String userId, int totalPrice, String token) async {
     var body = jsonEncode({
       'userId': userId,
       'totalPrice': totalPrice,
       'courseDtos': basket});
 
-    http.Response response = await http.post(Uri.encodeFull(payOrderUrl),
+    http.Response response = await http.post(Uri.encodeFull(createOrderUrl),
         body: body,
         headers: {
           "Accept": "application/json",
@@ -27,12 +28,29 @@ class PaymentService{
 
     if(response.statusCode == 200){
       String data = response.body;
-      var orderMap = jsonDecode(data);
-      Order verifiedOrder = Order.fromJson(orderMap);
-      return verifiedOrder.id;
+      // var orderMap = jsonDecode(data);
+      // Order verifiedOrder = Order.fromJson(orderMap);
+      return data;
     }
     else{
       print(response.statusCode);
+      return null;
+    }
+  }
+
+  Future<String> payOrder(String orderJson) async{
+    http.Response response = await http.post(Uri.encodeFull(payOrderUrl),
+        body: orderJson,
+        headers: {
+          "Accept": "application/json",
+          "content-type": "application/json",
+        });
+
+    if(response.statusCode == 302){
+      String location = response.headers['location'];
+      return location;
+    }
+    else{
       return null;
     }
   }

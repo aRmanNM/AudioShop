@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:mobile/models/course.dart';
+import 'package:mobile/services/authentication_service.dart';
 
 class CourseStore extends ChangeNotifier{
 
@@ -8,6 +9,7 @@ class CourseStore extends ChangeNotifier{
   List<Course> _basket = [];
   Course _currentCourse;
   int _totalBasketPrice = 0;
+  List<Course> _userCourses =[];
 
   String _userId;
   String _userName;
@@ -22,6 +24,7 @@ class CourseStore extends ChangeNotifier{
   List<Course> get basket => _basket;
   Course get currentCourse => _currentCourse;
   int get totalBasketPrice => _totalBasketPrice;
+  List<Course> get userCourses => _userCourses;
 
   String get userId => _userId;
   String get userName => _userName;
@@ -62,13 +65,16 @@ class CourseStore extends ChangeNotifier{
     return _isLoggedIn;
   }
 
-  setUserDetails(String receivedToken){
+  Future setUserDetails(String receivedToken) async{
 
     Map<String, dynamic> decodedToken = JwtDecoder.decode(receivedToken);
 
     _userId = decodedToken['nameid'];
     _userName = decodedToken['unique_name'];
     _token = receivedToken;
+
+    AuthenticationService authService = AuthenticationService();
+    this._userCourses = await authService.getUserCourses(_userId, _token);
 
     notifyListeners();
   }

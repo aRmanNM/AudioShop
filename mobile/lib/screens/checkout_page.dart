@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mobile/services/payment_service.dart';
 import 'package:mobile/store/course_store.dart';
@@ -16,9 +17,9 @@ class CheckOutPage extends StatefulWidget {
 class _CheckOutPageState extends State<CheckOutPage> {
   CourseStore courseStore;
   PaymentService orderService = PaymentService();
-  int orderId = 0;
+  String orderJson = '';
 
-  Future<int> getOrderId() async{
+  Future<String> createOrder() async{
     return await orderService.createOrder(
         courseStore.basket,
         courseStore.userId,
@@ -35,10 +36,19 @@ class _CheckOutPageState extends State<CheckOutPage> {
       persistentFooterButtons: [
         TextButton(
             onPressed: () async {
-              orderId = await getOrderId();
-              String url = "https://audioshoppp.ir/api/PaymentVerification/" + orderId.toString();
-              if (await canLaunch(url))
-                await launch(url);
+              orderJson = await createOrder();
+              String paymentPageUrl = await orderService.payOrder(orderJson);
+              if (await canLaunch(paymentPageUrl)){
+                try{
+                  await launch(paymentPageUrl);
+                }
+                catch(e){
+                  print(e.toString());
+                }
+                finally{
+                  SystemNavigator.pop();
+                }
+              }
               else
                 Fluttertoast.showToast(msg: 'خطا در انتقال به درگاه پرداخت');
             },

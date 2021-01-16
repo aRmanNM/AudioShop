@@ -151,7 +151,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
           await secureStorage.write(key: 'hasPhoneNumber',
               value: registeredUser.hasPhoneNumber.toString());
 
-          courseStore.setUserDetails(registeredUser.token);
+          await courseStore.setUserDetails(registeredUser.token);
 
           List<Course> userCourses = await authService
               .getUserCourses(courseStore.userId, courseStore.token);

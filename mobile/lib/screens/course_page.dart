@@ -168,10 +168,21 @@ class _CoursePageState extends State<CoursePage> {
                   flex: 2,
                     child: TextButton(
                       onPressed: (){
-                        if(courseStore.addCourseToBasket(course))
+                        bool isCoursePurchasedBefore = false;
+                        for(Course tempCourse in courseStore.userCourses){
+                          if(tempCourse.id == course.id)
+                          {
+                            isCoursePurchasedBefore = true;
+                            break;
+                          }
+                        }
+                        if(!isCoursePurchasedBefore &&
+                            courseStore.addCourseToBasket(course))
                           Fluttertoast.showToast(msg: 'دوره با موفقیت به سبد خرید اضافه شد');
-                        else
+                        else if (!isCoursePurchasedBefore)
                           Fluttertoast.showToast(msg: 'این دوره در سبد خرید شما موجود است');
+                        else
+                          Fluttertoast.showToast(msg: 'این دوره را قبلا خریداری کرده اید');
                       },
                       child: Icon(
                         Icons.shopping_basket,

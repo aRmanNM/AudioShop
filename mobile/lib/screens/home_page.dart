@@ -388,7 +388,7 @@ class _HomePageState extends State<HomePage> {
   Future loginStatement() async{
     String token = await secureStorage.read(key: 'token');
     if(token.isNotEmpty && !courseStore.isTokenExpired(token))
-      courseStore.setUserDetails(token);
+      await courseStore.setUserDetails(token);
   }
 
   @override
