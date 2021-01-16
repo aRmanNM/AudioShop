@@ -18,13 +18,13 @@ namespace Infrastructure.Data.Repositories
         public async Task<IEnumerable<Course>> GetUserCourses(string userId)
         {
             var courses = await (from course in _context.Courses
-                                   join basketItems in _context.BasketItems
-                                     on course.Id equals basketItems.CourseId
-                                   join orders in _context.Orders
-                                     on basketItems.OrderId equals orders.Id
-                                   where orders.Status == true &&
-                                         orders.UserId == userId
-                                   select new {course, basketItems, orders}
+                                 join basketItems in _context.BasketItems
+                                   on course.Id equals basketItems.CourseId
+                                 join orders in _context.Orders
+                                   on basketItems.OrderId equals orders.Id
+                                 where orders.Status == true &&
+                                       orders.UserId == userId
+                                 select new { course, basketItems, orders }
                                    ).Select(x => x.course).ToListAsync();
             return courses;
         }
@@ -38,7 +38,7 @@ namespace Infrastructure.Data.Repositories
                                      on basketItems.OrderId equals orders.Id
                                    where orders.Status == true &&
                                          orders.UserId == userId
-                                   select new {courses, basketItems, orders}
+                                   select new { courses, basketItems, orders }
                                    ).Select(x => x.courses.Id).ToListAsync();
             return courseIds;
         }

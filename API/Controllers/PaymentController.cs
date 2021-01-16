@@ -2,7 +2,6 @@ using System.Threading.Tasks;
 using Core.Dtos;
 using Core.Entities;
 using Core.Interfaces;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using ZarinpalSandbox;
@@ -20,20 +19,8 @@ namespace API.Controllers
             _orderRepository = orderRepository;
         }
 
-        public IActionResult Index() {
-            return View();
-        }
-
-        [HttpGet]
-        [Route("PaymentVerification/{orderId}")]
-        public async Task<IActionResult> PaymentVerification(int orderId)
-        {
-            var order = await _orderRepository.GetOrderById(orderId);
-            return View(order);
-        }
-
         [HttpPost("payorder")]
-        public IActionResult PayOrder(Order order)
+        public IActionResult PayOrder([FromBody] Order order)
         {
             if (order.Status)
             {
@@ -72,6 +59,7 @@ namespace API.Controllers
                     return BadRequest();
                 }
                 order.Status = true;
+                order.PaymentReceipt = result.RefId.ToString();
                 await _orderRepository.SaveChanges();
                 return View(new PaymentResultDto
                 {

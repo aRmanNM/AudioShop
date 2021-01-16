@@ -9,6 +9,7 @@ namespace Core.Entities
         public string UserId { get; set; }
         public int TotalPrice { get; set; }
         public bool Status { get; set; }
+        public string PaymentReceipt { get; set; }
         public DateTime Date { get; set; }
         public ICollection<BasketItem> BasketItems { get; set; }
     }
