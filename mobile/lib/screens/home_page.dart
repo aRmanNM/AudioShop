@@ -40,6 +40,7 @@ class _HomePageState extends State<HomePage> {
   bool delete = false;
   double totalBasketPrice = 0;
   Widget dropdownValue = Icon(Icons.person_pin, size: 50, color: Colors.white,);
+  bool alertReturn = false;
 
   @override
   void initState() {
@@ -60,7 +61,7 @@ class _HomePageState extends State<HomePage> {
     return courseList;
   }
 
-  void goToCoursePage(Course course, var courseCover) async {
+  goToCoursePage(Course course, var courseCover) {
     courseStore.setCurrentCourse(course);
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return CoursePage(course, courseCover);
@@ -245,9 +246,16 @@ class _HomePageState extends State<HomePage> {
                                       child: TextButton(
                                         child: Icon(Icons.delete_outline_sharp,
                                             size: 25, color: Colors.white),
-                                        onPressed: () {
-                                          showAlertDialog(context,
-                                              courseStore.basket[index]);
+                                        onPressed: () async {
+                                          Widget cancelB = cancelButton('خیر');
+                                          Widget continueB =
+                                            continueButton('بله', Alert.DeleteFromBasket, index);
+                                          AlertDialog alertD = alert('هشدار',
+                                              'آیا از حذف دوره از سبد خرید مطمئنید؟',
+                                              [cancelB, continueB]);
+
+                                          showBasketAlertDialog(context, alertD);
+
                                         },
                                       ),
                                     ),
@@ -304,7 +312,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                           child: TextButton(
                             onPressed: () {
-                              if (courseStore.token != null)
+                              if (courseStore.token != null && courseStore.token != '')
                                 Navigator.push(context,
                                     MaterialPageRoute(builder: (context) {
                                   return CheckOutPage();
@@ -390,35 +398,49 @@ class _HomePageState extends State<HomePage> {
             children: <Widget>[
               Expanded(
                 flex: 1,
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                        flex: 1,
-                        child: Icon(
-                          Icons.person_pin,
-                          size: 50,
-                          color: Colors.white,
-                        ),
-                    ),
-                    Expanded(
-                        flex: 3,
-                        child: Text(courseStore.userName + '  خوش آمدید  '),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: TextButton(
-                        onPressed: () async {
-                          await secureStorage.write(key: 'token', value: '');
-                          await courseStore.setUserDetails('');
-
-                          setState(() {
-                            library();
-                          });
-                        },
-                        child: Icon(Icons.exit_to_app, size: 50, color: Colors.white,),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 20.0),
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                          flex: 1,
+                          child: Icon(
+                            Icons.person_pin,
+                            size: 50,
+                            color: Colors.white,
+                          ),
                       ),
-                    ),
-                  ],
+                      Expanded(
+                          flex: 3,
+                          child: Text(courseStore.userName + '  خوش آمدید  '),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: TextButton(
+                          onPressed: () async {
+                            Widget cancelB = cancelButton('خیر');
+                            Widget continueB =
+                              continueButton('بله', Alert.LogOut, null);
+                            AlertDialog alertD = alert('هشدار',
+                                'میخواهید از برنامه خارج شوید؟',
+                                [cancelB, continueB]);
+
+                            await showBasketAlertDialog(context, alertD);
+
+                            if(alertReturn){
+                              await logOut();
+                            }
+                            alertReturn = false;
+
+                            setState(() {
+                              navigationSelect(1);
+                            });
+                          },
+                          child: Icon(Icons.exit_to_app, size: 40, color: Colors.white,),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               Expanded(
@@ -433,34 +455,41 @@ class _HomePageState extends State<HomePage> {
     return ListView.builder(
         itemCount: courseStore.userCourses.length,
         itemBuilder: (BuildContext context, int index) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(
-                vertical: 2, horizontal: 8),
-            child: Card(
-              color: Color(0xFF403F44),
-              elevation: 8,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15.0),
-              ),
-              child: IntrinsicHeight(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    Expanded(
-                        flex: 2,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(15),
-                          child: Image.network(
-                              courseStore.userCourses[index].pictureUrl),
-                        )),
-                    Expanded(
-                      flex: 6,
-                      child: Text(
-                        courseStore.userCourses[index].name,
-                        style: TextStyle(fontSize: 19),
+          return TextButton(
+            onPressed: () async {
+              var picFile = await DefaultCacheManager().getSingleFile(
+                  courseStore.userCourses[index].pictureUrl);
+              goToCoursePage(courseStore.userCourses[index], picFile);
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                  vertical: 2, horizontal: 8),
+              child: Card(
+                color: Color(0xFF403F44),
+                elevation: 8,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+                child: IntrinsicHeight(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      Expanded(
+                          flex: 2,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(15),
+                            child: Image.network(
+                                courseStore.userCourses[index].pictureUrl),
+                          )),
+                      Expanded(
+                        flex: 6,
+                        child: Text(
+                          courseStore.userCourses[index].name,
+                          style: TextStyle(fontSize: 19),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -468,38 +497,45 @@ class _HomePageState extends State<HomePage> {
         });
   }
 
-  showAlertDialog(BuildContext context, Course course) {
-    // set up the buttons
-    Widget cancelButton = FlatButton(
-      child: Text("خیر"),
+  Future logOut() async{
+    await secureStorage.write(key: 'token', value: '');
+    await courseStore.setUserDetails('');
+  }
+
+  Widget cancelButton(String cancelText){
+    return FlatButton(
+      child: Text(cancelText),
       onPressed: () {
-        setState(() {
-          Navigator.of(context).pop();
-        });
+        Navigator.of(context).pop();
+        alertReturn = false;
       },
     );
-    Widget continueButton = FlatButton(
-      child: Text("بله"),
-      onPressed: () {
-        setState(() {
-          Navigator.of(context).pop(); // dismiss dialog
-          courseStore.deleteCourseFromBasket(course);
-        });
+  }
+
+  Widget continueButton(String continueText, Alert alert, int index){
+    return FlatButton(
+      child: Text(continueText),
+      onPressed: () async {
+        Navigator.of(context).pop();
+        if(alert == Alert.DeleteFromBasket)
+          courseStore.deleteCourseFromBasket(courseStore.basket[index]);
+        else if(alert == Alert.LogOut){
+          alertReturn = true;
+        }
       },
     );
+  }
 
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: Text("هشدار"),
-      content: Text("آیا از حذف دوره از سبد خرید مطمئنید؟"),
-      actions: [
-        cancelButton,
-        continueButton,
-      ],
+  AlertDialog alert(String titleText, String contentText, List<Widget> actions){
+    return AlertDialog(
+      title: Text(titleText),
+      content: Text(contentText),
+      actions: actions,
     );
+  }
 
-    // show the dialog
-    showDialog(
+  Future showBasketAlertDialog(BuildContext context, AlertDialog alert) async {
+    return await showDialog(
       context: context,
       builder: (BuildContext context) {
         return alert;

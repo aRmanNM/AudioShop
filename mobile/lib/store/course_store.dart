@@ -73,13 +73,16 @@ class CourseStore extends ChangeNotifier{
       _userId = decodedToken['nameid'];
       _userName = decodedToken['unique_name'];
       AuthenticationService authService = AuthenticationService();
-      this._userCourses = await authService.getUserCourses(_userId, _token);
+      _userCourses = await authService.getUserCourses(_userId, receivedToken);
+    }
+    else{
+      _userId = '';
+      _userName = '';
+      _userCourses.clear();
     }
 
     _token = receivedToken;
 
-
-    notifyListeners();
   }
 
   refineUserBasket(List<Course> refinedBasket) {

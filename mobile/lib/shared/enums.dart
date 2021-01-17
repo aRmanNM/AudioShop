@@ -3,3 +3,8 @@ enum FormName {
   SignUp,
   RegisterPhoneNumber,
 }
+
+enum Alert {
+  LogOut,
+  DeleteFromBasket,
+}
