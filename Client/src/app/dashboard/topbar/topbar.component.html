@@ -1,0 +1,20 @@
+<mat-toolbar [dir]="'rtl'">
+    <span>نرم افزار مدیریت فروشگاه صوتی</span>
+    <span class="spacer"></span>
+    <span>
+      {{ currentUser }}
+    </span>
+
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+      <mat-icon>account_circle</mat-icon>
+    </button>
+
+  <mat-menu #menu>
+    <button mat-menu-item (click)="logout()">
+      <mat-icon>exit_to_app</mat-icon>
+      <span>خروج</span>
+    </button>
+  </mat-menu>
+
+
+</mat-toolbar>

@@ -1,0 +1,11 @@
+<mat-nav-list role="navigation">
+  <div *ngIf="authService.isInRole('Admin')">
+    <a mat-list-item routerLink="/overview">نمایه</a>
+    <a mat-list-item>پرداخت</a>
+    <a mat-list-item>تنظیمات</a>
+  </div>
+  <div *ngIf="authService.isInRole('SalesPerson')">
+    <a mat-list-item>پرداخت های من</a>
+  </div>
+  <a mat-list-item routerLink="/test">تست</a>
+</mat-nav-list>

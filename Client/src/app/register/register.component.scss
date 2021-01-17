@@ -1,0 +1,32 @@
+.centered-container {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+mat-card {
+  min-width: 300px;
+}
+
+mat-card mat-card-content form {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+mat-card-title {
+  text-align: center;
+}
+
+.button {
+  margin-top: 20px;
+}
+
+.login {
+  margin-top: 20px;
+}
+
+button {
+  width: 100%;
+}

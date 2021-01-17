@@ -1,0 +1,31 @@
+<div class="centered-container mat-app-background">
+  <mat-card [dir]="'rtl'">
+    <mat-card-title>ورود به سیستم</mat-card-title>
+    <mat-card-content>
+      <form [formGroup]="loginForm" (submit)="login()">
+
+        <mat-error *ngIf="error">{{ error }}</mat-error>
+
+        <mat-form-field color="accent">
+          <mat-label>نام کاربری</mat-label>
+          <input type="text" matInput formControlName="userName" maxlength="40"/>
+        </mat-form-field>
+
+        <mat-form-field color="accent">
+          <mat-label>رمز عبور</mat-label>
+          <input type="password" matInput formControlName="password" maxlength="40"/>
+        </mat-form-field>
+
+        <div class="button">
+          <button mat-raised-button color="warn" [disabled]="!loginForm.valid" type="submit">
+            ورود
+          </button>
+        </div>
+
+        <div class="register">
+          <a [routerLink]="['/register']">ثبت نام فروشنده</a>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
