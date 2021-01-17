@@ -416,11 +416,15 @@ class _HomePageState extends State<HomePage> {
                             ),
                         ),
                         Expanded(
-                            flex: 3,
-                            child: Text(courseStore.userName + '  خوش آمدید  '),
+                            flex: courseStore.hasPhoneNumber ? 4 : 3,
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(8,0,8,0),
+                              child: Text(courseStore.userName),
+                            ),
                         ),
+                        registerPhoneButton(),
                         Expanded(
-                          flex: 1,
+                          flex: 2,
                           child: TextButton(
                             onPressed: () async {
                               Widget cancelB = cancelButton('خیر');
@@ -441,13 +445,17 @@ class _HomePageState extends State<HomePage> {
                                 navigationSelect(1);
                               });
                             },
-                            child: Icon(Icons.exit_to_app, size: 40, color: Colors.white,),
+                            child: Card(
+                              color: Colors.red[700],
+                              child: Center(child: Text('خروج')),
+                            )
                           ),
                         ),
                       ],
                     ),
                   ),
                 ),
+                notRegisteredPhoneNumber(),
                 Expanded(
                   flex: 1,
                   child: Padding(
@@ -456,9 +464,9 @@ class _HomePageState extends State<HomePage> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Text(
-                              'دوره های شما',
-                              style: TextStyle(fontSize: 22),
+                            Text(courseStore.userCourses.length > 0 ?
+                              'دوره های شما' : 'هنوز دوره ای در حساب کاربری شما ثبت نشده است',
+                              style: TextStyle(fontSize: 18),
                             ),
                           ],
                         ),
@@ -472,6 +480,44 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
         );
+  }
+
+  Widget registerPhoneButton(){
+    if(courseStore.hasPhoneNumber)
+      return SizedBox();
+    return Expanded(
+      flex: 2,
+      child: TextButton(
+        onPressed: (){
+          Navigator.push(context, MaterialPageRoute(builder: (context){
+            return AuthenticationPage(FormName.RegisterPhoneNumber);
+          }));
+        },
+        child: Card(
+          color: Color(0xFF20BFA9),
+          child: Center(child: Text('ثبت همراه')),
+        ),
+      ),
+    );
+  }
+
+  Widget notRegisteredPhoneNumber(){
+    if(courseStore.token != null &&
+        courseStore.token != '' &&
+        !courseStore.hasPhoneNumber){
+      return Expanded(
+        flex: 4,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            'کاربر عزیز. شماره همراه شما در سیستم ثبت نشده است.'
+                ' ورود مجدد به حساب کاربری فقط با شماره همراه ممکن است.'
+                ' آیا مایل به ثبت شماره همراه خود هستید؟',
+            style: TextStyle(color: Colors.red[300]),
+      ),
+        ));
+    }
+    return SizedBox();
   }
 
   Widget userCourses(){
@@ -523,7 +569,7 @@ class _HomePageState extends State<HomePage> {
 
   Future logOut() async{
     await secureStorage.write(key: 'token', value: '');
-    await courseStore.setUserDetails('');
+    await courseStore.setUserDetails('', false);
   }
 
   Widget cancelButton(String cancelText){
@@ -545,6 +591,11 @@ class _HomePageState extends State<HomePage> {
           courseStore.deleteCourseFromBasket(courseStore.basket[index]);
         else if(alert == Alert.LogOut){
           alertReturn = true;
+        }
+        else if(alert == Alert.RegisterPhoneNumber){
+          Navigator.push(context, MaterialPageRoute(builder: (context){
+            return AuthenticationPage(FormName.RegisterPhoneNumber);
+          }));
         }
       },
     );
@@ -569,8 +620,9 @@ class _HomePageState extends State<HomePage> {
 
   Future loginStatement() async {
     String token = await secureStorage.read(key: 'token');
+    String hasPhoneNumber = await secureStorage.read(key: 'hasPhoneNumber');
     if (token.isNotEmpty && !courseStore.isTokenExpired(token))
-      await courseStore.setUserDetails(token);
+      await courseStore.setUserDetails(token, hasPhoneNumber.toLowerCase() == 'true');
   }
 
   @override
@@ -578,7 +630,7 @@ class _HomePageState extends State<HomePage> {
     courseStore = Provider.of<CourseStore>(context);
     courseStore.setAllCourses(courseList);
     if(courseStore.token != null)
-      courseStore.setUserDetails(courseStore.token);
+      courseStore.setUserDetails(courseStore.token, courseStore.hasPhoneNumber);
     // FirebaseAdMob.instance
     //     .initialize(appId: "ca-app-pub-6716792328957551~1144830596")
     //     .then((value) => myBanner

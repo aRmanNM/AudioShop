@@ -16,6 +16,7 @@ class AuthenticationService {
   String verifyTokenUrl = 'https://audioshoppp.ir/api/auth/verifytoken';
   String refineUserBasketUrl = 'https://audioshoppp.ir/api/user/RefineRepetitiveCourses';
   String getUserCoursesUrl = 'https://audioshoppp.ir/api/user/courses/';
+  String verifyPhoneUrl = 'https://audioshoppp.ir/api/auth/verifyphone';
 
   Future<bool> isPhoneNumberRegistered(String phoneNumber) async {
     http.Response response = await http.get(phoneNumberCheckUrl + phoneNumber);
@@ -99,6 +100,35 @@ class AuthenticationService {
       return null;
     }
   }
+
+  Future<bool> verifyPhoneNumber(String phoneNumber, String userId) async {
+    var body =
+      jsonEncode({'phoneNumber': phoneNumber, 'userId': userId});
+
+    http.Response response = await http.post(Uri.encodeFull(verifyPhoneUrl),
+        body: body,
+        headers: {
+          "Accept": "application/json",
+          "content-type": "application/json"
+        });
+
+    return response.statusCode == 200;
+  }
+
+  Future<bool> registerPhoneNumber(String phoneNumber, String authToken, String userId) async {
+    var body =
+    jsonEncode({'phoneNumber': phoneNumber, 'authToken': authToken, 'userId': userId});
+
+    http.Response response = await http.post(Uri.encodeFull(verifyTokenUrl),
+        body: body,
+        headers: {
+          "Accept": "application/json",
+          "content-type": "application/json"
+        });
+
+    return response.statusCode == 200;
+  }
+
 
   Future<List<Course>> refineUserBasket(List<Course> courses, int totalPrice, String userId, String token) async{
     var body = jsonEncode({

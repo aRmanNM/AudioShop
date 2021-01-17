@@ -67,14 +67,14 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
             msg: 'کاربری با این شماره تلفن یافت نشد. لطفا ثبت نام کنید.');
       }
     } else {
-      // if(!isRepetitiveUser){
-      //   sentCode = await authService.
-      //   signUp('https://audioshoppp.ir/api/auth/register',
-      //       phoneNumberController.text, nameController.text);
-      // }
-      // else {
-      //   Fluttertoast.showToast(msg: 'شماره همراه تکراری است. کافی است وارد شوید.');
-      // }
+      if(!isRepetitiveUser){
+        sentCode = await authService.
+          verifyPhoneNumber(phoneNumberController.text, courseStore.userId);
+      }
+      else {
+        Fluttertoast.showToast(msg: 'شماره همراه تکراری است. کافی است وارد شوید.');
+        return;
+      }
     }
 
     if (sentCode)
@@ -87,7 +87,6 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
     }
 
     sentCode = false;
-
   }
 
   Future<bool> isUserNameRepetitive(String username) async {
@@ -105,7 +104,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
 
   Widget sendCodeButton() {
     return Card(
-      color: (!isTimerActive) ? Colors.red[700] : Colors.red[400],
+      color: (!isTimerActive) ? Colors.red[700] : Colors.red[200],
       child: TextButton(
         onPressed: () {
           setState(() {
@@ -132,6 +131,22 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
     });
   }
 
+  Future registerPhoneNumber() async{
+    bool registeredPhone = await authService.registerPhoneNumber(
+        phoneNumberController.text, verificationCodeController.text, courseStore.userId);
+    if (!registeredPhone)
+      Fluttertoast.showToast(
+          msg: 'ثبت شماره با مشکل مواجه شد. لطفا مجددا تلاش کنید.');
+    else {
+      await secureStorage.write(
+          key: 'hasPhoneNumber', value: true.toString());
+
+      await courseStore.setUserDetails(courseStore.token, true);
+
+      Navigator.pop(context);
+    }
+  }
+
   Future signUp() async {
     bool isUserNotOk = await isUserNameRepetitive(userNameController.text);
     if (!isUserNotOk) {
@@ -146,7 +161,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
             key: 'hasPhoneNumber',
             value: registeredUser.hasPhoneNumber.toString());
 
-        await courseStore.setUserDetails(registeredUser.token);
+        await courseStore.setUserDetails(registeredUser.token, registeredUser.hasPhoneNumber);
 
         List<Course> userCourses = await authService.getUserCourses(
             courseStore.userId, courseStore.token);
@@ -179,7 +194,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
       await secureStorage.write(
           key: 'hasPhoneNumber', value: loggedInUser.hasPhoneNumber.toString());
 
-      await courseStore.setUserDetails(loggedInUser.token);
+      await courseStore.setUserDetails(loggedInUser.token, loggedInUser.hasPhoneNumber);
 
       List<Course> userCourses = await authService.getUserCourses(
           courseStore.userId, courseStore.token);
@@ -421,7 +436,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                       child: Card(
                         color: Color(0xFF20BFA9),
                         child: TextButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               phoneNumberError = verificationCodeError = '';
                               if (phoneNumberController.text.isEmpty)
@@ -429,10 +444,11 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                               if (verificationCodeController.text.isEmpty)
                                 verificationCodeError =
                                     'کد ارسال شده به همراهتان را وارد کنید';
-                              // if(phoneNumberController.text.isNotEmpty &&
-                              // verificationCodeController.text.isNotEmpty)
-                              //TODO Register Phone Number Method
+
                             });
+                            if(phoneNumberController.text.isNotEmpty &&
+                              verificationCodeController.text.isNotEmpty)
+                              await registerPhoneNumber();
                           },
                           child: Text(
                             'تایید',
@@ -505,7 +521,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                               child: Card(
                                 color: !isCheckingUserName
                                     ? Colors.red[700]
-                                    : Colors.red[400],
+                                    : Colors.red[200],
                                 child: TextButton(
                                   onPressed: () {
                                     setState(() {

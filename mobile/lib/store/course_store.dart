@@ -15,6 +15,7 @@ class CourseStore extends ChangeNotifier{
   String _userName;
   String _token;
   bool _isLoggedIn = false;
+  bool _hasPhoneNumber = false;
 
   CourseStore(){
     notifyListeners();
@@ -30,6 +31,7 @@ class CourseStore extends ChangeNotifier{
   String get userName => _userName;
   String get token => _token;
   bool get isLoggedIn => _isLoggedIn;
+  bool get hasPhoneNumber => _hasPhoneNumber;
 
   setAllCourses(List<Course> allCourses){
     this._courses = allCourses;
@@ -65,7 +67,7 @@ class CourseStore extends ChangeNotifier{
     return _isLoggedIn;
   }
 
-  Future setUserDetails(String receivedToken) async{
+  Future setUserDetails(String receivedToken, bool hasPhoneNumber) async{
 
     Map<String, dynamic> decodedToken = JwtDecoder.decode(receivedToken);
 
@@ -81,6 +83,7 @@ class CourseStore extends ChangeNotifier{
       _userCourses.clear();
     }
 
+    _hasPhoneNumber = hasPhoneNumber;
     _token = receivedToken;
 
   }
