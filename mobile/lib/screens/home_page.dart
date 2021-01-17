@@ -149,24 +149,23 @@ class _HomePageState extends State<HomePage> {
   Widget home() {
     return Column(
       children: <Widget>[
-        Container(
-          height: 20,
-        ),
         Expanded(
           flex: 2,
           child: Card(
             color: Color(0xFF403F44),
-            child: CarouselSlider(
-                options: CarouselOptions(
-                    height: height,
-                    viewportFraction: 0.6,
-                    reverse: false,
-                    autoPlay: true,
-                    autoPlayInterval: Duration(seconds: 3),
-                    autoPlayAnimationDuration: Duration(milliseconds: 800),
-                    autoPlayCurve: Curves.fastOutSlowIn,
-                    enlargeCenterPage: true),
-                items: carouselSlider),
+            child: SafeArea (
+              child: CarouselSlider(
+                  options: CarouselOptions(
+                      height: height,
+                      viewportFraction: 0.6,
+                      reverse: false,
+                      autoPlay: true,
+                      autoPlayInterval: Duration(seconds: 3),
+                      autoPlayAnimationDuration: Duration(milliseconds: 800),
+                      autoPlayCurve: Curves.fastOutSlowIn,
+                      enlargeCenterPage: true),
+                  items: carouselSlider),
+            ),
           ),
         ),
         Expanded(
@@ -192,81 +191,83 @@ class _HomePageState extends State<HomePage> {
             children: <Widget>[
               Expanded(
                 flex: 8,
-                child: ListView.builder(
-                    itemCount: courseStore.basket.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 2, horizontal: 8),
-                        child: Card(
-                          color: Color(0xFF403F44),
-                          elevation: 8,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15.0),
-                          ),
-                          child: IntrinsicHeight(
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: <Widget>[
-                                Expanded(
-                                    flex: 2,
+                child: SafeArea (
+                  child: ListView.builder(
+                      itemCount: courseStore.basket.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 2, horizontal: 8),
+                          child: Card(
+                            color: Color(0xFF403F44),
+                            elevation: 8,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15.0),
+                            ),
+                            child: IntrinsicHeight(
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: <Widget>[
+                                  Expanded(
+                                      flex: 2,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(15),
+                                        child: Image.network(
+                                            courseStore.basket[index].pictureUrl),
+                                      )),
+                                  Expanded(
+                                    flex: 6,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Text(
+                                          courseStore.basket[index].name,
+                                          style: TextStyle(fontSize: 19),
+                                        ),
+                                        Text(
+                                          NumberFormat('#,###').format(courseStore
+                                                  .basket[index].price) +
+                                              ' تومان',
+                                          style: TextStyle(fontSize: 15),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 1,
                                     child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(15),
-                                      child: Image.network(
-                                          courseStore.basket[index].pictureUrl),
-                                    )),
-                                Expanded(
-                                  flex: 6,
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Text(
-                                        courseStore.basket[index].name,
-                                        style: TextStyle(fontSize: 19),
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(15),
+                                        bottomLeft: Radius.circular(15),
                                       ),
-                                      Text(
-                                        NumberFormat('#,###').format(courseStore
-                                                .basket[index].price) +
-                                            ' تومان',
-                                        style: TextStyle(fontSize: 15),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(15),
-                                      bottomLeft: Radius.circular(15),
-                                    ),
-                                    child: Container(
-                                      color: Colors.red,
-                                      child: TextButton(
-                                        child: Icon(Icons.delete_outline_sharp,
-                                            size: 25, color: Colors.white),
-                                        onPressed: () async {
-                                          Widget cancelB = cancelButton('خیر');
-                                          Widget continueB =
-                                            continueButton('بله', Alert.DeleteFromBasket, index);
-                                          AlertDialog alertD = alert('هشدار',
-                                              'آیا از حذف دوره از سبد خرید مطمئنید؟',
-                                              [cancelB, continueB]);
+                                      child: Container(
+                                        color: Colors.red,
+                                        child: TextButton(
+                                          child: Icon(Icons.delete_outline_sharp,
+                                              size: 25, color: Colors.white),
+                                          onPressed: () async {
+                                            Widget cancelB = cancelButton('خیر');
+                                            Widget continueB =
+                                              continueButton('بله', Alert.DeleteFromBasket, index);
+                                            AlertDialog alertD = alert('هشدار',
+                                                'آیا از حذف دوره از سبد خرید مطمئنید؟',
+                                                [cancelB, continueB]);
 
-                                          showBasketAlertDialog(context, alertD);
+                                            showBasketAlertDialog(context, alertD);
 
-                                        },
+                                          },
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                )
-                              ],
+                                  )
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    }),
+                        );
+                      }),
+                ),
               ),
               Expanded(
                 flex: 3,
@@ -361,8 +362,10 @@ class _HomePageState extends State<HomePage> {
             children: <Widget>[
               Expanded(
                 flex: 3,
-                child: Text('جهت استفاده از محتوای غیر رایگان برنامه لطفا'
-                    ' ثبت نام کنید یا اگر قبلا ثبت نامه کرده اید وارد شوید.'),
+                child: SafeArea (
+                  child: Text('جهت استفاده از محتوای غیر رایگان برنامه لطفا'
+                      ' ثبت نام کنید یا اگر قبلا ثبت نامه کرده اید وارد شوید.'),
+                ),
               ),
               Expanded(
                   flex: 1,
@@ -394,61 +397,81 @@ class _HomePageState extends State<HomePage> {
                   ))
             ],
           )
-        : Column(
-            children: <Widget>[
-              Expanded(
-                flex: 1,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 20.0),
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                          flex: 1,
-                          child: Icon(
-                            Icons.person_pin,
-                            size: 50,
-                            color: Colors.white,
-                          ),
-                      ),
-                      Expanded(
-                          flex: 3,
-                          child: Text(courseStore.userName + '  خوش آمدید  '),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: TextButton(
-                          onPressed: () async {
-                            Widget cancelB = cancelButton('خیر');
-                            Widget continueB =
-                              continueButton('بله', Alert.LogOut, null);
-                            AlertDialog alertD = alert('هشدار',
-                                'میخواهید از برنامه خارج شوید؟',
-                                [cancelB, continueB]);
-
-                            await showBasketAlertDialog(context, alertD);
-
-                            if(alertReturn){
-                              await logOut();
-                            }
-                            alertReturn = false;
-
-                            setState(() {
-                              navigationSelect(1);
-                            });
-                          },
-                          child: Icon(Icons.exit_to_app, size: 40, color: Colors.white,),
+        : SafeArea(
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  flex: 3,
+                  child: Card(
+                    color: Color(0xFF202028),
+                    elevation: 20,
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                            flex: 1,
+                            child: Icon(
+                              Icons.person_pin,
+                              size: 50,
+                              color: Colors.white,
+                            ),
                         ),
-                      ),
-                    ],
+                        Expanded(
+                            flex: 3,
+                            child: Text(courseStore.userName + '  خوش آمدید  '),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: TextButton(
+                            onPressed: () async {
+                              Widget cancelB = cancelButton('خیر');
+                              Widget continueB =
+                                continueButton('بله', Alert.LogOut, null);
+                              AlertDialog alertD = alert('هشدار',
+                                  'میخواهید از برنامه خارج شوید؟',
+                                  [cancelB, continueB]);
+
+                              await showBasketAlertDialog(context, alertD);
+
+                              if(alertReturn){
+                                await logOut();
+                              }
+                              alertReturn = false;
+
+                              setState(() {
+                                navigationSelect(1);
+                              });
+                            },
+                            child: Icon(Icons.exit_to_app, size: 40, color: Colors.white,),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              Expanded(
-                flex: 7,
-                child: userCourses(),
-              )
-            ],
-          );
+                Expanded(
+                  flex: 1,
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              'دوره های شما',
+                              style: TextStyle(fontSize: 22),
+                            ),
+                          ],
+                        ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 15,
+                  child: userCourses(),
+                )
+              ],
+            ),
+        );
   }
 
   Widget userCourses(){
@@ -461,35 +484,36 @@ class _HomePageState extends State<HomePage> {
                   courseStore.userCourses[index].pictureUrl);
               goToCoursePage(courseStore.userCourses[index], picFile);
             },
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                  vertical: 2, horizontal: 8),
-              child: Card(
-                color: Color(0xFF403F44),
-                elevation: 8,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                child: IntrinsicHeight(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      Expanded(
-                          flex: 2,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(15),
-                            child: Image.network(
-                                courseStore.userCourses[index].pictureUrl),
-                          )),
-                      Expanded(
-                        flex: 6,
-                        child: Text(
-                          courseStore.userCourses[index].name,
-                          style: TextStyle(fontSize: 19),
+            child: Card(
+              color: Color(0xFF403F44),
+              elevation: 8,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              child: IntrinsicHeight(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    Expanded(
+                        flex: 2,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(15),
+                          child: Image.network(
+                              courseStore.userCourses[index].pictureUrl),
+                        )),
+                    Expanded(
+                      flex: 6,
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(8,0,8,0),
+                          child: Text(
+                            courseStore.userCourses[index].name,
+                            style: TextStyle(fontSize: 19),
+                          ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),
