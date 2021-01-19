@@ -75,33 +75,42 @@ class _HomePageState extends State<HomePage> {
       String courseDescription = course.description;
       var pictureFile = await DefaultCacheManager().getSingleFile(picUrl);
       coursesList.add(
-        Container(
+        Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          color: Color(0xFF2c3335),
           child: TextButton(
+            style: ButtonStyle(
+              padding: MaterialStateProperty.all(
+                  EdgeInsets.symmetric(vertical: 0, horizontal: 0)),
+            ),
             onPressed: () {
               goToCoursePage(course, pictureFile);
             },
             child: Column(
               children: <Widget>[
-                Expanded(
-                  flex: 3,
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 10.0),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: Image.file(
-                        //picUrl,
-                        pictureFile,
-                        fit: BoxFit.fill,
-                      ),
-                    ),
+                ClipRRect(
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
+                  child: Image.file(
+                    pictureFile,
+                    fit: BoxFit.fill,
                   ),
                 ),
-                Expanded(
-                  flex: 1,
+                Padding(
+                  padding: const EdgeInsets.all(3.0),
                   child: Text(
                     courseName,
-                    overflow: TextOverflow.fade,
-                    style: TextStyle(fontSize: 16, color: Colors.white),
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontSize: 14, color: Colors.white),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: Text(
+                    'بیطرف',
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontSize: 12, color: Colors.white70),
                   ),
                 ),
               ],
