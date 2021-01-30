@@ -1,0 +1,53 @@
+using API.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+
+namespace API.Data
+{
+    public class StoreContext : IdentityDbContext<User, Role, string,
+        IdentityUserClaim<string>, UserRole, IdentityUserLogin<string>,
+        IdentityRoleClaim<string>, IdentityUserToken<string>>
+    {
+        public DbSet<Course> Courses { get; set; }
+        public DbSet<Episode> Episodes { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<Config> Configs { get; set; }
+        public DbSet<Checkout> Checkouts { get; set; }
+        public DbSet<Coupon> Coupons { get; set; }
+        public DbSet<Photo> Photos { get; set; }
+        public DbSet<Audio> Audios { get; set; }
+
+        public StoreContext(DbContextOptions<StoreContext> options) : base(options)
+        {
+        }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.Entity<User>(b =>
+            {
+                b.HasMany(e => e.UserRoles)
+                    .WithOne(e => e.User)
+                    .HasForeignKey(ur => ur.UserId)
+                    .IsRequired();
+
+                b.Property(e => e.Id)
+                    .ValueGeneratedOnAdd();
+            });
+
+            builder.Entity<Role>(b =>
+            {
+                b.HasMany(e => e.UserRoles)
+                    .WithOne(e => e.Role)
+                    .HasForeignKey(ur => ur.RoleId)
+                    .IsRequired();
+
+                b.Property(e => e.Id)
+                    .ValueGeneratedOnAdd();
+            });
+        }
+    }
+
+}

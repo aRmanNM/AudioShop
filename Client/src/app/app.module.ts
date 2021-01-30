@@ -6,11 +6,12 @@ import {AppComponent} from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {DashboardModule} from './dashboard/dashboard.module';
 import {MaterialModule} from './material/material.module';
-import {HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {LoginComponent} from './login/login.component';
 import {RegisterComponent} from './register/register.component';
 import {AuthGuard} from './guards/auth.guard';
 import {AdminAuthGuard} from './guards/admin-auth.guard';
+import {JwtInterceptor} from './interceptors/jwt.interceptor';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,11 @@ import {AdminAuthGuard} from './guards/admin-auth.guard';
     MaterialModule,
     HttpClientModule
   ],
-  providers: [AuthGuard, AdminAuthGuard],
+  providers: [AuthGuard, AdminAuthGuard, {
+    provide: HTTP_INTERCEPTORS,
+    useClass: JwtInterceptor,
+    multi: true
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule {

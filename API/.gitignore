@@ -3,9 +3,10 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
-wwwroot/StaticFiles
+wwwroot/
 appsettings.json
 appsettings.Development.json
+Files/
 
 # User-specific files
 *.rsuser

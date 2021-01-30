@@ -1,7 +1,6 @@
-using System.Text;
-using Core.Entities;
-using API.Helpers;
-using AutoMapper;
+using API.Data;
+using API.Interfaces;
+using API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -11,10 +10,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using Infrastructure.Data;
-using Core.Interfaces;
-using Infrastructure.Data.Repositories;
-using Infrastructure.Services;
+using System.Text;
+using API.Models;
+using API.Models.Options;
+using API.Repositories;
 
 namespace API
 {
@@ -29,18 +28,42 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddScoped<IStoreRepository, StoreRepository>();
+
+            services.AddScoped<ICourseRepository, CourseRepository>();
+            services.AddScoped<IEpisodeRepository, EpisodeRepository>();
+            services.AddScoped<ICheckoutRepository, CheckoutRepository>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IConfigRepository, ConfigRepository>();
+            services.AddScoped<ICouponRepository, CouponRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<ISMSService, SMSService>();
-            services.AddAutoMapper(typeof(MappingProfiles));
-            services.Configure<SMSOptions>(_config);
-            services.AddDbContext<StoreContext>(x => x.UseSqlServer(_config.GetConnectionString("DefaultConnection")));
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IMapperService, MapperService>();
 
-            services.AddIdentityCore<User>().AddRoles<Role>().
-                AddRoleValidator<RoleValidator<Role>>().AddRoleManager<RoleManager<Role>>().
-                AddSignInManager<SignInManager<User>>().AddEntityFrameworkStores<StoreContext>().AddDefaultTokenProviders();
+            services.AddSingleton<ISMSService, SMSService>();
+
+            services.Configure<SMSOptions>(_config.GetSection("SMSOptions"));
+            services.Configure<PhotoOptions>(_config.GetSection("PhotoOptions"));
+            services.Configure<AudioOptions>(_config.GetSection("AudioOptions"));
+
+            services.AddDbContext<StoreContext>(x =>
+                x.UseSqlServer(_config.GetConnectionString("DefaultConnection")));
+
+            services.AddIdentityCore<User>(opt =>
+            {
+                // THIS IS NOT SAFE YET WE DO IT!
+                opt.Password.RequireNonAlphanumeric = false;
+                opt.Password.RequireUppercase = false;
+                opt.Password.RequireLowercase = false;
+                opt.Password.RequireDigit = false;
+                opt.Password.RequiredUniqueChars = 1;
+                opt.Password.RequiredLength = 6;
+            }).AddRoles<Role>()
+                .AddRoleValidator<RoleValidator<Role>>()
+                .AddRoleManager<RoleManager<Role>>()
+                .AddSignInManager<SignInManager<User>>()
+                .AddEntityFrameworkStores<StoreContext>()
+                .AddDefaultTokenProviders();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
             {
@@ -54,7 +77,13 @@ namespace API
                 };
             });
 
-            services.AddCors();
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod(); // FOR LOCAL CLIENT DEVELOPMENT ONLY!
+                });
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -65,16 +94,13 @@ namespace API
             }
 
             app.UseHttpsRedirection();
-
             app.UseRouting();
             app.UseStaticFiles();
-            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            app.UseCors();
             app.UseAuthentication();
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
-                // endpoints.MapControllers();
                 endpoints.MapDefaultControllerRoute();
             });
         }

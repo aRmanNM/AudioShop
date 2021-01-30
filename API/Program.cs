@@ -1,13 +1,10 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Core.Entities;
-using Infrastructure.Data;
+using API.Data;
+using API.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -30,7 +27,10 @@ namespace API
                     var userManager = services.GetRequiredService<UserManager<User>>();
                     var roleManager = services.GetRequiredService<RoleManager<Role>>();
                     await context.Database.MigrateAsync();
-                    Seed.SeedUsers(userManager, roleManager);
+                    await Seed.SeedUsers(userManager, roleManager);
+                    await Seed.SeedCourses(context);
+                    await Seed.SeedConfigs(context);
+                    await context.SaveChangesAsync();
                 }
                 catch(Exception ex)
                 {

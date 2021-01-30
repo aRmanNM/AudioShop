@@ -1,8 +1,8 @@
+using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
-using Core.Dtos;
-using Core.Entities;
-using Core.Interfaces;
+using API.Dtos;
+using API.Interfaces;
+using API.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,95 +14,145 @@ namespace API.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
-        private readonly ITokenService _tokenService;
-        private readonly IMapper _mapper;
+        private readonly IMapperService _mapper;
         private readonly ISMSService _smsService;
+        private readonly IConfigRepository _configRepository;
+        private readonly ICouponRepository _couponRepository;
+        private readonly IUserRepository _userRepository;
 
         public AuthController(UserManager<User> userManager,
             SignInManager<User> signInManager,
-            ITokenService tokenService,
-            IMapper mapper,
-            ISMSService smsService)
+            IMapperService mapper,
+            ISMSService smsService,
+            IConfigRepository configRepository,
+            ICouponRepository couponRepository,
+            IUserRepository userRepository)
         {
             _smsService = smsService;
-            _mapper = mapper;
-            _tokenService = tokenService;
+            _configRepository = configRepository;
+            _couponRepository = couponRepository;
+            _userRepository = userRepository;
             _signInManager = signInManager;
+            _mapper = mapper;
             _userManager = userManager;
-        }
-
-        [HttpPost("login")]
-        public async Task<ActionResult> Login(LoginDto loginDto, [FromQuery] string role = "member")
-        {
-            if (role.ToUpper() == "MEMBER")
-            {
-                var user = await _smsService.FindUserByPhoneNumberAsync(loginDto.PhoneNumber);
-                if (user == null)
-                {
-                    return BadRequest("کاربری پیدا نشد");
-                }
-                var authToken = _smsService.GenerateAuthToken();
-                var res = _smsService.SendSMS(user.PhoneNumber, authToken);
-                if (!res)
-                {
-                    return BadRequest("ارسال پیامک با مشکل روبرو شد");
-                }
-
-                user.VerificationToken = authToken;
-                await _userManager.UpdateAsync(user);
-                return Ok();
-
-            }
-            else if (role.ToUpper() == "SALESPERSON" || role.ToUpper() == "ADMIN")
-            {
-                var user = await _userManager.FindByNameAsync(loginDto.UserName);
-                if (user == null)
-                {
-                    return BadRequest("کاربری پیدا نشد");
-                }
-                if (user == null) return Unauthorized("ورود نامعتبر");
-                var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, true);
-                if (result.IsLockedOut) return Unauthorized("اکانت به مدت پنج دقیقه مسدود شد");
-                if (!result.Succeeded) return Unauthorized("ورود نامعتبر");
-                var userDto = await MapUserToUserDto(user);
-                return Ok(userDto);
-            }
-
-            return BadRequest("درخواست تامعتبر است");
-
         }
 
         [HttpPost("register")]
         public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto, [FromQuery] string role = "member")
         {
-            var user = _mapper.Map<RegisterDto, User>(registerDto);
+            if (string.IsNullOrEmpty(registerDto.PhoneNumber))
+            {
+                var phoneExists = await _userRepository.FindUserByPhoneNumberAsync(registerDto.PhoneNumber) != null;
+                if (phoneExists)
+                {
+                    return BadRequest("cant use this phone");
+                }
+            }
+
+            var configs = await _configRepository.GetAllConfigsAsync();
+            var user = _mapper.MapRegisterDtoToUser(registerDto);
+
+            if (registerDto.CouponCode != null && role.ToUpper() != "SALESPERSON")
+            {
+                var coupon = await _couponRepository.GetCouponByCode(registerDto.CouponCode);
+                if (coupon == null)
+                {
+                    return BadRequest("coupon not found");
+                }
+
+                if (!coupon.IsActive)
+                {
+                    return BadRequest("coupon is invalid");
+                }
+
+                user.Coupon = coupon;
+            }
+            else if (role.ToUpper() == "SALESPERSON")
+            {
+                var coupon = new Coupon
+                {
+                    DiscountPercentage = int.Parse(configs.First(c => c.Title == "DefaultDiscountPercentage").Value),
+                    Description = "salesperson coupon",
+                    Code = await _couponRepository.GenerateCouponCode(),
+                    IsActive = true,
+
+                };
+
+                user.Coupon = coupon;
+            }
+
             var result = await _userManager.CreateAsync(user, registerDto.Password);
-            if (!result.Succeeded) return BadRequest("ساخت اکانت با مشکل روبرو شد");
+            if (!result.Succeeded) return BadRequest("failed to create user");
+
             var res = role.ToUpper() switch
             {
                 "MEMBER" => await _userManager.AddToRoleAsync(user, "Member"),
-                "SALESPERSON" => await _userManager.AddToRoleAsync(user, "SalesPerson"),
+                "SALESPERSON" => await _userManager.AddToRoleAsync(user, "Salesperson"),
                 _ => null
             };
 
-            var userDto = await MapUserToUserDto(user);
+            var userDto = await _mapper.MapUserToUserDto(user);
             return Ok(userDto);
+        }
+
+        [HttpPost("login")]
+        public async Task<ActionResult> Login(LoginDto loginDto, [FromQuery] bool usingPhone = false)
+        {
+            if (usingPhone)
+            {
+                var user = await _userRepository.FindUserByPhoneNumberAsync(loginDto.PhoneNumber);
+                if (user == null)
+                {
+                    return BadRequest("user not found");
+                }
+
+                var authToken = _smsService.GenerateAuthToken();
+                var res = _smsService.SendSMS(user.PhoneNumber, authToken);
+                if (!res)
+                {
+                    return BadRequest("failed to send sms");
+                }
+
+                user.VerificationToken = authToken;
+                await _userManager.UpdateAsync(user);
+                return Ok();
+            }
+            else
+            {
+                var user = await _userManager.FindByNameAsync(loginDto.UserName);
+                if (user == null)
+                {
+                    return BadRequest("user not found");
+                }
+
+                var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, true);
+                if (result.IsLockedOut) return Unauthorized("account locked");
+                if (!result.Succeeded) return Unauthorized("not authorized");
+                var userDto = await _mapper.MapUserToUserDto(user);
+                return Ok(userDto);
+            }
         }
 
         [HttpPost("verifyphone")]
         public async Task<ActionResult> VerifyPhone(VerificationDto verificationDto)
         {
+            var phoneExists = await _userRepository.FindUserByPhoneNumberAsync(verificationDto.PhoneNumber) != null;
+            if (phoneExists)
+            {
+                return BadRequest("cant use this phone");
+            }
+
             var user = await _userManager.FindByIdAsync(verificationDto.UserId);
             if (user == null)
             {
-                return NotFound("کاربری پیدا نشد");
+                return NotFound("user not found");
             }
 
             var authToken = _smsService.GenerateAuthToken();
             var res = _smsService.SendSMS(verificationDto.PhoneNumber, authToken);
             if (!res)
             {
-                return BadRequest("ارسال پیامک با مشکل روبرو شد");
+                return BadRequest("failed to send sms");
             }
 
             user.VerificationToken = authToken;
@@ -113,31 +163,26 @@ namespace API.Controllers
         [HttpPost("verifytoken")]
         public async Task<ActionResult> VerifyToken(VerificationDto verificationDto)
         {
-            var user = new User();
-            if (verificationDto.UserId != null)
-            {
-                user = await _userManager.FindByIdAsync(verificationDto.UserId);
-            }
-            else
-            {
-                user = await _smsService.FindUserByPhoneNumberAsync(verificationDto.PhoneNumber);
-            }
+            var user = !string.IsNullOrEmpty(verificationDto.UserId) ?
+                await _userManager.FindByIdAsync(verificationDto.UserId) :
+                await _userRepository.FindUserByPhoneNumberAsync(verificationDto.PhoneNumber);
 
             if (user == null)
             {
-                return BadRequest("کاربر پیدا نشد");
+                return BadRequest("user not found");
             }
 
             if (verificationDto.AuthToken != user.VerificationToken)
             {
-                return Unauthorized("اعتبار سنجی ناموفق");
+                return Unauthorized("not authorized");
             }
 
             user.VerificationToken = "";
-            if (user.PhoneNumber != null)
+
+            if (!string.IsNullOrEmpty(user.PhoneNumber))
             {
                 await _userManager.UpdateAsync(user);
-                var userDto = await MapUserToUserDto(user);
+                var userDto = await _mapper.MapUserToUserDto(user);
                 return Ok(userDto);
             }
 
@@ -149,22 +194,13 @@ namespace API.Controllers
         [HttpGet("phoneexists")]
         public async Task<ActionResult<bool>> CheckPhoneNumberExistsAsync([FromQuery] string phoneNumber)
         {
-            return await _smsService.FindUserByPhoneNumberAsync(phoneNumber) != null;
+            return await _userRepository.FindUserByPhoneNumberAsync(phoneNumber) != null;
         }
 
         [HttpGet("userexists")]
         public async Task<ActionResult<bool>> CheckUserExistsAsync([FromQuery] string userName)
         {
             return await _userManager.FindByNameAsync(userName) != null;
-        }
-
-        public async Task<UserDto> MapUserToUserDto(User user)
-        {
-            return new UserDto
-            {
-                Token = await _tokenService.CreateToken(user),
-                HasPhoneNumber = (user.PhoneNumber == null) ? false : true
-            };
         }
     }
 }

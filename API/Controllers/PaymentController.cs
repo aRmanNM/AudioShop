@@ -1,7 +1,8 @@
+using System.Linq;
 using System.Threading.Tasks;
-using Core.Dtos;
-using Core.Entities;
-using Core.Interfaces;
+using API.Dtos;
+using API.Interfaces;
+using API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using ZarinpalSandbox;
@@ -13,9 +14,17 @@ namespace API.Controllers
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IConfiguration _config;
-        public PaymentController(IOrderRepository orderRepository, IConfiguration config)
+        private readonly IUserRepository _userRepository;
+        private readonly IUnitOfWork _unitOfWork;
+
+        public PaymentController(IOrderRepository orderRepository,
+            IConfiguration config,
+            IUserRepository userRepository,
+            IUnitOfWork unitOfWork)
         {
             _config = config;
+            _userRepository = userRepository;
+            _unitOfWork = unitOfWork;
             _orderRepository = orderRepository;
         }
 
@@ -27,7 +36,7 @@ namespace API.Controllers
                 return BadRequest();
             }
 
-            var payment = new Payment(order.TotalPrice);
+            var payment = new Payment((int)order.PriceToPay);
             var result = payment.PaymentRequest($"پرداخت فاکتور شماره {order.Id}",
                 _config["ApiUrl"] + "api/Payment/PaymentResult/" + order.Id);
 
@@ -51,7 +60,7 @@ namespace API.Controllers
             {
                 var authority = HttpContext.Request.Query["Authority"].ToString();
                 var order = await _orderRepository.GetOrderById(orderId);
-                var payment = new Payment(order.TotalPrice);
+                var payment = new Payment((int)order.PriceToPay);
                 var result = payment.Verification(authority).Result;
 
                 if (result.Status != 100)
@@ -60,7 +69,20 @@ namespace API.Controllers
                 }
                 order.Status = true;
                 order.PaymentReceipt = result.RefId.ToString();
-                await _orderRepository.SaveChanges();
+
+                var salesperson = await _userRepository.GetSalespersonByCouponCode(order.Coupons.First(c => !string.IsNullOrEmpty(c.UserId)).Code);
+
+                var salespersonShare = order.PriceToPay - ((order.PriceToPay * salesperson.SalePercentage) / 100);
+                order.SalespersonShare = salespersonShare;
+                salesperson.TotalSales +=  salespersonShare;
+
+                // TODO: ORDER UPDATE FAILURE - HOW TO HANDLE
+                var res = await _unitOfWork.CompleteAsync();
+                if (res < 0)
+                {
+                    return BadRequest("failed to update order");
+                }
+
                 return View(new PaymentResultDto
                 {
                     RefId = result.RefId

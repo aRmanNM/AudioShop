@@ -1,0 +1,48 @@
+<mat-toolbar>
+  <span>سهم شما:</span>
+  <span>{{salesAmount | number}} ریال</span>
+  <span class="spacer"></span>
+  <button mat-raised-button color="primary" (click)="createCheckout()" [disabled]="salesAmount == 0">
+    ثبت درخواست تسویه حساب
+  </button>
+</mat-toolbar>
+
+
+<table mat-table [dataSource]="orders">
+
+  <ng-container matColumnDef="priceToPay">
+    <th mat-header-cell *matHeaderCellDef>مبلغ پرداختی</th>
+    <td mat-cell *matCellDef="let order"> {{order.priceToPay | number}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="date">
+    <th mat-header-cell *matHeaderCellDef>تاریخ تراکنش</th>
+    <td mat-cell *matCellDef="let order"> {{order.date | date}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="salespersonShareAmount">
+    <th mat-header-cell *matHeaderCellDef>سهم فروشنده</th>
+    <td mat-cell *matCellDef="let order"> {{order.salespersonShareAmount | number}} ریال</td>
+  </ng-container>
+
+  <ng-container matColumnDef="basketItemsNames">
+    <th mat-header-cell *matHeaderCellDef>لیست دوره ها</th>
+    <td mat-cell *matCellDef="let order">
+      <mat-chip-list>
+        <mat-chip *ngFor="let name of order.basketItemsNames">{{name}}</mat-chip>
+      </mat-chip-list>
+    </td>
+  </ng-container>
+
+<!--  <ng-container matColumnDef="salespersonSharePaid">-->
+<!--    <th mat-header-cell *matHeaderCellDef>وضعیت تصفیه</th>-->
+<!--    <td mat-cell *matCellDef="let order">-->
+<!--      <button mat-stroked-button color="accent" *ngIf="order.salespersonSharePaid === true">پرداخت شده</button>-->
+<!--      <button mat-stroked-button color="primary" *ngIf="order.salespersonSharePaid === false">عدم تصفیه</button>-->
+<!--    </td>-->
+<!--  </ng-container>-->
+
+  <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+  <tr mat-row *matRowDef="let order; columns: columnsToDisplay"></tr>
+
+</table>
