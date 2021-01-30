@@ -3,6 +3,8 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+.config/
+.vscode/
 wwwroot/
 appsettings.json
 appsettings.Development.json
