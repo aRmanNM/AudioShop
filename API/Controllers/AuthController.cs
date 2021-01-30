@@ -54,18 +54,18 @@ namespace API.Controllers
 
             if (registerDto.CouponCode != null && role.ToUpper() != "SALESPERSON")
             {
-                var coupon = await _couponRepository.GetCouponByCode(registerDto.CouponCode);
-                if (coupon == null)
-                {
-                    return BadRequest("coupon not found");
-                }
+                // var coupon = await _couponRepository.GetCouponByCode(registerDto.CouponCode);
+                // if (coupon == null)
+                // {
+                //     return BadRequest("coupon not found");
+                // }
 
-                if (!coupon.IsActive)
-                {
-                    return BadRequest("coupon is invalid");
-                }
+                // if (!coupon.IsActive)
+                // {
+                //     return BadRequest("coupon is invalid");
+                // }
 
-                user.Coupon = coupon;
+                user.CouponCode = registerDto.CouponCode;
             }
             else if (role.ToUpper() == "SALESPERSON")
             {
@@ -78,6 +78,7 @@ namespace API.Controllers
 
                 };
 
+                user.CouponCode = coupon.Code;
                 user.Coupon = coupon;
             }
 

@@ -12,11 +12,11 @@ namespace API.Models
         public string Code { get; set; }
         public bool IsActive { get; set; }
         public string UserId { get; set; }
-        public ICollection<User> Blacklist { get; set; }
+        public ICollection<BlacklistItem> Blacklist { get; set; }
 
         public Coupon()
         {
-            Blacklist = new Collection<User>();
+            Blacklist = new Collection<BlacklistItem>();
         }
     }
 }

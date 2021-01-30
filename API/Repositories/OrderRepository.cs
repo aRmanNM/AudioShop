@@ -30,17 +30,17 @@ namespace API.Repositories
         public async Task<Order> GetOrderById(int orderId)
         {
             return await _context.Orders
-                .Include(o => o.Coupons)
-                .Include(o => o.Episodes)
+                .Include(o => o.OrderEpisodes)
+                .ThenInclude(oe => oe.Episode)
                 .FirstOrDefaultAsync(o => o.Id == orderId);
         }
 
-        public async Task<IEnumerable<Order>> GetOrdersForCheckout(int couponId)
+        public async Task<IEnumerable<Order>> GetOrdersForCheckout(string couponCode)
         {
             return await _context.Orders
-                .Include(o => o.Episodes)
-                .Include(o => o.Coupons)
-                .Where(o => o.Coupons.Any(c => c.Id == couponId) && o.Status == true)
+                .Include(o => o.OrderEpisodes)
+                .ThenInclude(oe => oe.Episode)
+                .Where(o => o.SalespersonCouponCode == couponCode && o.Status == true)
                 .ToArrayAsync();
         }
     }

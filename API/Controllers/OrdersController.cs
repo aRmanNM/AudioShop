@@ -39,23 +39,8 @@ namespace API.Controllers
         [Authorize]
         public async Task<ActionResult<Order>> CreateOrder(BasketDto basketDto)
         {
-            // CREATE LIST OF COUPONS TO APPLY!
-            //var couponsToUse = new List<Coupon>();
-            var coupon = await _couponRepository.GetCouponByCode(basketDto.CouponCode);
-            //if (coupon.IsActive) { couponsToUse.Add(coupon); }
+            var coupon = await _couponRepository.GetCouponByCode(basketDto.OtherCouponCode);
             var user = await _userManager.FindByIdAsync(basketDto.UserId);
-            //if (user.Coupon != null && user.Coupon.IsActive == true) { couponsToUse.Add(user.Coupon); }
-            //couponsToUse = couponsToUse.Distinct().ToList();
-
-            //var totalPrice = basketDto.Episodes.Select(c => c.Price).Aggregate((sum, p) => sum + p);
-
-            //decimal discount = 0;
-            //decimal mem = totalPrice;
-            //foreach (var c in couponsToUse)
-            //{
-            //    discount += (mem * c.DiscountPercentage) / 100;
-            //    mem -= discount;
-            //}
 
             var order = new Order
             {
@@ -64,16 +49,33 @@ namespace API.Controllers
                 Status = false,
                 Date = DateTime.Now,
                 Discount = basketDto.Discount,
-                PriceToPay = basketDto.PriceToPay,
-                Episodes = basketDto.Episodes.Select(e => _mapper.MapEpisodeDtoToEpisode(e)).ToArray(),
+                PriceToPay = basketDto.PriceToPay
             };
 
-            order.Coupons.Add(coupon);
-            await _orderRepository.CreateOrder(order);
+            // TODO: TEST THIS!
+            if (coupon.UserId != null && user.CouponCode != null)
+            {
+                order.SalespersonCouponCode = coupon.Code;
+            }
+            else if (coupon.UserId != null && user.CouponCode == null)
+            {
+                order.SalespersonCouponCode = coupon.Code;
+                user.CouponCode = coupon.Code;
+            }
+            else
+            {
+                order.OtherCouponCode = coupon.Code;
+            }
 
-            if (user.CouponId == null && coupon.UserId != null) { user.CouponId = coupon.Id; }
-            await _userManager.UpdateAsync(user);
+            order.OrderEpisodes = basketDto.Episodes.Select(e => new OrderEpisode {
+                OrderId = order.Id,
+                EpisodeId = e.Id
+            }).ToArray();
+
+            await _orderRepository.CreateOrder(order);
             await _unitOfWork.CompleteAsync();
+
+            await _userManager.UpdateAsync(user);
 
             return Ok(order);
         }

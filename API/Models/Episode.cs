@@ -17,10 +17,12 @@ namespace API.Models
         public Course Course { get; set; }
 
         public ICollection<Audio> Audios { get; set; }
+        public ICollection<OrderEpisode> OrderEpisodes { get; set; }
 
         public Episode()
         {
             Audios = new Collection<Audio>();
+            OrderEpisodes = new Collection<OrderEpisode>();
         }
     }
 }

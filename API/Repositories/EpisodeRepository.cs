@@ -5,6 +5,7 @@ using API.Data;
 using API.Interfaces;
 using API.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 
 namespace API.Repositories
 {
@@ -47,19 +48,22 @@ namespace API.Repositories
 
         public async Task<IEnumerable<Episode>> GetUserEpisodes(string userId)
         {
-            return await _context.Orders
-                .Include(o => o.Episodes)
-                .Where(o => o.UserId == userId && o.Status == true)
-                .SelectMany(o => o.Episodes)
+            return await _context.OrderEpisodes
+                .Include(o => o.Order)
+                .Include(e => e.Episode)
+                .Where(oe => oe.Order.Status == true && oe.Order.UserId == userId)
+                .Select(ep => ep.Episode)
                 .ToListAsync();
         }
 
         public async Task<IEnumerable<int>> GetUserEpisodeIds(string userId)
         {
-           return await _context.Orders
-                .Include(o => o.Episodes)
-                .Where(o => o.UserId == userId && o.Status == true)
-                .SelectMany(o => o.Episodes).Select(e => e.Id).ToListAsync();
+            return await _context.OrderEpisodes
+                .Include(o => o.Order)
+                .Include(e => e.Episode)
+                .Where(oe => oe.Order.Status == true && oe.Order.UserId == userId)
+                .Select(ep => ep.Episode.Id)
+                .ToListAsync();
         }
     }
 }

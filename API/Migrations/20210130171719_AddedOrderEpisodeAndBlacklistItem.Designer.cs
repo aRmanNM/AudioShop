@@ -4,14 +4,16 @@ using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace API.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    partial class StoreContextModelSnapshot : ModelSnapshot
+    [Migration("20210130171719_AddedOrderEpisodeAndBlacklistItem")]
+    partial class AddedOrderEpisodeAndBlacklistItem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -126,14 +128,15 @@ namespace API.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("OrderId")
+                        .HasColumnType("int");
+
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId")
-                        .IsUnique()
-                        .HasFilter("[UserId] IS NOT NULL");
+                    b.HasIndex("OrderId");
 
                     b.ToTable("Coupons");
                 });
@@ -206,17 +209,11 @@ namespace API.Migrations
                     b.Property<decimal>("Discount")
                         .HasColumnType("decimal(18)");
 
-                    b.Property<string>("OtherCouponCode")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("PaymentReceipt")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("PriceToPay")
                         .HasColumnType("decimal(18)");
-
-                    b.Property<string>("SalespersonCouponCode")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("SalespersonShare")
                         .HasColumnType("decimal(18)");
@@ -317,8 +314,11 @@ namespace API.Migrations
                     b.Property<string>("Country")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CouponCode")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("CouponId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CouponId1")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("CurrentSales")
                         .HasColumnType("decimal(18)");
@@ -382,6 +382,8 @@ namespace API.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CouponId1");
 
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
@@ -529,9 +531,9 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Models.Coupon", b =>
                 {
-                    b.HasOne("API.Models.User", null)
-                        .WithOne("Coupon")
-                        .HasForeignKey("API.Models.Coupon", "UserId");
+                    b.HasOne("API.Models.Order", null)
+                        .WithMany("Coupons")
+                        .HasForeignKey("OrderId");
                 });
 
             modelBuilder.Entity("API.Models.Course", b =>
@@ -570,6 +572,13 @@ namespace API.Migrations
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("API.Models.User", b =>
+                {
+                    b.HasOne("API.Models.Coupon", "Coupon")
+                        .WithMany()
+                        .HasForeignKey("CouponId1");
                 });
 
             modelBuilder.Entity("API.Models.UserRole", b =>

@@ -67,10 +67,11 @@ namespace API.Controllers
                 {
                     return BadRequest();
                 }
+
                 order.Status = true;
                 order.PaymentReceipt = result.RefId.ToString();
 
-                var salesperson = await _userRepository.GetSalespersonByCouponCode(order.Coupons.First(c => !string.IsNullOrEmpty(c.UserId)).Code);
+                var salesperson = await _userRepository.GetSalespersonByCouponCode(order.SalespersonCouponCode);
 
                 var salespersonShare = order.PriceToPay - ((order.PriceToPay * salesperson.SalePercentage) / 100);
                 order.SalespersonShare = salespersonShare;

@@ -22,16 +22,18 @@ namespace API.Models
 
         public string VerificationToken { get; set; }
 
-        public int? CouponId { get; set; }
+        public string CouponCode { get; set; }
         public Coupon Coupon { get; set; }
 
         public ICollection<UserRole> UserRoles { get; set; }
         public ICollection<Order> Orders { get; }
+        public ICollection<BlacklistItem> Blacklist { get; set; }
 
         public User()
         {
             UserRoles = new Collection<UserRole>();
             Orders = new Collection<Order>();
+            Blacklist = new Collection<BlacklistItem>();
         }
     }
 

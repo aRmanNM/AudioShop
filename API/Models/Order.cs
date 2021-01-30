@@ -28,13 +28,13 @@ namespace API.Models
         public string UserId { get; set; }
         public User User { get; set; }
 
-        public ICollection<Coupon> Coupons { get; set; }
-        public ICollection<Episode> Episodes { get; set; }
+        public string SalespersonCouponCode { get; set; }
+        public string OtherCouponCode { get; set; }
+        public ICollection<OrderEpisode> OrderEpisodes { get; set; }
 
         public Order()
         {
-            Coupons = new Collection<Coupon>();
-            Episodes = new Collection<Episode>();
+            OrderEpisodes = new Collection<OrderEpisode>();
         }
     }
 }

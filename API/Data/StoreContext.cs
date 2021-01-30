@@ -17,6 +17,8 @@ namespace API.Data
         public DbSet<Coupon> Coupons { get; set; }
         public DbSet<Photo> Photos { get; set; }
         public DbSet<Audio> Audios { get; set; }
+        public DbSet<OrderEpisode> OrderEpisodes { get; set; }
+        public DbSet<BlacklistItem> Blacklist { get; set; }
 
         public StoreContext(DbContextOptions<StoreContext> options) : base(options)
         {
@@ -47,6 +49,9 @@ namespace API.Data
                 b.Property(e => e.Id)
                     .ValueGeneratedOnAdd();
             });
+
+            builder.Entity<OrderEpisode>().HasKey(c => new {c.EpisodeId, c.OrderId});
+            builder.Entity<BlacklistItem>().HasKey(c => new { c.CouponId, c.UserId });
         }
     }
 

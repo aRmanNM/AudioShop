@@ -23,8 +23,7 @@ namespace API.Repositories
             }
 
             return await _context.Users
-                .Include(u => u.Coupon)
-                .FirstOrDefaultAsync(u => u.Coupon.Code == couponCode);
+                .FirstOrDefaultAsync(u => u.CouponCode == couponCode);
         }
 
         public async Task<User> FindUserByPhoneNumberAsync(string phoneNumber)

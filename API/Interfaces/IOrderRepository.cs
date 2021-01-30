@@ -9,6 +9,6 @@ namespace API.Interfaces
         Task<Order> CreateOrder(Order order);
         // Task CreateBasketItems(IEnumerable<OrderCourse> basketItems);
         Task<Order> GetOrderById(int orderId);
-        Task<IEnumerable<Order>> GetOrdersForCheckout(int couponId);
+        Task<IEnumerable<Order>> GetOrdersForCheckout(string couponCode);
     }
 }

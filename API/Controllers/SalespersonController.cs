@@ -41,7 +41,7 @@ namespace API.Controllers
         {
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var user = await _userManager.FindByIdAsync(userId);
-            var orders = await _orderRepository.GetOrdersForCheckout(user.CouponId ?? 0);
+            var orders = await _orderRepository.GetOrdersForCheckout(user.CouponCode);
             var ordersForSalesperson =
                 orders.Select(o => _mapper.MapOrderToOrderForSalespersonDto(o, user.SalePercentage));
             return Ok(ordersForSalesperson);
