@@ -52,7 +52,7 @@ namespace API.Controllers
                 PriceToPay = basketDto.PriceToPay
             };
 
-            // TODO: TEST THIS!
+            // TODO: WRITE A COMMENT OR MAKE IT BETTER
             if (coupon.UserId != null && user.CouponCode != null)
             {
                 order.SalespersonCouponCode = coupon.Code;

@@ -75,14 +75,9 @@ namespace API.Controllers
 
                 var salespersonShare = order.PriceToPay - ((order.PriceToPay * salesperson.SalePercentage) / 100);
                 order.SalespersonShare = salespersonShare;
-                salesperson.TotalSales +=  salespersonShare;
+                salesperson.CurrentSales +=  salespersonShare;
 
-                // TODO: ORDER UPDATE FAILURE - HOW TO HANDLE
-                var res = await _unitOfWork.CompleteAsync();
-                if (res < 0)
-                {
-                    return BadRequest("failed to update order");
-                }
+                await _unitOfWork.CompleteAsync();
 
                 return View(new PaymentResultDto
                 {

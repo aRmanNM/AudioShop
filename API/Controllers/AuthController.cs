@@ -75,11 +75,11 @@ namespace API.Controllers
                     Description = "salesperson coupon",
                     Code = await _couponRepository.GenerateCouponCode(),
                     IsActive = true,
-
                 };
 
                 user.CouponCode = coupon.Code;
                 user.Coupon = coupon;
+                user.SalePercentage = int.Parse(configs.First(c => c.Title == "DefaultSalespersonSharePercentage").Value);
             }
 
             var result = await _userManager.CreateAsync(user, registerDto.Password);

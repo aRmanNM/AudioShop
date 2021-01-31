@@ -12,7 +12,7 @@ namespace API.Interfaces
         Episode UpdateEpisode(Episode courseEpisode);
         Task<IEnumerable<Episode>> GetCourseEpisodes(int courseId);
         Task<Episode> GetEpisodeById(int id);
-        void DeleteEpisodes(IEnumerable<Episode> IDs); // TODO: WHAT IS THIS!?
+        void DeleteEpisode(Episode episode);
         Task<IEnumerable<Episode>> GetUserEpisodes(string userId);
         Task<IEnumerable<int>>  GetUserEpisodeIds(string userId);
     }

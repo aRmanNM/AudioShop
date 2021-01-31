@@ -30,9 +30,9 @@ namespace API.Repositories
             return updatedCourseEpisode.Entity;
         }
 
-        public void DeleteEpisodes(IEnumerable<Episode> courseEpisodes)
+        public void DeleteEpisode(Episode episode)
         {
-            _context.Episodes.RemoveRange(courseEpisodes);
+            _context.Episodes.Remove(episode);
         }
 
         public async Task<IEnumerable<Episode>> GetCourseEpisodes(int courseId)
