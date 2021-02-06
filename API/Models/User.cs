@@ -14,11 +14,11 @@ namespace API.Models
         public short Age { get; set; }
         public Gender Gender { get; set; }
 
-        public int SalePercentage { get; set; }
+        public int SalePercentageOfSalesperson { get; set; }
         [Column(TypeName = "decimal(18)")]
-        public decimal CurrentSales { get; set; }
+        public decimal CurrentSalesOfSalesperson { get; set; }
         [Column(TypeName = "decimal(18)")]
-        public decimal TotalSales { get; set; }
+        public decimal TotalSalesOfSalesperson { get; set; }
 
         public string VerificationToken { get; set; }
 

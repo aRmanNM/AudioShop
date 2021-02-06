@@ -142,8 +142,8 @@ namespace API.Data
             }
 
             var configs = new List<Config> {
-                new Config { Title = "DefaultDiscountPercentage", Value = "20", Description = "مقدار پیشفرض برای کد تخفیف" },
-                new Config { Title = "DefaultSalespersonSharePercentage", Value = "10", Description = "مقدار پیشفرض برای سهم فروشنده از هر خرید" }
+                new Config { TitleEn = "DefaultDiscountPercentage", Value = "20", TitleFa = "مقدار پیشفرض برای کد تخفیف" },
+                new Config { TitleEn = "DefaultSalespersonSharePercentage", Value = "10", TitleFa = "مقدار پیشفرض برای سهم فروشنده از هر خرید" }
             };
 
             await context.Configs.AddRangeAsync(configs);

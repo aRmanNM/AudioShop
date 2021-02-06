@@ -11,5 +11,6 @@ namespace API.Models
         public User User { get; set; }
         public int CouponId { get; set; }
         public Coupon Coupon { get; set; }
+        public string CouponCode { get; set; }
     }
 }

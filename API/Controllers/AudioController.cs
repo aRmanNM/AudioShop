@@ -19,19 +19,16 @@ namespace API.Controllers
     public class FilesController : ControllerBase
     {
         private readonly IEpisodeRepository _episodeRepository;
-        private readonly IConfiguration _config;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IWebHostEnvironment _host;
         private readonly AudioOptions _audioOptions;
 
         public FilesController(IEpisodeRepository episodeRepository,
-            IConfiguration config,
             IUnitOfWork unitOfWork,
             IWebHostEnvironment host,
             IOptions<AudioOptions> options)
         {
             _episodeRepository = episodeRepository;
-            _config = config;
             _unitOfWork = unitOfWork;
             _host = host;
             _audioOptions = options.Value;
@@ -75,6 +72,8 @@ namespace API.Controllers
         [HttpGet("episodes/{episodeId}/audios/{audioId}")]
         public async Task<ActionResult> GetAudioFile(int episodeId, int audioId)
         {
+            // check if episode is bought
+
             var episode = await _episodeRepository.GetEpisodeById(episodeId);
             if (episode == null) return NotFound();
 

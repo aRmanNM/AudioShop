@@ -19,6 +19,8 @@ namespace API.Models
         public ICollection<Audio> Audios { get; set; }
         public ICollection<OrderEpisode> OrderEpisodes { get; set; }
 
+        public int TotalAudiosDuration { get; set; }
+
         public Episode()
         {
             Audios = new Collection<Audio>();

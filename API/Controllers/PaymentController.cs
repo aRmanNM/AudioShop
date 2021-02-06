@@ -72,10 +72,15 @@ namespace API.Controllers
                 order.PaymentReceipt = result.RefId.ToString();
 
                 var salesperson = await _userRepository.GetSalespersonByCouponCode(order.SalespersonCouponCode);
-
-                var salespersonShare = order.PriceToPay - ((order.PriceToPay * salesperson.SalePercentage) / 100);
+                var salespersonShare = order.PriceToPay - ((order.PriceToPay * salesperson.SalePercentageOfSalesperson) / 100);
                 order.SalespersonShare = salespersonShare;
-                salesperson.CurrentSales +=  salespersonShare;
+                salesperson.CurrentSalesOfSalesperson +=  salespersonShare;
+
+                salesperson.Blacklist.Add(new BlacklistItem()
+                {
+                    CouponCode = order.OtherCouponCode,
+                    UserId = order.UserId
+                });
 
                 await _unitOfWork.CompleteAsync();
 

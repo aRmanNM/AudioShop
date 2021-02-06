@@ -71,7 +71,7 @@ namespace API.Controllers
             {
                 var coupon = new Coupon
                 {
-                    DiscountPercentage = int.Parse(configs.First(c => c.Title == "DefaultDiscountPercentage").Value),
+                    DiscountPercentage = int.Parse(configs.First(c => c.TitleEn == "DefaultDiscountPercentage").Value),
                     Description = "salesperson coupon",
                     Code = await _couponRepository.GenerateCouponCode(),
                     IsActive = true,
@@ -79,7 +79,7 @@ namespace API.Controllers
 
                 user.CouponCode = coupon.Code;
                 user.Coupon = coupon;
-                user.SalePercentage = int.Parse(configs.First(c => c.Title == "DefaultSalespersonSharePercentage").Value);
+                user.SalePercentageOfSalesperson = int.Parse(configs.First(c => c.TitleEn == "DefaultSalespersonSharePercentage").Value);
             }
 
             var result = await _userManager.CreateAsync(user, registerDto.Password);

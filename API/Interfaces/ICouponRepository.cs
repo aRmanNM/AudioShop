@@ -7,9 +7,11 @@ namespace API.Interfaces
     public interface ICouponRepository
     {
         Task<Coupon> CreateCoupon(Coupon coupon);
-        Task<IEnumerable<Coupon>> GetCoupons(string[] codes);
+        Task<IEnumerable<Coupon>> GetCoupons(bool includeSalespersons = false);
         Task<Coupon> GetCouponByCode(string code);
-        Task<bool> CheckCouponCodeExists(string CouponCode);
+        Task<bool> CheckCouponIsActive(string couponCode);
+        Task<bool> CheckCouponExists(string couponCode);
+        Task<bool> CheckUserIsBlacklisted(string couponCode, string userId);
         Task<string> GenerateCouponCode();
     }
 }

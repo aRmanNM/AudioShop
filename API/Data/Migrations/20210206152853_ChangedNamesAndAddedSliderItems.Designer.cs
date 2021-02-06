@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace API.Migrations
+namespace API.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20210130050524_Initial")]
-    partial class Initial
+    [Migration("20210206152853_ChangedNamesAndAddedSliderItems")]
+    partial class ChangedNamesAndAddedSliderItems
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -28,6 +28,9 @@ namespace API.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("Duration")
+                        .HasColumnType("int");
+
                     b.Property<int?>("EpisodeId")
                         .HasColumnType("int");
 
@@ -39,6 +42,24 @@ namespace API.Migrations
                     b.HasIndex("EpisodeId");
 
                     b.ToTable("Audios");
+                });
+
+            modelBuilder.Entity("API.Models.BlacklistItem", b =>
+                {
+                    b.Property<int>("CouponId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CouponCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CouponId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Blacklist");
                 });
 
             modelBuilder.Entity("API.Models.Checkout", b =>
@@ -80,10 +101,10 @@ namespace API.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Description")
+                    b.Property<string>("TitleEn")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Title")
+                    b.Property<string>("TitleFa")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Value")
@@ -113,15 +134,14 @@ namespace API.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("OrderId")
-                        .HasColumnType("int");
-
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrderId");
+                    b.HasIndex("UserId")
+                        .IsUnique()
+                        .HasFilter("[UserId] IS NOT NULL");
 
                     b.ToTable("Coupons");
                 });
@@ -168,20 +188,18 @@ namespace API.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("OrderId")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18)");
 
                     b.Property<int>("Sort")
                         .HasColumnType("int");
 
+                    b.Property<int>("TotalAudiosDuration")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CourseId");
-
-                    b.HasIndex("OrderId");
 
                     b.ToTable("Episodes");
                 });
@@ -199,11 +217,17 @@ namespace API.Migrations
                     b.Property<decimal>("Discount")
                         .HasColumnType("decimal(18)");
 
+                    b.Property<string>("OtherCouponCode")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("PaymentReceipt")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("PriceToPay")
                         .HasColumnType("decimal(18)");
+
+                    b.Property<string>("SalespersonCouponCode")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("SalespersonShare")
                         .HasColumnType("decimal(18)");
@@ -222,6 +246,21 @@ namespace API.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("API.Models.OrderEpisode", b =>
+                {
+                    b.Property<int>("EpisodeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.HasKey("EpisodeId", "OrderId");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("OrderEpisodes");
                 });
 
             modelBuilder.Entity("API.Models.Photo", b =>
@@ -267,6 +306,32 @@ namespace API.Migrations
                     b.ToTable("AspNetRoles");
                 });
 
+            modelBuilder.Entity("API.Models.SliderItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("PhotoId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PhotoId");
+
+                    b.ToTable("SliderItems");
+                });
+
             modelBuilder.Entity("API.Models.User", b =>
                 {
                     b.Property<string>("Id")
@@ -289,10 +354,10 @@ namespace API.Migrations
                     b.Property<string>("Country")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("CouponId")
-                        .HasColumnType("int");
+                    b.Property<string>("CouponCode")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("CurrentSales")
+                    b.Property<decimal>("CurrentSalesOfSalesperson")
                         .HasColumnType("decimal(18)");
 
                     b.Property<string>("Email")
@@ -334,13 +399,13 @@ namespace API.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<int>("SalePercentage")
+                    b.Property<int>("SalePercentageOfSalesperson")
                         .HasColumnType("int");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("TotalSales")
+                    b.Property<decimal>("TotalSalesOfSalesperson")
                         .HasColumnType("decimal(18)");
 
                     b.Property<bool>("TwoFactorEnabled")
@@ -354,8 +419,6 @@ namespace API.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CouponId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
@@ -479,6 +542,21 @@ namespace API.Migrations
                         .HasForeignKey("EpisodeId");
                 });
 
+            modelBuilder.Entity("API.Models.BlacklistItem", b =>
+                {
+                    b.HasOne("API.Models.Coupon", "Coupon")
+                        .WithMany("Blacklist")
+                        .HasForeignKey("CouponId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.Models.User", "User")
+                        .WithMany("Blacklist")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("API.Models.Checkout", b =>
                 {
                     b.HasOne("API.Models.User", "User")
@@ -488,9 +566,9 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Models.Coupon", b =>
                 {
-                    b.HasOne("API.Models.Order", null)
-                        .WithMany("Coupons")
-                        .HasForeignKey("OrderId");
+                    b.HasOne("API.Models.User", null)
+                        .WithOne("Coupon")
+                        .HasForeignKey("API.Models.Coupon", "UserId");
                 });
 
             modelBuilder.Entity("API.Models.Course", b =>
@@ -507,10 +585,6 @@ namespace API.Migrations
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("API.Models.Order", null)
-                        .WithMany("Episodes")
-                        .HasForeignKey("OrderId");
                 });
 
             modelBuilder.Entity("API.Models.Order", b =>
@@ -520,11 +594,26 @@ namespace API.Migrations
                         .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("API.Models.User", b =>
+            modelBuilder.Entity("API.Models.OrderEpisode", b =>
                 {
-                    b.HasOne("API.Models.Coupon", "Coupon")
-                        .WithMany("Blacklist")
-                        .HasForeignKey("CouponId");
+                    b.HasOne("API.Models.Episode", "Episode")
+                        .WithMany("OrderEpisodes")
+                        .HasForeignKey("EpisodeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.Models.Order", "Order")
+                        .WithMany("OrderEpisodes")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("API.Models.SliderItem", b =>
+                {
+                    b.HasOne("API.Models.Photo", "Photo")
+                        .WithMany()
+                        .HasForeignKey("PhotoId");
                 });
 
             modelBuilder.Entity("API.Models.UserRole", b =>

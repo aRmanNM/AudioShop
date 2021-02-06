@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace API.Migrations
+namespace API.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20210130191747_ChangedCouponFunctionality")]
-    partial class ChangedCouponFunctionality
+    [Migration("20210206154525_AddedNavigationPropertyToSliderItem")]
+    partial class AddedNavigationPropertyToSliderItem
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -27,6 +27,9 @@ namespace API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Duration")
+                        .HasColumnType("int");
 
                     b.Property<int?>("EpisodeId")
                         .HasColumnType("int");
@@ -48,6 +51,9 @@ namespace API.Migrations
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CouponCode")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("CouponId", "UserId");
 
@@ -95,10 +101,10 @@ namespace API.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Description")
+                    b.Property<string>("TitleEn")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Title")
+                    b.Property<string>("TitleFa")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Value")
@@ -129,9 +135,13 @@ namespace API.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique()
+                        .HasFilter("[UserId] IS NOT NULL");
 
                     b.ToTable("Coupons");
                 });
@@ -182,6 +192,9 @@ namespace API.Migrations
                         .HasColumnType("decimal(18)");
 
                     b.Property<int>("Sort")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalAudiosDuration")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -293,6 +306,34 @@ namespace API.Migrations
                     b.ToTable("AspNetRoles");
                 });
 
+            modelBuilder.Entity("API.Models.SliderItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("PhotoId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("PhotoId");
+
+                    b.ToTable("SliderItems");
+                });
+
             modelBuilder.Entity("API.Models.User", b =>
                 {
                     b.Property<string>("Id")
@@ -318,7 +359,7 @@ namespace API.Migrations
                     b.Property<string>("CouponCode")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("CurrentSales")
+                    b.Property<decimal>("CurrentSalesOfSalesperson")
                         .HasColumnType("decimal(18)");
 
                     b.Property<string>("Email")
@@ -360,13 +401,13 @@ namespace API.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<int>("SalePercentage")
+                    b.Property<int>("SalePercentageOfSalesperson")
                         .HasColumnType("int");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("TotalSales")
+                    b.Property<decimal>("TotalSalesOfSalesperson")
                         .HasColumnType("decimal(18)");
 
                     b.Property<bool>("TwoFactorEnabled")
@@ -525,6 +566,13 @@ namespace API.Migrations
                         .HasForeignKey("UserId");
                 });
 
+            modelBuilder.Entity("API.Models.Coupon", b =>
+                {
+                    b.HasOne("API.Models.User", null)
+                        .WithOne("Coupon")
+                        .HasForeignKey("API.Models.Coupon", "UserId");
+                });
+
             modelBuilder.Entity("API.Models.Course", b =>
                 {
                     b.HasOne("API.Models.Photo", "Photo")
@@ -561,6 +609,19 @@ namespace API.Migrations
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("API.Models.SliderItem", b =>
+                {
+                    b.HasOne("API.Models.Course", "Course")
+                        .WithMany()
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.Models.Photo", "Photo")
+                        .WithMany()
+                        .HasForeignKey("PhotoId");
                 });
 
             modelBuilder.Entity("API.Models.UserRole", b =>

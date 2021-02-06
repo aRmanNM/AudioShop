@@ -30,6 +30,7 @@ namespace API.Models
 
         public string SalespersonCouponCode { get; set; }
         public string OtherCouponCode { get; set; }
+
         public ICollection<OrderEpisode> OrderEpisodes { get; set; }
 
         public Order()

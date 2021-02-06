@@ -17,7 +17,7 @@ namespace API.Repositories
 
         public async Task<Config> GetConfigAsync(string title)
         {
-            return await _context.Configs.FirstOrDefaultAsync(c => c.Title == title);
+            return await _context.Configs.FirstOrDefaultAsync(c => c.TitleEn == title);
         }
 
         public async Task<IEnumerable<Config>> GetAllConfigsAsync()

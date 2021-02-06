@@ -43,7 +43,7 @@ namespace API.Controllers
             var user = await _userManager.FindByIdAsync(userId);
             var orders = await _orderRepository.GetOrdersForCheckout(user.CouponCode);
             var ordersForSalesperson =
-                orders.Select(o => _mapper.MapOrderToOrderForSalespersonDto(o, user.SalePercentage));
+                orders.Select(o => _mapper.MapOrderToOrderForSalespersonDto(o, user.SalePercentageOfSalesperson));
             return Ok(ordersForSalesperson);
         }
 
@@ -56,13 +56,13 @@ namespace API.Controllers
             {
                 UserId = user.Id,
                 Status = false,
-                AmountToCheckout = user.CurrentSales,
+                AmountToCheckout = user.CurrentSalesOfSalesperson,
                 CreatedAt = DateTime.Now
             };
 
             await _checkoutRepository.CreateCheckout(checkout);
-            user.TotalSales += user.CurrentSales;
-            user.CurrentSales = 0;
+            user.TotalSalesOfSalesperson += user.CurrentSalesOfSalesperson;
+            user.CurrentSalesOfSalesperson = 0;
             await _unitOfWork.CompleteAsync();
             await _userManager.UpdateAsync(user);
             return Ok(checkout);
@@ -73,7 +73,7 @@ namespace API.Controllers
         {
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var user = await _userManager.FindByIdAsync(userId);
-            return Ok(user.CurrentSales);
+            return Ok(user.CurrentSalesOfSalesperson);
         }
 
         [HttpGet("totalsaleamount")]
@@ -81,7 +81,7 @@ namespace API.Controllers
         {
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var user = await _userManager.FindByIdAsync(userId);
-            return Ok(user.TotalSales);
+            return Ok(user.TotalSalesOfSalesperson);
         }
 
         [HttpGet("checkouts")]

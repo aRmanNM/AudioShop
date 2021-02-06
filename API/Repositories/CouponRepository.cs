@@ -34,9 +34,22 @@ namespace API.Repositories
             return await _context.Coupons.FirstOrDefaultAsync(c => c.Code == couponCode);
         }
 
-        public async Task<bool> CheckCouponCodeExists(string couponCode)
+        public async Task<bool> CheckCouponExists(string couponCode)
         {
             return await _context.Coupons.FirstOrDefaultAsync(c => c.Code == couponCode) != null;
+        }
+
+        public async Task<bool> CheckUserIsBlacklisted(string couponCode, string userId)
+        {
+            return await _context.Blacklist.FirstOrDefaultAsync(i =>
+                i.CouponCode == couponCode && i.UserId == userId) != null;
+        }
+
+        public async Task<bool> CheckCouponIsActive(string couponCode)
+        {
+            var coupon = await _context.Coupons.FirstOrDefaultAsync(c => c.Code == couponCode);
+            if (coupon == null) return false;
+            return coupon.IsActive;
         }
 
         public async Task<string> GenerateCouponCode()
@@ -45,14 +58,19 @@ namespace API.Repositories
             do
             {
                 code = RandomString.Generate();
-            } while (await CheckCouponCodeExists(code) == true);
+            } while (await CheckCouponExists(code) == true);
 
             return code;
         }
 
-        public async Task<IEnumerable<Coupon>> GetCoupons(string[] codes)
+        public async Task<IEnumerable<Coupon>> GetCoupons(bool includeSalespersons = false)
         {
-            return await _context.Coupons.Where(c => codes.Any(co => co == c.Code)).ToArrayAsync();
+            if (includeSalespersons)
+            {
+                return await _context.Coupons.ToArrayAsync();
+            }
+
+            return await _context.Coupons.Where(c => string.IsNullOrEmpty(c.UserId)).ToArrayAsync();
         }
     }
 }

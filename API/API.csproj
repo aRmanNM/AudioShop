@@ -4,23 +4,24 @@
     <UserSecretsId>b0c995cd-2e35-4c61-845c-de2818ec0405</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="kavenegar" Version="1.2.4"/>
-    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0"/>
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.11"/>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.11"/>
+    <PackageReference Include="kavenegar" Version="1.2.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.11">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.11"/>
-    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.8.0"/>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.11"/>
-    <PackageReference Include="ZarinpalSandbox" Version="2.0.4"/>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.11"/>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.11" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.8.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.11" />
+    <PackageReference Include="ZarinpalSandbox" Version="2.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.11" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Files\"/>
-    <Folder Include="Files\Courses\1\"/>
-    <Folder Include="wwwroot\"/>
+    <Folder Include="Files\" />
+    <Folder Include="Files\Courses\1\" />
+    <Folder Include="Migrations\" />
+    <Folder Include="wwwroot\" />
   </ItemGroup>
 </Project>

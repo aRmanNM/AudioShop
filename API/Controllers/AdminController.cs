@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using API.Interfaces;
 using API.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,21 +16,12 @@ namespace API.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly ICheckoutRepository _checkoutRepository;
-        private readonly IMapperService _mapper;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IWebHostEnvironment _host;
 
         public AdminController(UserManager<User> userManager,
-            ICheckoutRepository checkoutRepository,
-            IMapperService mapper,
-            IUnitOfWork unitOfWork,
-            IWebHostEnvironment host)
+            ICheckoutRepository checkoutRepository)
         {
             _userManager = userManager;
             _checkoutRepository = checkoutRepository;
-            _mapper = mapper;
-            _unitOfWork = unitOfWork;
-            _host = host;
         }
 
         //
