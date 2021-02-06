@@ -16,6 +16,6 @@ namespace API.Interfaces
         Task<UserDto> MapUserToUserDto(User user);
         Course MapCourseDtoToCourse(CourseDto courseDto);
         Episode MapEpisodeDtoToEpisode(EpisodeDto episodeDto);
-
+        Task<Coupon> MapCouponDtoToCoupon(CouponToCreateDto couponDto);
     }
 }

@@ -9,10 +9,16 @@ namespace API.Services
     public class MapperService : IMapperService
     {
         private readonly ITokenService _tokenService;
+        private readonly IConfigRepository _configRepository;
+        private readonly ICouponRepository _couponRepository;
 
-        public MapperService(ITokenService tokenService)
+        public MapperService(ITokenService tokenService,
+            IConfigRepository configRepository,
+            ICouponRepository couponRepository)
         {
             _tokenService = tokenService;
+            _configRepository = configRepository;
+            _couponRepository = couponRepository;
         }
 
         public User MapRegisterDtoToUser(RegisterDto registerDto)
@@ -96,6 +102,18 @@ namespace API.Services
                 Price = episodeDto.Price,
                 CourseId = episodeDto.CourseId,
                 Audios = episodeDto.Audios
+            };
+        }
+
+        public async Task<Coupon> MapCouponDtoToCoupon(CouponToCreateDto couponDto)
+        {
+            var config = await _configRepository.GetConfigAsync("DefaultDiscountPercentage");
+            return new Coupon
+            {
+                Description = couponDto.Description,
+                DiscountPercentage = couponDto.DiscountPercentage ?? int.Parse(config.Value),
+                Code = await _couponRepository.GenerateCouponCode(),
+                IsActive = couponDto.IsActive
             };
         }
     }

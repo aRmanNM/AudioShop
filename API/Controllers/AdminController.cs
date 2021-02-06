@@ -16,12 +16,15 @@ namespace API.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly ICheckoutRepository _checkoutRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         public AdminController(UserManager<User> userManager,
-            ICheckoutRepository checkoutRepository)
+            ICheckoutRepository checkoutRepository,
+            IUnitOfWork unitOfWork)
         {
             _userManager = userManager;
             _checkoutRepository = checkoutRepository;
+            _unitOfWork = unitOfWork;
         }
 
         //
@@ -63,6 +66,7 @@ namespace API.Controllers
         {
             checkout.PaidAt = DateTime.Now;
             _checkoutRepository.EditCheckout(checkout);
+            await _unitOfWork.CompleteAsync();
             return Ok(checkout);
         }
     }

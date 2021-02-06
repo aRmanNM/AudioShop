@@ -1,7 +1,9 @@
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using API.Dtos;
 using API.Interfaces;
+using API.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,18 +11,21 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize]
+    [Authorize(Roles="Member")]
     public class MemberController : ControllerBase
     {
         private readonly IMapperService _mapper;
         private readonly IEpisodeRepository _episodeRepository;
+        private readonly ICouponRepository _couponRepository;
 
         public MemberController(
             IMapperService mapper,
-            IEpisodeRepository episodeRepository)
+            IEpisodeRepository episodeRepository,
+            ICouponRepository couponRepository)
         {
             _mapper = mapper;
             _episodeRepository = episodeRepository;
+            _couponRepository = couponRepository;
         }
 
         [HttpGet("Episodes/{userId}")]
@@ -32,6 +37,7 @@ namespace API.Controllers
         }
 
         [HttpPost("refinebasket")]
+        [AllowAnonymous]
         public async Task<ActionResult<BasketDto>> Refinebasket(BasketDto basketDto)
         {
             var episodeIds = await _episodeRepository.GetUserEpisodeIds(basketDto.UserId);
@@ -63,6 +69,13 @@ namespace API.Controllers
             }
 
             return false;
+        }
+
+        [HttpGet("isBlacklisted/{couponCode}")]
+        public async Task<bool> CheckMemberIsBlacklisted(string couponCode)
+        {
+            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            return await _couponRepository.CheckUserIsBlacklisted(couponCode, userId);
         }
     }
 }

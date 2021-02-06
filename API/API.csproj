@@ -21,7 +21,6 @@
   <ItemGroup>
     <Folder Include="Files\" />
     <Folder Include="Files\Courses\1\" />
-    <Folder Include="Migrations\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 </Project>
