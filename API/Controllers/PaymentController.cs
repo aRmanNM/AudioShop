@@ -16,15 +16,18 @@ namespace API.Controllers
         private readonly IConfiguration _config;
         private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ICouponRepository _couponRepository;
 
         public PaymentController(IOrderRepository orderRepository,
             IConfiguration config,
             IUserRepository userRepository,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            ICouponRepository couponRepository)
         {
             _config = config;
             _userRepository = userRepository;
             _unitOfWork = unitOfWork;
+            _couponRepository = couponRepository;
             _orderRepository = orderRepository;
         }
 
@@ -72,23 +75,28 @@ namespace API.Controllers
                 order.PaymentReceipt = result.RefId.ToString();
 
                 var salesperson = await _userRepository.GetSalespersonByCouponCode(order.SalespersonCouponCode);
-                var salespersonShare = order.PriceToPay - ((order.PriceToPay * salesperson.SalePercentageOfSalesperson) / 100);
-                order.SalespersonShare = salespersonShare;
-                salesperson.CurrentSalesOfSalesperson +=  salespersonShare;
-
-                salesperson.Blacklist.Add(new BlacklistItem()
+                if (salesperson != null)
                 {
-                    CouponCode = order.OtherCouponCode,
-                    UserId = order.UserId
-                });
+                    var salespersonShare = order.PriceToPay - ((order.PriceToPay * salesperson.SalePercentageOfSalesperson) / 100);
+                    order.SalespersonShare = salespersonShare;
+                    salesperson.CurrentSalesOfSalesperson += salespersonShare;
+                }
+
+                var coupon = await _couponRepository.GetCouponByCode(order.OtherCouponCode);
+                if (coupon != null)
+                {
+                    coupon.Blacklist.Add(new BlacklistItem()
+                    {
+                        CouponCode = order.OtherCouponCode,
+                        UserId = order.UserId
+                    });
+                }
 
                 await _unitOfWork.CompleteAsync();
-
                 return View(new PaymentResultDto
                 {
                     RefId = result.RefId
                 });
-
             }
 
             return BadRequest();
