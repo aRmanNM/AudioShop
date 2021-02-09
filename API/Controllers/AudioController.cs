@@ -45,7 +45,7 @@ namespace API.Controllers
             if (file.Length > _audioOptions.MaxBytes) return BadRequest("max file size exceeded");
             if (!_audioOptions.IsSupported(file.FileName)) return BadRequest("format not valid");
 
-            var uploadFolderPath = Path.Combine(_host.ContentRootPath, "Files", "Courses", episode.CourseId.ToString());
+            var uploadFolderPath = Path.Combine(_host.WebRootPath, "Files", episode.CourseId.ToString());
             if (!Directory.Exists(uploadFolderPath))
             {
                 Directory.CreateDirectory(uploadFolderPath);
@@ -69,27 +69,27 @@ namespace API.Controllers
             return Ok(audio);
         }
 
-        [HttpGet("episodes/{episodeId}/audios/{audioId}")]
-        public async Task<ActionResult> GetAudioFile(int episodeId, int audioId)
-        {
-            // check if episode is bought
+        // [HttpGet("episodes/{episodeId}/audios/{audioId}")]
+        // public async Task<ActionResult> GetAudioFile(int episodeId, int audioId)
+        // {
+        //     // check if episode is bought
 
-            var episode = await _episodeRepository.GetEpisodeById(episodeId);
-            if (episode == null) return NotFound();
+        //     var episode = await _episodeRepository.GetEpisodeById(episodeId);
+        //     if (episode == null) return NotFound();
 
-            var fileName = episode.Audios.FirstOrDefault(a => a.Id == audioId)?.FileName;
-            if (fileName == null) { return NotFound("file not found"); }
+        //     var fileName = episode.Audios.FirstOrDefault(a => a.Id == audioId)?.FileName;
+        //     if (fileName == null) { return NotFound("file not found"); }
 
-            var fileExtension = Path.GetExtension(fileName);
-            var mimeType = fileExtension.ToLower() switch
-            {
-                ".mp3" => "audio/mpeg",
-                ".wav" => "audio/wav",
-                _ => null
-            };
+        //     var fileExtension = Path.GetExtension(fileName);
+        //     var mimeType = fileExtension.ToLower() switch
+        //     {
+        //         ".mp3" => "audio/mpeg",
+        //         ".wav" => "audio/wav",
+        //         _ => null
+        //     };
 
-            var filePath = Path.Combine(_host.ContentRootPath, "Files", "Courses", episode.CourseId.ToString(), fileName ?? string.Empty);
-            return PhysicalFile(filePath, mimeType);
-        }
+        //     var filePath = Path.Combine(_host.ContentRootPath, "Files", "Courses", episode.CourseId.ToString(), fileName ?? string.Empty);
+        //     return PhysicalFile(filePath, mimeType);
+        // }
     }
 }

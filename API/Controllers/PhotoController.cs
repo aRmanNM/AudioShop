@@ -45,7 +45,7 @@ namespace API.Controllers
             if (file.Length > _photoOptions.MaxBytes) return BadRequest("max file size exceeded");
             if (!_photoOptions.IsSupported(file.FileName)) return BadRequest("format not valid");
 
-            var uploadFolderPath = Path.Combine(_host.WebRootPath, "Images", course.Id.ToString());
+            var uploadFolderPath = Path.Combine(_host.WebRootPath, "Files", course.Id.ToString());
             if (!Directory.Exists(uploadFolderPath))
             {
                 Directory.CreateDirectory(uploadFolderPath);

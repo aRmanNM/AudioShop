@@ -63,7 +63,7 @@ namespace API.Services
                 Id = course.Id,
                 Name = course.Name,
                 Price = course.Price,
-                Photo = course.Photo,
+                PhotoFileName = course.Photo.FileName,
                 Episodes = course.Episodes.Select(MapEpisodeToEpisodeDto).ToList()
             };
         }

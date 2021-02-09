@@ -52,7 +52,6 @@ namespace API
 
             services.AddIdentityCore<User>(opt =>
             {
-                // THIS IS NOT SAFE YET WE DO IT!
                 opt.Password.RequireNonAlphanumeric = false;
                 opt.Password.RequireUppercase = false;
                 opt.Password.RequireLowercase = false;
@@ -94,7 +93,7 @@ namespace API
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection(); // TODO: FIX THIS
             app.UseRouting();
             app.UseStaticFiles();
             app.UseCors();
