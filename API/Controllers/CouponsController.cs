@@ -46,7 +46,35 @@ namespace API.Controllers
         [HttpGet("{couponCode}/isActive")]
         public async Task<bool> CheckCouponIsActive(string couponCode)
         {
-            return await _couponRepository.CheckCouponIsActive(couponCode);
+            var coupon = await _couponRepository.GetCouponByCode(couponCode);
+            if (coupon == null)
+            {
+                return false;
+            }
+
+            if (coupon.IsActive)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        [HttpGet("{couponCode}/IsSalespersonCoupon")]
+        public async Task<bool> CheckIsSalespersonCoupon(string couponCode)
+        {
+            var coupon = await _couponRepository.GetCouponByCode(couponCode);
+            if (coupon == null)
+            {
+                return false;
+            }
+
+            if (!string.IsNullOrEmpty(coupon.UserId) && coupon.IsActive == true)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

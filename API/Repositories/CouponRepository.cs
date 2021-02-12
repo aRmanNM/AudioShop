@@ -40,13 +40,6 @@ namespace API.Repositories
                 i.CouponCode == couponCode && i.UserId == userId) != null;
         }
 
-        public async Task<bool> CheckCouponIsActive(string couponCode)
-        {
-            var coupon = await _context.Coupons.FirstOrDefaultAsync(c => c.Code == couponCode);
-            if (coupon == null) return false;
-            return coupon.IsActive;
-        }
-
         public async Task<IEnumerable<Coupon>> GetCoupons(bool includeSalespersons = false)
         {
             if (includeSalespersons)

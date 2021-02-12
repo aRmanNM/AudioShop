@@ -41,7 +41,7 @@ namespace API.Services
             return new UserDto
             {
                 Token = await _tokenService.CreateToken(user),
-                HasPhoneNumber = user.PhoneNumber == null
+                HasPhoneNumber = user.PhoneNumber != null
             };
         }
 

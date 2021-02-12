@@ -5,6 +5,7 @@ using API.Dtos;
 using API.Interfaces;
 using API.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -17,15 +18,18 @@ namespace API.Controllers
         private readonly IMapperService _mapper;
         private readonly IEpisodeRepository _episodeRepository;
         private readonly ICouponRepository _couponRepository;
+        private readonly UserManager<User> _userManager;
 
         public MemberController(
             IMapperService mapper,
             IEpisodeRepository episodeRepository,
-            ICouponRepository couponRepository)
+            ICouponRepository couponRepository,
+            UserManager<User> userManager)
         {
             _mapper = mapper;
             _episodeRepository = episodeRepository;
             _couponRepository = couponRepository;
+            _userManager = userManager;
         }
 
         [HttpGet("Episodes/{userId}")]
@@ -37,10 +41,10 @@ namespace API.Controllers
         }
 
         [HttpPost("refinebasket")]
-        [AllowAnonymous]
         public async Task<ActionResult<BasketDto>> Refinebasket(BasketDto basketDto)
         {
-            var episodeIds = await _episodeRepository.GetUserEpisodeIds(basketDto.UserId);
+            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var episodeIds = await _episodeRepository.GetUserEpisodeIds(userId);
 
             foreach(var id in episodeIds)
             {
@@ -71,11 +75,48 @@ namespace API.Controllers
             return false;
         }
 
-        [HttpGet("isBlacklisted/{couponCode}")]
-        public async Task<bool> CheckMemberIsBlacklisted(string couponCode)
+        [HttpGet("canUseCoupon/{couponCode}")]
+        public async Task<int> CheckMemeberCanUseCoupon(string couponCode)
+        {
+            // If coupon is inactive or null
+            // no need to check if memeber is blacklisted or not
+
+            // -1 means cannot
+
+            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var coupon = await _couponRepository.GetCouponByCode(couponCode);
+
+            if (coupon == null)
+            {
+                return -1;
+            }
+
+            if (!coupon.IsActive)
+            {
+                return -1;
+            }
+
+            if (await _couponRepository.CheckUserIsBlacklisted(couponCode, userId))
+            {
+                return -1;
+            }
+
+            return coupon.DiscountPercentage;
+        }
+
+        [HttpPost("addSalespersonCoupon/{salespersoncouponCode}")]
+        public async Task<ActionResult> AddSalesPersonCoupon(string salespersonCouponCode)
         {
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            return await _couponRepository.CheckUserIsBlacklisted(couponCode, userId);
+            var user = await _userManager.FindByIdAsync(userId);
+            user.CouponCode = salespersonCouponCode;
+            var res = await _userManager.UpdateAsync(user);
+            if (res.Succeeded)
+            {
+                return Ok();
+            }
+
+            return BadRequest("failed to update user");
         }
     }
 }

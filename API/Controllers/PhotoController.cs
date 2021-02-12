@@ -9,6 +9,7 @@ using API.Models.Options;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
@@ -35,6 +36,7 @@ namespace API.Controllers
             _photoOptions = options.Value;
         }
 
+        [Authorize(Roles="Admin")]
         [HttpPost("course/{courseId}/photo")]
         public async Task<ActionResult<Photo>> Upload(int courseId, IFormFile file)
         {

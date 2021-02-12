@@ -52,20 +52,9 @@ namespace API.Controllers
             var configs = await _configRepository.GetAllConfigsAsync();
             var user = _mapper.MapRegisterDtoToUser(registerDto);
 
-            if (registerDto.CouponCode != null && role.ToUpper() != "SALESPERSON")
+            if (registerDto.SalespersnCouponCode != null && role.ToUpper() != "SALESPERSON")
             {
-                // var coupon = await _couponRepository.GetCouponByCode(registerDto.CouponCode);
-                // if (coupon == null)
-                // {
-                //     return BadRequest("coupon not found");
-                // }
-
-                // if (!coupon.IsActive)
-                // {
-                //     return BadRequest("coupon is invalid");
-                // }
-
-                user.CouponCode = registerDto.CouponCode;
+                user.CouponCode = registerDto.SalespersnCouponCode;
             }
             else if (role.ToUpper() == "SALESPERSON")
             {
@@ -134,7 +123,7 @@ namespace API.Controllers
             }
         }
 
-        [HttpPost("verifyphone")]
+        [HttpPost("verifyPhone")]
         public async Task<ActionResult> VerifyPhone(VerificationDto verificationDto)
         {
             var phoneExists = await _userRepository.FindUserByPhoneNumberAsync(verificationDto.PhoneNumber) != null;
@@ -161,7 +150,7 @@ namespace API.Controllers
             return Ok();
         }
 
-        [HttpPost("verifytoken")]
+        [HttpPost("verifyToken")]
         public async Task<ActionResult> VerifyToken(VerificationDto verificationDto)
         {
             var user = !string.IsNullOrEmpty(verificationDto.UserId) ?

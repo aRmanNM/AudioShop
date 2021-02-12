@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Dtos;
@@ -39,9 +38,9 @@ namespace API.Controllers
         [Authorize]
         public async Task<ActionResult<Order>> CreateOrder(BasketDto basketDto)
         {
-            var coupon = await _couponRepository.GetCouponByCode(basketDto.OtherCouponCode);
             var user = await _userManager.FindByIdAsync(basketDto.UserId);
 
+            // TODO: Create mapper
             var order = new Order
             {
                 UserId = basketDto.UserId,
@@ -52,21 +51,7 @@ namespace API.Controllers
                 PriceToPay = basketDto.PriceToPay
             };
 
-            // TODO: WRITE A COMMENT OR MAKE IT BETTER
-            if (coupon.UserId != null && user.CouponCode != null)
-            {
-                order.SalespersonCouponCode = coupon.Code;
-            }
-            else if (coupon.UserId != null && user.CouponCode == null)
-            {
-                order.SalespersonCouponCode = coupon.Code;
-                user.CouponCode = coupon.Code;
-            }
-            else
-            {
-                order.OtherCouponCode = coupon.Code;
-            }
-
+            // TODO: maybe we should create order episode items when order is successfull
             order.OrderEpisodes = basketDto.Episodes.Select(e => new OrderEpisode {
                 OrderId = order.Id,
                 EpisodeId = e.Id
