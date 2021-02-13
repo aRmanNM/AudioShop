@@ -44,17 +44,11 @@ namespace API.Controllers
         public async Task<ActionResult<BasketDto>> Refinebasket(BasketDto basketDto)
         {
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var episodeIds = await _episodeRepository.GetUserEpisodeIds(userId);
+            var userEpisodeIds = await _episodeRepository.GetUserEpisodeIds(userId);
 
-            foreach(var id in episodeIds)
-            {
-                for(int i = 0; i < basketDto.Episodes.Count; i++)
-                {
-                    var episodeDto = basketDto.Episodes.FirstOrDefault(x => x.Id != 0);
-                    if (id != episodeDto.Id) continue;
-                    basketDto.Episodes.Remove(episodeDto);
-                }
-            }
+            // TODO: Check this for validity
+            var filteredEpisdeIds = basketDto.EpisodeIds.Where(epi => !userEpisodeIds.Any(uepi => uepi == epi)).ToArray();
+            basketDto.EpisodeIds = filteredEpisdeIds;
 
             return basketDto;
         }

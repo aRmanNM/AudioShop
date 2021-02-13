@@ -52,9 +52,9 @@ namespace API.Controllers
             };
 
             // TODO: maybe we should create order episode items when order is successfull
-            order.OrderEpisodes = basketDto.Episodes.Select(e => new OrderEpisode {
+            order.OrderEpisodes = basketDto.EpisodeIds.Select(e => new OrderEpisode {
                 OrderId = order.Id,
-                EpisodeId = e.Id
+                EpisodeId = e
             }).ToArray();
 
             await _orderRepository.CreateOrder(order);

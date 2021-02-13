@@ -11,11 +11,11 @@ namespace API.Dtos
         public string UserId { get; set; }
         public string SalespersonCouponCode { get; set; }
         public string OtherCouponCode { get; set; }
-        public ICollection<EpisodeDto> Episodes { get; set; }
+        public ICollection<int> EpisodeIds { get; set; }
 
         public BasketDto()
         {
-            Episodes = new Collection<EpisodeDto>();
+            EpisodeIds = new Collection<int>();
         }
     }
 }
