@@ -4,5 +4,6 @@
     {
         public string Token { get; set; }
         public bool HasPhoneNumber { get; set; }
+        public string SalespersonCouponCode { get; set; }
     }
 }

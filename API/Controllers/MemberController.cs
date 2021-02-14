@@ -99,7 +99,7 @@ namespace API.Controllers
         }
 
         [HttpPost("addSalespersonCoupon/{salespersoncouponCode}")]
-        public async Task<ActionResult> AddSalesPersonCoupon(string salespersonCouponCode)
+        public async Task<ActionResult<UserDto>> AddSalesPersonCoupon(string salespersonCouponCode)
         {
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var user = await _userManager.FindByIdAsync(userId);
@@ -107,7 +107,7 @@ namespace API.Controllers
             var res = await _userManager.UpdateAsync(user);
             if (res.Succeeded)
             {
-                return Ok();
+                return Ok(await _mapper.MapUserToUserDto(user));
             }
 
             return BadRequest("failed to update user");
