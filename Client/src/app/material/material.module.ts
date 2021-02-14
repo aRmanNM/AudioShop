@@ -7,7 +7,6 @@ import {MaterialPersianDateAdapter, PERSIAN_DATE_FORMATS} from './material-persi
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
-import {ReactiveFormsModule} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatListModule} from '@angular/material/list';
@@ -23,32 +22,32 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 @NgModule({
-  providers: [
-    {provide: DateAdapter, useClass: MaterialPersianDateAdapter, deps: [MAT_DATE_LOCALE]},
-    {provide: MAT_DATE_FORMATS, useValue: PERSIAN_DATE_FORMATS}
-  ],
-  declarations: [],
-  imports: [
-    CommonModule
-  ],
-  exports: [
-    MatInputModule,
-    MatDatepickerModule,
-    MatFormFieldModule,
-    MatButtonModule,
-    MatSidenavModule,
-    MatListModule,
-    MatToolbarModule,
-    MatCardModule,
-    MatIconModule,
-    MatMenuModule,
-    MatTableModule,
-    MatChipsModule,
-    MatDialogModule,
-    MatTabsModule,
-    MatSnackBarModule,
-    MatProgressBarModule
-  ]
+    providers: [
+        {provide: DateAdapter, useClass: MaterialPersianDateAdapter, deps: [MAT_DATE_LOCALE]},
+        {provide: MAT_DATE_FORMATS, useValue: PERSIAN_DATE_FORMATS}
+    ],
+    declarations: [],
+    imports: [
+        CommonModule
+    ],
+    exports: [
+        MatInputModule,
+        MatDatepickerModule,
+        MatFormFieldModule,
+        MatButtonModule,
+        MatSidenavModule,
+        MatListModule,
+        MatToolbarModule,
+        MatCardModule,
+        MatIconModule,
+        MatMenuModule,
+        MatTableModule,
+        MatChipsModule,
+        MatDialogModule,
+        MatTabsModule,
+        MatSnackBarModule,
+        MatProgressBarModule
+    ]
 })
 export class MaterialModule {
 }

@@ -26,7 +26,6 @@ export class CoursesComponent implements OnInit {
     getCourses(): void {
         this.coursesAndEpisodesService.getCourses(this.searchString).subscribe((res) => {
             this.courses = res;
-            // console.log('res', res);
         });
     }
 

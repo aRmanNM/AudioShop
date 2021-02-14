@@ -1,0 +1,44 @@
+<mat-toolbar>
+    <input type="number" class="form-control" style="width: 150px;" min="1" [(ngModel)]="courseId" placeholder="شناسه دوره">
+    <button mat-flat-button color="primary" style="margin-right: 6px;" (click)="getEpisodes()" [disabled]="!courseId">
+        انتخاب دوره
+    </button>
+    <span class="spacer"></span>
+    <button mat-raised-button color="primary" (click)="addOrEditDialog(null)" [disabled]="!addEnabled">
+        اپیزود جدید
+    </button>
+</mat-toolbar>
+
+
+<table mat-table [dataSource]="episodes">
+    <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef>شناسه</th>
+        <td mat-cell *matCellDef="let episode"> {{episode.id}} </td>
+    </ng-container>
+    <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>عنوان اپیزود</th>
+        <td mat-cell *matCellDef="let episode"> {{episode.name}} </td>
+    </ng-container>
+    <ng-container matColumnDef="price">
+        <th mat-header-cell *matHeaderCellDef>مبلغ تکی</th>
+        <td mat-cell *matCellDef="let episode"> {{episode.price | number}} ریال</td>
+    </ng-container>
+    <ng-container matColumnDef="order">
+        <th mat-header-cell *matHeaderCellDef>ترتیب نمایش</th>
+        <td mat-cell *matCellDef="let episode"> {{episode.sort}}</td>
+    </ng-container>
+    <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let episode">
+            <!--        <button class="action" mat-stroked-button color="primary" (click)="openDetailDialog(episode)">-->
+            <!--          جزئیات-->
+            <!--        </button>-->
+            <button class="action" mat-flat-button color="primary" style="float: left;"
+                    (click)="addOrEditDialog(episode)">
+                ویرایش
+            </button>
+        </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+    <tr mat-row *matRowDef="let episode; columns: columnsToDisplay"></tr>
+</table>

@@ -6,35 +6,53 @@ import {Observable} from 'rxjs';
 import {Episode} from '../models/episode';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class CoursesAndEpisodesService {
-    baseUrl = environment.apiUrl + 'api/courses';
+  baseUrl = environment.apiUrl + 'api/courses';
 
-    constructor(private http: HttpClient) {
-    }
+  constructor(private http: HttpClient) {
+  }
 
-    getCourses(search: string): Observable<Course[]> {
-        return this.http.get<Course[]>(this.baseUrl, {
-            params: new HttpParams().set('search', search).set('includeepisodes', 'false')
-        });
-    }
+  getCourses(search: string): Observable<Course[]> {
+    return this.http.get<Course[]>(this.baseUrl, {
+      params: new HttpParams().set('search', search).set('includeepisodes', 'false')
+    });
+  }
 
-    getCourseEpisodes(courseId: number): Observable<Episode[]> {
-        return this.http.get<Episode[]>(this.baseUrl + '/' + courseId + '/episodes');
-    }
+  getCourseEpisodes(courseId: number): Observable<Episode[]> {
+    return this.http.get<Episode[]>(this.baseUrl + '/' + courseId + '/episodes');
+  }
 
-    createCourse(course: Course): Observable<Course> {
-        return this.http.post<Course>(this.baseUrl, course);
-    }
+  createCourse(course: Course): Observable<Course> {
+    return this.http.post<Course>(this.baseUrl, course);
+  }
 
-    updateCourse(course: Course): Observable<Course> {
-        return this.http.put<Course>(this.baseUrl, course);
-    }
+  updateCourse(course: Course): Observable<Course> {
+    return this.http.put<Course>(this.baseUrl, course);
+  }
 
-    uploadPhoto(courseId: number, photo: any): any {
-        const formData = new FormData();
-        formData.append('file', photo);
-        return this.http.post(this.baseUrl + '/' + courseId + '/photo', formData);
-    }
+  uploadPhoto(courseId: number, photo: any): any {
+    const formData = new FormData();
+    formData.append('file', photo);
+    return this.http.post(this.baseUrl + '/' + courseId + '/photo', formData);
+  }
+
+  updateEpisode(episode: Episode): Observable<Episode> {
+    return this.http.put<Episode>(this.baseUrl + '/episodes', episode);
+  }
+
+  createEpisode(episode: Episode): Observable<Episode> {
+    return this.http.post<Episode>(this.baseUrl + '/episodes', episode);
+  }
+
+  uploadAudio(episodeId: number, audio: any): any {
+    const formData = new FormData();
+    formData.append('file', audio);
+    return this.http.post(`${environment.apiUrl}api/episodes/${episodeId}/audios`, formData);
+  }
+
+  getEpisode(episodeId: number): Observable<Episode> {
+    return this.http.get<Episode>(`${this.baseUrl}/episodes/${episodeId}`);
+  }
 }
