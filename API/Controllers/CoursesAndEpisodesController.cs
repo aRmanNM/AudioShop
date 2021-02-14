@@ -83,6 +83,12 @@ namespace API.Controllers
         [HttpGet("{courseId}/episodes")]
         public async Task<ActionResult<List<EpisodeDto>>> GetCourseEpisodes(int courseId)
         {
+            var course = await _courseRepository.GetCourseById(courseId);
+            if (course == null)
+            {
+                return NotFound("course not found!");
+            }
+
             var episodes = await _episodeRepository.GetCourseEpisodes(courseId);
             var episodeDtos = episodes.Select(e => _mapper.MapEpisodeToEpisodeDto(e));
             return Ok(episodeDtos);
@@ -98,12 +104,12 @@ namespace API.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPost("episodes")]
-        public async Task<ActionResult<Episode>> CreateEpisode(Episode episode)
+        public async Task<ActionResult<EpisodeDto>> CreateEpisode(EpisodeDto episodeDto)
         {
+            var episode = _mapper.MapEpisodeDtoToEpisode(episodeDto);
             await _episodeRepository.CreateEpisode(episode);
             await _unitOfWork.CompleteAsync();
-            var episodeDto = _mapper.MapEpisodeToEpisodeDto(episode);
-            return Ok(episodeDto);
+            return Ok(_mapper.MapEpisodeToEpisodeDto(episode));
         }
 
         [Authorize(Roles = "Admin")]
@@ -117,12 +123,11 @@ namespace API.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPut("episodes")]
-        public async Task<ActionResult<Episode>> UpdateEpisode(Episode episode)
+        public async Task<ActionResult<EpisodeDto>> UpdateEpisode(Episode episode)
         {
             _episodeRepository.UpdateEpisode(episode);
             await _unitOfWork.CompleteAsync();
-            var episodeDto = _mapper.MapEpisodeToEpisodeDto(episode);
-            return Ok(episodeDto);
+            return Ok(_mapper.MapEpisodeToEpisodeDto(episode));
         }
     }
 }

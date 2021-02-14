@@ -27,7 +27,7 @@ namespace API.Controllers
             return Ok(await _configRepo.GetConfigAsync(title));
         }
 
-        [Authorize(Roles = "Admin")]
+        // [Authorize(Roles = "Admin")]
         [HttpGet("all")]
         public async Task<ActionResult<IEnumerable<Config>>> GetAllConfigs()
         {

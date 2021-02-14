@@ -8,9 +8,7 @@ using API.Models;
 using API.Models.Options;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
-using System.Linq;
 
 namespace API.Controllers
 {

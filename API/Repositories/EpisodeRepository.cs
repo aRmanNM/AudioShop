@@ -20,14 +20,14 @@ namespace API.Repositories
 
         public async Task<Episode> CreateEpisode(Episode courseEpisode)
         {
-            var newCourseEpisode = await _context.Episodes.AddAsync(courseEpisode);
-            return newCourseEpisode.Entity;
+            await _context.Episodes.AddAsync(courseEpisode);
+            return courseEpisode;
         }
 
         public Episode UpdateEpisode(Episode courseEpisode)
         {
-            var updatedCourseEpisode = _context.Episodes.Update(courseEpisode);
-            return updatedCourseEpisode.Entity;
+            _context.Episodes.Update(courseEpisode);
+            return courseEpisode;
         }
 
         public void DeleteEpisode(Episode episode)
