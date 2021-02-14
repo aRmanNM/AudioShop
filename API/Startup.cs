@@ -102,6 +102,7 @@ namespace API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
+                endpoints.MapFallbackToController("Index", "Fallback");
             });
         }
     }
