@@ -3,7 +3,7 @@ import {ErrorStateMatcher} from '@angular/material/core';
 import {AsyncValidatorFn, FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import {of, timer} from 'rxjs';
 import {map, switchMap} from 'rxjs/operators';
-import {AuthService} from '../services/auth.service';
+import {AuthService} from '../../services/auth.service';
 import {Router} from '@angular/router';
 
 export class PasswordStateMatcher implements ErrorStateMatcher {
@@ -52,7 +52,7 @@ export class RegisterComponent implements OnInit {
   register(): void {
     this.authService.register(this.registerForm.value).subscribe((res) => {
       console.log('user registered as salesperson');
-      this.router.navigate(['/dashboard']);
+      this.router.navigate(['/shared']);
     }, error => {
       console.log(error);
     });

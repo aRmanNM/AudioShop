@@ -13,7 +13,7 @@ import {UserLogin} from '../models/user-login';
   providedIn: 'root'
 })
 export class AuthService {
-  baseUrl = environment.apiUrl + 'auth/';
+  baseUrl = environment.apiUrl + 'api/auth/';
   jwtHelper = new JwtHelperService();
   decodedToken: any;
 

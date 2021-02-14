@@ -2,11 +2,11 @@ import {Component, OnInit} from '@angular/core';
 import {SalespersonService} from '../../services/salesperson.service';
 
 @Component({
-  selector: 'app-salesperson-orders',
-  templateUrl: './salesperson-orders.component.html',
-  styleUrls: ['./salesperson-orders.component.scss']
+  selector: 'app-orders',
+  templateUrl: './orders.component.html',
+  styleUrls: ['./orders.component.scss']
 })
-export class SalespersonOrdersComponent implements OnInit {
+export class OrdersComponent implements OnInit {
   orders: any[];
   salesAmount: number;
   columnsToDisplay = ['priceToPay', 'date', 'salespersonShareAmount', 'basketItemsNames'];

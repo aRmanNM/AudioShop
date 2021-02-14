@@ -17,6 +17,10 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatTableModule} from '@angular/material/table';
 import {MatChipsModule} from '@angular/material/chips';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatTabsModule} from '@angular/material/tabs';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 @NgModule({
   providers: [
@@ -31,7 +35,6 @@ import {MatChipsModule} from '@angular/material/chips';
     MatInputModule,
     MatDatepickerModule,
     MatFormFieldModule,
-    ReactiveFormsModule,
     MatButtonModule,
     MatSidenavModule,
     MatListModule,
@@ -40,7 +43,11 @@ import {MatChipsModule} from '@angular/material/chips';
     MatIconModule,
     MatMenuModule,
     MatTableModule,
-    MatChipsModule
+    MatChipsModule,
+    MatDialogModule,
+    MatTabsModule,
+    MatSnackBarModule,
+    MatProgressBarModule
   ]
 })
 export class MaterialModule {

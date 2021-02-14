@@ -1,0 +1,26 @@
+<mat-tab-group animationDuration="0ms" dir="rtl">
+  <mat-tab label="جزئیات دوره">
+      <p>details of course</p>
+  </mat-tab>
+  <mat-tab label="لیست اپیزودها">
+
+    <table mat-table [dataSource]="episodes">
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef>شناسه</th>
+        <td mat-cell *matCellDef="let episode"> {{episode.id}} </td>
+      </ng-container>
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>عنوان اپیزود</th>
+        <td mat-cell *matCellDef="let episode"> {{episode.name}} </td>
+      </ng-container>
+      <ng-container matColumnDef="price">
+        <th mat-header-cell *matHeaderCellDef>مبلغ اپیزود</th>
+        <td mat-cell *matCellDef="let episode"> {{episode.price | number}} ریال</td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+      <tr mat-row *matRowDef="let episode; columns: columnsToDisplay"></tr>
+    </table>
+
+  </mat-tab>
+</mat-tab-group>
+

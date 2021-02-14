@@ -1,0 +1,39 @@
+<mat-tab-group animationDuration="0ms" mat-align-tabs="center" mat-stretch-tabs backgroundColor="primary" dir="rtl">
+  <mat-tab label="اطلاعات پایه">
+    <form [formGroup]="courseForm" (ngSubmit)="createOrEditCourse()">
+      <mat-form-field color="accent" hidden>
+        <mat-label>شناسه</mat-label>
+        <input matInput type="text" formControlName="id"/>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>عنوان</mat-label>
+        <input matInput type="text" formControlName="name"/>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>توضیحات</mat-label>
+        <textarea rows="5" matInput formControlName="description"></textarea>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>مبلغ</mat-label>
+        <input matInput type="number" formControlName="price"/>
+      </mat-form-field>
+
+      <button
+        mat-raised-button
+        color="primary"
+        [disabled]="!courseForm.valid"
+        type="submit">
+        <span *ngIf="data.course">ویرایش</span>
+        <span *ngIf="!data.course">درج دوره جدید</span>
+      </button>
+
+    </form>
+
+  </mat-tab>
+  <mat-tab label="لوگو" *ngIf="data.course">
+    <img src="{{ imgUrl }}" *ngIf="data.course.photoFileName">
+    <input type="file" class="form-control-file mt-2" value="انتخاب فایل" #fileInput>
+    <button class="mt-2" mat-raised-button color="primary" type="submit" (click)="uploadPhoto()">اپلود</button>
+    <mat-progress-bar *ngIf="showProgressBar" mode="indeterminate"></mat-progress-bar>
+  </mat-tab>
+</mat-tab-group>

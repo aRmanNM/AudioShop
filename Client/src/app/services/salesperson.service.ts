@@ -8,7 +8,7 @@ import {Checkout} from '../models/checkout';
   providedIn: 'root'
 })
 export class SalespersonService {
-  baseUrl = environment.apiUrl + 'salesperson/';
+  baseUrl = environment.apiUrl + 'api/salesperson/';
 
   constructor(private http: HttpClient) {
   }

@@ -3,11 +3,11 @@ import {SalespersonService} from '../../services/salesperson.service';
 import {Checkout} from '../../models/checkout';
 
 @Component({
-  selector: 'app-salesperson-checkouts',
-  templateUrl: './salesperson-checkouts.component.html',
-  styleUrls: ['./salesperson-checkouts.component.scss']
+  selector: 'app-checkouts',
+  templateUrl: './checkouts.component.html',
+  styleUrls: ['./checkouts.component.scss']
 })
-export class SalespersonCheckoutsComponent implements OnInit {
+export class CheckoutsComponent implements OnInit {
   checkouts: Checkout[];
   totalSaleAmount: number;
   columnsToDisplay = ['amountToCheckout', 'createdAt', 'status', 'paymentReceipt', 'paidAt'];

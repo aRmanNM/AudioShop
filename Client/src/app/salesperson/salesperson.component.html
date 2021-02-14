@@ -1,0 +1,13 @@
+<app-topbar></app-topbar>
+<mat-drawer-container class="container" [dir]="'rtl'">
+  <mat-drawer mode="side" opened>
+    <app-sidebar>
+      <a mat-list-item [routerLink]="['./orders']" routerLinkActive="active">سابقه خریدها</a>
+      <a mat-list-item [routerLink]="['./checkouts']" routerLinkActive="active">درخواست های تصفیه</a>
+    </app-sidebar>
+  </mat-drawer>
+  <mat-drawer-content>
+    <router-outlet></router-outlet>
+  </mat-drawer-content>
+</mat-drawer-container>
+
