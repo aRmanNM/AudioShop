@@ -34,20 +34,21 @@ namespace API.Repositories
             return course;
         }
 
-        public async Task<IEnumerable<Course>> GetCourses(bool includeEpisodes)
+        public async Task<IEnumerable<Course>> GetCourses(bool includeEpisodes, string search)
         {
-            if (!includeEpisodes)
+            var courses = _context.Courses.Include(c => c.Photo).AsQueryable();
+
+            if (includeEpisodes)
             {
-                return await _context.Courses
-                    .Include(c => c.Photo)
-                    .ToListAsync();
+                courses = courses.Include(c => c.Episodes);
             }
 
-            return await _context.Courses
-                .Include(c => c.Photo)
-                .Include(c => c.Episodes)
-                .ToListAsync();
+            if (!string.IsNullOrEmpty(search))
+            {
+                courses = courses.Where(c => c.Name.Contains(search));
+            }
 
+            return await courses.OrderByDescending(c => c.Id).AsNoTracking().ToArrayAsync();
         }
         public async Task<Course> GetCourseById(int id)
         {

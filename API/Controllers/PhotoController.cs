@@ -37,7 +37,7 @@ namespace API.Controllers
         }
 
         [Authorize(Roles="Admin")]
-        [HttpPost("course/{courseId}/photo")]
+        [HttpPost("courses/{courseId}/photo")]
         public async Task<ActionResult<Photo>> Upload(int courseId, IFormFile file)
         {
             var course = await _courseRepository.GetCourseById(courseId);

@@ -11,7 +11,7 @@ namespace API.Interfaces
         Task<Course> CreateCourse(Course course);
         Course UpdateCourse(Course course);
         void DeleteCourses(IEnumerable<Course> IDs); // TODO : THIS SEEMS WRONG
-        Task<IEnumerable<Course>> GetCourses(bool includeEpisodes);
+        Task<IEnumerable<Course>> GetCourses(bool includeEpisodes, string search);
         Task<Course> GetCourseById(int id);
     }
 }
