@@ -20,6 +20,7 @@ namespace API.Data
         public DbSet<OrderEpisode> OrderEpisodes { get; set; }
         public DbSet<BlacklistItem> Blacklist { get; set; }
         public DbSet<SliderItem> SliderItems { get; set; }
+        public DbSet<Review> Reviews { get; set; }
 
         public StoreContext(DbContextOptions<StoreContext> options) : base(options)
         {

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using API.Dtos;
 using API.Interfaces;
@@ -17,16 +18,19 @@ namespace API.Controllers
         private readonly IEpisodeRepository _episodeRepository;
         private readonly IMapperService _mapper;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IReviewRepository _reviewRepository;
 
         public CoursesController(ICourseRepository courseRepository,
             IEpisodeRepository episodeRepository,
             IMapperService mapper,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            IReviewRepository reviewRepository)
         {
             _courseRepository = courseRepository;
             _episodeRepository = episodeRepository;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _reviewRepository = reviewRepository;
         }
 
         //
@@ -74,6 +78,46 @@ namespace API.Controllers
             var updatedCourse = _courseRepository.UpdateCourse(course);
             await _unitOfWork.CompleteAsync();
             return updatedCourse;
+        }
+
+        [HttpGet("{courseId}/reviews")]
+        public async Task<ActionResult<List<Review>>> GetCourseReviews(int courseId)
+        {
+            var reviews = await _reviewRepository.GetCourseReviews(courseId);
+            return Ok(reviews);
+        }
+
+        [Authorize(Roles="Member")]
+        [HttpPost("{courseId}/reviews")]
+        public async Task<ActionResult<Review>> AddCourseReview(int courseId, Review review)
+        {
+            if (courseId != review.CourseId)
+            {
+                return BadRequest();
+            }
+
+            review.Accepted = false;
+            await _reviewRepository.AddReview(review);
+            await _unitOfWork.CompleteAsync();
+            return Ok(review);
+        }
+
+        [HttpPut("{courseId}/reviews/{reviewId}")]
+        public async Task<ActionResult<Review>> UpdateCourseReview(int courseId, int reviewId, Review review)
+        {
+            if (courseId != review.CourseId)
+            {
+                return BadRequest();
+            }
+
+            if (reviewId != review.Id)
+            {
+                return BadRequest();
+            }
+
+            _reviewRepository.UpdateReview(review);
+            await _unitOfWork.CompleteAsync();
+            return Ok(review);
         }
 
         //

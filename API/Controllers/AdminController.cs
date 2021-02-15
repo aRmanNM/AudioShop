@@ -17,19 +17,18 @@ namespace API.Controllers
         private readonly UserManager<User> _userManager;
         private readonly ICheckoutRepository _checkoutRepository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IReviewRepository _reviewRepository;
 
         public AdminController(UserManager<User> userManager,
             ICheckoutRepository checkoutRepository,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            IReviewRepository reviewRepository)
         {
             _userManager = userManager;
             _checkoutRepository = checkoutRepository;
             _unitOfWork = unitOfWork;
+            _reviewRepository = reviewRepository;
         }
-
-        //
-        // MEMBERS
-        //
 
         [HttpGet("members")]
         public async Task<ActionResult<IEnumerable<User>>> GetMembers()
@@ -50,10 +49,6 @@ namespace API.Controllers
             return Ok(member);
         }
 
-        //
-        // CHECKOUTS
-        //
-
         [HttpGet("checkouts")]
         public async Task<ActionResult<IEnumerable<Checkout>>> GetCheckouts(bool status)
         {
@@ -69,5 +64,13 @@ namespace API.Controllers
             await _unitOfWork.CompleteAsync();
             return Ok(checkout);
         }
+
+        [HttpGet("courses/{courseId}/reviews")]
+        public async Task<ActionResult<List<Review>>> GetAllCourseReviews(int courseId, bool accepted)
+        {
+            var reviews = await _reviewRepository.GetCourseReviews(courseId, accepted);
+            return Ok(reviews);
+        }
+
     }
 }

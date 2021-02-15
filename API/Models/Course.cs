@@ -14,10 +14,12 @@ namespace API.Models
 
         public Photo Photo { get; set; }
         public ICollection<Episode> Episodes { get; set; }
+        public ICollection<Review> Reviews { get; set; }
 
         public Course()
         {
             Episodes = new Collection<Episode>();
+            Reviews = new Collection<Review>();
         }
     }
 }

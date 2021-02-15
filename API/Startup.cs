@@ -40,6 +40,7 @@ namespace API
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IMapperService, MapperService>();
+            services.AddScoped<IReviewRepository, ReviewRepository>();
 
             services.AddSingleton<ISMSService, SMSService>();
 
