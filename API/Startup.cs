@@ -43,6 +43,7 @@ namespace API
             services.AddScoped<IReviewRepository, ReviewRepository>();
 
             services.AddSingleton<ISMSService, SMSService>();
+            services.AddSingleton<IFileService, FileService>();
 
             services.Configure<SMSOptions>(_config.GetSection("SMSOptions"));
             services.Configure<PhotoOptions>(_config.GetSection("PhotoOptions"));

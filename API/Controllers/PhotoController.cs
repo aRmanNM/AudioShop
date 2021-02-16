@@ -21,24 +21,27 @@ namespace API.Controllers
         private readonly ICourseRepository _courseRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IConfiguration _config;
+        private readonly IFileService _fileService;
         private readonly PhotoOptions _photoOptions;
 
         public PhotoController(IWebHostEnvironment host,
             ICourseRepository courseRepository,
             IUnitOfWork unitOfWork,
             IConfiguration config,
-            IOptions<PhotoOptions> options)
+            IOptions<PhotoOptions> options,
+            IFileService fileService)
         {
             _host = host;
             _courseRepository = courseRepository;
             _unitOfWork = unitOfWork;
             _config = config;
+            _fileService = fileService;
             _photoOptions = options.Value;
         }
 
         [Authorize(Roles="Admin")]
         [HttpPost("courses/{courseId}/photo")]
-        public async Task<ActionResult<Photo>> Upload(int courseId, IFormFile file)
+        public async Task<ActionResult<Photo>> UploadCoursePhoto(int courseId, IFormFile file)
         {
             var course = await _courseRepository.GetCourseById(courseId);
             if (course == null) return NotFound();
@@ -48,23 +51,26 @@ namespace API.Controllers
             if (!_photoOptions.IsSupported(file.FileName)) return BadRequest("format not valid");
 
             var uploadFolderPath = Path.Combine(_host.WebRootPath, "Files", course.Id.ToString());
-            if (!Directory.Exists(uploadFolderPath))
-            {
-                Directory.CreateDirectory(uploadFolderPath);
-            }
-
             var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-            var filePath = Path.Combine(uploadFolderPath, fileName);
 
-            using (var stream = new FileStream(filePath, FileMode.Create))
+            try
             {
-                await file.CopyToAsync(stream);
+                await _fileService.Upload(file, fileName, uploadFolderPath);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
             }
 
             var photo = new Photo()
             {
                 FileName = fileName
             };
+
+            if (course.Photo != null)
+            {
+                _fileService.Delete(course.Photo.FileName, uploadFolderPath);
+            }
 
             course.Photo = photo;
             await _unitOfWork.CompleteAsync();
