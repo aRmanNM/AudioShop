@@ -1,9 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {Episode} from '../../models/episode';
 import {CoursesAndEpisodesService} from '../../services/courses-and-episodes.service';
 import {MatDialog} from '@angular/material/dialog';
 import {EpisodeCreateEditComponent} from './episode-create-edit/episode-create-edit.component';
-import {Observable} from 'rxjs';
+import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
+import * as cloneDeep from 'lodash/cloneDeep';
 
 @Component({
   selector: 'app-episodes',
@@ -14,7 +15,7 @@ export class EpisodesComponent implements OnInit {
   episodes: Episode[];
   courseId: number;
   addEnabled = false;
-  columnsToDisplay = ['id', 'name', 'price', 'order', 'actions'];
+  columnsToDisplay = ['handle', 'name', 'price', 'actions'];
 
   constructor(private coursesAndEpisodesService: CoursesAndEpisodesService, public dialog: MatDialog) {
   }
@@ -28,6 +29,9 @@ export class EpisodesComponent implements OnInit {
     this.coursesAndEpisodesService.getCourseEpisodes(this.courseId).subscribe((res) => {
       this.episodes = res;
       this.addEnabled = true;
+
+      this.updateSortIndex();
+      this.updateCourseEpisodes();
     }, error => {
     });
   }
@@ -55,6 +59,26 @@ export class EpisodesComponent implements OnInit {
     dialogRef.afterClosed().subscribe(res => {
       this.getEpisodes();
     });
+  }
+
+  drop(event: CdkDragDrop<Episode[]>): void {
+    // console.log(event.previousIndex, event.currentIndex);
+    moveItemInArray(this.episodes, event.previousIndex, event.currentIndex);
+    this.episodes = cloneDeep(this.episodes);
+    this.updateSortIndex();
+    this.updateCourseEpisodes();
+  }
+
+  updateCourseEpisodes(): void {
+    this.coursesAndEpisodesService.updateCourseEpisodes(this.courseId, this.episodes).subscribe(() => {
+      // console.log('updated!');
+    });
+  }
+
+  updateSortIndex(): void {
+    for (let i = 0; i < this.episodes.length; i++) {
+      this.episodes[i].sort = i;
+    }
   }
 
 }

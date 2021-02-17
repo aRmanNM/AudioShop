@@ -36,8 +36,11 @@
     <div class="mt-2" *ngIf="this.audioFiles.length > 0">
       <audio *ngFor="let audio of audioFiles" controls [src]="audio"></audio>
     </div>
-    <input type="file" class="form-control-file mt-2" value="انتخاب فایل" #fileInput>
-    <button class="mt-2" mat-raised-button color="primary" type="submit" (click)="uploadAudio()">اپلود</button>
+    <input type="file" class="form-control-file mt-2" value="انتخاب فایل" #fileInput multiple>
+    <div class="d-flex justify-content-between">
+      <button class="mt-2" mat-raised-button color="primary" type="submit" (click)="uploadAudios()">اپلود</button>
+      <button class="mt-2" mat-raised-button color="warn" type="submit" (click)="deleteEpisodeAudios()">حذف کامل</button>
+    </div>
     <mat-progress-bar *ngIf="showProgressBar" mode="indeterminate"></mat-progress-bar>
   </mat-tab>
 </mat-tab-group>

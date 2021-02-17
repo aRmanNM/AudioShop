@@ -4,6 +4,7 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {Course} from '../models/course';
 import {Observable} from 'rxjs';
 import {Episode} from '../models/episode';
+import {Audio} from '../models/audio';
 
 @Injectable({
   providedIn: 'root'
@@ -46,13 +47,21 @@ export class CoursesAndEpisodesService {
     return this.http.post<Episode>(this.baseUrl + '/episodes', episode);
   }
 
-  uploadAudio(episodeId: number, audio: any): any {
+  uploadAudio(episodeId: number, audio: any): Observable<any> {
     const formData = new FormData();
     formData.append('file', audio);
     return this.http.post(`${environment.apiUrl}api/episodes/${episodeId}/audios`, formData);
   }
 
+  deleteEpisodeAudios(episodeId: number): Observable<any> {
+    return this.http.delete(`${environment.apiUrl}api/episodes/${episodeId}/audios`);
+  }
+
   getEpisode(episodeId: number): Observable<Episode> {
     return this.http.get<Episode>(`${this.baseUrl}/episodes/${episodeId}`);
+  }
+
+  updateCourseEpisodes(courseId: number, episodes: Episode[]): Observable<any> {
+    return this.http.put<Episode[]>(this.baseUrl + '/' + courseId + '/episodes', episodes);
   }
 }

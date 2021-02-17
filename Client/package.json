@@ -23,6 +23,7 @@
     "@angular/router": "~10.2.4",
     "@auth0/angular-jwt": "^5.0.2",
     "jalali-moment": "^3.3.9",
+    "lodash": "^4.17.20",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.2"

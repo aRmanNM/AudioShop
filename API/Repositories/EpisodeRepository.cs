@@ -65,5 +65,10 @@ namespace API.Repositories
                 .Select(ep => ep.Episode.Id)
                 .ToListAsync();
         }
+
+        public void UpdateEpisodes(Episode[] episodes)
+        {
+            _context.Episodes.UpdateRange(episodes);
+        }
     }
 }

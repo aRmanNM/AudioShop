@@ -87,12 +87,12 @@ namespace API.Controllers
 
             if (!coupon.IsActive)
             {
-                return -1;
+                return -2;
             }
 
             if (await _couponRepository.CheckUserIsBlacklisted(couponCode, userId))
             {
-                return -1;
+                return -3;
             }
 
             return coupon.DiscountPercentage;

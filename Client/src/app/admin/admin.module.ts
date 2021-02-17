@@ -12,6 +12,7 @@ import {CreateOrEditComponent} from './courses/create-or-edit/create-or-edit.com
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {EpisodesComponent} from './episodes/episodes.component';
 import {EpisodeCreateEditComponent} from './episodes/episode-create-edit/episode-create-edit.component';
+import {DragDropModule} from '@angular/cdk/drag-drop';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import {EpisodeCreateEditComponent} from './episodes/episode-create-edit/episode
     MaterialModule,
     SharedModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    DragDropModule
   ]
 })
 export class AdminModule {

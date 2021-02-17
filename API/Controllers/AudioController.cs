@@ -19,16 +19,19 @@ namespace API.Controllers
         private readonly IEpisodeRepository _episodeRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IWebHostEnvironment _host;
+        private readonly IFileService _fileService;
         private readonly AudioOptions _audioOptions;
 
         public FilesController(IEpisodeRepository episodeRepository,
             IUnitOfWork unitOfWork,
             IWebHostEnvironment host,
-            IOptions<AudioOptions> options)
+            IOptions<AudioOptions> options,
+            IFileService fileService)
         {
             _episodeRepository = episodeRepository;
             _unitOfWork = unitOfWork;
             _host = host;
+            _fileService = fileService;
             _audioOptions = options.Value;
         }
 
@@ -44,17 +47,15 @@ namespace API.Controllers
             if (!_audioOptions.IsSupported(file.FileName)) return BadRequest("format not valid");
 
             var uploadFolderPath = Path.Combine(_host.WebRootPath, "Files", episode.CourseId.ToString());
-            if (!Directory.Exists(uploadFolderPath))
-            {
-                Directory.CreateDirectory(uploadFolderPath);
-            }
-
             var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-            var filePath = Path.Combine(uploadFolderPath, fileName);
 
-            using (var stream = new FileStream(filePath, FileMode.Create))
+            try
             {
-                await file.CopyToAsync(stream);
+                await _fileService.Upload(file, fileName, uploadFolderPath);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
             }
 
             var audio = new Audio()
@@ -67,27 +68,30 @@ namespace API.Controllers
             return Ok(audio);
         }
 
-        // [HttpGet("episodes/{episodeId}/audios/{audioId}")]
-        // public async Task<ActionResult> GetAudioFile(int episodeId, int audioId)
-        // {
-        //     // check if episode is bought
+        [Authorize(Roles="Admin")]
+        [HttpDelete("episodes/{episodeId}/audios")]
+        public async Task<ActionResult> DeleteEpisodeAudios(int episodeId)
+        {
+            var episode = await _episodeRepository.GetEpisodeById(episodeId);
+            var uploadFolderPath = Path.Combine(_host.WebRootPath, "Files", episode.CourseId.ToString());
+            if (episode == null) return NotFound();
+            try
+            {
+                foreach (var item in episode.Audios)
+                {
+                    _fileService.Delete(item.FileName, uploadFolderPath);
+                }
+            }
+            catch (System.Exception e)
+            {
+                return BadRequest(e.Message);
+            }
 
-        //     var episode = await _episodeRepository.GetEpisodeById(episodeId);
-        //     if (episode == null) return NotFound();
+            episode.Audios = null;
+            _episodeRepository.UpdateEpisode(episode);
+            await _unitOfWork.CompleteAsync();
 
-        //     var fileName = episode.Audios.FirstOrDefault(a => a.Id == audioId)?.FileName;
-        //     if (fileName == null) { return NotFound("file not found"); }
-
-        //     var fileExtension = Path.GetExtension(fileName);
-        //     var mimeType = fileExtension.ToLower() switch
-        //     {
-        //         ".mp3" => "audio/mpeg",
-        //         ".wav" => "audio/wav",
-        //         _ => null
-        //     };
-
-        //     var filePath = Path.Combine(_host.ContentRootPath, "Files", "Courses", episode.CourseId.ToString(), fileName ?? string.Empty);
-        //     return PhysicalFile(filePath, mimeType);
-        // }
+            return Ok();
+        }
     }
 }

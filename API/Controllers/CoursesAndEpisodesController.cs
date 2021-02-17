@@ -173,5 +173,14 @@ namespace API.Controllers
             await _unitOfWork.CompleteAsync();
             return Ok(_mapper.MapEpisodeToEpisodeDto(episode));
         }
+
+        [Authorize(Roles="Admin")]
+        [HttpPut("{courseId}/episodes")]
+        public async Task<ActionResult> UpdateCourseEpisodes(Episode[] episodes)
+        {
+            _episodeRepository.UpdateEpisodes(episodes);
+            await _unitOfWork.CompleteAsync();
+            return Ok();
+        }
     }
 }

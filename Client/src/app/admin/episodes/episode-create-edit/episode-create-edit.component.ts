@@ -75,21 +75,34 @@ export class EpisodeCreateEditComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  uploadAudio(): any {
-    this.showProgressBar = true;
+  uploadAudios(): any {
     const nativeElement = this.fileInput.nativeElement;
-    this.coursesAndEpisodesService.uploadAudio(this.data.episode.id, nativeElement.files[0]).subscribe((res) => {
-      this.showProgressBar = false;
-      this.data.episode.audios.push(res);
-      this.getAudios();
-    });
+    for (let i = 0; i < nativeElement.files.length; i++) {
+      this.showProgressBar = true;
+      console.log(`${i + 1}/${nativeElement.files.length}`);
+      this.coursesAndEpisodesService.uploadAudio(this.data.episode.id, nativeElement.files[i]).subscribe((res) => {
+        this.showProgressBar = false;
+        this.data.episode.audios.push(res);
+        this.getAudios();
+      });
+    }
   }
 
   getAudios(): void {
     this.audioFiles = [];
-    for (let a of this.data.episode.audios) {
+    for (const a of this.data.episode.audios) {
       this.audioFiles.push(`${this.baseUrl}${this.data.episode.courseId}/${a.fileName}`);
     }
+  }
+
+  deleteEpisodeAudios(): void {
+    this.coursesAndEpisodesService.deleteEpisodeAudios(this.data.episode.id).subscribe(() => {
+      this.snackBar.open('بخش های صوتی با موفقیت حذف شدند', null, {
+        duration: 2000,
+      });
+      this.data.episode.audios = [];
+      this.getAudios();
+    });
   }
 
 }
