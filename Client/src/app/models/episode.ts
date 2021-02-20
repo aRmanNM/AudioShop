@@ -8,4 +8,5 @@ export interface Episode {
   price: number;
   audios: Audio[];
   courseId: number;
+  totalAudiosDuration: number;
 }

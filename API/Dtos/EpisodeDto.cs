@@ -13,6 +13,7 @@ namespace API.Dtos
         public decimal Price { get; set; }
         public ICollection<Audio> Audios { get; set; }
         public int CourseId { get; set; }
+        public int TotalAudiosDuration { get; set; }
 
         public EpisodeDto()
         {

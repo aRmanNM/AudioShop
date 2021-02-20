@@ -15,7 +15,7 @@ export class EpisodesComponent implements OnInit {
   episodes: Episode[];
   courseId: number;
   addEnabled = false;
-  columnsToDisplay = ['handle', 'name', 'price', 'actions'];
+  columnsToDisplay = ['handle', 'name', 'price', 'duration', 'actions'];
 
   constructor(private coursesAndEpisodesService: CoursesAndEpisodesService, public dialog: MatDialog) {
   }

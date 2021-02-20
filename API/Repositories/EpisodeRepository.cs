@@ -24,10 +24,12 @@ namespace API.Repositories
             return courseEpisode;
         }
 
-        public Episode UpdateEpisode(Episode courseEpisode)
+        public Episode UpdateEpisode(Episode episode)
         {
-            _context.Episodes.Update(courseEpisode);
-            return courseEpisode;
+            // _context.Episodes.Update(courseEpisode);
+            _context.Entry(episode).State = EntityState.Modified;
+            _context.Entry(episode).Property(e => e.TotalAudiosDuration).IsModified = false;
+            return episode;
         }
 
         public void DeleteEpisode(Episode episode)

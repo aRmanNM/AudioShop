@@ -58,11 +58,14 @@ namespace API.Controllers
                 return BadRequest(e.Message);
             }
 
+            var duration = int.Parse(file.FileName.Split('_')[1]);
             var audio = new Audio()
             {
-                FileName = fileName
+                FileName = fileName,
+                Duration = duration
             };
 
+            episode.TotalAudiosDuration = episode.TotalAudiosDuration + duration;
             episode.Audios.Add(audio);
             await _unitOfWork.CompleteAsync();
             return Ok(audio);
@@ -88,7 +91,7 @@ namespace API.Controllers
             }
 
             episode.Audios = null;
-            _episodeRepository.UpdateEpisode(episode);
+            episode.TotalAudiosDuration = 0;            
             await _unitOfWork.CompleteAsync();
 
             return Ok();

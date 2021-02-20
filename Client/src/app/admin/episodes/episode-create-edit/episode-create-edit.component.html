@@ -33,8 +33,8 @@
 
   </mat-tab>
   <mat-tab label="فایل های صوتی" *ngIf="data.episode">
-    <div class="mt-2" *ngIf="this.audioFiles.length > 0">
-      <audio *ngFor="let audio of audioFiles" controls [src]="audio"></audio>
+    <div class="mt-2">
+      {{audioFiles.length}} فایل اپلود شده است
     </div>
     <input type="file" class="form-control-file mt-2" value="انتخاب فایل" #fileInput multiple>
     <div class="d-flex justify-content-between">
@@ -42,5 +42,6 @@
       <button class="mt-2" mat-raised-button color="warn" type="submit" (click)="deleteEpisodeAudios()">حذف کامل</button>
     </div>
     <mat-progress-bar *ngIf="showProgressBar" mode="indeterminate"></mat-progress-bar>
+    {{uploadCounter}}
   </mat-tab>
 </mat-tab-group>

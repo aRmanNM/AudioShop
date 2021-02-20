@@ -33,6 +33,10 @@
         <mat-header-cell *matHeaderCellDef>مبلغ تکی</mat-header-cell>
         <mat-cell *matCellDef="let episode"> {{episode.price | number}} ریال</mat-cell>
     </ng-container>
+  <ng-container matColumnDef="duration">
+    <mat-header-cell *matHeaderCellDef>زمان دوره</mat-header-cell>
+    <mat-cell *matCellDef="let episode"> {{episode.totalAudiosDuration}}</mat-cell>
+  </ng-container>
     <ng-container matColumnDef="sort">
         <mat-header-cell *matHeaderCellDef>ترتیب نمایش</mat-header-cell>
         <mat-cell *matCellDef="let episode"> {{episode.sort}}</mat-cell>

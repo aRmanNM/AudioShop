@@ -5,6 +5,9 @@ import {CoursesAndEpisodesService} from '../../../services/courses-and-episodes.
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Episode} from '../../../models/episode';
 import {environment} from '../../../../environments/environment';
+import {concatAll, concatMap, tap} from 'rxjs/operators';
+import {concat, from, Observable, of, pipe} from 'rxjs';
+import {Audio} from '../../../models/audio';
 
 interface DialogData {
   episode: Episode;
@@ -20,6 +23,7 @@ export class EpisodeCreateEditComponent implements OnInit {
   baseUrl = environment.apiUrl + 'files/';
   showProgressBar = false;
   audioFiles = [];
+  uploadCounter: string;
   @ViewChild('fileInput') fileInput: ElementRef;
 
   episodeForm = new FormGroup(
@@ -76,22 +80,27 @@ export class EpisodeCreateEditComponent implements OnInit {
   }
 
   uploadAudios(): any {
+    this.showProgressBar = true;
+    // used observable concatenation to implement sequential http requests
+    // article i learned this from: https://blog.angular-university.io/rxjs-higher-order-mapping/
     const nativeElement = this.fileInput.nativeElement;
-    for (let i = 0; i < nativeElement.files.length; i++) {
-      this.showProgressBar = true;
-      console.log(`${i + 1}/${nativeElement.files.length}`);
-      this.coursesAndEpisodesService.uploadAudio(this.data.episode.id, nativeElement.files[i]).subscribe((res) => {
+    let counter = 1;
+    from(nativeElement.files)
+      .pipe(
+        concatMap(file => this.coursesAndEpisodesService.uploadAudio(this.data.episode.id, file)))
+      .subscribe((res) => {
+        this.uploadCounter = `uploading ${counter} of ${nativeElement.files.length}`;
+        counter++;
         this.showProgressBar = false;
         this.data.episode.audios.push(res);
         this.getAudios();
       });
-    }
   }
 
   getAudios(): void {
     this.audioFiles = [];
     for (const a of this.data.episode.audios) {
-      this.audioFiles.push(`${this.baseUrl}${this.data.episode.courseId}/${a.fileName}`);
+      this.audioFiles.push(a);
     }
   }
 

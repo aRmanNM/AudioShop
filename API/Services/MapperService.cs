@@ -90,7 +90,8 @@ namespace API.Services
                 Price = episode.Price,
                 Sort = episode.Sort,
                 Audios = episode.Audios,
-                CourseId = episode.CourseId
+                CourseId = episode.CourseId,
+                TotalAudiosDuration = episode.TotalAudiosDuration
             };
         }
 
@@ -102,7 +103,8 @@ namespace API.Services
                 Sort = episodeDto.Sort,
                 Price = episodeDto.Price,
                 CourseId = episodeDto.CourseId,
-                Audios = episodeDto.Audios
+                Audios = episodeDto.Audios,
+                TotalAudiosDuration = episodeDto.TotalAudiosDuration
             };
         }
 
