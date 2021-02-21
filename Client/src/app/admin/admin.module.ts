@@ -13,6 +13,8 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {EpisodesComponent} from './episodes/episodes.component';
 import {EpisodeCreateEditComponent} from './episodes/episode-create-edit/episode-create-edit.component';
 import {DragDropModule} from '@angular/cdk/drag-drop';
+import { CheckoutsComponent } from './checkouts/checkouts.component';
+import { CheckoutEditComponent } from './checkouts/checkout-edit/checkout-edit.component';
 
 
 @NgModule({
@@ -23,7 +25,9 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
     DetailComponent,
     CreateOrEditComponent,
     EpisodesComponent,
-    EpisodeCreateEditComponent
+    EpisodeCreateEditComponent,
+    CheckoutsComponent,
+    CheckoutEditComponent
   ],
   imports: [
     CommonModule,

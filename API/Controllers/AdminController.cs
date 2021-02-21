@@ -50,9 +50,9 @@ namespace API.Controllers
         }
 
         [HttpGet("checkouts")]
-        public async Task<ActionResult<IEnumerable<Checkout>>> GetCheckouts(bool status)
+        public async Task<ActionResult<IEnumerable<Checkout>>> GetCheckouts(bool status, string userName = null)
         {
-            var checkouts = await _checkoutRepository.GetCheckouts(status);
+            var checkouts = await _checkoutRepository.GetCheckouts(status, userName);
             return Ok(checkouts);
         }
 

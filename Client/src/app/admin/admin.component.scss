@@ -1,5 +1,15 @@
 .drawer {
-  height: 100%;
+  height: calc(100% - 64px);
 }
 
 a.mat-list-item.active { background-color: lightgray; }
+
+mat-expansion-panel-header {
+  margin-left: 0px;
+  padding: 1em;
+  color: gray;
+}
+
+::ng-deep div.mat-expansion-panel-body {
+  padding: 0 !important;
+}

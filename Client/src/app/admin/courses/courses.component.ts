@@ -13,7 +13,7 @@ import {SpinnerService} from '../../services/spinner.service';
 })
 export class CoursesComponent implements OnInit {
   courses: Course[];
-  baseUrl = environment.apiUrl + 'files/';
+  baseUrl = environment.apiUrl + 'Files/';
   columnsToDisplay = ['id', 'name', 'price', 'photo', 'actions'];
   searchString = '';
   dialogActive = false;

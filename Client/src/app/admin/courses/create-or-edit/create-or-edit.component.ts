@@ -17,7 +17,7 @@ interface DialogData {
   styleUrls: ['./create-or-edit.component.scss']
 })
 export class CreateOrEditComponent implements OnInit {
-  baseUrl = environment.apiUrl + 'files/';
+  baseUrl = environment.apiUrl + 'Files/';
   imgUrl;
   showProgressBar = false;
   @ViewChild('fileInput') fileInput: ElementRef;
@@ -26,7 +26,7 @@ export class CreateOrEditComponent implements OnInit {
               @Inject(MAT_DIALOG_DATA) public data: DialogData,
               private coursesAndEpisodesService: CoursesAndEpisodesService,
               private snackBar: MatSnackBar,
-              private spinnerService: SpinnerService) {
+              public spinnerService: SpinnerService) {
   }
 
   courseForm = new FormGroup(

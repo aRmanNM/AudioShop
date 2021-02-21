@@ -55,6 +55,7 @@ namespace API.Controllers
             var checkout = new Checkout
             {
                 UserId = user.Id,
+                UserName = user.UserName,
                 Status = false,
                 AmountToCheckout = user.CurrentSalesOfSalesperson,
                 CreatedAt = DateTime.Now

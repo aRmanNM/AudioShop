@@ -22,8 +22,11 @@ namespace API.Repositories
                 return null;
             }
 
-            return await _context.Users
-                .FirstOrDefaultAsync(u => u.CouponCode == couponCode);
+            var userRole = await _context.UserRoles
+                .Include(u => u.User).Include(r => r.Role)
+                .FirstOrDefaultAsync(u => u.User.CouponCode == couponCode && u.Role.Name == "Salesperson");
+
+            return userRole.User;
         }
 
         public async Task<User> FindUserByPhoneNumberAsync(string phoneNumber)

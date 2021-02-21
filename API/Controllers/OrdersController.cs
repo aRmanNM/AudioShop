@@ -48,7 +48,9 @@ namespace API.Controllers
                 Status = false,
                 Date = DateTime.Now,
                 Discount = basketDto.Discount,
-                PriceToPay = basketDto.PriceToPay
+                PriceToPay = basketDto.PriceToPay,
+                OtherCouponCode = basketDto.OtherCouponCode,
+                SalespersonCouponCode = basketDto.SalespersonCouponCode
             };
 
             // TODO: maybe we should create order episode items when order is successfull

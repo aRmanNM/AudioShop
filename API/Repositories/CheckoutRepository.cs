@@ -17,9 +17,15 @@ namespace API.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Checkout>> GetCheckouts(bool status)
+        public async Task<IEnumerable<Checkout>> GetCheckouts(bool status, string userName)
         {
-            return await _context.Checkouts.Where(c => c.Status == status).ToArrayAsync();
+            var checkouts = _context.Checkouts.AsQueryable();
+            if(!string.IsNullOrEmpty(userName))
+            {
+                checkouts = checkouts.Where(c => c.UserName == userName);
+            }
+
+            return await checkouts.Where(c => c.Status == status).ToArrayAsync();
         }
 
         public Checkout EditCheckout(Checkout checkout)
