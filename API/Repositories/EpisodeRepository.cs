@@ -5,7 +5,6 @@ using API.Data;
 using API.Interfaces;
 using API.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
 
 namespace API.Repositories
 {
@@ -40,7 +39,9 @@ namespace API.Repositories
         public async Task<IEnumerable<Episode>> GetCourseEpisodes(int courseId)
         {
             return await _context.Episodes.Where(x => x.CourseId == courseId)
-                .Include(x => x.Course).ToListAsync();
+                .Include(x => x.Course)
+                .OrderBy(e => e.Sort)
+                .ToListAsync();
         }
 
         public async Task<Episode> GetEpisodeById(int id)

@@ -4,6 +4,7 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {Course} from '../models/course';
 import {Observable} from 'rxjs';
 import {Episode} from '../models/episode';
+import {delay} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'

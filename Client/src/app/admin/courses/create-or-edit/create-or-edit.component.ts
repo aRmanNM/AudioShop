@@ -5,6 +5,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {CoursesAndEpisodesService} from '../../../services/courses-and-episodes.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {environment} from '../../../../environments/environment';
+import {SpinnerService} from '../../../services/spinner.service';
 
 interface DialogData {
   course: Course;
@@ -24,7 +25,8 @@ export class CreateOrEditComponent implements OnInit {
   constructor(public dialogRef: MatDialogRef<CreateOrEditComponent>,
               @Inject(MAT_DIALOG_DATA) public data: DialogData,
               private coursesAndEpisodesService: CoursesAndEpisodesService,
-              private snackBar: MatSnackBar) {
+              private snackBar: MatSnackBar,
+              private spinnerService: SpinnerService) {
   }
 
   courseForm = new FormGroup(

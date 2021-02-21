@@ -20,34 +20,36 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 @NgModule({
-    providers: [
-        {provide: DateAdapter, useClass: MaterialPersianDateAdapter, deps: [MAT_DATE_LOCALE]},
-        {provide: MAT_DATE_FORMATS, useValue: PERSIAN_DATE_FORMATS}
-    ],
-    declarations: [],
-    imports: [
-        CommonModule
-    ],
-    exports: [
-        MatInputModule,
-        MatDatepickerModule,
-        MatFormFieldModule,
-        MatButtonModule,
-        MatSidenavModule,
-        MatListModule,
-        MatToolbarModule,
-        MatCardModule,
-        MatIconModule,
-        MatMenuModule,
-        MatTableModule,
-        MatChipsModule,
-        MatDialogModule,
-        MatTabsModule,
-        MatSnackBarModule,
-        MatProgressBarModule
-    ]
+  providers: [
+    {provide: DateAdapter, useClass: MaterialPersianDateAdapter, deps: [MAT_DATE_LOCALE]},
+    {provide: MAT_DATE_FORMATS, useValue: PERSIAN_DATE_FORMATS}
+  ],
+  declarations: [],
+  imports: [
+    CommonModule
+  ],
+  exports: [
+    MatInputModule,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    MatButtonModule,
+    MatSidenavModule,
+    MatListModule,
+    MatToolbarModule,
+    MatCardModule,
+    MatIconModule,
+    MatMenuModule,
+    MatTableModule,
+    MatChipsModule,
+    MatDialogModule,
+    MatTabsModule,
+    MatSnackBarModule,
+    MatProgressBarModule,
+    MatProgressSpinnerModule
+  ]
 })
 export class MaterialModule {
 }

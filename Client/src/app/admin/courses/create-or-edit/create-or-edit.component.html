@@ -37,3 +37,5 @@
     <mat-progress-bar *ngIf="showProgressBar" mode="indeterminate"></mat-progress-bar>
   </mat-tab>
 </mat-tab-group>
+
+<mat-progress-bar color="accent" mode="indeterminate" *ngIf="spinnerService.visibility | async"></mat-progress-bar>

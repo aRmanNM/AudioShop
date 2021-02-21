@@ -12,6 +12,7 @@ import {AuthGuard} from './guards/auth.guard';
 import {AdminAuthGuard} from './guards/admin-auth.guard';
 import {JwtInterceptor} from './interceptors/jwt.interceptor';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {CustomHttpInterceptor} from './interceptors/http.interceptor';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,10 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
   providers: [AuthGuard, AdminAuthGuard, {
     provide: HTTP_INTERCEPTORS,
     useClass: JwtInterceptor,
+    multi: true
+  }, {
+    provide: HTTP_INTERCEPTORS,
+    useClass: CustomHttpInterceptor,
     multi: true
   }],
   bootstrap: [AppComponent]

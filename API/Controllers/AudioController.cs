@@ -91,7 +91,7 @@ namespace API.Controllers
             }
 
             episode.Audios = null;
-            episode.TotalAudiosDuration = 0;            
+            episode.TotalAudiosDuration = 0;
             await _unitOfWork.CompleteAsync();
 
             return Ok();
