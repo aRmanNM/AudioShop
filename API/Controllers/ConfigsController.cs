@@ -29,9 +29,9 @@ namespace API.Controllers
 
         // [Authorize(Roles = "Admin")]
         [HttpGet("all")]
-        public async Task<ActionResult<IEnumerable<Config>>> GetAllConfigs()
+        public async Task<ActionResult<IEnumerable<Config>>> GetAllConfigs([FromQuery] string group = "General")
         {
-            return Ok(await _configRepo.GetAllConfigsAsync());
+            return Ok(await _configRepo.GetAllConfigsAsync(group));
         }
 
         [Authorize(Roles = "Admin")]

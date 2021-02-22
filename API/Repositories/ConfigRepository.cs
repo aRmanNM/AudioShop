@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using API.Data;
 using API.Interfaces;
@@ -15,14 +16,14 @@ namespace API.Repositories
             _context = context;
         }
 
-        public async Task<Config> GetConfigAsync(string title)
+        public async Task<Config> GetConfigAsync(string titleEn)
         {
-            return await _context.Configs.FirstOrDefaultAsync(c => c.TitleEn == title);
+            return await _context.Configs.FirstOrDefaultAsync(c => c.TitleEn == titleEn);
         }
 
-        public async Task<IEnumerable<Config>> GetAllConfigsAsync()
+        public async Task<IEnumerable<Config>> GetAllConfigsAsync(string GroupEn)
         {
-            return await _context.Configs.ToListAsync();
+            return await _context.Configs.Where(c => c.GroupEn.ToUpper() == GroupEn.ToUpper()).ToListAsync();
         }
 
         public async Task<Config> SetConfigAsync(Config config)

@@ -6,8 +6,8 @@ namespace API.Interfaces
 {
     public interface IConfigRepository
     {
-         Task<Config> GetConfigAsync(string title);
-         Task<IEnumerable<Config>> GetAllConfigsAsync();
+         Task<Config> GetConfigAsync(string titleEn);
+         Task<IEnumerable<Config>> GetAllConfigsAsync(string GroupEn);
          Task<Config> SetConfigAsync(Config config);
     }
 }
