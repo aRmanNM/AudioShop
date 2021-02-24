@@ -8,7 +8,6 @@ namespace API.Interfaces
     {
         // Model to DTO
         CourseDto MapCourseToCourseDto(Course course);
-        OrderForSalespersonDto MapOrderToOrderForSalespersonDto(Order order, int salePercent);
         EpisodeDto MapEpisodeToEpisodeDto(Episode episode);
 
         // DTO to Model

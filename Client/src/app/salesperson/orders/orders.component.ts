@@ -1,5 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {SalespersonService} from '../../services/salesperson.service';
+import {SpinnerService} from '../../services/spinner.service';
+import {ConfigService} from '../../services/config.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-orders',
@@ -9,15 +12,30 @@ import {SalespersonService} from '../../services/salesperson.service';
 export class OrdersComponent implements OnInit {
   orders: any[];
   salesAmount: number;
+  checkoutThreshold: number;
+  credentialAccepted = false;
   columnsToDisplay = ['priceToPay', 'date', 'salespersonShareAmount', 'basketItemsNames'];
 
-  constructor(private salespersonService: SalespersonService) {
-
+  constructor(private salespersonService: SalespersonService,
+              public spinnerService: SpinnerService,
+              private configService: ConfigService,
+              private snackBar: MatSnackBar) {
   }
 
   ngOnInit(): void {
+
+    this.salespersonService.ordersUpdated.subscribe((res) => {
+      this.getEverything();
+    });
+
+    this.salespersonService.updateOrders();
+  }
+
+  getEverything(): void {
     this.getSaleAmount();
     this.getOrdersForCheckout();
+    this.getCheckoutThreshold();
+    this.checkSalespersonCredetialAccepted();
   }
 
   getOrdersForCheckout(): void {
@@ -34,9 +52,28 @@ export class OrdersComponent implements OnInit {
 
   createCheckout(): void {
     this.salespersonService.createCheckout().subscribe((res) => {
-      console.log('checkout created!', res);
-      this.getSaleAmount();
+      this.snackBar.open('درخواست ثبت شد. برای بررسی وضعیت به بخش درخواست ها برید', null, {
+        duration: 5000,
+      });
+
+      this.salespersonService.updateCheckout();
     });
+  }
+
+  getCheckoutThreshold(): void {
+    this.configService.getConfig('DefaultCheckoutThreshold').subscribe((res) => {
+      this.checkoutThreshold = Number(res.value);
+    });
+  }
+
+  checkSalespersonCredetialAccepted(): void {
+    this.salespersonService.checkSalespersonCredetialAccepted().subscribe((res) => {
+      this.credentialAccepted = res;
+    });
+  }
+
+  refresh(): void {
+    this.salespersonService.updateOrders();
   }
 
 }

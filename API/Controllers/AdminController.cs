@@ -50,10 +50,22 @@ namespace API.Controllers
         }
 
         [HttpGet("checkouts")]
-        public async Task<ActionResult<IEnumerable<Checkout>>> GetCheckouts(bool status, string userName = null)
+        public async Task<ActionResult<IEnumerable<Checkout>>> GetCheckouts(bool status, string userName = null, bool includeSalespersonInfo = false)
         {
-            var checkouts = await _checkoutRepository.GetCheckouts(status, userName);
+            var checkouts = await _checkoutRepository.GetCheckouts(status, userName, includeSalespersonInfo);
             return Ok(checkouts);
+        }
+
+        [HttpGet("checkouts/{checkoutId}")]
+        public async Task<ActionResult<Checkout>> GetCheckoutWithInfo(int checkoutId)
+        {
+            var checkout = await _checkoutRepository.GetCheckoutWithId(checkoutId);
+            if (checkout == null)
+            {
+                return NotFound("cehckout not found");
+            }
+
+            return Ok(checkout);
         }
 
         [HttpPut("checkouts/{id}")]

@@ -19,7 +19,6 @@ interface DialogData {
 export class CreateOrEditComponent implements OnInit {
   baseUrl = environment.apiUrl + 'Files/';
   imgUrl;
-  showProgressBar = false;
   @ViewChild('fileInput') fileInput: ElementRef;
 
   constructor(public dialogRef: MatDialogRef<CreateOrEditComponent>,
@@ -57,6 +56,7 @@ export class CreateOrEditComponent implements OnInit {
         this.snackBar.open('ویرایش دوره موفقیت آمیز بود', null, {
           duration: 2000,
         });
+        this.coursesAndEpisodesService.onUpdate();
         this.closeDialog();
       });
     } else {
@@ -64,6 +64,7 @@ export class CreateOrEditComponent implements OnInit {
         this.snackBar.open('دوره جدید با موفقیت ایجاد شد', null, {
           duration: 2000,
         });
+        this.coursesAndEpisodesService.onUpdate();
         this.closeDialog();
       });
     }
@@ -74,12 +75,11 @@ export class CreateOrEditComponent implements OnInit {
   }
 
   uploadPhoto(): any {
-    this.showProgressBar = true;
     const nativeElement = this.fileInput.nativeElement;
     this.coursesAndEpisodesService.uploadPhoto(this.data.course.id, nativeElement.files[0]).subscribe((res) => {
-      this.showProgressBar = false;
       this.data.course.photoFileName = res.fileName;
       this.getImage();
+      this.coursesAndEpisodesService.onUpdate();
     });
   }
 

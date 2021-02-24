@@ -373,6 +373,9 @@ namespace API.Data.Migrations
                     b.Property<int?>("BankCardPhotoId")
                         .HasColumnType("int");
 
+                    b.Property<string>("BankName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("IdCardNumber")
                         .HasColumnType("nvarchar(max)");
 
@@ -446,6 +449,9 @@ namespace API.Data.Migrations
 
                     b.Property<string>("CouponCode")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("CredentialAccepted")
+                        .HasColumnType("bit");
 
                     b.Property<decimal>("CurrentSalesOfSalesperson")
                         .HasColumnType("decimal(18)");

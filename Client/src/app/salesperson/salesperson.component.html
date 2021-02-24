@@ -1,9 +1,10 @@
 <app-topbar></app-topbar>
-<mat-drawer-container class="container" [dir]="'rtl'">
-  <mat-drawer mode="side" opened>
+<mat-drawer-container [dir]="'rtl'" class="drawer">
+  <mat-drawer mode="side" opened style="width: 200px;">
     <app-sidebar>
-      <a mat-list-item [routerLink]="['./orders']" routerLinkActive="active">سابقه خریدها</a>
+      <a mat-list-item [routerLink]="['./orders']" routerLinkActive="active">تراکنش های کوپن</a>
       <a mat-list-item [routerLink]="['./checkouts']" routerLinkActive="active">درخواست های تصفیه</a>
+      <a mat-list-item [routerLink]="['./credentials']" routerLinkActive="active">مدارک هویتی</a>
     </app-sidebar>
   </mat-drawer>
   <mat-drawer-content>

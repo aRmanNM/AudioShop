@@ -34,7 +34,6 @@
     <img src="{{ imgUrl }}" *ngIf="data.course.photoFileName">
     <input type="file" class="form-control-file mt-2" value="انتخاب فایل" #fileInput>
     <button class="mt-2" mat-raised-button color="primary" type="submit" (click)="uploadPhoto()">اپلود</button>
-    <mat-progress-bar *ngIf="showProgressBar" mode="indeterminate"></mat-progress-bar>
   </mat-tab>
 </mat-tab-group>
 

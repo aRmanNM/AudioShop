@@ -8,9 +8,10 @@ namespace API.Interfaces
 {
     public interface ICheckoutRepository
     {
-        Task<IEnumerable<Checkout>> GetCheckouts(bool status, string userName);
+        Task<IEnumerable<Checkout>> GetCheckouts(bool status, string userName, bool includeSalespersonInfo = false);
+        Task<Checkout> GetCheckoutWithId(int checkoutId);
         Checkout EditCheckout(Checkout checkout);
         Task<Checkout> CreateCheckout(Checkout checkout);
-        Task<IEnumerable<Checkout>> GetCheckouts(string userId);
+        Task<IEnumerable<Checkout>> GetSalespersonCheckouts(string userId);
     }
 }

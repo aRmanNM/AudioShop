@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {CoursesAndEpisodesService} from '../../services/courses-and-episodes.service';
 import {Course} from '../../models/course';
 import {environment} from '../../../environments/environment';
@@ -20,11 +20,15 @@ export class CoursesComponent implements OnInit {
 
   constructor(private coursesAndEpisodesService: CoursesAndEpisodesService,
               public dialog: MatDialog,
-              private spinnerService: SpinnerService) {
+              public spinnerService: SpinnerService) {
   }
 
   ngOnInit(): void {
-    this.getCourses();
+    this.coursesAndEpisodesService.updatedEmmiter.subscribe(() => {
+      this.getCourses();
+    });
+
+    this.coursesAndEpisodesService.onUpdate();
   }
 
   getCourses(): void {
@@ -32,6 +36,7 @@ export class CoursesComponent implements OnInit {
       this.courses = res;
     });
   }
+
 
   openAddOrEditDialog(course: Course): void {
     this.dialogActive = true;
@@ -41,17 +46,16 @@ export class CoursesComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(res => {
-      this.getCourses();
       this.dialogActive = false;
     });
   }
 
   search(): void {
-    this.getCourses();
+    this.coursesAndEpisodesService.onUpdate();
   }
 
   clearSearch(): void {
     this.searchString = '';
-    this.getCourses();
+    this.coursesAndEpisodesService.onUpdate();
   }
 }

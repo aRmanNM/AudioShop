@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Threading.Tasks;
 using API.Dtos;
 using API.Interfaces;
@@ -77,7 +76,7 @@ namespace API.Controllers
                 var salesperson = await _userRepository.GetSalespersonByCouponCode(order.SalespersonCouponCode);
                 if (salesperson != null)
                 {
-                    var salespersonShare = order.PriceToPay - ((order.PriceToPay * salesperson.SalePercentageOfSalesperson) / 100);
+                    var salespersonShare = (order.PriceToPay * salesperson.SalePercentageOfSalesperson) / 100;
                     order.SalespersonShare = salespersonShare;
                     salesperson.CurrentSalesOfSalesperson += salespersonShare;
                 }

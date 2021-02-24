@@ -17,9 +17,15 @@ namespace API.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Checkout>> GetCheckouts(bool status, string userName)
+        public async Task<IEnumerable<Checkout>> GetCheckouts(bool status, string userName, bool includeSalespersonInfo = false)
         {
             var checkouts = _context.Checkouts.AsQueryable();
+
+            if (includeSalespersonInfo)
+            {
+                checkouts = checkouts.Include(c => c.User).ThenInclude(u => u.SalespersonCredential);
+            }
+
             if(!string.IsNullOrEmpty(userName))
             {
                 checkouts = checkouts.Where(c => c.UserName == userName);
@@ -40,9 +46,17 @@ namespace API.Repositories
             return checkout;
         }
 
-        public async Task<IEnumerable<Checkout>> GetCheckouts(string userId)
+        public async Task<IEnumerable<Checkout>> GetSalespersonCheckouts(string userId)
         {
             return await _context.Checkouts.Where(c => c.UserId == userId).ToArrayAsync();
+        }
+
+        public async Task<Checkout> GetCheckoutWithId(int checkoutId)
+        {
+            return await _context.Checkouts
+                .Include(c => c.User)
+                .ThenInclude(u => u.SalespersonCredential)
+                .FirstOrDefaultAsync(c => c.Id == checkoutId);
         }
     }
 }

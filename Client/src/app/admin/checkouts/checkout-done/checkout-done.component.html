@@ -1,10 +1,10 @@
 <mat-toolbar>
   <input type="text" class="form-control" style="width: 150px;" min="1" [(ngModel)]="userName" placeholder="نام کاربری">
   <button mat-flat-button color="primary" style="margin-right: 6px;" (click)="getCheckouts()">
-      انتخاب
+    انتخاب
   </button>
   <button mat-stroked-button color="basic" style="margin-right: 6px;" (click)="clearUserName()">
-      همه موارد
+    همه موارد
   </button>
 </mat-toolbar>
 
@@ -18,7 +18,7 @@
     <td mat-cell *matCellDef="let checkout"> {{checkout.id}} </td>
   </ng-container>
   <ng-container matColumnDef="userName">
-    <th mat-header-cell *matHeaderCellDef>نام کاربری</th>
+    <th mat-header-cell *matHeaderCellDef>نام کاربری معرف</th>
     <td mat-cell *matCellDef="let checkout"> {{checkout.userName}} </td>
   </ng-container>
   <ng-container matColumnDef="paymentAmount">
@@ -44,8 +44,9 @@
   <ng-container matColumnDef="actions">
     <th mat-header-cell *matHeaderCellDef></th>
     <td mat-cell *matCellDef="let checkout">
-      <button class="action" mat-flat-button color="primary" style="float: left;" (click)="openAddOrEditDialog(checkout)">
-        ویرایش
+      <button class="action" mat-flat-button color="primary" style="float: left;"
+              (click)="openAddOrEditDialog(checkout)">
+        پردازش
       </button>
     </td>
   </ng-container>

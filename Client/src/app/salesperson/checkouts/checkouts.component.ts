@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {SalespersonService} from '../../services/salesperson.service';
 import {Checkout} from '../../models/checkout';
+import {SpinnerService} from '../../services/spinner.service';
 
 @Component({
   selector: 'app-checkouts',
@@ -10,14 +11,20 @@ import {Checkout} from '../../models/checkout';
 export class CheckoutsComponent implements OnInit {
   checkouts: Checkout[];
   totalSaleAmount: number;
+
   columnsToDisplay = ['amountToCheckout', 'createdAt', 'status', 'paymentReceipt', 'paidAt'];
 
-  constructor(private salespersonService: SalespersonService) {
+  constructor(private salespersonService: SalespersonService,
+              public spinnerService: SpinnerService) {
   }
 
   ngOnInit(): void {
-    this.getCheckouts();
-    this.getTotalSaleAmount();
+    this.salespersonService.checkoutUpdated.subscribe((res) => {
+      this.getCheckouts();
+      this.getTotalSaleAmount();
+    });
+
+    this.salespersonService.updateCheckout();
   }
 
   getCheckouts(): void {

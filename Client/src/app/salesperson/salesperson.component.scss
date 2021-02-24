@@ -1,5 +1,5 @@
-.container {
-  height: 100%;
+.drawer {
+  height: calc(100% - 64px);
 }
 
 a.mat-list-item.active { background-color: lightgray; }

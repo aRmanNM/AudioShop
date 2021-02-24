@@ -1,3 +1,5 @@
+import {SalespersonInfo} from './salesperson-info';
+
 export interface  Checkout {
   id: number;
   userId: string;
@@ -7,5 +9,6 @@ export interface  Checkout {
   paymentReceipt: string;
   createdAt: Date;
   paidAt: Date;
+  user: SalespersonInfo;
 }
 

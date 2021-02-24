@@ -33,6 +33,12 @@ export class RegisterComponent implements OnInit {
         [Validators.required, Validators.maxLength(40)],
         [this.validateUserNameNotTaken()]
       ),
+      firstName: new FormControl(''),
+      lastName: new FormControl(''),
+      city: new FormControl(''),
+      country: new FormControl(''),
+      age: new FormControl(''),
+      gender: new FormControl(''),
       password: new FormControl('', [
         Validators.required,
         // Validators.pattern(this.passwordPattern),
@@ -52,7 +58,7 @@ export class RegisterComponent implements OnInit {
   register(): void {
     this.authService.register(this.registerForm.value).subscribe((res) => {
       console.log('user registered as salesperson');
-      this.router.navigate(['/shared']);
+      this.router.navigate(['/salesperson']);
     }, error => {
       console.log(error);
     });

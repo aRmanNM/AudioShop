@@ -4,6 +4,8 @@
   <span class="spacer"></span>
 </mat-toolbar>
 
+<mat-progress-bar color="accent" mode="indeterminate" *ngIf="spinnerService.visibility | async"></mat-progress-bar>
+
 <table mat-table [dataSource]="checkouts">
 
   <ng-container matColumnDef="amountToCheckout">
@@ -13,7 +15,7 @@
 
   <ng-container matColumnDef="createdAt">
     <th mat-header-cell *matHeaderCellDef>تاریخ ثبت درخواست</th>
-    <td mat-cell *matCellDef="let checkout"> {{checkout.createdAt | date}} </td>
+    <td mat-cell *matCellDef="let checkout"> {{checkout.createdAt}} </td>
   </ng-container>
 
   <ng-container matColumnDef="status">

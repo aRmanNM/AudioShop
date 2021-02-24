@@ -19,5 +19,6 @@ namespace API.Dtos
 
         public short Age { get; set; }
         public Gender Gender { get; set; }
+        public bool Employed { get; set; }
     }
 }

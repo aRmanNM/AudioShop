@@ -41,6 +41,7 @@ namespace API
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IMapperService, MapperService>();
             services.AddScoped<IReviewRepository, ReviewRepository>();
+            services.AddScoped<ICredentialRepository, CredentialRepository>();
 
             services.AddSingleton<ISMSService, SMSService>();
             services.AddSingleton<IFileService, FileService>();

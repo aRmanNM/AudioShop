@@ -144,6 +144,7 @@ namespace API.Data
             var configs = new List<Config> {
                 new Config { TitleEn = "DefaultDiscountPercentage", Value = "20", TitleFa = "مقدار پیشفرض برای کد تخفیف", GroupEn = "General", GroupFa = "تنظیمات کلی" },
                 new Config { TitleEn = "DefaultSalespersonSharePercentage", Value = "10", TitleFa = "مقدار پیشفرض برای سهم فروشنده از هر خرید", GroupEn = "General", GroupFa = "تنظیمات کلی" },
+                new Config { TitleEn = "DefaultCheckoutThreshold", Value = "3000000", TitleFa = "حداقل میزان خرید برای ایجاد درخواست پرداخت", GroupEn = "General", GroupFa = "تنظیمات کلی" },
 
                 new Config { TitleEn = "ReminderNotifTitle", Value = "یادآوری دوره", TitleFa = "عنوان اعلان", GroupEn = "Reminder", GroupFa = "اعلان یادآوری" },
                 new Config { TitleEn = "ReminderNotifBody", Value = "برو دوره تو گوش بده ادم حسابی", TitleFa = "بدنه اعلان", GroupEn = "Reminder", GroupFa = "اعلان یادآوری" },

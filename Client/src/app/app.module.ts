@@ -13,6 +13,8 @@ import {AdminAuthGuard} from './guards/admin-auth.guard';
 import {JwtInterceptor} from './interceptors/jwt.interceptor';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {CustomHttpInterceptor} from './interceptors/http.interceptor';
+import {RouteReuseStrategy} from '@angular/router';
+import {CustomRouteReuseStrategy} from './reuse-strategy';
 
 @NgModule({
   declarations: [
@@ -29,15 +31,21 @@ import {CustomHttpInterceptor} from './interceptors/http.interceptor';
     FormsModule,
     ReactiveFormsModule
   ],
-  providers: [AuthGuard, AdminAuthGuard, {
-    provide: HTTP_INTERCEPTORS,
-    useClass: JwtInterceptor,
-    multi: true
-  }, {
-    provide: HTTP_INTERCEPTORS,
-    useClass: CustomHttpInterceptor,
-    multi: true
-  }],
+  providers: [
+    {
+      provide: RouteReuseStrategy,
+      useClass: CustomRouteReuseStrategy
+    },
+    AuthGuard,
+    AdminAuthGuard, {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtInterceptor,
+      multi: true
+    }, {
+      provide: HTTP_INTERCEPTORS,
+      useClass: CustomHttpInterceptor,
+      multi: true
+    }],
   bootstrap: [AppComponent]
 })
 export class AppModule {

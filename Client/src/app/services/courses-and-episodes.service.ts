@@ -1,18 +1,22 @@
-import {Injectable} from '@angular/core';
+import {Injectable, OnInit} from '@angular/core';
 import {environment} from '../../environments/environment';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Course} from '../models/course';
-import {Observable} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import {Episode} from '../models/episode';
-import {delay} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CoursesAndEpisodesService {
+  updatedEmmiter = new Subject();
   baseUrl = environment.apiUrl + 'api/courses';
 
   constructor(private http: HttpClient) {
+  }
+
+  onUpdate(): any {
+    this.updatedEmmiter.next();
   }
 
   getCourses(search: string): Observable<Course[]> {

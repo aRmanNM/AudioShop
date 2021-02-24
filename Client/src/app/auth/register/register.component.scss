@@ -1,5 +1,4 @@
 .centered-container {
-  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -7,6 +6,7 @@
 
 mat-card {
   min-width: 300px;
+  margin: 50px ;
 }
 
 mat-card mat-card-content form {

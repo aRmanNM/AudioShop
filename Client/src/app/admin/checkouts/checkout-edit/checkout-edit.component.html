@@ -1,7 +1,14 @@
-<mat-form-field appearance="fill">
-  <mat-label>رسید پرداخت</mat-label>
-  <input matInput [(ngModel)]="paymentReceipt">
-</mat-form-field>
-<button mat-raised-button color="primary" (click)="addPaymentReceipt()">
-  ذخیره
-</button>
+<mat-tab-group animationDuration="0ms" mat-align-tabs="center" mat-stretch-tabs backgroundColor="primary" dir="rtl">
+  <mat-tab label="پردازش درخواست معرف">
+    <p>اطلاعات کردنشیال فروشنده اینجا قرار میگیره</p>
+    <mat-form-field appearance="fill">
+      <mat-label>رسید پرداخت</mat-label>
+      <input matInput [(ngModel)]="paymentReceipt">
+    </mat-form-field>
+    <button mat-raised-button color="primary" (click)="addPaymentReceipt()">
+      اتمام درخواست
+    </button>
+  </mat-tab>
+</mat-tab-group>
+
+<mat-progress-bar color="accent" mode="indeterminate" *ngIf="spinnerService.visibility | async"></mat-progress-bar>

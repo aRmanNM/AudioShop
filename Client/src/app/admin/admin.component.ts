@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {CoursesAndEpisodesService} from '../services/courses-and-episodes.service';
 
 @Component({
   selector: 'app-admin',
@@ -6,10 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./admin.component.scss']
 })
 export class AdminComponent implements OnInit {
-
   constructor() { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
 }

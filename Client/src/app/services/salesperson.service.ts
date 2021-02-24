@@ -1,14 +1,30 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../../environments/environment';
-import {Observable} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import {Checkout} from '../models/checkout';
+import {SalespersonCredential} from '../models/salesperson-credential';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SalespersonService {
   baseUrl = environment.apiUrl + 'api/salesperson/';
+  credentialUpdated = new Subject<any>();
+  checkoutUpdated = new Subject<any>();
+  ordersUpdated = new Subject<any>();
+
+  updateCredential(): void {
+    this.credentialUpdated.next();
+  }
+
+  updateCheckout(): void {
+    this.checkoutUpdated.next();
+  }
+
+  updateOrders(): void {
+    this.ordersUpdated.next();
+  }
 
   constructor(private http: HttpClient) {
   }
@@ -31,6 +47,27 @@ export class SalespersonService {
 
   createCheckout(): Observable<Checkout> {
     return this.http.post<Checkout>(this.baseUrl + 'checkouts', {});
+  }
+
+  getCredential(): Observable<SalespersonCredential> {
+    return this.http.get<SalespersonCredential>(this.baseUrl + 'credential');
+  }
+
+  updateOrCreateCredential(credential: SalespersonCredential): Observable<SalespersonCredential> {
+    return this.http.put<SalespersonCredential>(this.baseUrl + 'credential', credential);
+  }
+
+  uploadPhoto(credentialId: number, photo: any, usedAs: string): any {
+    console.log();
+    const formData = new FormData();
+    formData.append('file', photo);
+    return this.http.post(this.baseUrl + 'credential/photo', formData, {
+      params: new HttpParams().set('usedas', usedAs).set('credentialId', `${credentialId}`)
+    });
+  }
+
+  checkSalespersonCredetialAccepted(): Observable<boolean> {
+    return this.http.get<boolean>(this.baseUrl + 'credential/Accepted');
   }
 
 }

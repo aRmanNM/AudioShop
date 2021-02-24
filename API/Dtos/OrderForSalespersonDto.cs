@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using API.Models;
 
 namespace API.Dtos
 {
@@ -9,11 +10,11 @@ namespace API.Dtos
         public decimal Price { get; set; }
         public DateTime Date { get; set; }
         public decimal SalespersonShareAmount { get; set; }
-        public ICollection<EpisodeDto> Episodes { get; set; }
+        public ICollection<string> Courses { get; set; }
 
         public OrderForSalespersonDto()
         {
-            Episodes = new Collection<EpisodeDto>();
+            Courses = new Collection<string>();
         }
     }
 }

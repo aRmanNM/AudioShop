@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Data;
+using API.Dtos;
 using API.Interfaces;
 using API.Models;
 using Microsoft.EntityFrameworkCore;
@@ -18,7 +19,7 @@ namespace API.Repositories
 
         public async Task<Order> CreateOrder(Order order)
         {
-            await _context.AddAsync(order);
+            await _context.Orders.AddAsync(order);
             return order;
         }
 
@@ -35,13 +36,24 @@ namespace API.Repositories
                 .FirstOrDefaultAsync(o => o.Id == orderId);
         }
 
-        public async Task<IEnumerable<Order>> GetOrdersForCheckout(string couponCode)
+        public async Task<IEnumerable<OrderForSalespersonDto>> GetOrdersForCheckout(string couponCode)
         {
-            return await _context.Orders
+            var orders = await _context.Orders
                 .Include(o => o.OrderEpisodes)
                 .ThenInclude(oe => oe.Episode)
-                .Where(o => o.SalespersonCouponCode == couponCode && o.Status == true)
+                .ThenInclude(oee => oee.Course)
+                .Where(o => o.Status == true && o.SalespersonCouponCode == couponCode)
+                .Select(o => new {o.PriceToPay, o.Date, o.SalespersonShare, o.OrderEpisodes})
                 .ToArrayAsync();
+
+            var OrderForSalespersonDtos = orders.Select(o => new OrderForSalespersonDto {
+                Price = o.PriceToPay,
+                Date = o.Date,
+                SalespersonShareAmount = o.SalespersonShare,
+                Courses = o.OrderEpisodes.Select(oe => oe.Episode.Course.Name).ToArray()
+            });
+
+            return OrderForSalespersonDtos;
         }
     }
 }

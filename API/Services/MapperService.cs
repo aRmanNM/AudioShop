@@ -69,17 +69,6 @@ namespace API.Services
             };
         }
 
-        public OrderForSalespersonDto MapOrderToOrderForSalespersonDto(Order order, int salePercent)
-        {
-            return new OrderForSalespersonDto()
-            {
-                // Courses = order.OrderCourses.Select(oc => oc.Course.Name).ToArray(),
-                Date = order.Date,
-                Price = order.PriceToPay,
-                SalespersonShareAmount = order.PriceToPay - ((order.PriceToPay * salePercent) / 100)
-            };
-        }
-
         public EpisodeDto MapEpisodeToEpisodeDto(Episode episode)
         {
             return new EpisodeDto
