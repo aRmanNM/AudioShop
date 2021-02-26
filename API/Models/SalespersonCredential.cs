@@ -10,6 +10,7 @@ namespace API.Models
         public string BankCardNumber { get; set; }
         public string BankCardName { get; set; }
         public string BankName { get; set; }
+        public string Phone { get; set; }
         public Photo IdCardPhoto { get; set; }
         public Photo BankCardPhoto { get; set; }
     }

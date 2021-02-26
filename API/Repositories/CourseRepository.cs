@@ -48,7 +48,7 @@ namespace API.Repositories
                 courses = courses.Where(c => c.Name.Contains(search));
             }
 
-            return await courses.OrderByDescending(c => c.Id).AsNoTracking().ToArrayAsync();
+            return await courses.Where(c => c.IsActive).OrderByDescending(c => c.Id).AsNoTracking().ToArrayAsync();
         }
         public async Task<Course> GetCourseById(int id)
         {

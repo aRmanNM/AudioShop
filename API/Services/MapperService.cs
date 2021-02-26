@@ -52,7 +52,8 @@ namespace API.Services
             {
                 Name = courseDto.Name,
                 Price = courseDto.Price,
-                Description = courseDto.Description
+                Description = courseDto.Description,
+                WaitingTimeBetweenEpisodes = courseDto.WaitingTimeBetweenEpisodes
             };
         }
 
@@ -65,6 +66,7 @@ namespace API.Services
                 Name = course.Name,
                 Price = course.Price,
                 PhotoFileName = course.Photo?.FileName,
+                WaitingTimeBetweenEpisodes = course.WaitingTimeBetweenEpisodes,
                 Episodes = course.Episodes.Select(MapEpisodeToEpisodeDto).ToList()
             };
         }

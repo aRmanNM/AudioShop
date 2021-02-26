@@ -12,6 +12,9 @@ namespace API.Models
         public decimal Price { get; set; }
         public string Description { get; set; }
 
+        public int WaitingTimeBetweenEpisodes { get; set; } = 0;
+        public bool IsActive { get; set; } = true;
+
         public Photo Photo { get; set; }
         public ICollection<Episode> Episodes { get; set; }
         public ICollection<Review> Reviews { get; set; }

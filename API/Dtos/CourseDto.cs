@@ -10,6 +10,7 @@ namespace API.Dtos
         public decimal Price { get; set; }
         public string Description { get; set; }
         public string PhotoFileName { get; set; }
+        public int WaitingTimeBetweenEpisodes { get; set; } = 0;
         public ICollection<EpisodeDto> Episodes { get; set; }
     }
 }

@@ -53,6 +53,7 @@ namespace API.Data
                     Name = "دوره آموزشی ازدواج و روابط زناشویی",
                     Price = 1000000,
                     Description = "توضیحاتی در خصوص چگونگی تقویت روابط زناشویی در ازدواج و اینکه کلا چطوریه داستان و باز یه مقدار توضیح دیگه صرفا برا طولانی شدن بیشتر ",
+                    WaitingTimeBetweenEpisodes = 1,
                     Episodes = new List<Episode>() {
                         new Episode {
                             Name = "قسمت اول: چگونگی فلان",
@@ -78,6 +79,7 @@ namespace API.Data
                     Name = "دوره موفقیت و کسب درآمد",
                     Price = 1200000,
                     Description = "چگونه به سادگی و در کمترین زمان بیشترین درآمد ممکن را داشته باشیم تنها با دانستن چند تکنیک ساده و آموزش آن بر عهده ما خواهد بود و اجرای آن توسط شما",
+                    WaitingTimeBetweenEpisodes = 0,
                     Episodes = new List<Episode>() {
                         new Episode {
                             Name = "قسمت اول: چگونگی فلان",
@@ -103,6 +105,7 @@ namespace API.Data
                     Name = "پکیج کامل پرسونال برندینگ",
                     Price = 1000000,
                     Description = "پکج کامل شروع کار جهت گسترش برند شخصی و اینکه چطوری بتونیم تاثیرگذاری بیشتری داشته باشیم",
+                    WaitingTimeBetweenEpisodes = 2,
                     Episodes = new List<Episode>() {
                         new Episode {
                             Name = "قسمت اول: چگونگی فلان",
