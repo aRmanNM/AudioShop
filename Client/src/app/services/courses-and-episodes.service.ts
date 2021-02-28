@@ -21,7 +21,7 @@ export class CoursesAndEpisodesService {
 
   getCourses(search: string): Observable<Course[]> {
     return this.http.get<Course[]>(this.baseUrl, {
-      params: new HttpParams().set('search', search).set('includeepisodes', 'false')
+      params: new HttpParams().set('search', search).set('includeepisodes', 'false').set('includeInactive', 'true')
     });
   }
 

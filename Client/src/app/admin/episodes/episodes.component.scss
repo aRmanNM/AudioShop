@@ -31,16 +31,19 @@ table {
 
 .mat-column-handle {
   flex: 0 1 10%;
-
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .mat-column-name {
-  flex: 0 1 50%;
-
+  flex: 0 1 35%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.mat-column-actions {
+  position: absolute;
+  left: 0;
 }

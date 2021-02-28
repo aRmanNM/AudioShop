@@ -20,7 +20,7 @@ export class CustomHttpInterceptor implements HttpInterceptor {
     return next
       .handle(request)
       .pipe(
-        pipe(delay(2000)),
+        pipe(delay(500)),
         tap((event: HttpEvent<any>) => {
           if (event instanceof HttpResponse) {
             this.spinnerService.hide();

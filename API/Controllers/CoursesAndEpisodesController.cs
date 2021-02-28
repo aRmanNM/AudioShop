@@ -38,9 +38,9 @@ namespace API.Controllers
         //
 
         [HttpGet]
-        public async Task<ActionResult<List<CourseDto>>> GetCourses(bool includeEpisodes = false, string search = null)
+        public async Task<ActionResult<List<CourseDto>>> GetCourses(bool includeEpisodes = false, string search = null, bool includeInactive = false)
         {
-            var courses = await _courseRepository.GetCourses(includeEpisodes, search);
+            var courses = await _courseRepository.GetCourses(includeEpisodes, search, includeInactive);
             var courseDtos = courses.Select(c => _mapper.MapCourseToCourseDto(c));
             return Ok(courseDtos);
         }

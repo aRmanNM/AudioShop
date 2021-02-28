@@ -14,7 +14,7 @@ import {SpinnerService} from '../../services/spinner.service';
 export class CoursesComponent implements OnInit {
   courses: Course[];
   baseUrl = environment.apiUrl + 'Files/';
-  columnsToDisplay = ['id', 'name', 'price', 'photo', 'actions'];
+  columnsToDisplay = ['id', 'name', 'price', 'watingTime', 'isActive', 'photo', 'actions'];
   searchString = '';
   dialogActive = false;
 

@@ -42,6 +42,7 @@ namespace API
             services.AddScoped<IMapperService, MapperService>();
             services.AddScoped<IReviewRepository, ReviewRepository>();
             services.AddScoped<ICredentialRepository, CredentialRepository>();
+            services.AddScoped<ISliderRepository, SliderRepository>();
 
             services.AddSingleton<ISMSService, SMSService>();
             services.AddSingleton<IFileService, FileService>();

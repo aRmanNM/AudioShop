@@ -33,7 +33,9 @@ export class CreateOrEditComponent implements OnInit {
       id: new FormControl(''),
       name: new FormControl('', [Validators.required]),
       description: new FormControl(''),
-      price: new FormControl('', [Validators.required])
+      price: new FormControl('', [Validators.required]),
+      isActive: new FormControl('', [Validators.required]),
+      waitingTimeBetweenEpisodes: new FormControl('', [Validators.required])
     }
   );
 
@@ -43,7 +45,9 @@ export class CreateOrEditComponent implements OnInit {
         id: this.data.course.id,
         name: this.data.course.name,
         description: this.data.course.description,
-        price: this.data.course.price
+        price: this.data.course.price,
+        isActive: this.data.course.isActive,
+        waitingTimeBetweenEpisodes: this.data.course.waitingTimeBetweenEpisodes
       });
 
       this.getImage();

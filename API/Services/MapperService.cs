@@ -53,7 +53,8 @@ namespace API.Services
                 Name = courseDto.Name,
                 Price = courseDto.Price,
                 Description = courseDto.Description,
-                WaitingTimeBetweenEpisodes = courseDto.WaitingTimeBetweenEpisodes
+                WaitingTimeBetweenEpisodes = courseDto.WaitingTimeBetweenEpisodes,
+                IsActive = courseDto.IsActive
             };
         }
 
@@ -67,6 +68,7 @@ namespace API.Services
                 Price = course.Price,
                 PhotoFileName = course.Photo?.FileName,
                 WaitingTimeBetweenEpisodes = course.WaitingTimeBetweenEpisodes,
+                IsActive = course.IsActive,
                 Episodes = course.Episodes.Select(MapEpisodeToEpisodeDto).ToList()
             };
         }
@@ -108,6 +110,18 @@ namespace API.Services
                 DiscountPercentage = couponDto.DiscountPercentage ?? int.Parse(config.Value),
                 Code = await _couponRepository.GenerateCouponCode(),
                 IsActive = couponDto.IsActive
+            };
+        }
+
+        public SliderItemDto MapSliderItemToSliderItemDto(SliderItem slideritem)
+        {
+            return new SliderItemDto {
+                Id = slideritem.Id,
+                Title = slideritem.Title,
+                Description = slideritem.Description,
+                CourseId = slideritem.CourseId,
+                IsActive = slideritem.IsActive,
+                PhotoFileName = slideritem.Photo.FileName
             };
         }
     }

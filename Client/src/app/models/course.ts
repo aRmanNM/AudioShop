@@ -6,5 +6,7 @@ export interface Course {
   price: number;
   description: string;
   photoFileName: string;
+  isActive: boolean;
+  waitingTimeBetweenEpisodes: number;
   episodes: Episode[];
 }

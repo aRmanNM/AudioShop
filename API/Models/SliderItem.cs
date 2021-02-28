@@ -7,7 +7,6 @@ namespace API.Models
         public string Description { get; set; }
         public int CourseId { get; set; }
         public bool IsActive { get; set; }
-        public Course Course { get; set; }
         public Photo Photo { get; set; }
     }
 }

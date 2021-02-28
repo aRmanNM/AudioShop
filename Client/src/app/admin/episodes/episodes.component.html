@@ -9,6 +9,9 @@
     </button>
 </mat-toolbar>
 
+<span *ngIf="!dialogActive">
+  <mat-progress-bar color="accent" mode="indeterminate" *ngIf="spinnerService.visibility | async"></mat-progress-bar>
+</span>
 
 <mat-table cdkDropList [dataSource]="episodes" (cdkDropListDropped)="drop($event)" [cdkDropListData]="episodes">
     <ng-container matColumnDef="handle">

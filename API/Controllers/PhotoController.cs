@@ -24,6 +24,7 @@ namespace API.Controllers
         private readonly IConfiguration _config;
         private readonly IFileService _fileService;
         private readonly ICredentialRepository _credentialRepository;
+        private readonly ISliderRepository _sliderRepository;
         private readonly PhotoOptions _photoOptions;
 
         public PhotoController(IWebHostEnvironment host,
@@ -32,7 +33,8 @@ namespace API.Controllers
             IConfiguration config,
             IOptions<PhotoOptions> options,
             IFileService fileService,
-            ICredentialRepository credentialRepository)
+            ICredentialRepository credentialRepository,
+            ISliderRepository sliderRepository)
         {
             _host = host;
             _courseRepository = courseRepository;
@@ -40,6 +42,7 @@ namespace API.Controllers
             _config = config;
             _fileService = fileService;
             _credentialRepository = credentialRepository;
+            _sliderRepository = sliderRepository;
             _photoOptions = options.Value;
         }
 
@@ -83,7 +86,7 @@ namespace API.Controllers
 
         [Authorize(Roles = "Salesperson")]
         [HttpPost("salesperson/credential/photo")]
-        public async Task<ActionResult<Photo>> UploadCredentialPhoto([FromQuery]int credentialId, IFormFile file, [FromQuery]string usedAs)
+        public async Task<ActionResult<Photo>> UploadCredentialPhoto([FromQuery] int credentialId, IFormFile file, [FromQuery] string usedAs)
         {
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var credential = await _credentialRepository.GetSalespersonCredetial(userId, true);
@@ -129,6 +132,44 @@ namespace API.Controllers
                 credential.BankCardPhoto = photo;
             }
 
+            await _unitOfWork.CompleteAsync();
+            return Ok(photo);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost("sliders/{sliderId}/photo")]
+        public async Task<ActionResult<Photo>> UploadSliderPhoto(int sliderId, IFormFile file)
+        {
+            var sliderItem = await _sliderRepository.GetSliderItemById(sliderId);
+            if (sliderItem == null) return NotFound();
+            if (file == null) return BadRequest("null file");
+            if (file.Length == 0) return BadRequest("empty file");
+            if (file.Length > _photoOptions.MaxBytes) return BadRequest("max file size exceeded");
+            if (!_photoOptions.IsSupported(file.FileName)) return BadRequest("format not valid");
+
+            var uploadFolderPath = Path.Combine(_host.WebRootPath, "SliderItems", sliderItem.Id.ToString());
+            var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+
+            try
+            {
+                await _fileService.Upload(file, fileName, uploadFolderPath);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
+            var photo = new Photo()
+            {
+                FileName = fileName
+            };
+
+            if (sliderItem.Photo != null)
+            {
+                _fileService.Delete(sliderItem.Photo.FileName, uploadFolderPath);
+            }
+
+            sliderItem.Photo = photo;
             await _unitOfWork.CompleteAsync();
             return Ok(photo);
         }

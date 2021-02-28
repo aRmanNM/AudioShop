@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {AuthService} from '../../services/auth.service';
@@ -17,9 +17,11 @@ export class LoginComponent implements OnInit {
     password: new FormControl('', [Validators.required, Validators.maxLength(40)]),
   });
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) {
+  }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
   login(): any {
     this.error = '';
@@ -27,8 +29,11 @@ export class LoginComponent implements OnInit {
       () => {
         if (this.authService.isInRole('Admin')) {
           this.router.navigate(['/admin']);
-        } else {
+        } else if (this.authService.isInRole('Salesperson')) {
           this.router.navigate(['/salesperson']);
+        } else {
+          this.error = 'ورود ناموفق';
+          return;
         }
       },
       (er) => {

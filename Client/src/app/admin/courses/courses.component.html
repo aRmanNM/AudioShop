@@ -31,6 +31,20 @@
     <th mat-header-cell *matHeaderCellDef>مبلغ کل</th>
     <td mat-cell *matCellDef="let course"> {{course.price | number}} ریال</td>
   </ng-container>
+  <ng-container matColumnDef="watingTime">
+    <th mat-header-cell *matHeaderCellDef>شیوه پخش</th>
+    <td mat-cell *matCellDef="let course">
+      <span *ngIf="course.waitingTimeBetweenEpisodes == 0">بدون محدودیت</span>
+      <span *ngIf="course.waitingTimeBetweenEpisodes > 0">{{course.waitingTimeBetweenEpisodes}}روز در میان</span>
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="isActive">
+    <th mat-header-cell *matHeaderCellDef>امکان خرید</th>
+    <td mat-cell *matCellDef="let course">
+      <button mat-stroked-button color="primary" *ngIf="course.isActive">فعال</button>
+      <button mat-stroked-button color="warn" *ngIf="!course.isActive">غیر فعال</button>
+    </td>
+  </ng-container>
   <ng-container matColumnDef="photo">
     <th mat-header-cell *matHeaderCellDef>لوگو</th>
     <td mat-cell *matCellDef="let course">

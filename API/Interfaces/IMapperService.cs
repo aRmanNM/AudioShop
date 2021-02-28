@@ -9,6 +9,7 @@ namespace API.Interfaces
         // Model to DTO
         CourseDto MapCourseToCourseDto(Course course);
         EpisodeDto MapEpisodeToEpisodeDto(Episode episode);
+        SliderItemDto MapSliderItemToSliderItemDto(SliderItem slideritem);
 
         // DTO to Model
         User MapRegisterDtoToUser(RegisterDto registerDto);

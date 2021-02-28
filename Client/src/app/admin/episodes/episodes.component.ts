@@ -5,6 +5,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {EpisodeCreateEditComponent} from './episode-create-edit/episode-create-edit.component';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 import * as cloneDeep from 'lodash/cloneDeep';
+import {SpinnerService} from '../../services/spinner.service';
 
 @Component({
   selector: 'app-episodes',
@@ -16,8 +17,11 @@ export class EpisodesComponent implements OnInit {
   courseId: number;
   addEnabled = false;
   columnsToDisplay = ['handle', 'name', 'price', 'duration', 'actions'];
+  dialogActive = false;
 
-  constructor(private coursesAndEpisodesService: CoursesAndEpisodesService, public dialog: MatDialog) {
+  constructor(private coursesAndEpisodesService: CoursesAndEpisodesService,
+              public dialog: MatDialog,
+              public spinnerService: SpinnerService) {
   }
 
   ngOnInit(): void {

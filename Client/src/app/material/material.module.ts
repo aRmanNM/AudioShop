@@ -24,6 +24,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatSelectModule} from '@angular/material/select';
 import {MatGridListModule} from '@angular/material/grid-list';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 
 @NgModule({
   providers: [
@@ -54,7 +55,8 @@ import {MatGridListModule} from '@angular/material/grid-list';
     MatProgressSpinnerModule,
     MatExpansionModule,
     MatSelectModule,
-    MatGridListModule
+    MatGridListModule,
+    MatSlideToggleModule
   ]
 })
 export class MaterialModule {

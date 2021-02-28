@@ -34,7 +34,7 @@ namespace API.Repositories
             return course;
         }
 
-        public async Task<IEnumerable<Course>> GetCourses(bool includeEpisodes, string search)
+        public async Task<IEnumerable<Course>> GetCourses(bool includeEpisodes, string search, bool includeInactive = false)
         {
             var courses = _context.Courses.Include(c => c.Photo).AsQueryable();
 
@@ -48,7 +48,12 @@ namespace API.Repositories
                 courses = courses.Where(c => c.Name.Contains(search));
             }
 
-            return await courses.Where(c => c.IsActive).OrderByDescending(c => c.Id).AsNoTracking().ToArrayAsync();
+            if (!includeInactive)
+            {
+                courses = courses.Where(c => c.IsActive);
+            }
+
+            return await courses.OrderByDescending(c => c.Id).AsNoTracking().ToArrayAsync();
         }
         public async Task<Course> GetCourseById(int id)
         {

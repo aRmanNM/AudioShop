@@ -11,6 +11,7 @@ namespace API.Dtos
         public string Description { get; set; }
         public string PhotoFileName { get; set; }
         public int WaitingTimeBetweenEpisodes { get; set; } = 0;
+        public bool IsActive { get; set; }
         public ICollection<EpisodeDto> Episodes { get; set; }
     }
 }
