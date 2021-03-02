@@ -8,8 +8,9 @@ namespace API.Interfaces
 {
     public interface IReviewRepository
     {
-        Task<ICollection<Review>> GetCourseReviews(int courseId, Boolean accepted = true);
+        Task<ICollection<Review>> GetCourseReviews(int courseId, bool accepted = true);
         Task<Review> AddReview(Review review);
         Review UpdateReview(Review review);
+        Task<ICollection<Review>> GetAllReviews(bool accepted);
     }
 }

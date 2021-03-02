@@ -15,6 +15,10 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
 import {CheckoutEditComponent} from './checkouts/checkout-edit/checkout-edit.component';
 import {CheckoutDoneComponent} from './checkouts/checkout-done/checkout-done.component';
 import {CheckoutPendingComponent} from './checkouts/checkout-pending/checkout-pending.component';
+import {ReviewsDoneComponent} from './reviews/reviews-done/reviews-done.component';
+import {ReviewsPendingComponent} from './reviews/reviews-pending/reviews-pending.component';
+import {SalespersonModule} from '../salesperson/salesperson.module';
+import { ReviewsEditComponent } from './reviews/reviews-edit/reviews-edit.component';
 
 
 @NgModule({
@@ -27,7 +31,10 @@ import {CheckoutPendingComponent} from './checkouts/checkout-pending/checkout-pe
     EpisodeCreateEditComponent,
     CheckoutEditComponent,
     CheckoutDoneComponent,
-    CheckoutPendingComponent
+    CheckoutPendingComponent,
+    ReviewsDoneComponent,
+    ReviewsPendingComponent,
+    ReviewsEditComponent
   ],
   imports: [
     CommonModule,
@@ -36,7 +43,8 @@ import {CheckoutPendingComponent} from './checkouts/checkout-pending/checkout-pe
     SharedModule,
     ReactiveFormsModule,
     FormsModule,
-    DragDropModule
+    DragDropModule,
+    SalespersonModule
   ]
 })
 export class AdminModule {

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using API.Dtos;
 using API.Interfaces;
@@ -63,15 +63,6 @@ namespace API.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpDelete]
-        public async Task<ActionResult> DeleteCourse(IEnumerable<Course> courses)
-        {
-            _courseRepository.DeleteCourses(courses);
-            await _unitOfWork.CompleteAsync();
-            return Ok();
-        }
-
-        [Authorize(Roles = "Admin")]
         [HttpPut]
         public async Task<ActionResult<Course>> UpdateCourse(Course course)
         {
@@ -80,14 +71,24 @@ namespace API.Controllers
             return updatedCourse;
         }
 
+        //
+        // REVIEWS
+        //
+
         [HttpGet("{courseId}/reviews")]
-        public async Task<ActionResult<List<Review>>> GetCourseReviews(int courseId)
+        public async Task<ActionResult<List<Review>>> GetCourseReviews(int courseId, bool accepted = true)
         {
-            var reviews = await _reviewRepository.GetCourseReviews(courseId);
+            var role = HttpContext.User.FindFirst(ClaimTypes.Role)?.Value;
+            if (role.ToUpper() != "ADMIN")
+            {
+                accepted = true;
+            }
+
+            var reviews = await _reviewRepository.GetCourseReviews(courseId, accepted);
             return Ok(reviews);
         }
 
-        [Authorize(Roles="Member")]
+        [Authorize(Roles = "Member")]
         [HttpPost("{courseId}/reviews")]
         public async Task<ActionResult<Review>> AddCourseReview(int courseId, Review review)
         {
@@ -102,6 +103,7 @@ namespace API.Controllers
             return Ok(review);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{courseId}/reviews/{reviewId}")]
         public async Task<ActionResult<Review>> UpdateCourseReview(int courseId, int reviewId, Review review)
         {
@@ -118,6 +120,14 @@ namespace API.Controllers
             _reviewRepository.UpdateReview(review);
             await _unitOfWork.CompleteAsync();
             return Ok(review);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet("reviews")]
+        public async Task<ActionResult<List<Review>>> GetAllReviews([FromQuery] bool accepted)
+        {
+            var reviews = await _reviewRepository.GetAllReviews(accepted);
+            return Ok(reviews);
         }
 
         //
@@ -174,7 +184,7 @@ namespace API.Controllers
             return Ok(_mapper.MapEpisodeToEpisodeDto(episode));
         }
 
-        [Authorize(Roles="Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPut("{courseId}/episodes")]
         public async Task<ActionResult> UpdateCourseEpisodes(Episode[] episodes)
         {

@@ -76,6 +76,7 @@ export class CreateOrEditComponent implements OnInit {
 
   closeDialog(): void {
     this.dialogRef.close();
+    this.coursesAndEpisodesService.onReviewsUpdate();
   }
 
   uploadPhoto(): any {

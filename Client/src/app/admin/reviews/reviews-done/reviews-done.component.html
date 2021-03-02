@@ -1,0 +1,49 @@
+<mat-toolbar>
+  <input type="text" class="form-control" style="width: 150px;" min="1" [(ngModel)]="courseId" placeholder="شناسه دوره">
+  <button mat-flat-button color="primary" style="margin-right: 6px;" (click)="getReviews()">
+    انتخاب
+  </button>
+  <button mat-stroked-button color="basic" style="margin-right: 6px;" (click)="courseId='' ; getReviews()">
+    همه موارد
+  </button>
+</mat-toolbar>
+
+<span *ngIf="!dialogActive">
+  <mat-progress-bar color="accent" mode="indeterminate" *ngIf="spinnerService.visibility | async"></mat-progress-bar>
+</span>
+
+<table mat-table [dataSource]="reviews">
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef>شناسه</th>
+    <td mat-cell *matCellDef="let review"> {{review.id}} </td>
+  </ng-container>
+  <ng-container matColumnDef="text">
+    <th mat-header-cell *matHeaderCellDef>متن</th>
+    <td mat-cell *matCellDef="let review"> {{review.text}} </td>
+  </ng-container>
+  <ng-container matColumnDef="rating">
+    <th mat-header-cell *matHeaderCellDef>ستاره</th>
+    <td mat-cell *matCellDef="let review">
+      <!--      show start for ratings-->
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="date">
+    <th mat-header-cell *matHeaderCellDef>تاریخ</th>
+    <td mat-cell *matCellDef="let review"> {{review.date | date:'yyyy/MM/dd' | PersianDate}}</td>
+  </ng-container>
+  <ng-container matColumnDef="courseName">
+    <th mat-header-cell *matHeaderCellDef>نام دوره</th>
+    <td mat-cell *matCellDef="let review"> {{review.courseName}}</td>
+  </ng-container>
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef="let reviews">
+      <button class="action" mat-flat-button color="primary" style="float: left;"
+              (click)="openAddOrEditDialog(reviews)">
+        ویرایش
+      </button>
+    </td>
+  </ng-container>
+  <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+  <tr mat-row *matRowDef="let reviews; columns: columnsToDisplay"></tr>
+</table>

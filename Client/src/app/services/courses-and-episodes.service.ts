@@ -1,15 +1,17 @@
-import {Injectable, OnInit} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {environment} from '../../environments/environment';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Course} from '../models/course';
 import {Observable, Subject} from 'rxjs';
 import {Episode} from '../models/episode';
+import {Review} from '../models/review';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CoursesAndEpisodesService {
   updatedEmmiter = new Subject();
+  reviewsUpdatedEmitter = new Subject();
   baseUrl = environment.apiUrl + 'api/courses';
 
   constructor(private http: HttpClient) {
@@ -17,6 +19,10 @@ export class CoursesAndEpisodesService {
 
   onUpdate(): any {
     this.updatedEmmiter.next();
+  }
+
+  onReviewsUpdate(): any {
+    this.reviewsUpdatedEmitter.next();
   }
 
   getCourses(search: string): Observable<Course[]> {
@@ -67,5 +73,21 @@ export class CoursesAndEpisodesService {
 
   updateCourseEpisodes(courseId: number, episodes: Episode[]): Observable<any> {
     return this.http.put<Episode[]>(this.baseUrl + '/' + courseId + '/episodes', episodes);
+  }
+
+  getAllReviews(accepted: boolean): Observable<Review[]> {
+    return this.http.get<Review[]>(this.baseUrl + '/reviews', {
+      params: new HttpParams().set('accepted', `${accepted}`)
+    });
+  }
+
+  getCourseReviews(courseId: number, accepted: boolean): Observable<Review[]> {
+    return this.http.get<Review[]>(`${this.baseUrl}/${courseId}/reviews`, {
+      params: new HttpParams().set('accepted', `${accepted}`)
+    });
+  }
+
+  updateReview(courseId: number, reviewId: number, review: Review): Observable<Review> {
+    return this.http.put<Review>(`${this.baseUrl}/${courseId}/reviews/${reviewId}`, review);
   }
 }

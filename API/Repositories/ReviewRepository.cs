@@ -37,5 +37,10 @@ namespace API.Repositories
             _context.Reviews.Update(review);
             return review;
         }
+
+        public async Task<ICollection<Review>> GetAllReviews(bool accepted)
+        {
+            return await _context.Reviews.Where(r => r.Accepted == accepted).ToArrayAsync();
+        }
     }
 }

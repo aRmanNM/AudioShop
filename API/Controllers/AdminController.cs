@@ -77,12 +77,5 @@ namespace API.Controllers
             return Ok(checkout);
         }
 
-        [HttpGet("courses/{courseId}/reviews")]
-        public async Task<ActionResult<List<Review>>> GetAllCourseReviews(int courseId, bool accepted)
-        {
-            var reviews = await _reviewRepository.GetCourseReviews(courseId, accepted);
-            return Ok(reviews);
-        }
-
     }
 }

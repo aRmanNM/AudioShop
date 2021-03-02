@@ -1,0 +1,23 @@
+<mat-tab-group animationDuration="0ms" mat-align-tabs="center" mat-stretch-tabs backgroundColor="primary" dir="rtl">
+  <mat-tab label="ویرایش نظر">
+    <form [formGroup]="reviewForm" (ngSubmit)="updateReview()">
+      <mat-form-field color="accent" hidden>
+        <mat-label>شناسه</mat-label>
+        <input matInput type="text" formControlName="id"/>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>متن نظر</mat-label>
+        <textarea rows="5" matInput formControlName="text"></textarea>
+      </mat-form-field>
+      <mat-slide-toggle class="mt-2 mb-3" formControlName="accepted">تایید نظر</mat-slide-toggle>
+      <button
+        mat-raised-button
+        color="primary"
+        [disabled]="!reviewForm.valid"
+        type="submit">
+        ویرایش
+      </button>
+    </form>
+  </mat-tab>
+</mat-tab-group>
+<mat-progress-bar color="accent" mode="indeterminate" *ngIf="spinnerService.visibility | async"></mat-progress-bar>
