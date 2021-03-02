@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using API.Data;
+using API.Dtos;
 using API.Interfaces;
 using API.Models;
 using Microsoft.EntityFrameworkCore;
@@ -34,8 +35,19 @@ namespace API.Repositories
             return course;
         }
 
-        public async Task<IEnumerable<Course>> GetCourses(bool includeEpisodes, string search, bool includeInactive = false)
+        public async Task<PaginatedResult<Course>> GetCourses(bool includeEpisodes,
+            string search, bool includeInactive = false, int pageNumber = 1, int pageSize = 10)
         {
+            if (pageSize > 20 || pageSize < 1)
+            {
+                pageSize = 10;
+            }
+
+            if (pageNumber < 1)
+            {
+                pageNumber = 1;
+            }
+
             var courses = _context.Courses.Include(c => c.Photo).AsQueryable();
 
             if (includeEpisodes)
@@ -53,7 +65,14 @@ namespace API.Repositories
                 courses = courses.Where(c => c.IsActive);
             }
 
-            return await courses.OrderByDescending(c => c.Id).AsNoTracking().ToArrayAsync();
+            var result = new PaginatedResult<Course>();
+            result.TotalItems = await courses.CountAsync();
+            result.Items = await courses.OrderByDescending(c => c.Id)
+                .AsNoTracking()
+                .Skip((pageNumber - 1) * pageSize).Take(pageSize)
+                .ToArrayAsync();
+
+            return result;
         }
         public async Task<Course> GetCourseById(int id)
         {

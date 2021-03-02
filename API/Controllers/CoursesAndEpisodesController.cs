@@ -38,11 +38,14 @@ namespace API.Controllers
         //
 
         [HttpGet]
-        public async Task<ActionResult<List<CourseDto>>> GetCourses(bool includeEpisodes = false, string search = null, bool includeInactive = false)
+        public async Task<ActionResult<List<CourseDto>>> GetCourses(bool includeEpisodes = false,
+            string search = null, bool includeInactive = false, int pageNumber = 1, int pageSize = 10)
         {
-            var courses = await _courseRepository.GetCourses(includeEpisodes, search, includeInactive);
-            var courseDtos = courses.Select(c => _mapper.MapCourseToCourseDto(c));
-            return Ok(courseDtos);
+            var result = await _courseRepository.GetCourses(includeEpisodes, search, includeInactive, pageNumber, pageSize);
+            var resultWithDtos = new PaginatedResult<CourseDto>();
+            resultWithDtos.TotalItems = result.TotalItems;
+            resultWithDtos.Items = result.Items.Select(c => _mapper.MapCourseToCourseDto(c));
+            return Ok(resultWithDtos);
         }
 
         [HttpGet("{id}")]

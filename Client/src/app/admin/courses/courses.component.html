@@ -66,3 +66,9 @@
   <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
   <tr mat-row *matRowDef="let course; columns: columnsToDisplay"></tr>
 </table>
+<mat-paginator [length]="totalItems"
+               [pageSize]="pageSize"
+               [pageIndex]="pageIndex"
+               [pageSizeOptions]="[1, 5, 10]"
+               (page)="changePage()">
+</mat-paginator>

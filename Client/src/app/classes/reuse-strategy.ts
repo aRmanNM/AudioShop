@@ -5,8 +5,8 @@
 // https://js.plainenglish.io/angular-route-reuse-strategy-b5d40adce841
 
 import {ActivatedRouteSnapshot, DetachedRouteHandle, RouteReuseStrategy, UrlSegment} from '@angular/router';
-import {LoginComponent} from './auth/login/login.component';
-import {RegisterComponent} from './auth/register/register.component';
+import {LoginComponent} from '../auth/login/login.component';
+import {RegisterComponent} from '../auth/register/register.component';
 
 export class CustomRouteReuseStrategy implements RouteReuseStrategy {
   storedHandles: { [key: string]: DetachedRouteHandle } = {};

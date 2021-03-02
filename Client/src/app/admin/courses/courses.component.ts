@@ -1,10 +1,11 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {CoursesAndEpisodesService} from '../../services/courses-and-episodes.service';
 import {Course} from '../../models/course';
 import {environment} from '../../../environments/environment';
 import {MatDialog} from '@angular/material/dialog';
 import {CreateOrEditComponent} from './create-or-edit/create-or-edit.component';
 import {SpinnerService} from '../../services/spinner.service';
+import {MatPaginator} from '@angular/material/paginator';
 
 @Component({
   selector: 'app-admin-courses',
@@ -13,10 +14,14 @@ import {SpinnerService} from '../../services/spinner.service';
 })
 export class CoursesComponent implements OnInit {
   courses: Course[];
+  totalItems: number;
+  pageSize = 2;
+  pageIndex = 1;
   baseUrl = environment.apiUrl + 'Files/';
   columnsToDisplay = ['id', 'name', 'price', 'watingTime', 'isActive', 'photo', 'actions'];
   searchString = '';
   dialogActive = false;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(private coursesAndEpisodesService: CoursesAndEpisodesService,
               public dialog: MatDialog,
@@ -32,8 +37,9 @@ export class CoursesComponent implements OnInit {
   }
 
   getCourses(): void {
-    this.coursesAndEpisodesService.getCourses(this.searchString).subscribe((res) => {
-      this.courses = res;
+    this.coursesAndEpisodesService.getCourses(this.searchString, this.pageIndex, this.pageSize).subscribe((res) => {
+      this.courses = res.items;
+      this.totalItems = res.totalItems;
     });
   }
 
@@ -56,6 +62,12 @@ export class CoursesComponent implements OnInit {
 
   clearSearch(): void {
     this.searchString = '';
+    this.coursesAndEpisodesService.onUpdate();
+  }
+
+  changePage(): void {
+    this.pageIndex = this.paginator.pageIndex;
+    this.pageSize = this.paginator.pageSize;
     this.coursesAndEpisodesService.onUpdate();
   }
 }

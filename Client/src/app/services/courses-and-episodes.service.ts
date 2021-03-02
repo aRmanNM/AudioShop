@@ -5,6 +5,7 @@ import {Course} from '../models/course';
 import {Observable, Subject} from 'rxjs';
 import {Episode} from '../models/episode';
 import {Review} from '../models/review';
+import {PaginatedResult} from '../models/PaginatedResult';
 
 @Injectable({
   providedIn: 'root'
@@ -25,9 +26,14 @@ export class CoursesAndEpisodesService {
     this.reviewsUpdatedEmitter.next();
   }
 
-  getCourses(search: string): Observable<Course[]> {
-    return this.http.get<Course[]>(this.baseUrl, {
-      params: new HttpParams().set('search', search).set('includeepisodes', 'false').set('includeInactive', 'true')
+  getCourses(search: string, pageIndex: number, pageSize: number): Observable<PaginatedResult<Course>> {
+    return this.http.get<PaginatedResult<Course>>(this.baseUrl, {
+      params: new HttpParams()
+        .set('search', search)
+        .set('includeEpisodes', 'false')
+        .set('includeInactive', 'true')
+        .set('pageNumber', `${pageIndex + 1}`)
+        .set('pageSize', `${pageSize}`)
     });
   }
 
