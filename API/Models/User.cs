@@ -24,8 +24,6 @@ namespace API.Models
 
         public string CouponCode { get; set; }
         public Coupon Coupon { get; set; }
-
-        public int SalespersonCredentialId { get; set; }
         public SalespersonCredential SalespersonCredential { get; set; }
         public bool CredentialAccepted { get; set; } = false;
 

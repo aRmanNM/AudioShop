@@ -15,8 +15,8 @@ import {MatPaginator} from '@angular/material/paginator';
 export class CoursesComponent implements OnInit {
   courses: Course[];
   totalItems: number;
-  pageSize = 2;
-  pageIndex = 1;
+  pageSize = 10;
+  pageIndex = 0;
   baseUrl = environment.apiUrl + 'Files/';
   columnsToDisplay = ['id', 'name', 'price', 'watingTime', 'isActive', 'photo', 'actions'];
   searchString = '';

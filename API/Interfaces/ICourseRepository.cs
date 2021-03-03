@@ -13,7 +13,7 @@ namespace API.Interfaces
         Course UpdateCourse(Course course);
         void DeleteCourses(IEnumerable<Course> IDs); // TODO : THIS SEEMS WRONG
         Task<PaginatedResult<Course>> GetCourses(bool includeEpisodes,
-            string search, bool includeInactive = false, int pageNumber = 1, int PageSize = 10);
+            string search, bool includeInactive = false, int pageNumber = 1, int pageSize = 10);
         Task<Course> GetCourseById(int id);
     }
 }

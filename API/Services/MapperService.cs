@@ -90,7 +90,8 @@ namespace API.Services
 
         public Episode MapEpisodeDtoToEpisode(EpisodeDto episodeDto)
         {
-            return new Episode {
+            return new Episode
+            {
                 Name = episodeDto.Name,
                 Description = episodeDto.Description,
                 Sort = episodeDto.Sort,
@@ -115,13 +116,34 @@ namespace API.Services
 
         public SliderItemDto MapSliderItemToSliderItemDto(SliderItem slideritem)
         {
-            return new SliderItemDto {
+            return new SliderItemDto
+            {
                 Id = slideritem.Id,
                 Title = slideritem.Title,
                 Description = slideritem.Description,
                 CourseId = slideritem.CourseId,
                 IsActive = slideritem.IsActive,
                 PhotoFileName = slideritem.Photo.FileName
+            };
+        }
+
+        public SalespersonDto MapUserToSalespersonDto(User user)
+        {
+            return new SalespersonDto {
+                Id = user.Id,
+                UserName = user.UserName,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                City = user.City,
+                Country = user.Country,
+                Age = user.Age,
+                Gender = user.Gender,
+                SalePercentageOfSalesperson = user.SalePercentageOfSalesperson,
+                CurrentSalesOfSalesperson = user.CurrentSalesOfSalesperson,
+                TotalSalesOfSalesperson = user.TotalSalesOfSalesperson,
+                CouponCode = user.CouponCode,
+                SalespersonCredential = user.SalespersonCredential,
+                CredentialAccepted = user.CredentialAccepted
             };
         }
     }

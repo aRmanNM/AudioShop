@@ -1,0 +1,51 @@
+<div *ngIf="salesperson">
+  <mat-tab-group animationDuration="0ms" mat-align-tabs="center" mat-stretch-tabs backgroundColor="primary" dir="rtl">
+    <mat-tab label="اطلاعات حساب">
+
+      <div *ngIf="salesperson.salespersonCredential" class="d-flex flex-column">
+        <mat-form-field appearance="fill">
+          <mat-label>شماره ملی</mat-label>
+          <input matInput type="text" [ngModel]="salesperson.salespersonCredential.idCardNumber"/>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>شماره حساب بانکی</mat-label>
+          <input matInput type="text" [ngModel]="salesperson.salespersonCredential.bankAccountNumber"/>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>شماره شبا</mat-label>
+          <input matInput type="text" [ngModel]="salesperson.salespersonCredential.bankAccountShebaNumber"/>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>شماره کارت بانکی</mat-label>
+          <input matInput type="text" [ngModel]="salesperson.salespersonCredential.bankCardNumber"/>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>نام صاحب حساب</mat-label>
+          <input matInput type="text" [ngModel]="salesperson.salespersonCredential.bankCardName"/>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>نام بانک</mat-label>
+          <input matInput type="text" [ngModel]="salesperson.salespersonCredential.bankName"/>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>شماره تماس ضروری</mat-label>
+          <input matInput type="text" [ngModel]="salesperson.salespersonCredential.phone"/>
+        </mat-form-field>
+      </div>
+
+      <mat-slide-toggle class="mt-2 mb-3" [(ngModel)]="salesperson.credentialAccepted" (toggleChange)="toggleCredential()">فعال بودن امکان تسویه حساب</mat-slide-toggle>
+
+    </mat-tab>
+    <mat-tab label="تصویر کارت ملی">
+      <img
+        src="{{ baseUrl + salesperson.salespersonCredential.id + '/' + salesperson.salespersonCredential.idCardPhoto.fileName }}"
+        *ngIf="salesperson.salespersonCredential">
+    </mat-tab>
+    <mat-tab label="تصویر کارت بانکی">
+      <img
+        src="{{ baseUrl + salesperson.salespersonCredential.id + '/' + salesperson.salespersonCredential.bankCardPhoto.fileName }}"
+        *ngIf="salesperson.salespersonCredential">
+    </mat-tab>
+  </mat-tab-group>
+</div>
+<mat-progress-bar color="accent" mode="indeterminate" *ngIf="spinnerService.visibility | async"></mat-progress-bar>

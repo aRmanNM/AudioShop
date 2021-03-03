@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using API.Dtos;
 using API.Interfaces;
 using API.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -18,16 +20,22 @@ namespace API.Controllers
         private readonly ICheckoutRepository _checkoutRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IReviewRepository _reviewRepository;
+        private readonly IMapperService _mapper;
+        private readonly IUserRepository _userRepository;
 
         public AdminController(UserManager<User> userManager,
             ICheckoutRepository checkoutRepository,
             IUnitOfWork unitOfWork,
-            IReviewRepository reviewRepository)
+            IReviewRepository reviewRepository,
+            IMapperService mapper,
+            IUserRepository userRepository)
         {
             _userManager = userManager;
             _checkoutRepository = checkoutRepository;
             _unitOfWork = unitOfWork;
             _reviewRepository = reviewRepository;
+            _mapper = mapper;
+            _userRepository = userRepository;
         }
 
         [HttpGet("members")]
@@ -75,6 +83,33 @@ namespace API.Controllers
             _checkoutRepository.EditCheckout(checkout);
             await _unitOfWork.CompleteAsync();
             return Ok(checkout);
+        }
+
+        [HttpGet("salespersons")]
+        public async Task<ActionResult<PaginatedResult<SalespersonDto>>> GetAllSalespersons(string search = null,
+            bool onlyShowUsersWithUnacceptedCred = false, int pageNumber = 1, int pageSize = 10)
+        {
+            var result = await _userRepository.GetAllSalespersons(search, onlyShowUsersWithUnacceptedCred, pageNumber, pageSize);
+            var resultWithDtos = new PaginatedResult<SalespersonDto>();
+            resultWithDtos.TotalItems = result.TotalItems;
+            resultWithDtos.Items = result.Items.Select(s => _mapper.MapUserToSalespersonDto(s));
+            return Ok(resultWithDtos);
+        }
+
+        [HttpGet("salespersons/{userId}")]
+        public async Task<ActionResult<SalespersonDto>> GetSalesperson(string userId)
+        {
+            var salesperson = await _userRepository.FindUserById(userId);
+            return Ok(_mapper.MapUserToSalespersonDto(salesperson));
+        }
+
+        [HttpPut("salespersons/{userId}")]
+        public async Task<ActionResult<SalespersonDto>> UpdateCredential(string userId)
+        {
+            var salesperson = await _userManager.FindByIdAsync(userId);
+            salesperson.CredentialAccepted = !salesperson.CredentialAccepted;
+            await _userManager.UpdateAsync(salesperson);
+            return Ok();
         }
 
     }

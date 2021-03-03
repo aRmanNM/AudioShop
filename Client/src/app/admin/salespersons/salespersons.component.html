@@ -1,0 +1,68 @@
+<mat-toolbar>
+  <mat-slide-toggle [(ngModel)]="onlyShowUsersWithUnacceptedCred" (toggleChange)="toggleAccepted()">تنها موارد غیرفعال را نشان بده</mat-slide-toggle>
+  <span class="spacer"></span>
+  <input type="text" class="form-control" style="width: 300px;" [(ngModel)]="searchString" placeholder="جستجو">
+  <button mat-flat-button color="primary" style="margin-right: 6px;" (click)="search()">
+    جستجو
+  </button>
+  <button mat-stroked-button color="basic" style="margin-right: 6px;" (click)="clearSearch()">
+    بازگشت
+  </button>
+</mat-toolbar>
+
+<span *ngIf="!dialogActive">
+  <mat-progress-bar color="accent" mode="indeterminate" *ngIf="spinnerService.visibility | async"></mat-progress-bar>
+</span>
+
+<table mat-table [dataSource]="salespersons">
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef>شناسه</th>
+    <td mat-cell *matCellDef="let salesperson"> {{salesperson.id}} </td>
+  </ng-container>
+  <ng-container matColumnDef="userName">
+    <th mat-header-cell *matHeaderCellDef>نام کاربری</th>
+    <td mat-cell *matCellDef="let salesperson"> {{salesperson.userName}} </td>
+  </ng-container>
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef>نام</th>
+    <td mat-cell *matCellDef="let salesperson"> {{salesperson.firstName + salesperson.lastName}}</td>
+  </ng-container>
+  <ng-container matColumnDef="percentage">
+    <th mat-header-cell *matHeaderCellDef>سهم از فروش</th>
+    <td mat-cell *matCellDef="let salesperson"> {{salesperson.salePercentageOfSalesperson}}%</td>
+  </ng-container>
+  <ng-container matColumnDef="currentSale">
+    <th mat-header-cell *matHeaderCellDef>حساب</th>
+    <td mat-cell *matCellDef="let salesperson"> {{salesperson.currentSalesOfSalesperson | number}}</td>
+  </ng-container>
+  <ng-container matColumnDef="totalSale">
+    <th mat-header-cell *matHeaderCellDef>تصفیه شده</th>
+    <td mat-cell *matCellDef="let salesperson"> {{salesperson.totalSalesOfSalesperson | number}}</td>
+  </ng-container>
+  <ng-container matColumnDef="accepted">
+    <th mat-header-cell *matHeaderCellDef>امکان تسویه حساب</th>
+    <td mat-cell *matCellDef="let salesperson">
+      <button mat-stroked-button color="primary" *ngIf="salesperson.credentialAccepted">فعال</button>
+      <button mat-stroked-button color="warn" *ngIf="!salesperson.credentialAccepted">غیر فعال</button>
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef="let salesperson">
+      <!--        <button class="action" mat-stroked-button color="primary" (click)="openDetailDialog(salesperson)">-->
+      <!--          جزئیات-->
+      <!--        </button>-->
+      <button class="action" mat-stroked-button color="primary" style="float: left;" (click)="openAddOrEditDialog(salesperson)">
+        مشاهده اطلاعات هویتی
+      </button>
+    </td>
+  </ng-container>
+  <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+  <tr mat-row *matRowDef="let salesperson; columns: columnsToDisplay"></tr>
+</table>
+<mat-paginator [length]="totalItems"
+               [pageSize]="pageSize"
+               [pageIndex]="pageIndex"
+               [pageSizeOptions]="[1, 5, 10]"
+               (page)="changePage()">
+</mat-paginator>

@@ -8,6 +8,7 @@ import {CheckoutDoneComponent} from './checkouts/checkout-done/checkout-done.com
 import {CheckoutPendingComponent} from './checkouts/checkout-pending/checkout-pending.component';
 import {ReviewsDoneComponent} from './reviews/reviews-done/reviews-done.component';
 import {ReviewsPendingComponent} from './reviews/reviews-pending/reviews-pending.component';
+import {SalespersonsComponent} from './salespersons/salespersons.component';
 
 const routes: Routes = [
   {
@@ -17,7 +18,8 @@ const routes: Routes = [
       {path: 'checkouts/done', component: CheckoutDoneComponent, canActivate: [AdminAuthGuard], data: {reuseRoute: true}},
       {path: 'checkouts/pending', component: CheckoutPendingComponent, canActivate: [AdminAuthGuard], data: {reuseRoute: true}},
       {path: 'reviews/done', component: ReviewsDoneComponent, canActivate: [AdminAuthGuard], data: {reuseRoute: true}},
-      {path: 'reviews/pending', component: ReviewsPendingComponent, canActivate: [AdminAuthGuard], data: {reuseRoute: true}}
+      {path: 'reviews/pending', component: ReviewsPendingComponent, canActivate: [AdminAuthGuard], data: {reuseRoute: true}},
+      {path: 'salespersons', component: SalespersonsComponent, canActivate: [AdminAuthGuard], data: {reuseRoute: true}},
     ]
   }
 ];

@@ -125,19 +125,17 @@ namespace API.Controllers
             var credential = await _credentialRepository.GetSalespersonCredetial(userId);
             if (credential == null)
             {
-                salespersonCredential.UserId = userId;
                 await _credentialRepository.CreateCredential(salespersonCredential);
-                user.SalespersonCredentialId = salespersonCredential.Id;
                 user.CredentialAccepted = false;
             }
             else
             {
-                salespersonCredential.UserId = userId;
                 _credentialRepository.UpdateCredetial(salespersonCredential);
             }
 
-            await _userManager.UpdateAsync(user);
             await _unitOfWork.CompleteAsync();
+            user.SalespersonCredential = salespersonCredential;
+            await _userManager.UpdateAsync(user);
             return Ok(credential);
         }
 

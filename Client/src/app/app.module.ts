@@ -14,8 +14,8 @@ import {JwtInterceptor} from './interceptors/jwt.interceptor';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {CustomHttpInterceptor} from './interceptors/http.interceptor';
 import {RouteReuseStrategy} from '@angular/router';
-import {CustomRouteReuseStrategy} from './classes/reuse-strategy';
-import {CustomMatPaginatorIntl} from './classes/paginatorInt';
+import {CustomRouteReuseStrategy} from './extends/reuse-strategy';
+import {CustomMatPaginatorIntl} from './extends/paginatorInt';
 import {MatPaginatorIntl} from '@angular/material/paginator';
 
 @NgModule({

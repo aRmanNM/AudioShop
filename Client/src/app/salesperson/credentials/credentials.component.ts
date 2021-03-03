@@ -3,7 +3,7 @@ import {FormControl, FormGroup} from '@angular/forms';
 import {SpinnerService} from '../../services/spinner.service';
 import {SalespersonService} from '../../services/salesperson.service';
 import {environment} from '../../../environments/environment';
-import {SalespersonCredential} from '../../models/salesperson-credential';
+import {Credential} from '../../models/credential';
 import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
@@ -17,7 +17,7 @@ export class CredentialsComponent implements OnInit {
   @ViewChild('fileInputBank') fileInputBank: ElementRef;
   bankCardPhotoUrl;
   idCardPhotoUrl;
-  credential: SalespersonCredential;
+  credential: Credential;
 
   credentialForm = new FormGroup({
     id: new FormControl('0'),

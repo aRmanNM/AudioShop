@@ -3,7 +3,7 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {Observable, Subject} from 'rxjs';
 import {Checkout} from '../models/checkout';
-import {SalespersonCredential} from '../models/salesperson-credential';
+import {Credential} from '../models/credential';
 
 @Injectable({
   providedIn: 'root'
@@ -49,12 +49,12 @@ export class SalespersonService {
     return this.http.post<Checkout>(this.baseUrl + 'checkouts', {});
   }
 
-  getCredential(): Observable<SalespersonCredential> {
-    return this.http.get<SalespersonCredential>(this.baseUrl + 'credential');
+  getCredential(): Observable<Credential> {
+    return this.http.get<Credential>(this.baseUrl + 'credential');
   }
 
-  updateOrCreateCredential(credential: SalespersonCredential): Observable<SalespersonCredential> {
-    return this.http.put<SalespersonCredential>(this.baseUrl + 'credential', credential);
+  updateOrCreateCredential(credential: Credential): Observable<Credential> {
+    return this.http.put<Credential>(this.baseUrl + 'credential', credential);
   }
 
   uploadPhoto(credentialId: number, photo: any, usedAs: string): any {

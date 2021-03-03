@@ -18,7 +18,9 @@ import {CheckoutPendingComponent} from './checkouts/checkout-pending/checkout-pe
 import {ReviewsDoneComponent} from './reviews/reviews-done/reviews-done.component';
 import {ReviewsPendingComponent} from './reviews/reviews-pending/reviews-pending.component';
 import {SalespersonModule} from '../salesperson/salesperson.module';
-import { ReviewsEditComponent } from './reviews/reviews-edit/reviews-edit.component';
+import {ReviewsEditComponent} from './reviews/reviews-edit/reviews-edit.component';
+import {SalespersonsComponent} from './salespersons/salespersons.component';
+import { SalespersonEditComponent } from './salespersons/salesperson-edit/salesperson-edit.component';
 
 
 @NgModule({
@@ -34,7 +36,9 @@ import { ReviewsEditComponent } from './reviews/reviews-edit/reviews-edit.compon
     CheckoutPendingComponent,
     ReviewsDoneComponent,
     ReviewsPendingComponent,
-    ReviewsEditComponent
+    ReviewsEditComponent,
+    SalespersonsComponent,
+    SalespersonEditComponent,
   ],
   imports: [
     CommonModule,

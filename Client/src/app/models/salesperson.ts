@@ -1,7 +1,9 @@
-import {SalespersonCredential} from './salesperson-credential';
+import {Credential} from './credential';
 
 
-export interface SalespersonInfo {
+export interface Salesperson {
+  id: string;
+  userName: string;
   firstName: string;
   lastName: string;
   city: string;
@@ -12,6 +14,6 @@ export interface SalespersonInfo {
   currentSalesOfSalesperson: number;
   totalSalesOfSalesperson: number;
   couponCode: string;
-  salespersonCredential: SalespersonCredential;
+  salespersonCredential: Credential;
   credentialAccepted: boolean;
 }

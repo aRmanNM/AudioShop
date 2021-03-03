@@ -5,8 +5,9 @@
     <app-sidebar>
       <a mat-list-item [routerLink]="['./courses']" routerLinkActive="active">دوره ها</a>
       <a mat-list-item [routerLink]="['./episodes']" routerLinkActive="active">اپیزودها</a>
+      <a mat-list-item [routerLink]="['./salespersons']" routerLinkActive="active">فروشنده ها</a>
       <mat-expansion-panel [class.mat-elevation-z0]="true">
-        <mat-expansion-panel-header>پرداخت های معرف
+        <mat-expansion-panel-header>پرداخت های فروشندگان
         </mat-expansion-panel-header>
         <a mat-list-item [routerLink]="['./checkouts/pending']" routerLinkActive="active">در انتظار</a>
         <a mat-list-item [routerLink]="['./checkouts/done']" routerLinkActive="active">انجام شده</a>

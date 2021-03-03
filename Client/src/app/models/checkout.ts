@@ -1,4 +1,4 @@
-import {SalespersonInfo} from './salesperson-info';
+import {Salesperson} from './salesperson';
 
 export interface  Checkout {
   id: number;
@@ -9,6 +9,6 @@ export interface  Checkout {
   paymentReceipt: string;
   createdAt: Date;
   paidAt: Date;
-  user: SalespersonInfo;
+  user: Salesperson;
 }
 
