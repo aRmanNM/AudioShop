@@ -122,10 +122,17 @@ namespace API.Controllers
         {
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var user = await _userManager.FindByIdAsync(userId);
+
+            if (user.CredentialAccepted)
+            {
+                return BadRequest("cant do that anymore!");
+            }
+
             var credential = await _credentialRepository.GetSalespersonCredetial(userId);
             if (credential == null)
             {
                 await _credentialRepository.CreateCredential(salespersonCredential);
+                user.SalespersonCredential = salespersonCredential;
                 user.CredentialAccepted = false;
             }
             else
@@ -134,7 +141,6 @@ namespace API.Controllers
             }
 
             await _unitOfWork.CompleteAsync();
-            user.SalespersonCredential = salespersonCredential;
             await _userManager.UpdateAsync(user);
             return Ok(credential);
         }

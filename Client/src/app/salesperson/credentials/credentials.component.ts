@@ -18,6 +18,7 @@ export class CredentialsComponent implements OnInit {
   bankCardPhotoUrl;
   idCardPhotoUrl;
   credential: Credential;
+  credentialAccepted = false;
 
   credentialForm = new FormGroup({
     id: new FormControl('0'),
@@ -28,6 +29,7 @@ export class CredentialsComponent implements OnInit {
     bankCardNumber: new FormControl(''),
     bankCardName: new FormControl(''),
     bankName: new FormControl(''),
+    phone: new FormControl('')
   });
 
   constructor(public spinnerService: SpinnerService,
@@ -38,6 +40,7 @@ export class CredentialsComponent implements OnInit {
   ngOnInit(): void {
     this.salespersonService.credentialUpdated.subscribe((res) => {
       this.getCredential();
+      this.checkSalespersonCredetialAccepted();
     });
 
     this.salespersonService.updateCredential();
@@ -56,7 +59,8 @@ export class CredentialsComponent implements OnInit {
           bankAccountShebaNumber: res.bankAccountShebaNumber,
           bankCardNumber: res.bankCardNumber,
           bankCardName: res.bankCardName,
-          bankName: res.bankName
+          bankName: res.bankName,
+          phone: res.phone
         });
       }
     });
@@ -82,11 +86,11 @@ export class CredentialsComponent implements OnInit {
       if (usedAs === 'idcard') {
         this.credential.idCardPhoto = res;
         this.getImage();
-        // this.salespersonService.onUpdate();
+        this.salespersonService.updateCredential();
       } else if (usedAs === 'bankcard') {
         this.credential.bankCardPhoto = res;
         this.getImage();
-        // this.salespersonService.onUpdate();
+        this.salespersonService.updateCredential();
       }
     });
   }
@@ -100,4 +104,9 @@ export class CredentialsComponent implements OnInit {
     }
   }
 
+  checkSalespersonCredetialAccepted(): void {
+    this.salespersonService.checkSalespersonCredetialAccepted().subscribe((res) => {
+      this.credentialAccepted = res;
+    });
+  }
 }
