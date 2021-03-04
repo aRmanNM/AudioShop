@@ -4,6 +4,7 @@ import {Checkout} from '../../../models/checkout';
 import {AdminService} from '../../../services/admin.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {SpinnerService} from '../../../services/spinner.service';
+import {environment} from '../../../../environments/environment';
 
 interface DialogData {
   checkoutId: number;
@@ -18,6 +19,7 @@ export class CheckoutEditComponent implements OnInit {
   paymentReceipt;
   checkout: Checkout;
   showProgressBar = false;
+  baseUrl = environment.apiUrl + 'Credentials/';
 
   constructor(public dialogRef: MatDialogRef<CheckoutEditComponent>,
               @Inject(MAT_DIALOG_DATA) public data: DialogData,

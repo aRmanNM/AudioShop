@@ -56,6 +56,10 @@ namespace API.Repositories
             return await _context.Checkouts
                 .Include(c => c.User)
                 .ThenInclude(u => u.SalespersonCredential)
+                .ThenInclude(sc => sc.IdCardPhoto)
+                .Include(c => c.User)
+                .ThenInclude(u => u.SalespersonCredential)
+                .ThenInclude(sc => sc.BankCardPhoto)
                 .FirstOrDefaultAsync(c => c.Id == checkoutId);
         }
     }
