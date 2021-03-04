@@ -1,0 +1,33 @@
+<mat-progress-bar color="accent" mode="indeterminate" *ngIf="spinnerService.visibility | async"></mat-progress-bar>
+<div *ngIf="configGroups">
+  <mat-tab-group animationDuration="0ms" mat-align-tabs="center" mat-stretch-tabs backgroundColor="basic" dir="rtl">
+    <mat-tab *ngFor="let group of configGroups" label="{{group.groupFa}}">
+
+      <table mat-table [dataSource]="group.configs">
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>عنوان</th>
+          <td mat-cell *matCellDef="let config"> {{config.titleFa}} </td>
+        </ng-container>
+        <ng-container matColumnDef="value">
+          <th mat-header-cell *matHeaderCellDef>مقدار</th>
+          <td mat-cell *matCellDef="let config">
+             <span [ngSwitch]="config.valueType">
+            <input *ngSwitchCase="0" type="text" class="form-control" [(ngModel)]="config.value">
+            <input *ngSwitchCase="1" type="number" class="form-control" [(ngModel)]="config.value">
+            <mat-slide-toggle *ngSwitchCase="2" formControlName="isActive"></mat-slide-toggle>
+          </span>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let config">
+            <button style="float: left;" mat-stroked-button color="primary" (click)="setConfig(config)">ثبت</button>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="['name', 'value', 'action']"></tr>
+        <tr mat-row *matRowDef="let course; columns: ['name', 'value', 'action']"></tr>
+      </table>
+
+    </mat-tab>
+  </mat-tab-group>
+</div>

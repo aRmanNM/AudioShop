@@ -104,7 +104,7 @@ namespace API.Services
 
         public async Task<Coupon> MapCouponDtoToCoupon(CouponToCreateDto couponDto)
         {
-            var config = await _configRepository.GetConfigAsync("DefaultDiscountPercentage");
+            var config = await _configRepository.GetConfig("DefaultDiscountPercentage");
             return new Coupon
             {
                 Description = couponDto.Description,

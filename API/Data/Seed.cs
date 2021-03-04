@@ -148,19 +148,19 @@ namespace API.Data
             }
 
             var configs = new List<Config> {
-                new Config { TitleEn = "DefaultDiscountPercentage", Value = "20", TitleFa = "مقدار پیشفرض برای کد تخفیف", GroupEn = "General", GroupFa = "تنظیمات کلی" },
-                new Config { TitleEn = "DefaultSalespersonSharePercentage", Value = "10", TitleFa = "مقدار پیشفرض برای سهم فروشنده از هر خرید", GroupEn = "General", GroupFa = "تنظیمات کلی" },
-                new Config { TitleEn = "DefaultCheckoutThreshold", Value = "3000000", TitleFa = "حداقل میزان خرید برای ایجاد درخواست پرداخت", GroupEn = "General", GroupFa = "تنظیمات کلی" },
+                new Config { TitleEn = "DefaultDiscountPercentage", Value = "20", TitleFa = "مقدار پیشفرض برای کد تخفیف", GroupEn = "General", GroupFa = "تنظیمات کلی", ValueType = ValueType.number },
+                new Config { TitleEn = "DefaultSalespersonSharePercentage", Value = "10", TitleFa = "مقدار پیشفرض برای سهم فروشنده از هر خرید", GroupEn = "General", GroupFa = "تنظیمات کلی", ValueType = ValueType.number },
+                new Config { TitleEn = "DefaultCheckoutThreshold", Value = "3000000", TitleFa = "حداقل میزان خرید برای ایجاد درخواست پرداخت", GroupEn = "General", GroupFa = "تنظیمات کلی" , ValueType = ValueType.number },
 
-                new Config { TitleEn = "ReminderNotifTitle", Value = "یادآوری دوره", TitleFa = "عنوان اعلان", GroupEn = "Reminder", GroupFa = "اعلان یادآوری" },
-                new Config { TitleEn = "ReminderNotifBody", Value = "برو دوره تو گوش بده ادم حسابی", TitleFa = "بدنه اعلان", GroupEn = "Reminder", GroupFa = "اعلان یادآوری" },
-                new Config { TitleEn = "ReminderNotifTime", Value = "10", TitleFa = "ساعت اعلان", GroupEn = "Reminder", GroupFa = "اعلان یادآوری" },
-                new Config { TitleEn = "ReminderNotifCourseId", Value = "1", TitleFa = "کد دوره", GroupEn = "Reminder", GroupFa = "اعلان یادآوری" },
+                new Config { TitleEn = "ReminderNotifTitle", Value = "یادآوری دوره", TitleFa = "عنوان اعلان", GroupEn = "Reminder", GroupFa = "اعلان یادآوری", ValueType = ValueType.text },
+                new Config { TitleEn = "ReminderNotifBody", Value = "برو دوره تو گوش بده ادم حسابی", TitleFa = "بدنه اعلان", GroupEn = "Reminder", GroupFa = "اعلان یادآوری", ValueType = ValueType.text },
+                new Config { TitleEn = "ReminderNotifTime", Value = "10", TitleFa = "ساعت اعلان", GroupEn = "Reminder", GroupFa = "اعلان یادآوری", ValueType = ValueType.number },
+                new Config { TitleEn = "ReminderNotifCourseId", Value = "1", TitleFa = "کد دوره", GroupEn = "Reminder", GroupFa = "اعلان یادآوری", ValueType = ValueType.number },
 
-                new Config { TitleEn = "PromoteNotifTitle", Value = "دوره جدید فلان", TitleFa = "عنوان اعلان", GroupEn = "Promote", GroupFa = "اعلان پروموت" },
-                new Config { TitleEn = "PromoteNotifBody", Value = "دوره جدید و جذاب فلان", TitleFa = "بدنه اعلان", GroupEn = "Promote", GroupFa = "اعلان پروموت"},
-                new Config { TitleEn = "PromoteNotifTime", Value = "11", TitleFa = "ساعت اعلان", GroupEn = "Promote", GroupFa = "اعلان پروموت" },
-                new Config { TitleEn = "PromoteNotifCourseId", Value = "2", TitleFa = "کد دوره", GroupEn = "Promote", GroupFa = "اعلان پروموت" },
+                new Config { TitleEn = "PromoteNotifTitle", Value = "دوره جدید فلان", TitleFa = "عنوان اعلان", GroupEn = "Promote", GroupFa = "اعلان پروموت", ValueType = ValueType.text },
+                new Config { TitleEn = "PromoteNotifBody", Value = "دوره جدید و جذاب فلان", TitleFa = "بدنه اعلان", GroupEn = "Promote", GroupFa = "اعلان پروموت", ValueType = ValueType.text},
+                new Config { TitleEn = "PromoteNotifTime", Value = "11", TitleFa = "ساعت اعلان", GroupEn = "Promote", GroupFa = "اعلان پروموت", ValueType = ValueType.number },
+                new Config { TitleEn = "PromoteNotifCourseId", Value = "2", TitleFa = "کد دوره", GroupEn = "Promote", GroupFa = "اعلان پروموت", ValueType = ValueType.number },
             };
 
             await context.Configs.AddRangeAsync(configs);

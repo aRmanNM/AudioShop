@@ -5,4 +5,5 @@ export interface Config {
   groupEn: string;
   groupFa: string;
   value: string;
+  valueType: number;
 }

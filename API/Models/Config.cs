@@ -8,5 +8,13 @@ namespace API.Models
         public string GroupEn { get; set; }
         public string GroupFa { get; set; }
         public string Value { get; set; }
+        public ValueType ValueType { get; set; }
+    }
+
+    public enum ValueType
+    {
+        text,
+        number,
+        boolean
     }
 }

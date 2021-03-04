@@ -20,7 +20,8 @@ import {ReviewsPendingComponent} from './reviews/reviews-pending/reviews-pending
 import {SalespersonModule} from '../salesperson/salesperson.module';
 import {ReviewsEditComponent} from './reviews/reviews-edit/reviews-edit.component';
 import {SalespersonsComponent} from './salespersons/salespersons.component';
-import { SalespersonEditComponent } from './salespersons/salesperson-edit/salesperson-edit.component';
+import {SalespersonEditComponent} from './salespersons/salesperson-edit/salesperson-edit.component';
+import {ConfigsComponent} from './configs/configs.component';
 
 
 @NgModule({
@@ -39,6 +40,7 @@ import { SalespersonEditComponent } from './salespersons/salesperson-edit/salesp
     ReviewsEditComponent,
     SalespersonsComponent,
     SalespersonEditComponent,
+    ConfigsComponent,
   ],
   imports: [
     CommonModule,

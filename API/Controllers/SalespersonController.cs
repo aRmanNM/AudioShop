@@ -56,7 +56,7 @@ namespace API.Controllers
         {
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var user = await _userManager.FindByIdAsync(userId);
-            var checkoutThreshold = await _configRepository.GetConfigAsync("DefaultCheckoutThreshold");
+            var checkoutThreshold = await _configRepository.GetConfig("DefaultCheckoutThreshold");
 
             if (!user.CredentialAccepted)
             {
