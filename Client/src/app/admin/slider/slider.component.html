@@ -1,0 +1,58 @@
+<mat-toolbar>
+  <button mat-raised-button color="primary" (click)="openAddOrEditDialog(null)">
+    افزودن
+  </button>
+  <span class="spacer"></span>
+</mat-toolbar>
+
+<span *ngIf="!dialogActive">
+  <mat-progress-bar color="accent" mode="indeterminate" *ngIf="spinnerService.visibility | async"></mat-progress-bar>
+</span>
+
+<table mat-table [dataSource]="sliderItems">
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef>شناسه</th>
+    <td mat-cell *matCellDef="let sliderItem"> {{sliderItem.id}} </td>
+  </ng-container>
+  <ng-container matColumnDef="title">
+    <th mat-header-cell *matHeaderCellDef>عنوان</th>
+    <td mat-cell *matCellDef="let sliderItem"> {{sliderItem.title}} </td>
+  </ng-container>
+  <ng-container matColumnDef="description">
+    <th mat-header-cell *matHeaderCellDef>توضیحات</th>
+    <td mat-cell *matCellDef="let sliderItem">{{ sliderItem.description }}</td>
+  </ng-container>
+  <ng-container matColumnDef="courseId">
+    <th mat-header-cell *matHeaderCellDef>کد دوره</th>
+    <td mat-cell *matCellDef="let sliderItem">{{ sliderItem.courseId }}</td>
+  </ng-container>
+  <ng-container matColumnDef="isActive">
+    <th mat-header-cell *matHeaderCellDef>وضعیت نمایش</th>
+    <td mat-cell *matCellDef="let sliderItem">
+      <button mat-stroked-button color="primary" *ngIf="sliderItem.isActive">فعال</button>
+      <button mat-stroked-button color="warn" *ngIf="!sliderItem.isActive">غیر فعال</button>
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="photo">
+    <th mat-header-cell *matHeaderCellDef>کاور</th>
+    <td mat-cell *matCellDef="let sliderItem">
+      <img src="{{ baseUrl + sliderItem.photoFileName }}" *ngIf="sliderItem.photoFileName">
+      <span *ngIf="!sliderItem.photoFileName">بدون عکس</span>
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef="let sliderItem">
+      <button class="action" mat-flat-button color="warn" style="float: left;"
+              (click)="deleteSliderItem(sliderItem.id)">
+حذف
+      </button>
+      <button class="action" mat-flat-button color="primary" style="float: left;"
+              (click)="openAddOrEditDialog(sliderItem)">
+        ویرایش
+      </button>
+    </td>
+  </ng-container>
+  <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+  <tr mat-row *matRowDef="let sliderItem; columns: columnsToDisplay"></tr>
+</table>

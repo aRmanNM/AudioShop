@@ -147,7 +147,7 @@ namespace API.Controllers
             if (file.Length > _photoOptions.MaxBytes) return BadRequest("max file size exceeded");
             if (!_photoOptions.IsSupported(file.FileName)) return BadRequest("format not valid");
 
-            var uploadFolderPath = Path.Combine(_host.WebRootPath, "SliderItems", sliderItem.Id.ToString());
+            var uploadFolderPath = Path.Combine(_host.WebRootPath, "Slider");
             var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
 
             try

@@ -21,9 +21,17 @@ namespace API.Repositories
             return sliderItem;
         }
 
+        public void DeleteSliderItem(SliderItem item)
+        {
+            _context.Remove(item.Photo);
+            _context.Remove(item);
+        }
+
         public async Task<SliderItem> GetSliderItemById(int sliderId)
         {
-            return await _context.SliderItems.FirstOrDefaultAsync(s => s.Id == sliderId);
+            return await _context.SliderItems
+                .Include(si => si.Photo)
+                .FirstOrDefaultAsync(s => s.Id == sliderId);
         }
 
         public async Task<IEnumerable<SliderItem>> GetSliderItems()

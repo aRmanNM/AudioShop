@@ -22,6 +22,8 @@ import {ReviewsEditComponent} from './reviews/reviews-edit/reviews-edit.componen
 import {SalespersonsComponent} from './salespersons/salespersons.component';
 import {SalespersonEditComponent} from './salespersons/salesperson-edit/salesperson-edit.component';
 import {ConfigsComponent} from './configs/configs.component';
+import { SliderComponent } from './slider/slider.component';
+import { SliderEditCreateComponent } from './slider/slider-edit-create/slider-edit-create.component';
 
 
 @NgModule({
@@ -41,6 +43,8 @@ import {ConfigsComponent} from './configs/configs.component';
     SalespersonsComponent,
     SalespersonEditComponent,
     ConfigsComponent,
+    SliderComponent,
+    SliderEditCreateComponent,
   ],
   imports: [
     CommonModule,

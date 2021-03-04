@@ -1,0 +1,44 @@
+<mat-tab-group animationDuration="0ms" mat-align-tabs="center" mat-stretch-tabs backgroundColor="primary" dir="rtl">
+  <mat-tab label="اطلاعات اسلایدر">
+    <form [formGroup]="sliderItemForm" (ngSubmit)="createOrEditSliderItem()">
+      <mat-form-field color="accent" hidden>
+        <mat-label>شناسه</mat-label>
+        <input matInput type="text" formControlName="id"/>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>عنوان</mat-label>
+        <input matInput type="text" formControlName="title"/>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>توضیحات</mat-label>
+        <textarea rows="5" matInput formControlName="description"></textarea>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>شناسه دوره</mat-label>
+        <input matInput type="number" formControlName="courseId"/>
+      </mat-form-field>
+      <mat-slide-toggle class="mt-2 mb-3" formControlName="isActive">وضعیت نمایش</mat-slide-toggle>
+      <button
+        mat-raised-button
+        color="primary"
+        [disabled]="!sliderItemForm.valid"
+        type="submit">
+        <span *ngIf="data.sliderItem">ویرایش</span>
+        <span *ngIf="!data.sliderItem">درج دوره جدید</span>
+      </button>
+
+    </form>
+
+  </mat-tab>
+  <mat-tab label="کاور" *ngIf="data.sliderItem">
+    <div class="d-flex flex-column align-items-start">
+      <img src="{{ imgUrl }}" *ngIf="data.sliderItem.photoFileName">
+      <input type="file" class="form-control-file mt-2" value="انتخاب فایل" #fileInput>
+      <button class="mt-2" mat-raised-button color="primary" type="submit" (click)="uploadPhoto()">اپلود</button>
+    </div>
+  </mat-tab>
+</mat-tab-group>
+
+<mat-progress-bar color="accent" mode="indeterminate" *ngIf="spinnerService.visibility | async"></mat-progress-bar>
+
+{{ sliderItemForm.value | json }}

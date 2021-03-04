@@ -123,7 +123,7 @@ namespace API.Services
                 Description = slideritem.Description,
                 CourseId = slideritem.CourseId,
                 IsActive = slideritem.IsActive,
-                PhotoFileName = slideritem.Photo.FileName
+                PhotoFileName = slideritem.Photo?.FileName ?? null
             };
         }
 
@@ -144,6 +144,16 @@ namespace API.Services
                 CouponCode = user.CouponCode,
                 SalespersonCredential = user.SalespersonCredential,
                 CredentialAccepted = user.CredentialAccepted
+            };
+        }
+
+        public SliderItem MapSliderItemDtoToSliderItem(SliderItemDto sliderItemDto)
+        {
+            return new SliderItem {
+                Title = sliderItemDto.Title,
+                Description = sliderItemDto.Description,
+                IsActive = sliderItemDto.IsActive,
+                CourseId = sliderItemDto.CourseId
             };
         }
     }

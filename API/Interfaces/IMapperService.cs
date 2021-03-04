@@ -18,5 +18,6 @@ namespace API.Interfaces
         Course MapCourseDtoToCourse(CourseDto courseDto);
         Episode MapEpisodeDtoToEpisode(EpisodeDto episodeDto);
         Task<Coupon> MapCouponDtoToCoupon(CouponToCreateDto couponDto);
+        SliderItem MapSliderItemDtoToSliderItem(SliderItemDto sliderItemDto);
     }
 }

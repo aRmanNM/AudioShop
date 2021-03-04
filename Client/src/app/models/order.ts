@@ -1,5 +1,3 @@
-import {BasketItem} from './basketItem';
-
 export interface Order {
   id: number;
   userId: string;
@@ -12,5 +10,4 @@ export interface Order {
   date: Date;
   salespersonShareAmount: number;
   salespersonSharePaid: boolean;
-  basketItem: BasketItem[];
 }

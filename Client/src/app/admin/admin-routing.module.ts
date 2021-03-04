@@ -10,6 +10,7 @@ import {ReviewsDoneComponent} from './reviews/reviews-done/reviews-done.componen
 import {ReviewsPendingComponent} from './reviews/reviews-pending/reviews-pending.component';
 import {SalespersonsComponent} from './salespersons/salespersons.component';
 import {ConfigsComponent} from './configs/configs.component';
+import {SliderComponent} from './slider/slider.component';
 
 const routes: Routes = [
   {
@@ -22,6 +23,7 @@ const routes: Routes = [
       {path: 'reviews/pending', component: ReviewsPendingComponent, canActivate: [AdminAuthGuard], data: {reuseRoute: true}},
       {path: 'salespersons', component: SalespersonsComponent, canActivate: [AdminAuthGuard], data: {reuseRoute: true}},
       {path: 'configs', component: ConfigsComponent, canActivate: [AdminAuthGuard], data: {reuseRoute: true}},
+      {path: 'slider', component: SliderComponent, canActivate: [AdminAuthGuard], data: {reuseRoute: true}},
     ]
   }
 ];

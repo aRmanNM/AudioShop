@@ -3,7 +3,7 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {Checkout} from '../models/checkout';
 import {environment} from '../../environments/environment';
 import {Observable, Subject} from 'rxjs';
-import {PaginatedResult} from '../models/PaginatedResult';
+import {PaginatedResult} from '../models/paginated-result';
 import {Salesperson} from '../models/salesperson';
 import {Course} from '../models/course';
 

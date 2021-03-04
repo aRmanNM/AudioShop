@@ -10,5 +10,6 @@ namespace API.Interfaces
         Task<SliderItem> GetSliderItemById(int sliderId);
         Task<SliderItem> CreateSliderItem(SliderItem sliderItem);
         SliderItem UpdateSliderItem(SliderItem sliderItem);
+        void DeleteSliderItem(SliderItem sliderItem);
     }
 }

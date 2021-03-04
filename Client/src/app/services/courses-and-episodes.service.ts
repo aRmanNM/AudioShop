@@ -5,7 +5,7 @@ import {Course} from '../models/course';
 import {Observable, Subject} from 'rxjs';
 import {Episode} from '../models/episode';
 import {Review} from '../models/review';
-import {PaginatedResult} from '../models/PaginatedResult';
+import {PaginatedResult} from '../models/paginated-result';
 
 @Injectable({
   providedIn: 'root'
