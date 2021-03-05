@@ -80,7 +80,6 @@ export class EpisodeCreateEditComponent implements OnInit {
   }
 
   uploadAudios(): any {
-    this.showProgressBar = true;
     // used observable concatenation to implement sequential http requests
     // article i learned this from: https://blog.angular-university.io/rxjs-higher-order-mapping/
     const nativeElement = this.fileInput.nativeElement;
@@ -91,10 +90,13 @@ export class EpisodeCreateEditComponent implements OnInit {
       .subscribe((res) => {
         this.uploadCounter = `uploading ${counter} of ${nativeElement.files.length}`;
         counter++;
-        this.showProgressBar = false;
         this.data.episode.audios.push(res);
         this.getAudios();
-      });
+      }, ((e) => {
+        this.snackBar.open(e.error, null, {
+          duration: 2000,
+        });
+      }));
   }
 
   getAudios(): void {

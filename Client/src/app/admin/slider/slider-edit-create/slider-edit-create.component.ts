@@ -82,7 +82,11 @@ export class SliderEditCreateComponent implements OnInit {
       this.data.sliderItem.photoFileName = res.fileName;
       this.getImage();
       this.sliderService.onSliderUpdate();
-    });
+    }, ((e) => {
+      this.snackBar.open(e.error, null, {
+        duration: 2000,
+      });
+    }));
   }
 
   getImage(): void {

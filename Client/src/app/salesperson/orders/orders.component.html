@@ -1,3 +1,6 @@
+<mat-toolbar *ngIf="salesperson">
+  <span> {{ 'کوپن فروشندگی شما:  ' +  salesperson.couponCode }} </span>
+</mat-toolbar>
 <div class="d-flex flex-column m-3" *ngIf="salesAmount < checkoutThreshold || !credentialAccepted">
   <label *ngIf="salesAmount < checkoutThreshold" style="color: red;font-size: small;">- میزان تراکنش های شما به حد نصاب
     نرسیده است</label>
@@ -12,7 +15,7 @@
   <button class="mx-1" mat-raised-button color="primary" (click)="createCheckout()" [disabled]="salesAmount < checkoutThreshold || !credentialAccepted">
     ثبت درخواست تسویه حساب
   </button>
-  <button mat-stroked-button color="basic" (click)="refresh()">
+  <button mat-stroked-button color="primary" (click)="refresh()">
     بررسی مجدد
   </button>
 </mat-toolbar>

@@ -43,8 +43,8 @@ namespace API.Controllers
             if (episode == null) return NotFound();
             if (file == null) return BadRequest("null file");
             if (file.Length == 0) return BadRequest("empty file");
-            if (file.Length > _audioOptions.MaxBytes) return BadRequest("max file size exceeded");
-            if (!_audioOptions.IsSupported(file.FileName)) return BadRequest("format not valid");
+            if (file.Length > _audioOptions.MaxBytes) return BadRequest("حجم فایل بیش از حد بزرگ است");
+            if (!_audioOptions.IsSupported(file.FileName)) return BadRequest("فرمت فایل درست نیست");
 
             var uploadFolderPath = Path.Combine(_host.WebRootPath, "Files", episode.CourseId.ToString());
             var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);

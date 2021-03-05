@@ -3,6 +3,7 @@ import {SalespersonService} from '../../services/salesperson.service';
 import {SpinnerService} from '../../services/spinner.service';
 import {ConfigService} from '../../services/config.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {Salesperson} from '../../models/salesperson';
 
 @Component({
   selector: 'app-orders',
@@ -12,6 +13,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 export class OrdersComponent implements OnInit {
   orders: any[];
   salesAmount: number;
+  salesperson: Salesperson;
   checkoutThreshold: number;
   credentialAccepted = false;
   columnsToDisplay = ['priceToPay', 'date', 'salespersonShareAmount', 'basketItemsNames'];
@@ -28,6 +30,7 @@ export class OrdersComponent implements OnInit {
       this.getEverything();
     });
 
+    this.getInfo();
     this.salespersonService.updateOrders();
   }
 
@@ -74,6 +77,12 @@ export class OrdersComponent implements OnInit {
 
   refresh(): void {
     this.salespersonService.updateOrders();
+  }
+
+  getInfo(): void {
+    this.salespersonService.getInfo().subscribe((res) => {
+      this.salesperson = res;
+    });
   }
 
 }

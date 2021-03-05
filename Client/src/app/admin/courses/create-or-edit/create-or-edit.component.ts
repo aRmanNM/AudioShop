@@ -85,7 +85,11 @@ export class CreateOrEditComponent implements OnInit {
       this.data.course.photoFileName = res.fileName;
       this.getImage();
       this.coursesAndEpisodesService.onUpdate();
-    });
+    }, ((e) => {
+      this.snackBar.open(e.error, null, {
+        duration: 2000,
+      });
+    }));
   }
 
   getImage(): void {

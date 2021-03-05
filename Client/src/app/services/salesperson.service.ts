@@ -4,6 +4,7 @@ import {environment} from '../../environments/environment';
 import {Observable, Subject} from 'rxjs';
 import {Checkout} from '../models/checkout';
 import {Credential} from '../models/credential';
+import {Salesperson} from '../models/salesperson';
 
 @Injectable({
   providedIn: 'root'
@@ -68,6 +69,10 @@ export class SalespersonService {
 
   checkSalespersonCredetialAccepted(): Observable<boolean> {
     return this.http.get<boolean>(this.baseUrl + 'credential/Accepted');
+  }
+
+  getInfo(): Observable<Salesperson> {
+    return this.http.get<Salesperson>(this.baseUrl + 'info');
   }
 
 }

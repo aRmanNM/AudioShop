@@ -24,6 +24,7 @@ namespace API.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly ICredentialRepository _credentialRepository;
         private readonly IConfigRepository _configRepository;
+        private readonly IUserRepository _userRepository;
 
         public SalespersonController(UserManager<User> userManager,
             IOrderRepository orderRepository,
@@ -31,7 +32,8 @@ namespace API.Controllers
             ICheckoutRepository checkoutRepository,
             IUnitOfWork unitOfWork,
             ICredentialRepository credentialRepository,
-            IConfigRepository configRepository)
+            IConfigRepository configRepository,
+            IUserRepository userRepository)
         {
             _userManager = userManager;
             _orderRepository = orderRepository;
@@ -40,6 +42,7 @@ namespace API.Controllers
             _unitOfWork = unitOfWork;
             _credentialRepository = credentialRepository;
             _configRepository = configRepository;
+            _userRepository = userRepository;
         }
 
         [HttpGet("orders")]
@@ -153,5 +156,12 @@ namespace API.Controllers
             return user.CredentialAccepted == true;
         }
 
+        [HttpGet("info")]
+        public async Task<ActionResult<SalespersonDto>> GetInfo()
+        {
+            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var salesperson = await _userRepository.FindUserById(userId);
+            return Ok(_mapper.MapUserToSalespersonDto(salesperson));
+        }
     }
 }

@@ -92,7 +92,11 @@ export class CredentialsComponent implements OnInit {
         this.getImage();
         this.salespersonService.updateCredential();
       }
-    });
+    }, ((e) => {
+      this.snackBar.open(e.error, null, {
+        duration: 2000,
+      });
+    }));
   }
 
   getImage(): void {
