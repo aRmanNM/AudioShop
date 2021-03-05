@@ -33,10 +33,10 @@ namespace API.Services
                 // TODO: Remove For production
                 _logger.LogInformation(authToken);
 
-                var sender = _options.SMSSender;
-                var message = $"سلام\nکد عضویت در نرم افزار:\n{authToken}";
-                var api = new KavenegarApi(_options.SMSAPIKey);
-                api.Send(sender, receptor, message);
+            //     var sender = _options.SMSSender;
+            //     var message = $"سلام\nکد عضویت در نرم افزار:\n{authToken}";
+            //     var api = new KavenegarApi(_options.SMSAPIKey);
+            //     api.Send(sender, receptor, message);
             }
             catch (Kavenegar.Exceptions.ApiException ex)
             {

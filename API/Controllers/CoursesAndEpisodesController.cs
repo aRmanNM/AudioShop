@@ -82,7 +82,7 @@ namespace API.Controllers
         public async Task<ActionResult<List<Review>>> GetCourseReviews(int courseId, bool accepted = true)
         {
             var role = HttpContext.User.FindFirst(ClaimTypes.Role)?.Value;
-            if (role.ToUpper() != "ADMIN")
+            if (role == null || (role != null && role.ToUpper() != "ADMIN"))
             {
                 accepted = true;
             }

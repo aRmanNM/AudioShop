@@ -51,7 +51,7 @@ namespace API.Data
             var courses = new List<Course>() {
                 new Course {
                     Name = "دوره آموزشی ازدواج و روابط زناشویی",
-                    Price = 1000000,
+                    Price = 300000,
                     Description = "توضیحاتی در خصوص چگونگی تقویت روابط زناشویی در ازدواج و اینکه کلا چطوریه داستان و باز یه مقدار توضیح دیگه صرفا برا طولانی شدن بیشتر ",
                     WaitingTimeBetweenEpisodes = 1,
                     IsActive = false,
@@ -66,13 +66,49 @@ namespace API.Data
                             Name = "قسمت دوم: چگونه ازدواج کنید",
                             Description = "نکاتی حیاتی در خصوص ازدواج",
                             Sort = 1,
-                            Price = 450000
+                            Price = 44000
                         },
                         new Episode {
                             Name = "قسمت سوم: بهبود روابط زناشی",
                             Description = "نکات نایاب در حل مشکلات زناشویی",
                             Sort = 2,
-                            Price = 5800000
+                            Price = 44000
+                        },
+                        new Episode {
+                            Name = "قسمت چهارم: چگونگی فلان",
+                            Description = "یک سوال مهم در خصوص ازدواج",
+                            Sort = 3,
+                            Price = 44000
+                        },
+                        new Episode {
+                            Name = "قسمت پنجم: چگونه ازدواج کنید",
+                            Description = "نکاتی حیاتی در خصوص ازدواج",
+                            Sort = 4,
+                            Price = 44000
+                        },
+                        new Episode {
+                            Name = "قسمت ششم: بهبود روابط زناشی",
+                            Description = "نکات نایاب در حل مشکلات زناشویی",
+                            Sort = 5,
+                            Price = 44000
+                        },
+                        new Episode {
+                            Name = "قسمت هفتم: چگونگی فلان",
+                            Description = "یک سوال مهم در خصوص ازدواج",
+                            Sort = 6,
+                            Price = 44000
+                        },
+                        new Episode {
+                            Name = "قسمت هشتم: چگونه ازدواج کنید",
+                            Description = "نکاتی حیاتی در خصوص ازدواج",
+                            Sort = 7,
+                            Price = 44000
+                        },
+                        new Episode {
+                            Name = "قسمت نهم: بهبود روابط زناشی",
+                            Description = "نکات نایاب در حل مشکلات زناشویی",
+                            Sort = 8,
+                            Price = 44000
                         }
                     }
                 },
@@ -109,6 +145,198 @@ namespace API.Data
                     Description = "پکج کامل شروع کار جهت گسترش برند شخصی و اینکه چطوری بتونیم تاثیرگذاری بیشتری داشته باشیم",
                     WaitingTimeBetweenEpisodes = 2,
                     IsActive = true,
+                    Episodes = new List<Episode>() {
+                        new Episode {
+                            Name = "قسمت اول: چگونگی فلان",
+                            Description = "|رسونال برندینگ چیه",
+                            Sort = 0,
+                            Price = 400000
+                        },
+                        new Episode {
+                            Name = "چطوری شروع کنیم",
+                            Description = "از کدوم شبکه اجتماعی شروع کنیم",
+                            Sort = 1,
+                            Price = 800000
+                        },
+                        new Episode {
+                            Name = "توضیحات نهایی",
+                            Description = "جمع بندی نکات مهم آموزش",
+                            Sort = 2,
+                            Price = 0
+                        },
+                        new Episode {
+                            Name = "ادامه مسیر",
+                            Description = "معروف شدیم بعدش چی!",
+                            Sort = 3,
+                            Price = 0
+                        }
+                    }
+                },
+                new Course {
+                    Name = "پکیج کامل پرسونال برندینگ",
+                    Price = 1000000,
+                    Description = "پکج کامل شروع کار جهت گسترش برند شخصی و اینکه چطوری بتونیم تاثیرگذاری بیشتری داشته باشیم",
+                    WaitingTimeBetweenEpisodes = 2,
+                    Episodes = new List<Episode>() {
+                        new Episode {
+                            Name = "قسمت اول: چگونگی فلان",
+                            Description = "|رسونال برندینگ چیه",
+                            Sort = 0,
+                            Price = 400000
+                        },
+                        new Episode {
+                            Name = "چطوری شروع کنیم",
+                            Description = "از کدوم شبکه اجتماعی شروع کنیم",
+                            Sort = 1,
+                            Price = 800000
+                        },
+                        new Episode {
+                            Name = "توضیحات نهایی",
+                            Description = "جمع بندی نکات مهم آموزش",
+                            Sort = 2,
+                            Price = 0
+                        },
+                        new Episode {
+                            Name = "ادامه مسیر",
+                            Description = "معروف شدیم بعدش چی!",
+                            Sort = 3,
+                            Price = 0
+                        }
+                    }
+                },
+                new Course {
+                    Name = "پکیج کامل پرسونال برندینگ",
+                    Price = 1000000,
+                    Description = "پکج کامل شروع کار جهت گسترش برند شخصی و اینکه چطوری بتونیم تاثیرگذاری بیشتری داشته باشیم",
+                    WaitingTimeBetweenEpisodes = 2,
+                    Episodes = new List<Episode>() {
+                        new Episode {
+                            Name = "قسمت اول: چگونگی فلان",
+                            Description = "|رسونال برندینگ چیه",
+                            Sort = 0,
+                            Price = 400000
+                        },
+                        new Episode {
+                            Name = "چطوری شروع کنیم",
+                            Description = "از کدوم شبکه اجتماعی شروع کنیم",
+                            Sort = 1,
+                            Price = 800000
+                        },
+                        new Episode {
+                            Name = "توضیحات نهایی",
+                            Description = "جمع بندی نکات مهم آموزش",
+                            Sort = 2,
+                            Price = 0
+                        },
+                        new Episode {
+                            Name = "ادامه مسیر",
+                            Description = "معروف شدیم بعدش چی!",
+                            Sort = 3,
+                            Price = 0
+                        }
+                    }
+                },
+                new Course {
+                    Name = "پکیج کامل پرسونال برندینگ",
+                    Price = 1000000,
+                    Description = "پکج کامل شروع کار جهت گسترش برند شخصی و اینکه چطوری بتونیم تاثیرگذاری بیشتری داشته باشیم",
+                    WaitingTimeBetweenEpisodes = 2,
+                    Episodes = new List<Episode>() {
+                        new Episode {
+                            Name = "قسمت اول: چگونگی فلان",
+                            Description = "|رسونال برندینگ چیه",
+                            Sort = 0,
+                            Price = 400000
+                        },
+                        new Episode {
+                            Name = "چطوری شروع کنیم",
+                            Description = "از کدوم شبکه اجتماعی شروع کنیم",
+                            Sort = 1,
+                            Price = 800000
+                        },
+                        new Episode {
+                            Name = "توضیحات نهایی",
+                            Description = "جمع بندی نکات مهم آموزش",
+                            Sort = 2,
+                            Price = 0
+                        },
+                        new Episode {
+                            Name = "ادامه مسیر",
+                            Description = "معروف شدیم بعدش چی!",
+                            Sort = 3,
+                            Price = 0
+                        }
+                    }
+                },
+                new Course {
+                    Name = "پکیج کامل پرسونال برندینگ",
+                    Price = 1000000,
+                    Description = "پکج کامل شروع کار جهت گسترش برند شخصی و اینکه چطوری بتونیم تاثیرگذاری بیشتری داشته باشیم",
+                    WaitingTimeBetweenEpisodes = 2,
+                    Episodes = new List<Episode>() {
+                        new Episode {
+                            Name = "قسمت اول: چگونگی فلان",
+                            Description = "|رسونال برندینگ چیه",
+                            Sort = 0,
+                            Price = 400000
+                        },
+                        new Episode {
+                            Name = "چطوری شروع کنیم",
+                            Description = "از کدوم شبکه اجتماعی شروع کنیم",
+                            Sort = 1,
+                            Price = 800000
+                        },
+                        new Episode {
+                            Name = "توضیحات نهایی",
+                            Description = "جمع بندی نکات مهم آموزش",
+                            Sort = 2,
+                            Price = 0
+                        },
+                        new Episode {
+                            Name = "ادامه مسیر",
+                            Description = "معروف شدیم بعدش چی!",
+                            Sort = 3,
+                            Price = 0
+                        }
+                    }
+                },
+                new Course {
+                    Name = "پکیج کامل پرسونال برندینگ",
+                    Price = 1000000,
+                    Description = "پکج کامل شروع کار جهت گسترش برند شخصی و اینکه چطوری بتونیم تاثیرگذاری بیشتری داشته باشیم",
+                    WaitingTimeBetweenEpisodes = 2,
+                    Episodes = new List<Episode>() {
+                        new Episode {
+                            Name = "قسمت اول: چگونگی فلان",
+                            Description = "|رسونال برندینگ چیه",
+                            Sort = 0,
+                            Price = 400000
+                        },
+                        new Episode {
+                            Name = "چطوری شروع کنیم",
+                            Description = "از کدوم شبکه اجتماعی شروع کنیم",
+                            Sort = 1,
+                            Price = 800000
+                        },
+                        new Episode {
+                            Name = "توضیحات نهایی",
+                            Description = "جمع بندی نکات مهم آموزش",
+                            Sort = 2,
+                            Price = 0
+                        },
+                        new Episode {
+                            Name = "ادامه مسیر",
+                            Description = "معروف شدیم بعدش چی!",
+                            Sort = 3,
+                            Price = 0
+                        }
+                    }
+                },
+                new Course {
+                    Name = "پکیج کامل پرسونال برندینگ",
+                    Price = 1000000,
+                    Description = "پکج کامل شروع کار جهت گسترش برند شخصی و اینکه چطوری بتونیم تاثیرگذاری بیشتری داشته باشیم",
+                    WaitingTimeBetweenEpisodes = 2,
                     Episodes = new List<Episode>() {
                         new Episode {
                             Name = "قسمت اول: چگونگی فلان",
