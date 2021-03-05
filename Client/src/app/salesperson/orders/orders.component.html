@@ -1,12 +1,12 @@
 <mat-toolbar *ngIf="salesperson">
   <span> {{ 'کوپن فروشندگی شما:  ' +  salesperson.couponCode }} </span>
 </mat-toolbar>
-<div class="d-flex flex-column m-3" *ngIf="salesAmount < checkoutThreshold || !credentialAccepted">
-  <label *ngIf="salesAmount < checkoutThreshold" style="color: red;font-size: small;">- میزان تراکنش های شما به حد نصاب
-    نرسیده است</label>
-  <label *ngIf="!credentialAccepted" style="color: red;font-size: small;">- برای ثبت درخواست تسویه حساب ابتدا مدارک
-    مورد نیاز در بخش تایید هویت را تکمیل نمایید.</label>
-</div>
+<ul class="d-flex flex-column m-3" *ngIf="salesAmount < checkoutThreshold || !credentialAccepted">
+  <li *ngIf="salesAmount < checkoutThreshold" style="color: red;font-size: small;">میزان تراکنش های شما به حد نصاب
+    نرسیده است</li>
+  <li *ngIf="!credentialAccepted" style="color: red;font-size: small;">برای ثبت درخواست تسویه حساب ابتدا مدارک
+    مورد نیاز در بخش تایید هویت را تکمیل نمایید.</li>
+</ul>
 <mat-toolbar>
   <span class="mx-1">سهم شما:</span>
   <span class="mx-1">{{salesAmount | number}}</span>

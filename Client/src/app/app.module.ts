@@ -17,12 +17,14 @@ import {RouteReuseStrategy} from '@angular/router';
 import {CustomRouteReuseStrategy} from './extends/reuse-strategy';
 import {CustomMatPaginatorIntl} from './extends/paginatorInt';
 import {MatPaginatorIntl} from '@angular/material/paginator';
+import { LandingComponent } from './landing/landing.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    LandingComponent
   ],
   imports: [
     BrowserModule,

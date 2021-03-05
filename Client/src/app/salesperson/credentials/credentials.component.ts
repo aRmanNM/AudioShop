@@ -1,5 +1,5 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {FormControl, FormGroup} from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {SpinnerService} from '../../services/spinner.service';
 import {SalespersonService} from '../../services/salesperson.service';
 import {environment} from '../../../environments/environment';
@@ -23,13 +23,13 @@ export class CredentialsComponent implements OnInit {
   credentialForm = new FormGroup({
     id: new FormControl('0'),
     userId: new FormControl(''),
-    idCardNumber: new FormControl(''),
-    bankAccountNumber: new FormControl(''),
-    bankAccountShebaNumber: new FormControl(''),
-    bankCardNumber: new FormControl(''),
-    bankCardName: new FormControl(''),
-    bankName: new FormControl(''),
-    phone: new FormControl('')
+    idCardNumber: new FormControl('', [Validators.required]),
+    bankAccountNumber: new FormControl('', [Validators.required]),
+    bankAccountShebaNumber: new FormControl('', [Validators.required]),
+    bankCardNumber: new FormControl('', [Validators.required]),
+    bankCardName: new FormControl('', [Validators.required]),
+    bankName: new FormControl('', [Validators.required]),
+    phone: new FormControl('', [Validators.required])
   });
 
   constructor(public spinnerService: SpinnerService,
@@ -71,6 +71,8 @@ export class CredentialsComponent implements OnInit {
       this.snackBar.open('اطلاعات ثبت شد', null, {
         duration: 2000,
       });
+
+      this.salespersonService.updateCredential();
     });
   }
 
