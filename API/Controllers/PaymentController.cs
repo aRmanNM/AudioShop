@@ -2,9 +2,10 @@ using System.Threading.Tasks;
 using API.Dtos;
 using API.Interfaces;
 using API.Models;
+using Dto.Payment;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using ZarinpalSandbox;
+using ZarinPal.Class;
 
 namespace API.Controllers
 {
@@ -17,6 +18,11 @@ namespace API.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly ICouponRepository _couponRepository;
 
+        // zarinpal stuff
+        private readonly Payment _payment;
+        private readonly Authority _authority;
+        private readonly Transactions _transactions;
+
         public PaymentController(IOrderRepository orderRepository,
             IConfiguration config,
             IUserRepository userRepository,
@@ -28,28 +34,30 @@ namespace API.Controllers
             _unitOfWork = unitOfWork;
             _couponRepository = couponRepository;
             _orderRepository = orderRepository;
+
+            // zarinpal stuff
+            var expose = new Expose();
+            _payment = expose.CreatePayment();
+            _authority = expose.CreateAuthority();
+            _transactions = expose.CreateTransactions();
         }
 
         [HttpPost("payorder")]
-        public IActionResult PayOrder([FromBody] Order order)
+        public async Task<IActionResult> PayOrder([FromBody] Order order)
         {
             if (order.Status)
             {
                 return BadRequest();
             }
 
-            var payment = new Payment((int)order.PriceToPay);
-            var result = payment.PaymentRequest($"پرداخت فاکتور شماره {order.Id}",
-                _config["ApiUrl"] + "api/Payment/PaymentResult/" + order.Id);
-
-            if (result.Result.Status == 100)
+            var result = await _payment.Request(new DtoRequest()
             {
-                return Redirect("https://sandbox.zarinpal.com/pg/StartPay/" + result.Result.Authority);
-            }
-            else
-            {
-                return BadRequest();
-            }
+                CallbackUrl = _config["ApiUrl"] + "api/Payment/PaymentResult/" + order.Id,
+                Description = "توضیحات",
+                Amount = (int)order.PriceToPay,
+                MerchantId = _config["MerchantId"]
+            }, Payment.Mode.sandbox); // TODO: CHANGE THIS FOR PRODUCTION
+            return Redirect($"https://sandbox.zarinpal.com/pg/StartPay/{result.Authority}");
         }
 
         [HttpGet]
@@ -62,16 +70,20 @@ namespace API.Controllers
             {
                 var authority = HttpContext.Request.Query["Authority"].ToString();
                 var order = await _orderRepository.GetOrderById(orderId);
-                var payment = new Payment((int)order.PriceToPay);
-                var result = payment.Verification(authority).Result;
+                var verification = await _payment.Verification(new DtoVerification
+                {
+                    Amount = (int)order.PriceToPay,
+                    MerchantId = _config["MerchantId"],
+                    Authority = authority
+                }, Payment.Mode.sandbox); // TODO: CHANGE THIS FOR PRODUCTION
 
-                if (result.Status != 100)
+                if (verification.Status != 100)
                 {
                     return BadRequest();
                 }
 
                 order.Status = true;
-                order.PaymentReceipt = result.RefId.ToString();
+                order.PaymentReceipt = verification.RefId.ToString();
 
                 var salesperson = await _userRepository.GetSalespersonByCouponCode(order.SalespersonCouponCode);
                 if (salesperson != null)
@@ -94,7 +106,7 @@ namespace API.Controllers
                 await _unitOfWork.CompleteAsync();
                 return View(new PaymentResultDto
                 {
-                    RefId = result.RefId
+                    RefId = verification.RefId
                 });
             }
 
