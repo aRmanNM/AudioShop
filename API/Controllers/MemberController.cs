@@ -95,6 +95,11 @@ namespace API.Controllers
                 return -3;
             }
 
+            if (!string.IsNullOrEmpty(coupon.UserId) && coupon.IsActive == true)
+            {
+                return -4;
+            }
+
             return coupon.DiscountPercentage;
         }
 
