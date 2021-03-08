@@ -65,5 +65,10 @@ namespace API.Repositories
         {
             return await _context.Coupons.FirstOrDefaultAsync(c => c.Code == couponCode) != null;
         }
+
+        public void UpdateCoupon(Coupon coupon)
+        {
+            _context.Coupons.Update(coupon);
+        }
     }
 }

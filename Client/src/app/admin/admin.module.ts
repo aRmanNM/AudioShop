@@ -25,6 +25,7 @@ import {ConfigsComponent} from './configs/configs.component';
 import { SliderComponent } from './slider/slider.component';
 import { SliderEditCreateComponent } from './slider/slider-edit-create/slider-edit-create.component';
 import { CouponsComponent } from './coupons/coupons.component';
+import { CouponsCreateEditComponent } from './coupons/coupons-create-edit/coupons-create-edit.component';
 
 
 @NgModule({
@@ -47,6 +48,7 @@ import { CouponsComponent } from './coupons/coupons.component';
     SliderComponent,
     SliderEditCreateComponent,
     CouponsComponent,
+    CouponsCreateEditComponent,
   ],
   imports: [
     CommonModule,

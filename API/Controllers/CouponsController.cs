@@ -43,6 +43,15 @@ namespace API.Controllers
             return Ok(coupon);
         }
 
+        [HttpPut]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<Coupon>> UpdateCoupon(Coupon coupon)
+        {            
+            _couponRepository.UpdateCoupon(coupon);
+            await _unitOfWork.CompleteAsync();
+            return Ok(coupon);
+        }
+
         [HttpGet("{couponCode}/isActive")]
         public async Task<bool> CheckCouponIsActive(string couponCode)
         {

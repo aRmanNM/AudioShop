@@ -1,1 +1,45 @@
-<p>coupons works!</p>
+<mat-toolbar>
+  <button mat-raised-button color="primary" (click)="openAddOrEditCoupon(null)">
+    افزودن
+  </button>
+</mat-toolbar>
+
+<span *ngIf="!dialogActive">
+  <mat-progress-bar color="accent" mode="indeterminate" *ngIf="spinnerService.visibility | async"></mat-progress-bar>
+</span>
+
+<table mat-table [dataSource]="coupons">
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef>شناسه</th>
+    <td mat-cell *matCellDef="let coupon"> {{coupon.id}} </td>
+  </ng-container>
+  <ng-container matColumnDef="discount">
+    <th mat-header-cell *matHeaderCellDef>میزان تخفیف</th>
+    <td mat-cell *matCellDef="let coupon"> {{coupon.discountPercentage}}% </td>
+  </ng-container>
+  <ng-container matColumnDef="description">
+    <th mat-header-cell *matHeaderCellDef>توضیح</th>
+    <td mat-cell *matCellDef="let coupon"> {{coupon.description}} </td>
+  </ng-container>
+  <ng-container matColumnDef="code">
+    <th mat-header-cell *matHeaderCellDef>کد تخفیف</th>
+    <td mat-cell *matCellDef="let coupon"> {{coupon.code}} </td>
+  </ng-container>
+  <ng-container matColumnDef="isActive">
+    <th mat-header-cell *matHeaderCellDef>وضعیت</th>
+    <td mat-cell *matCellDef="let coupon">
+      <button mat-stroked-button color="primary" *ngIf="coupon.isActive">فعال</button>
+      <button mat-stroked-button color="warn" *ngIf="!coupon.isActive">غیر فعال</button>
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef="let coupon">
+      <button class="action" mat-flat-button color="primary" style="float: left;" (click)="openAddOrEditCoupon(coupon)">
+        ویرایش
+      </button>
+    </td>
+  </ng-container>
+  <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+  <tr mat-row *matRowDef="let coupon; columns: columnsToDisplay"></tr>
+</table>

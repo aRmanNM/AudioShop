@@ -11,5 +11,6 @@ namespace API.Interfaces
         Task<Coupon> GetCouponByCode(string code);
         Task<bool> CheckUserIsBlacklisted(string couponCode, string userId);
         Task<string> GenerateCouponCode();
+        void UpdateCoupon(Coupon coupon);
     }
 }
