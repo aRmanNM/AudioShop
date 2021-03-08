@@ -11,6 +11,7 @@ const routes: Routes = [
   {path: '', component: LandingComponent},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
+  {path: 'landing', component: LandingComponent},
   {
     path: 'admin',
     loadChildren: () => import ('./admin/admin.module').then(m => m.AdminModule),
@@ -21,7 +22,7 @@ const routes: Routes = [
     loadChildren: () => import ('./salesperson/salesperson.module').then(m => m.SalespersonModule),
     canActivate: [AuthGuard, SalespersonAuthGuard]
   },
-  {path: '**', redirectTo: '', pathMatch: 'full'}
+  {path: '**', redirectTo: 'landing', pathMatch: 'full'}
 ];
 
 @NgModule({

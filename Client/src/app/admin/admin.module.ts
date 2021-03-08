@@ -26,6 +26,7 @@ import { SliderComponent } from './slider/slider.component';
 import { SliderEditCreateComponent } from './slider/slider-edit-create/slider-edit-create.component';
 import { CouponsComponent } from './coupons/coupons.component';
 import { CouponsCreateEditComponent } from './coupons/coupons-create-edit/coupons-create-edit.component';
+import { MobileAppComponent } from './mobile-app/mobile-app.component';
 
 
 @NgModule({
@@ -49,6 +50,7 @@ import { CouponsCreateEditComponent } from './coupons/coupons-create-edit/coupon
     SliderEditCreateComponent,
     CouponsComponent,
     CouponsCreateEditComponent,
+    MobileAppComponent,
   ],
   imports: [
     CommonModule,

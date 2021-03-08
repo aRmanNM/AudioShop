@@ -1,0 +1,8 @@
+<mat-toolbar>
+  <span *ngIf="latest">{{ 'آخرن نسخه ثبت شده نرم افزار:  ' }}{{ latest.value }}</span>
+</mat-toolbar>
+<div class="d-flex flex-column flex align-items-start" style="margin-right: 1em;">
+  <input type="file" class="form-control-file mt-2" value="انتخاب فایل" #fileInput>
+  <button class="mt-2" mat-raised-button color="primary" type="submit" (click)="uploadApp()">اپلود</button>
+</div>
+

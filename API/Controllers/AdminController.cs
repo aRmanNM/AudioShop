@@ -18,22 +18,19 @@ namespace API.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly ICheckoutRepository _checkoutRepository;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IReviewRepository _reviewRepository;
+        private readonly IUnitOfWork _unitOfWork;        
         private readonly IMapperService _mapper;
-        private readonly IUserRepository _userRepository;
+        private readonly IUserRepository _userRepository;        
 
         public AdminController(UserManager<User> userManager,
             ICheckoutRepository checkoutRepository,
-            IUnitOfWork unitOfWork,
-            IReviewRepository reviewRepository,
+            IUnitOfWork unitOfWork,            
             IMapperService mapper,
             IUserRepository userRepository)
         {
             _userManager = userManager;
             _checkoutRepository = checkoutRepository;
-            _unitOfWork = unitOfWork;
-            _reviewRepository = reviewRepository;
+            _unitOfWork = unitOfWork;            
             _mapper = mapper;
             _userRepository = userRepository;
         }
@@ -110,7 +107,6 @@ namespace API.Controllers
             salesperson.CredentialAccepted = !salesperson.CredentialAccepted;
             await _userManager.UpdateAsync(salesperson);
             return Ok();
-        }
-
+        }      
     }
 }

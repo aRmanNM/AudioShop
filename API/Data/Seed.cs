@@ -379,6 +379,7 @@ namespace API.Data
                 new Config { TitleEn = "DefaultDiscountPercentage", Value = "20", TitleFa = "مقدار پیشفرض برای کد تخفیف", GroupEn = "General", GroupFa = "تنظیمات کلی", ValueType = ValueType.number },
                 new Config { TitleEn = "DefaultSalespersonSharePercentage", Value = "10", TitleFa = "مقدار پیشفرض برای سهم فروشنده از هر خرید", GroupEn = "General", GroupFa = "تنظیمات کلی", ValueType = ValueType.number },
                 new Config { TitleEn = "DefaultCheckoutThreshold", Value = "3000000", TitleFa = "حداقل میزان خرید برای ایجاد درخواست پرداخت", GroupEn = "General", GroupFa = "تنظیمات کلی" , ValueType = ValueType.number },
+                new Config { TitleEn = "LatestMobileAppName", Value = "audioshop1.0", TitleFa = "آخرین نسخه نرم افزار", GroupEn = "General", GroupFa = "تنظیمات کلی" , ValueType = ValueType.text },
 
                 new Config { TitleEn = "ReminderNotifTitle", Value = "یادآوری دوره", TitleFa = "عنوان اعلان", GroupEn = "Reminder", GroupFa = "اعلان یادآوری", ValueType = ValueType.text },
                 new Config { TitleEn = "ReminderNotifBody", Value = "برو دوره تو گوش بده ادم حسابی", TitleFa = "بدنه اعلان", GroupEn = "Reminder", GroupFa = "اعلان یادآوری", ValueType = ValueType.text },

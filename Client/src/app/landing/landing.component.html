@@ -1,14 +1,12 @@
-
 <div class="centered-container">
   <mat-card [dir]="'rtl'">
     <mat-card-title>آدیوشاپ</mat-card-title>
     <mat-card-subtitle>جایی برای شنیدن</mat-card-subtitle>
     <mat-card-content>
-
-      <button mat-raised-button color="primary" class="mb-2">دانلود آخرین نسخه نرم افزار</button>
-      <button mat-stroked-button color="primary" [routerLink]="['/login']" routerLinkActive="$router_link-active$">همکاری در فروش</button>
-
-
+      <a class="mb-2" mat-stroked-button color="primary" href="{{ latest }}" target="_blank">دانلود آخرین نسخه نرم افزار</a>
+      <button mat-raised-button color="primary" [routerLink]="['/login']" routerLinkActive="$router_link-active$">همکاری
+        در فروش
+      </button>
     </mat-card-content>
   </mat-card>
 </div>

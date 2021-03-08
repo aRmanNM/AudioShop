@@ -42,7 +42,7 @@ export class ConfigsComponent implements OnInit {
       for (const title of titles) {
         this.configGroups.push({
           groupFa: title,
-          configs: this.configs.filter(c => c.groupFa === title)
+          configs: this.configs.filter(c => c.groupFa === title && c.titleEn !== 'LatestMobileAppName')
         });
       }
     });
