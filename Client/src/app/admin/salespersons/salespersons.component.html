@@ -1,4 +1,7 @@
 <mat-toolbar>
+  <button mat-raised-button color="primary" style="margin-left: 2em;" (click)="refresh()">
+    بررسی مجدد
+  </button>
   <mat-slide-toggle [(ngModel)]="onlyShowUsersWithUnacceptedCred" (toggleChange)="toggleAccepted()">تنها موارد غیرفعال را نشان بده</mat-slide-toggle>
   <span class="spacer"></span>
   <input type="text" class="form-control" style="width: 300px;" [(ngModel)]="searchString" placeholder="جستجو">

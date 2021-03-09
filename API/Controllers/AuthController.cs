@@ -52,9 +52,9 @@ namespace API.Controllers
             var configs = await _configRepository.GetConfigsByGroup("General");
             var user = _mapper.MapRegisterDtoToUser(registerDto);
 
-            if (registerDto.SalespersnCouponCode != null && role.ToUpper() != "SALESPERSON")
+            if (registerDto.SalespersonCouponCode != null && role.ToUpper() != "SALESPERSON")
             {
-                user.CouponCode = registerDto.SalespersnCouponCode;
+                user.CouponCode = registerDto.SalespersonCouponCode;
             }
             else if (role.ToUpper() == "SALESPERSON")
             {

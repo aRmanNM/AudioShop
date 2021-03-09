@@ -5,6 +5,7 @@ import {Observable, Subject} from 'rxjs';
 import {Checkout} from '../models/checkout';
 import {Credential} from '../models/credential';
 import {Salesperson} from '../models/salesperson';
+import {PaginatedResult} from '../models/paginated-result';
 
 @Injectable({
   providedIn: 'root'
@@ -30,8 +31,12 @@ export class SalespersonService {
   constructor(private http: HttpClient) {
   }
 
-  getOrdersForCheckout(): Observable<any[]> {
-    return this.http.get<any[]>(this.baseUrl + 'orders');
+  getOrdersForCheckout(pageIndex: number, pageSize: number): Observable<PaginatedResult<any>> {
+    return this.http.get<PaginatedResult<any>>(this.baseUrl + 'orders', {
+      params: new HttpParams()
+        .set('pageNumber', `${pageIndex + 1}`)
+        .set('pageSize', `${pageSize}`)
+    });
   }
 
   getSaleAmount(): Observable<number> {

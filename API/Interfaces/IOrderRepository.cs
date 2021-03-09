@@ -10,6 +10,6 @@ namespace API.Interfaces
         Task<Order> CreateOrder(Order order);
         // Task CreateBasketItems(IEnumerable<OrderCourse> basketItems);
         Task<Order> GetOrderById(int orderId);
-        Task<IEnumerable<OrderForSalespersonDto>> GetOrdersForCheckout(string couponCode);
+        Task<PaginatedResult<OrderForSalespersonDto>> GetOrdersForCheckout(string couponCode,  int pageNumber = 1, int pageSize = 10);
     }
 }

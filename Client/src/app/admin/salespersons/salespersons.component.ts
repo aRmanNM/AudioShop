@@ -77,4 +77,8 @@ export class SalespersonsComponent implements OnInit {
     this.pageSize = this.paginator.pageSize;
     this.adminService.onSalespersonsUpdate();
   }
+
+  refresh(): void {
+    this.adminService.onSalespersonsUpdate();
+  }
 }

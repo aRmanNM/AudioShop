@@ -46,12 +46,12 @@ namespace API.Controllers
         }
 
         [HttpGet("orders")]
-        public async Task<ActionResult<IEnumerable<OrderForSalespersonDto>>> GetOrdersForCheckout()
+        public async Task<ActionResult<PaginatedResult<OrderForSalespersonDto>>> GetOrdersForCheckout([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var user = await _userManager.FindByIdAsync(userId);
-            var ordersForSalesperson = await _orderRepository.GetOrdersForCheckout(user.CouponCode);
-            return Ok(ordersForSalesperson);
+            var result = await _orderRepository.GetOrdersForCheckout(user.CouponCode, pageNumber, pageSize);
+            return Ok(result);
         }
 
         [HttpPost("checkouts")]

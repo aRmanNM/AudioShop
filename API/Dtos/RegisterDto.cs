@@ -10,7 +10,7 @@ namespace API.Dtos
         [Required]
         public string Password { get; set; }
 
-        public string SalespersnCouponCode { get; set; }
+        public string SalespersonCouponCode { get; set; }
         public string PhoneNumber { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }

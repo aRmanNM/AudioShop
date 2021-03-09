@@ -1,9 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {SalespersonService} from '../../services/salesperson.service';
 import {SpinnerService} from '../../services/spinner.service';
 import {ConfigService} from '../../services/config.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Salesperson} from '../../models/salesperson';
+import {MatPaginator} from '@angular/material/paginator';
 
 @Component({
   selector: 'app-orders',
@@ -17,6 +18,10 @@ export class OrdersComponent implements OnInit {
   checkoutThreshold: number;
   credentialAccepted = false;
   columnsToDisplay = ['priceToPay', 'date', 'salespersonShareAmount', 'basketItemsNames'];
+  totalItems: number;
+  pageSize = 10;
+  pageIndex = 0;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(private salespersonService: SalespersonService,
               public spinnerService: SpinnerService,
@@ -42,8 +47,9 @@ export class OrdersComponent implements OnInit {
   }
 
   getOrdersForCheckout(): void {
-    this.salespersonService.getOrdersForCheckout().subscribe((res) => {
-      this.orders = res;
+    this.salespersonService.getOrdersForCheckout(this.pageIndex, this.pageSize).subscribe((res) => {
+      this.orders = res.items;
+      this.totalItems = res.totalItems;
     });
   }
 
@@ -83,6 +89,12 @@ export class OrdersComponent implements OnInit {
     this.salespersonService.getInfo().subscribe((res) => {
       this.salesperson = res;
     });
+  }
+
+  changePage(): void {
+    this.pageIndex = this.paginator.pageIndex;
+    this.pageSize = this.paginator.pageSize;
+    this.salespersonService.updateOrders();
   }
 
 }

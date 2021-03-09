@@ -37,6 +37,14 @@ export class AuthService {
   }
 
   register(userRegister: UserRegister): Observable<any> {
+    if (!userRegister.age) {
+      userRegister.age = 1;
+    }
+
+    if (!userRegister.gender) {
+      userRegister.gender = 1;
+    }
+
     return this.http.post<User>(this.baseUrl + 'register', userRegister, {
       params: {
         role: 'salesperson'

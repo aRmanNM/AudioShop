@@ -38,7 +38,7 @@ namespace API.Controllers
         //
 
         [HttpGet]
-        public async Task<ActionResult<List<CourseDto>>> GetCourses(bool includeEpisodes = false,
+        public async Task<ActionResult<PaginatedResult<CourseDto>>> GetCourses(bool includeEpisodes = false,
             string search = null, bool includeInactive = false, int pageNumber = 1, int pageSize = 10)
         {
             var result = await _courseRepository.GetCourses(includeEpisodes, search, includeInactive, pageNumber, pageSize);
