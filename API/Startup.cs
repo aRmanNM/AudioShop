@@ -14,6 +14,7 @@ using System.Text;
 using API.Models;
 using API.Models.Options;
 using API.Repositories;
+using Microsoft.AspNetCore.StaticFiles;
 
 namespace API
 {
@@ -99,7 +100,15 @@ namespace API
 
             // app.UseHttpsRedirection(); // TODO: FIX THIS
             app.UseRouting();
-            app.UseStaticFiles();
+
+            var provider = new FileExtensionContentTypeProvider();
+            provider.Mappings[".apk"] = "application/vnd.android.package-archive";
+            app.UseStaticFiles(new StaticFileOptions
+            {                
+                ContentTypeProvider = provider
+            });
+
+
             app.UseCors();
             app.UseAuthentication();
             app.UseAuthorization();
