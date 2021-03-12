@@ -22,11 +22,11 @@ import {ReviewsEditComponent} from './reviews/reviews-edit/reviews-edit.componen
 import {SalespersonsComponent} from './salespersons/salespersons.component';
 import {SalespersonEditComponent} from './salespersons/salesperson-edit/salesperson-edit.component';
 import {ConfigsComponent} from './configs/configs.component';
-import { SliderComponent } from './slider/slider.component';
-import { SliderEditCreateComponent } from './slider/slider-edit-create/slider-edit-create.component';
-import { CouponsComponent } from './coupons/coupons.component';
-import { CouponsCreateEditComponent } from './coupons/coupons-create-edit/coupons-create-edit.component';
-import { MobileAppComponent } from './mobile-app/mobile-app.component';
+import {SliderComponent} from './slider/slider.component';
+import {SliderEditCreateComponent} from './slider/slider-edit-create/slider-edit-create.component';
+import {CouponsComponent} from './coupons/coupons.component';
+import {CouponsCreateEditComponent} from './coupons/coupons-create-edit/coupons-create-edit.component';
+import {MobileAppComponent} from './mobile-app/mobile-app.component';
 
 
 @NgModule({

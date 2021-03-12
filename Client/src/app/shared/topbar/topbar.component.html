@@ -1,18 +1,24 @@
 <mat-toolbar [dir]="'rtl'" color="primary">
-    <span>نرم افزار مدیریت فروشگاه صوتی</span>
-    <span class="spacer"></span>
-    <span>
-      {{ currentUser }}
-    </span>
+  <ng-content></ng-content>
+  <button mat-raised-button>
+    <span>{{ 'کاربر سیستم: ' + currentUser }}</span>
+  </button>
+  <span class="spacer"></span>
 
-    <button mat-icon-button [matMenuTriggerFor]="menu">
-      <mat-icon>account_circle</mat-icon>
-    </button>
+  <!--    <button mat-icon-button [matMenuTriggerFor]="menu">-->
+  <!--      <mat-icon>account_circle</mat-icon>-->
+  <!--    </button>-->
 
-  <mat-menu #menu>
-    <button mat-menu-item (click)="logout()">
-      <mat-icon>exit_to_app</mat-icon>
-      <span>خروج</span>
-    </button>
-  </mat-menu>
+  <!--  <mat-menu #menu>-->
+  <!--    <button mat-menu-item (click)="logout()">-->
+  <!--      <mat-icon>exit</mat-icon>-->
+  <!--      <span>خروج</span>-->
+  <!--    </button>-->
+  <!--  </mat-menu>-->
+
+  <button mat-raised-button (click)="logout()">
+    خروج از حساب کاربری
+    <mat-icon>logout</mat-icon>
+  </button>
+
 </mat-toolbar>

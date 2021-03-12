@@ -1,12 +1,12 @@
 <mat-toolbar *ngIf="salesperson">
   <span> {{ 'کوپن فروشندگی شما:  ' + salesperson.couponCode }} </span>
 </mat-toolbar>
-<ul class="d-flex flex-column m-3" *ngIf="salesAmount < checkoutThreshold || !credentialAccepted">
-  <li *ngIf="salesAmount < checkoutThreshold" style="color: red;font-size: small;">میزان تراکنش های شما به حد نصاب
+<ul class="d-flex flex-column m-3" *ngIf="salesAmount < checkoutThreshold || credentialAccepted != null">
+  <li *ngIf="salesAmount < checkoutThreshold" style="color: red">میزان تراکنش های شما به حد نصاب
     نرسیده است
   </li>
-  <li *ngIf="!credentialAccepted" style="color: red;font-size: small;">برای ثبت درخواست تسویه حساب ابتدا مدارک
-    مورد نیاز در بخش تایید هویت را تکمیل نمایید.
+  <li *ngIf="!credentialAccepted" style="color: red">
+    جهت ثبت تسویه حساب مدارک هویتی خود را تکمیل نموده و منتظر بمانید توسط مدیر سایت بررسی و تایید گردد.
   </li>
 </ul>
 <mat-toolbar>

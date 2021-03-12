@@ -79,6 +79,9 @@
           <a [routerLink]="['/login']">ورود به حساب کاربری</a>
         </div>
       </form>
+      <div *ngIf="showSpinner" style="margin-top: 1em;">
+        <mat-progress-bar color="accent" mode="indeterminate" *ngIf="spinnerService.visibility | async"></mat-progress-bar>
+      </div>
     </mat-card-content>
   </mat-card>
 </div>

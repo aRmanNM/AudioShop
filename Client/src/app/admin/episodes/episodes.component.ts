@@ -6,6 +6,8 @@ import {EpisodeCreateEditComponent} from './episode-create-edit/episode-create-e
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 import * as cloneDeep from 'lodash/cloneDeep';
 import {SpinnerService} from '../../services/spinner.service';
+import {ActivatedRoute, Params, Router} from '@angular/router';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-episodes',
@@ -21,10 +23,18 @@ export class EpisodesComponent implements OnInit {
 
   constructor(private coursesAndEpisodesService: CoursesAndEpisodesService,
               public dialog: MatDialog,
-              public spinnerService: SpinnerService) {
+              public spinnerService: SpinnerService,
+              private route: ActivatedRoute,
+              private snackBar: MatSnackBar) {
   }
 
   ngOnInit(): void {
+    this.route.params.subscribe((params: Params) => {
+      if (params.courseId) {
+        this.courseId = params.courseId;
+        this.getEpisodes();
+      }
+    });
   }
 
   getEpisodes(): void {
@@ -37,6 +47,9 @@ export class EpisodesComponent implements OnInit {
       this.updateSortIndex();
       this.updateCourseEpisodes();
     }, error => {
+      this.snackBar.open('چنین دوره ای وجود ندارد', null, {
+        duration: 3000,
+      });
     });
   }
 

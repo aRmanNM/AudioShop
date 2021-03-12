@@ -27,5 +27,6 @@
         </div>
       </form>
     </mat-card-content>
+    <mat-progress-bar color="accent" mode="indeterminate" *ngIf="spinnerService.visibility | async"></mat-progress-bar>
   </mat-card>
 </div>

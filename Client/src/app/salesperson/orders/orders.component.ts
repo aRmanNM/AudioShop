@@ -16,7 +16,7 @@ export class OrdersComponent implements OnInit {
   salesAmount: number;
   salesperson: Salesperson;
   checkoutThreshold: number;
-  credentialAccepted = false;
+  credentialAccepted;
   columnsToDisplay = ['priceToPay', 'date', 'salespersonShareAmount', 'basketItemsNames'];
   totalItems: number;
   pageSize = 10;

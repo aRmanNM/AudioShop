@@ -5,7 +5,6 @@ import {environment} from '../../environments/environment';
 import {Observable, Subject} from 'rxjs';
 import {PaginatedResult} from '../models/paginated-result';
 import {Salesperson} from '../models/salesperson';
-import {Course} from '../models/course';
 
 @Injectable({
   providedIn: 'root'

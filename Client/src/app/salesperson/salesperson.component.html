@@ -1,6 +1,10 @@
-<app-topbar></app-topbar>
+<app-topbar>
+  <button mat-icon-button (click)="drawer.toggle()">
+    <mat-icon>menu</mat-icon>
+  </button>
+</app-topbar>
 <mat-drawer-container [dir]="'rtl'" class="drawer">
-  <mat-drawer mode="side" opened style="width: 200px;">
+  <mat-drawer #drawer mode="side" opened style="width: 200px;">
     <app-sidebar>
       <a mat-list-item [routerLink]="['./orders']" routerLinkActive="active">تراکنش های کوپن</a>
       <a mat-list-item [routerLink]="['./checkouts']" routerLinkActive="active">درخواست های تصفیه</a>

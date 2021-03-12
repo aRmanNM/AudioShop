@@ -37,15 +37,20 @@
 
     </mat-tab>
     <mat-tab label="تصویر کارت ملی">
-      <img
-        src="{{ baseUrl + salesperson.salespersonCredential.id + '/' + salesperson.salespersonCredential.idCardPhoto.fileName }}"
-        *ngIf="salesperson.salespersonCredential">
+      <div *ngIf="salesperson.salespersonCredential">
+        <img
+          src="{{ baseUrl + salesperson.salespersonCredential.id + '/' + salesperson.salespersonCredential.idCardPhoto.fileName }}"
+          *ngIf="salesperson.salespersonCredential.idCardPhoto">
+      </div>
     </mat-tab>
     <mat-tab label="تصویر کارت بانکی">
-      <img
-        src="{{ baseUrl + salesperson.salespersonCredential.id + '/' + salesperson.salespersonCredential.bankCardPhoto.fileName }}"
-        *ngIf="salesperson.salespersonCredential">
+      <div *ngIf="salesperson.salespersonCredential">
+        <img
+          src="{{ baseUrl + salesperson.salespersonCredential.id + '/' + salesperson.salespersonCredential.bankCardPhoto.fileName }}"
+          *ngIf="salesperson.salespersonCredential.bankCardPhoto">
+      </div>
     </mat-tab>
   </mat-tab-group>
 </div>
+
 <mat-progress-bar color="accent" mode="indeterminate" *ngIf="spinnerService.visibility | async"></mat-progress-bar>

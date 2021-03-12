@@ -5,6 +5,8 @@ import {of, timer} from 'rxjs';
 import {map, switchMap} from 'rxjs/operators';
 import {AuthService} from '../../services/auth.service';
 import {Router} from '@angular/router';
+import {SpinnerService} from '../../services/spinner.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 export class PasswordStateMatcher implements ErrorStateMatcher {
   isErrorState(
@@ -21,7 +23,7 @@ export class PasswordStateMatcher implements ErrorStateMatcher {
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
-
+  showSpinner = false;
   matcher = new PasswordStateMatcher();
   // passwordPattern = '(?=^.{6,20}$)(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&amp;*()_+}{&quot;:;\'?/&gt;.&lt;,])(?!.*\\s).*$';
   isRegister: boolean;
@@ -49,18 +51,24 @@ export class RegisterComponent implements OnInit {
     this.passwordMatchValidator
   );
 
-  constructor(private authService: AuthService, private router: Router) {
+  constructor(private authService: AuthService,
+              private router: Router,
+              public spinnerService: SpinnerService,
+              private snackBar: MatSnackBar) {
   }
 
   ngOnInit(): void {
   }
 
   register(): void {
+    this.showSpinner = true;
     this.authService.register(this.registerForm.value).subscribe((res) => {
-      console.log('user registered as salesperson');
+      this.showSpinner = false;
       this.router.navigate(['/salesperson']);
     }, error => {
-      console.log(error);
+      this.snackBar.open('ثبت نام ناموفق', null, {
+        duration: 2000,
+      });
     });
   }
 

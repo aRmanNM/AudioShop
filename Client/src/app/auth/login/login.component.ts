@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {AuthService} from '../../services/auth.service';
+import {SpinnerService} from '../../services/spinner.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +19,10 @@ export class LoginComponent implements OnInit {
     password: new FormControl('', [Validators.required, Validators.maxLength(40)]),
   });
 
-  constructor(private authService: AuthService, private router: Router) {
+  constructor(private authService: AuthService,
+              private router: Router,
+              public spinnerService: SpinnerService,
+              private snackBar: MatSnackBar) {
   }
 
   ngOnInit(): void {
@@ -37,9 +42,12 @@ export class LoginComponent implements OnInit {
         }
       },
       (er) => {
-        this.error = er.error;
+        this.error = 'ورود ناموفق';
         this.loginForm.reset();
-        console.log('login failed!');
+        // console.log('login failed!');
+        this.snackBar.open('ورود ناموفق بود', null, {
+          duration: 2000,
+        });
       }
     );
   }

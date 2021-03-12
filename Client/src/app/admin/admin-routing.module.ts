@@ -19,6 +19,7 @@ const routes: Routes = [
     path: '', component: AdminComponent, children: [
       {path: 'courses', component: CoursesComponent, canActivate: [AdminAuthGuard], data: {reuseRoute: true}},
       {path: 'episodes', component: EpisodesComponent, canActivate: [AdminAuthGuard], data: {reuseRoute: true}},
+      {path: 'episodes/:courseId', component: EpisodesComponent, canActivate: [AdminAuthGuard]},
       {path: 'checkouts/done', component: CheckoutDoneComponent, canActivate: [AdminAuthGuard], data: {reuseRoute: true}},
       {path: 'checkouts/pending', component: CheckoutPendingComponent, canActivate: [AdminAuthGuard], data: {reuseRoute: true}},
       {path: 'reviews/done', component: ReviewsDoneComponent, canActivate: [AdminAuthGuard], data: {reuseRoute: true}},
