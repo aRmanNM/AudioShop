@@ -27,6 +27,7 @@ import {SliderEditCreateComponent} from './slider/slider-edit-create/slider-edit
 import {CouponsComponent} from './coupons/coupons.component';
 import {CouponsCreateEditComponent} from './coupons/coupons-create-edit/coupons-create-edit.component';
 import {MobileAppComponent} from './mobile-app/mobile-app.component';
+import { PasswordComponent } from './password/password.component';
 
 
 @NgModule({
@@ -51,6 +52,7 @@ import {MobileAppComponent} from './mobile-app/mobile-app.component';
     CouponsComponent,
     CouponsCreateEditComponent,
     MobileAppComponent,
+    PasswordComponent,
   ],
   imports: [
     CommonModule,

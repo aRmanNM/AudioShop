@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {environment} from '../../environments/environment';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {JwtHelperService} from '@auth0/angular-jwt';
 import {UserRegister} from '../models/user-register';
 import {User} from '../models/user';
@@ -92,5 +92,9 @@ export class AuthService {
 
   isInRole(role: string): boolean {
     return this.decodedToken.role.toLowerCase() === role.toLowerCase() ? true : false;
+  }
+
+  updatePassword(oldPassword: string, newPassword: string): Observable<any> {
+    return this.http.put(this.baseUrl + 'updatePassword', {oldPassword, newPassword});
   }
 }

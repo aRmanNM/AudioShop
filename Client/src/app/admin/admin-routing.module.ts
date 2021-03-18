@@ -13,6 +13,7 @@ import {ConfigsComponent} from './configs/configs.component';
 import {SliderComponent} from './slider/slider.component';
 import {CouponsComponent} from './coupons/coupons.component';
 import {MobileAppComponent} from './mobile-app/mobile-app.component';
+import {PasswordComponent} from './password/password.component';
 
 const routes: Routes = [
   {
@@ -29,6 +30,7 @@ const routes: Routes = [
       {path: 'slider', component: SliderComponent, canActivate: [AdminAuthGuard], data: {reuseRoute: true}},
       {path: 'coupons', component: CouponsComponent, canActivate: [AdminAuthGuard], data: {reuseRoute: true}},
       {path: 'app-upload', component: MobileAppComponent, canActivate: [AdminAuthGuard], data: {reuseRoute: true}},
+      {path: 'password', component: PasswordComponent, canActivate: [AdminAuthGuard]},
     ]
   }
 ];

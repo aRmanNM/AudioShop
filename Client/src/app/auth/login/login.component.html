@@ -25,6 +25,9 @@
         <div class="register">
           <a [routerLink]="['/register']">ثبت نام</a>
         </div>
+        <div class="register">
+          <a [routerLink]="['/landing']">بازگشت به صفحه اصلی</a>
+        </div>
       </form>
     </mat-card-content>
     <mat-progress-bar color="accent" mode="indeterminate" *ngIf="spinnerService.visibility | async"></mat-progress-bar>

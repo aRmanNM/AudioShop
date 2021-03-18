@@ -23,7 +23,10 @@ namespace API.Repositories
             var reviews = _context.Reviews.AsQueryable();
 
             reviews = accepted ? reviews.Where(r => r.Accepted == true) : reviews.Where(r => r.Accepted == false);
-            return await reviews.Where(r => r.CourseId == courseId).ToArrayAsync();
+            return await reviews
+                .Where(r => r.CourseId == courseId)
+                .OrderByDescending(r => r.Date)
+                .ToArrayAsync();
         }
 
         public async Task<Review> AddReview(Review review)
@@ -40,7 +43,10 @@ namespace API.Repositories
 
         public async Task<ICollection<Review>> GetAllReviews(bool accepted)
         {
-            return await _context.Reviews.Where(r => r.Accepted == accepted).ToArrayAsync();
+            return await _context.Reviews
+                .Where(r => r.Accepted == accepted)
+                .OrderByDescending(r => r.Date)
+                .ToArrayAsync();
         }
     }
 }

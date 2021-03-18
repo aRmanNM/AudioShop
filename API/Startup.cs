@@ -45,7 +45,7 @@ namespace API
             services.AddScoped<ICredentialRepository, CredentialRepository>();
             services.AddScoped<ISliderRepository, SliderRepository>();
 
-            services.AddSingleton<ISMSService, SMSService>();
+            services.AddSingleton<ISMSService, FakeSMSService>();
             services.AddSingleton<IFileService, FileService>();
 
             services.Configure<SMSOptions>(_config.GetSection("SMSOptions"));
@@ -98,13 +98,13 @@ namespace API
                 app.UseDeveloperExceptionPage();
             }
 
-            // app.UseHttpsRedirection(); // TODO: FIX THIS
+            app.UseHttpsRedirection();
             app.UseRouting();
 
             var provider = new FileExtensionContentTypeProvider();
             provider.Mappings[".apk"] = "application/vnd.android.package-archive";
             app.UseStaticFiles(new StaticFileOptions
-            {                
+            {
                 ContentTypeProvider = provider
             });
 

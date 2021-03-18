@@ -1,8 +1,10 @@
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using API.Dtos;
 using API.Interfaces;
 using API.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -191,6 +193,21 @@ namespace API.Controllers
         public async Task<ActionResult<bool>> CheckUserExistsAsync([FromQuery] string userName)
         {
             return await _userManager.FindByNameAsync(userName) != null;
+        }
+
+        [Authorize]
+        [HttpPut("updatepassword")]
+        public async Task<ActionResult> UpdatePassword(PasswordChangeDto passwordChangeDto)
+        {
+            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var user = await _userManager.FindByIdAsync(userId);
+            var res = await _userManager.ChangePasswordAsync(user, passwordChangeDto.OldPassword, passwordChangeDto.NewPassword);
+            if (!res.Succeeded)
+            {
+                return BadRequest();
+            }
+
+            return Ok();
         }
     }
 }
