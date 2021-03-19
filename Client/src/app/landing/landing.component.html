@@ -5,11 +5,12 @@
   </h3>
   <mat-card [dir]="'rtl'">
     <mat-card-content>
-      <a class="mb-2" mat-raised-button color="accent" href="{{ latest }}" target="_blank">دانلود آخرین نسخه نرم
-        افزار</a>
-      <button mat-raised-button color="primary" [routerLink]="['/login']" routerLinkActive="$router_link-active$">همکاری
+<!--      <button class="mb-2" mat-raised-button color="accent" [routerLink]="[latest]" target="_blank">دانلود آخرین نسخه نرم-->
+<!--        افزار</button>-->
+      <a class="btn btn-secondary mb-2" href="{{latest}}" target="_blank">دریافت آخرین نسخه نرم افزار</a>
+      <a class="btn btn-primary" [routerLink]="['/login']" routerLinkActive="$router_link-active$">همکاری
         در فروش
-      </button>
+      </a>
     </mat-card-content>
   </mat-card>
 </div>

@@ -30,10 +30,8 @@ namespace API.Services
         {
             try
             {
-                var sender = _options.SMSSender;
-                var message = $"سلام\nکد عضویت در نرم افزار:\n{authToken}";
                 var api = new KavenegarApi(_options.SMSAPIKey);
-                api.Send(sender, receptor, message);
+                api.VerifyLookup(receptor, authToken, "smsverification");
             }
             catch (Kavenegar.Exceptions.ApiException ex)
             {

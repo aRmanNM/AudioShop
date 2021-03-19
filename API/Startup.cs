@@ -45,7 +45,7 @@ namespace API
             services.AddScoped<ICredentialRepository, CredentialRepository>();
             services.AddScoped<ISliderRepository, SliderRepository>();
 
-            services.AddSingleton<ISMSService, FakeSMSService>();
+            services.AddSingleton<ISMSService, SMSService>();
             services.AddSingleton<IFileService, FileService>();
 
             services.Configure<SMSOptions>(_config.GetSection("SMSOptions"));
