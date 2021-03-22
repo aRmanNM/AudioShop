@@ -3,7 +3,7 @@ mat-drawer-container {
 }
 
 mat-drawer {
-  width: 200px;
+  width: 230px;
 }
 
 a.mat-list-item.active { background-color: lightgray; }
@@ -11,7 +11,6 @@ a.mat-list-item.active { background-color: lightgray; }
 mat-expansion-panel-header {
   margin-left: 0px;
   padding: 1em;
-  color: gray;
 }
 
 ::ng-deep div.mat-expansion-panel-body {

@@ -2,11 +2,6 @@
   flex: 1 1 auto;
 }
 
-button {
-  margin-right: 1em;
+.user-icon {
+  transform: scale(2);
 }
-
-mat-icon {
-  cursor: pointer;
-}
-

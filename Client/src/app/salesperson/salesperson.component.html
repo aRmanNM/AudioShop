@@ -6,9 +6,18 @@
 <mat-drawer-container [dir]="'rtl'" class="drawer">
   <mat-drawer #drawer mode="side" opened style="width: 200px;">
     <app-sidebar>
-      <a mat-list-item [routerLink]="['./orders']" routerLinkActive="active">تراکنش های کوپن</a>
-      <a mat-list-item [routerLink]="['./checkouts']" routerLinkActive="active">درخواست های تصفیه</a>
-      <a mat-list-item [routerLink]="['./credentials']" routerLinkActive="active">مدارک هویتی</a>
+      <a mat-list-item [routerLink]="['./orders']" routerLinkActive="active">
+        <mat-icon>payment</mat-icon>
+        تراکنش های کوپن
+      </a>
+      <a mat-list-item [routerLink]="['./checkouts']" routerLinkActive="active">
+        <mat-icon>account_balance</mat-icon>
+        درخواست های تصفیه
+      </a>
+      <a mat-list-item [routerLink]="['./credentials']" routerLinkActive="active">
+        <mat-icon>verified_user</mat-icon>
+        مدارک هویتی
+      </a>
     </app-sidebar>
   </mat-drawer>
   <mat-drawer-content>

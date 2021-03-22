@@ -1,24 +1,17 @@
 <mat-toolbar [dir]="'rtl'" color="primary">
   <ng-content></ng-content>
-  <button mat-raised-button>
-    <span>{{ 'کاربر سیستم: ' + currentUser }}</span>
-  </button>
   <span class="spacer"></span>
-
-  <!--    <button mat-icon-button [matMenuTriggerFor]="menu">-->
-  <!--      <mat-icon>account_circle</mat-icon>-->
-  <!--    </button>-->
-
-  <!--  <mat-menu #menu>-->
-  <!--    <button mat-menu-item (click)="logout()">-->
-  <!--      <mat-icon>exit</mat-icon>-->
-  <!--      <span>خروج</span>-->
-  <!--    </button>-->
-  <!--  </mat-menu>-->
-
-  <button mat-raised-button (click)="logout()">
-    خروج از حساب کاربری
-    <mat-icon>logout</mat-icon>
+  <button mat-icon-button [matMenuTriggerFor]="menu">
+    <mat-icon class="user-icon">account_circle</mat-icon>
   </button>
-
+  <mat-menu #menu>
+    <button mat-menu-item disabled>
+      <mat-icon>account_circle</mat-icon>
+      <span>{{ currentUser }}</span>
+    </button>
+    <button mat-menu-item (click)="logout()">
+      <mat-icon>exit_to_app</mat-icon>
+      <span>خروج از سیستم</span>
+    </button>
+  </mat-menu>
 </mat-toolbar>
