@@ -7,6 +7,7 @@ using API.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 
 namespace API.Controllers
 {
@@ -21,6 +22,7 @@ namespace API.Controllers
         private readonly IConfigRepository _configRepository;
         private readonly ICouponRepository _couponRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IConfiguration _config;
 
         public AuthController(UserManager<User> userManager,
             SignInManager<User> signInManager,
@@ -28,12 +30,14 @@ namespace API.Controllers
             ISMSService smsService,
             IConfigRepository configRepository,
             ICouponRepository couponRepository,
-            IUserRepository userRepository)
+            IUserRepository userRepository,
+            IConfiguration config)
         {
             _smsService = smsService;
             _configRepository = configRepository;
             _couponRepository = couponRepository;
             _userRepository = userRepository;
+            _config = config;
             _signInManager = signInManager;
             _mapper = mapper;
             _userManager = userManager;
@@ -179,6 +183,7 @@ namespace API.Controllers
             }
 
             user.PhoneNumber = verificationDto.PhoneNumber;
+            user.PhoneNumberConfirmed = true;
             await _userManager.UpdateAsync(user);
             return Ok();
         }
@@ -192,7 +197,7 @@ namespace API.Controllers
         [HttpGet("userexists")]
         public async Task<ActionResult<bool>> CheckUserExistsAsync([FromQuery] string userName)
         {
-            return await _userManager.FindByNameAsync(userName) != null;
+            return await _userManager.FindByNameAsync(userName.ToLower()) != null;
         }
 
         [Authorize]
@@ -206,6 +211,22 @@ namespace API.Controllers
             {
                 return BadRequest();
             }
+
+            return Ok();
+        }
+
+        // TODO: Don't keep this bullshit.
+        [HttpGet("resetadminpassword")]
+        public async Task<ActionResult> ResetAdminPassword([FromQuery] string userName ,[FromQuery] string secret)
+        {
+            if (secret != _config["Pass:Secret"])
+            {
+                return BadRequest("cant do that!");
+            }
+
+            var user = await _userManager.FindByNameAsync(userName.ToLower());
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var res = await _userManager.ResetPasswordAsync(user, token, _config["Pass:Default"]);
 
             return Ok();
         }

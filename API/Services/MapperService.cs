@@ -25,7 +25,7 @@ namespace API.Services
         {
             return new User()
             {
-                UserName = registerDto.UserName,
+                UserName = registerDto.UserName.ToLower(),
                 PhoneNumber = registerDto.PhoneNumber,
                 FirstName = registerDto.FirstName,
                 LastName = registerDto.LastName,

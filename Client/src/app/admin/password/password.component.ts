@@ -4,6 +4,7 @@ import {ErrorStateMatcher} from '@angular/material/core';
 import {FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {SpinnerService} from '../../services/spinner.service';
+import {Router} from '@angular/router';
 
 export class PasswordStateMatcher implements ErrorStateMatcher {
   isErrorState(
@@ -38,7 +39,8 @@ export class PasswordComponent implements OnInit {
 
   constructor(private authService: AuthService,
               private snackBar: MatSnackBar,
-              public spinnerService: SpinnerService) {
+              public spinnerService: SpinnerService,
+              private router: Router) {
   }
 
   ngOnInit(): void {
@@ -56,11 +58,18 @@ export class PasswordComponent implements OnInit {
       this.snackBar.open('رمز با موفقیت تغییر کرد', null, {
         duration: 3000,
       });
+
+      this.logout();
     }, error => {
       this.passForm.reset();
       this.snackBar.open('خطایی رخ داد', null, {
         duration: 3000,
       });
     });
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 }
