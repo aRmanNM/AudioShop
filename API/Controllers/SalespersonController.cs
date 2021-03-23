@@ -50,7 +50,7 @@ namespace API.Controllers
         {
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var user = await _userManager.FindByIdAsync(userId);
-            var result = await _orderRepository.GetOrdersForCheckout(user.CouponCode, pageNumber, pageSize);
+            var result = await _orderRepository.GetOrdersForCheckoutAsync(user.CouponCode, pageNumber, pageSize);
             return Ok(result);
         }
 
@@ -59,7 +59,7 @@ namespace API.Controllers
         {
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var user = await _userManager.FindByIdAsync(userId);
-            var checkoutThreshold = await _configRepository.GetConfig("DefaultCheckoutThreshold");
+            var checkoutThreshold = await _configRepository.GetConfigAsync("DefaultCheckoutThreshold");
 
             if (!user.CredentialAccepted)
             {
@@ -80,7 +80,7 @@ namespace API.Controllers
                 CreatedAt = DateTime.Now
             };
 
-            await _checkoutRepository.CreateCheckout(checkout);
+            await _checkoutRepository.CreateCheckoutAsync(checkout);
             user.TotalSalesOfSalesperson += user.CurrentSalesOfSalesperson;
             user.CurrentSalesOfSalesperson = 0;
             await _unitOfWork.CompleteAsync();
@@ -108,7 +108,7 @@ namespace API.Controllers
         public async Task<ActionResult<IEnumerable<Checkout>>> GetCheckouts()
         {
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var checkouts = await _checkoutRepository.GetSalespersonCheckouts(userId);
+            var checkouts = await _checkoutRepository.GetSalespersonCheckoutsAsync(userId);
             return Ok(checkouts);
         }
 
@@ -116,7 +116,7 @@ namespace API.Controllers
         public async Task<ActionResult<SalespersonCredential>> GetCredential()
         {
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var credential = await _credentialRepository.GetSalespersonCredetial(userId);
+            var credential = await _credentialRepository.GetSalespersonCredentialAsync(userId);
             return Ok(credential);
         }
 
@@ -131,16 +131,16 @@ namespace API.Controllers
                 return BadRequest("cant do that anymore!");
             }
 
-            var credential = await _credentialRepository.GetSalespersonCredetial(userId);
+            var credential = await _credentialRepository.GetSalespersonCredentialAsync(userId);
             if (credential == null)
             {
-                await _credentialRepository.CreateCredential(salespersonCredential);
+                await _credentialRepository.CreateCredentialAsync(salespersonCredential);
                 user.SalespersonCredential = salespersonCredential;
                 user.CredentialAccepted = false;
             }
             else
             {
-                _credentialRepository.UpdateCredetial(salespersonCredential);
+                _credentialRepository.UpdateCredential(salespersonCredential);
             }
 
             await _unitOfWork.CompleteAsync();
@@ -160,7 +160,7 @@ namespace API.Controllers
         public async Task<ActionResult<SalespersonDto>> GetInfo()
         {
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var salesperson = await _userRepository.FindUserById(userId);
+            var salesperson = await _userRepository.FindUserByIdAsync(userId);
             return Ok(_mapper.MapUserToSalespersonDto(salesperson));
         }
     }

@@ -6,9 +6,9 @@ namespace API.Interfaces
 {
     public interface ISliderRepository
     {
-        Task<IEnumerable<SliderItem>> GetSliderItems();
-        Task<SliderItem> GetSliderItemById(int sliderId);
-        Task<SliderItem> CreateSliderItem(SliderItem sliderItem);
+        Task<IEnumerable<SliderItem>> GetSliderItemsAsync();
+        Task<SliderItem> GetSliderItemByIdAsync(int sliderId);
+        Task<SliderItem> CreateSliderItemAsync(SliderItem sliderItem);
         SliderItem UpdateSliderItem(SliderItem sliderItem);
         void DeleteSliderItem(SliderItem sliderItem);
     }

@@ -59,7 +59,7 @@ namespace API.Controllers
                 EpisodeId = e
             }).ToArray();
 
-            await _orderRepository.CreateOrder(order);
+            await _orderRepository.CreateOrderAsync(order);
             await _unitOfWork.CompleteAsync();
 
             await _userManager.UpdateAsync(user);

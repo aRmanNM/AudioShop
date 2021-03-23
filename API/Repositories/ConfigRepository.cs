@@ -16,17 +16,17 @@ namespace API.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Config>> GetAllConfigs()
+        public async Task<IEnumerable<Config>> GetAllConfigsAsync()
         {
             return await _context.Configs.ToArrayAsync();
         }
 
-        public async Task<Config> GetConfig(string titleEn)
+        public async Task<Config> GetConfigAsync(string titleEn)
         {
             return await _context.Configs.FirstOrDefaultAsync(c => c.TitleEn == titleEn);
         }
 
-        public async Task<IEnumerable<Config>> GetConfigsByGroup(string GroupEn)
+        public async Task<IEnumerable<Config>> GetConfigsByGroupAsync(string GroupEn)
         {
             return await _context.Configs.Where(c => c.GroupEn.ToUpper() == GroupEn.ToUpper()).ToListAsync();
         }

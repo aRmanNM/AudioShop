@@ -25,7 +25,7 @@ namespace API.Services
             _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Token:Key"]));
         }
 
-        public async Task<string> CreateToken(User user)
+        public async Task<string> CreateTokenAsync(User user)
         {
             var claims = new List<Claim>
             {

@@ -50,7 +50,7 @@ namespace API.Controllers
         [HttpPost("courses/{courseId}/photo")]
         public async Task<ActionResult<Photo>> UploadCoursePhoto(int courseId, IFormFile file)
         {
-            var course = await _courseRepository.GetCourseById(courseId);
+            var course = await _courseRepository.GetCourseByIdAsync(courseId);
             if (course == null) return NotFound();
             if (file == null) return BadRequest("null file");
             if (file.Length == 0) return BadRequest("empty file");
@@ -62,7 +62,7 @@ namespace API.Controllers
 
             try
             {
-                await _fileService.Upload(file, fileName, uploadFolderPath);
+                await _fileService.UploadAsync(file, fileName, uploadFolderPath);
             }
             catch (Exception e)
             {
@@ -89,7 +89,7 @@ namespace API.Controllers
         public async Task<ActionResult<Photo>> UploadCredentialPhoto([FromQuery] int credentialId, IFormFile file, [FromQuery] string usedAs)
         {
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var credential = await _credentialRepository.GetSalespersonCredetial(userId, true);
+            var credential = await _credentialRepository.GetSalespersonCredentialAsync(userId, true);
             if (credential == null) return NotFound();
             if (file == null) return BadRequest("null file");
             if (file.Length == 0) return BadRequest("empty file");
@@ -101,7 +101,7 @@ namespace API.Controllers
 
             try
             {
-                await _fileService.Upload(file, fileName, uploadFolderPath);
+                await _fileService.UploadAsync(file, fileName, uploadFolderPath);
             }
             catch (Exception e)
             {
@@ -140,7 +140,7 @@ namespace API.Controllers
         [HttpPost("sliders/{sliderId}/photo")]
         public async Task<ActionResult<Photo>> UploadSliderPhoto(int sliderId, IFormFile file)
         {
-            var sliderItem = await _sliderRepository.GetSliderItemById(sliderId);
+            var sliderItem = await _sliderRepository.GetSliderItemByIdAsync(sliderId);
             if (sliderItem == null) return NotFound();
             if (file == null) return BadRequest("null file");
             if (file.Length == 0) return BadRequest("empty file");
@@ -152,7 +152,7 @@ namespace API.Controllers
 
             try
             {
-                await _fileService.Upload(file, fileName, uploadFolderPath);
+                await _fileService.UploadAsync(file, fileName, uploadFolderPath);
             }
             catch (Exception e)
             {

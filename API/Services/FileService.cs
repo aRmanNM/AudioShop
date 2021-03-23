@@ -13,7 +13,7 @@ namespace API.Services
             File.Delete(filePath);
         }
 
-        public async Task Upload(IFormFile file, string fileName, string folderPath)
+        public async Task UploadAsync(IFormFile file, string fileName, string folderPath)
         {
             if (!Directory.Exists(folderPath))
             {

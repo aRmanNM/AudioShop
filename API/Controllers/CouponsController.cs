@@ -29,7 +29,7 @@ namespace API.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<Coupon>>> GetCoupons()
         {
-            var coupons = await _couponRepository.GetCoupons();
+            var coupons = await _couponRepository.GetCouponsAsync();
             return Ok(coupons);
         }
 
@@ -37,8 +37,8 @@ namespace API.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Coupon>> CreateCoupon(CouponToCreateDto couponDto)
         {
-            var coupon = await _mapper.MapCouponDtoToCoupon(couponDto);
-            await _couponRepository.CreateCoupon(coupon);
+            var coupon = await _mapper.MapCouponDtoToCouponAsync(couponDto);
+            await _couponRepository.CreateCouponAsync(coupon);
             await _unitOfWork.CompleteAsync();
             return Ok(coupon);
         }
@@ -55,7 +55,7 @@ namespace API.Controllers
         [HttpGet("{couponCode}/isActive")]
         public async Task<bool> CheckCouponIsActive(string couponCode)
         {
-            var coupon = await _couponRepository.GetCouponByCode(couponCode);
+            var coupon = await _couponRepository.GetCouponByCodeAsync(couponCode);
             if (coupon == null)
             {
                 return false;
@@ -72,7 +72,7 @@ namespace API.Controllers
         [HttpGet("{couponCode}/IsSalespersonCoupon")]
         public async Task<int> CheckIsSalespersonCoupon(string couponCode)
         {
-            var coupon = await _couponRepository.GetCouponByCode(couponCode);
+            var coupon = await _couponRepository.GetCouponByCodeAsync(couponCode);
             if (coupon == null)
             {
                 return -1;

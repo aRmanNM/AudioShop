@@ -15,7 +15,7 @@ namespace API.Repositories
             _context = context;
         }
 
-        public async Task<SliderItem> CreateSliderItem(SliderItem sliderItem)
+        public async Task<SliderItem> CreateSliderItemAsync(SliderItem sliderItem)
         {
             await _context.SliderItems.AddAsync(sliderItem);
             return sliderItem;
@@ -27,14 +27,14 @@ namespace API.Repositories
             _context.Remove(item);
         }
 
-        public async Task<SliderItem> GetSliderItemById(int sliderId)
+        public async Task<SliderItem> GetSliderItemByIdAsync(int sliderId)
         {
             return await _context.SliderItems
                 .Include(si => si.Photo)
                 .FirstOrDefaultAsync(s => s.Id == sliderId);
         }
 
-        public async Task<IEnumerable<SliderItem>> GetSliderItems()
+        public async Task<IEnumerable<SliderItem>> GetSliderItemsAsync()
         {
             return await _context.SliderItems
                 .Include(s => s.Photo)

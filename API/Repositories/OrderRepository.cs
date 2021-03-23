@@ -17,7 +17,7 @@ namespace API.Repositories
             _context = context;
         }
 
-        public async Task<Order> CreateOrder(Order order)
+        public async Task<Order> CreateOrderAsync(Order order)
         {
             await _context.Orders.AddAsync(order);
             return order;
@@ -28,7 +28,7 @@ namespace API.Repositories
         //     await _context.AddRangeAsync(basketItems);
         // }
 
-        public async Task<Order> GetOrderById(int orderId)
+        public async Task<Order> GetOrderByIdAsync(int orderId)
         {
             return await _context.Orders
                 .Include(o => o.OrderEpisodes)
@@ -36,7 +36,7 @@ namespace API.Repositories
                 .FirstOrDefaultAsync(o => o.Id == orderId);
         }
 
-        public async Task<PaginatedResult<OrderForSalespersonDto>> GetOrdersForCheckout(string couponCode, int pageNumber = 1, int pageSize = 10)
+        public async Task<PaginatedResult<OrderForSalespersonDto>> GetOrdersForCheckoutAsync(string couponCode, int pageNumber = 1, int pageSize = 10)
         {
             if (pageSize > 20 || pageSize < 1)
             {

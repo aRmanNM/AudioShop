@@ -26,20 +26,20 @@ namespace API.Controllers
         [HttpGet]
         public async Task<ActionResult<Config>> GetConfig([FromQuery] string title)
         {
-            return Ok(await _configRepo.GetConfig(title));
+            return Ok(await _configRepo.GetConfigAsync(title));
         }
 
         [HttpGet("{group}")]
         public async Task<ActionResult<IEnumerable<Config>>> GetGroupConfigs(string group)
         {
-            return Ok(await _configRepo.GetConfigsByGroup(group));
+            return Ok(await _configRepo.GetConfigsByGroupAsync(group));
         }
 
         [Authorize(Roles="Admin")]
         [HttpGet("all")]
         public async Task<ActionResult<IEnumerable<Config>>> GetAllConfigs()
         {
-            return Ok(await _configRepo.GetAllConfigs());
+            return Ok(await _configRepo.GetAllConfigsAsync());
         }
 
         [Authorize(Roles = "Admin")]

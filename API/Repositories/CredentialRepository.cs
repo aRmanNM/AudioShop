@@ -14,13 +14,13 @@ namespace API.Repositories
             _context = context;
         }
 
-        public async Task<SalespersonCredential> CreateCredential(SalespersonCredential salespersonCredential)
+        public async Task<SalespersonCredential> CreateCredentialAsync(SalespersonCredential salespersonCredential)
         {
             await _context.SalespersonCredentials.AddAsync(salespersonCredential);
             return salespersonCredential;
         }
 
-        public async Task<SalespersonCredential> GetSalespersonCredetial(string userId, bool withTracking = false)
+        public async Task<SalespersonCredential> GetSalespersonCredentialAsync(string userId, bool withTracking = false)
         {
             var credential = _context.SalespersonCredentials
                 .Include(sc => sc.IdCardPhoto)
@@ -36,7 +36,7 @@ namespace API.Repositories
             }
         }
 
-        public SalespersonCredential UpdateCredetial(SalespersonCredential salespersonCredential)
+        public SalespersonCredential UpdateCredential(SalespersonCredential salespersonCredential)
         {
             _context.SalespersonCredentials.Update(salespersonCredential);
             return salespersonCredential;

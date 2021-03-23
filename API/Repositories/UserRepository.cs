@@ -17,7 +17,7 @@ namespace API.Repositories
             _context = context;
         }
 
-        public async Task<User> GetSalespersonByCouponCode(string couponCode)
+        public async Task<User> GetSalespersonByCouponCodeAsync(string couponCode)
         {
             if (string.IsNullOrEmpty(couponCode))
             {
@@ -41,7 +41,7 @@ namespace API.Repositories
             return await _context.Users.FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
         }
 
-        public Task<User> FindUserById(string userId)
+        public Task<User> FindUserByIdAsync(string userId)
         {
             return _context.Users
                 .Include(u => u.SalespersonCredential).ThenInclude(sc => sc.IdCardPhoto)
@@ -49,7 +49,7 @@ namespace API.Repositories
                 .FirstOrDefaultAsync(u => u.Id == userId);
         }
 
-        public async Task<PaginatedResult<User>> GetAllSalespersons(string search,
+        public async Task<PaginatedResult<User>> GetSalespersonsAsync(string search,
             bool onlyShowUsersWithUnacceptedCred = false, int pageNumber = 1, int pageSize = 10)
         {
             if (pageSize > 20 || pageSize < 1)

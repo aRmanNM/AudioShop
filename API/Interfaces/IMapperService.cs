@@ -9,15 +9,15 @@ namespace API.Interfaces
         // Model to DTO
         CourseDto MapCourseToCourseDto(Course course);
         EpisodeDto MapEpisodeToEpisodeDto(Episode episode);
-        SliderItemDto MapSliderItemToSliderItemDto(SliderItem slideritem);
+        SliderItemDto MapSliderItemToSliderItemDto(SliderItem sliderItem);
         SalespersonDto MapUserToSalespersonDto(User user);
 
         // DTO to Model
         User MapRegisterDtoToUser(RegisterDto registerDto);
-        Task<UserDto> MapUserToUserDto(User user);
+        Task<UserDto> MapUserToUserDtoAsync(User user);
         Course MapCourseDtoToCourse(CourseDto courseDto);
         Episode MapEpisodeDtoToEpisode(EpisodeDto episodeDto);
-        Task<Coupon> MapCouponDtoToCoupon(CouponToCreateDto couponDto);
+        Task<Coupon> MapCouponDtoToCouponAsync(CouponToCreateDto couponDto);
         SliderItem MapSliderItemDtoToSliderItem(SliderItemDto sliderItemDto);
     }
 }

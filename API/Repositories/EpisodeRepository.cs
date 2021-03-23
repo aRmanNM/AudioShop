@@ -17,7 +17,7 @@ namespace API.Repositories
             _context = context;
         }
 
-        public async Task<Episode> CreateEpisode(Episode courseEpisode)
+        public async Task<Episode> CreateEpisodeAsync(Episode courseEpisode)
         {
             await _context.Episodes.AddAsync(courseEpisode);
             return courseEpisode;
@@ -36,7 +36,7 @@ namespace API.Repositories
             _context.Episodes.Remove(episode);
         }
 
-        public async Task<IEnumerable<Episode>> GetCourseEpisodes(int courseId)
+        public async Task<IEnumerable<Episode>> GetCourseEpisodesAsync(int courseId)
         {
             return await _context.Episodes.Where(x => x.CourseId == courseId)
                 .Include(x => x.Course)
@@ -44,12 +44,12 @@ namespace API.Repositories
                 .ToListAsync();
         }
 
-        public async Task<Episode> GetEpisodeById(int id)
+        public async Task<Episode> GetEpisodeByIdAsync(int id)
         {
             return await _context.Episodes.Include(x => x.Audios).FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<IEnumerable<Episode>> GetUserEpisodes(string userId)
+        public async Task<IEnumerable<Episode>> GetUserEpisodesAsync(string userId)
         {
             return await _context.OrderEpisodes
                 .Include(o => o.Order)
@@ -59,7 +59,7 @@ namespace API.Repositories
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<int>> GetUserEpisodeIds(string userId)
+        public async Task<IEnumerable<int>> GetUserEpisodeIdsAsync(string userId)
         {
             return await _context.OrderEpisodes
                 .Include(o => o.Order)

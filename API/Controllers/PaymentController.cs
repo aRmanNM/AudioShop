@@ -69,7 +69,7 @@ namespace API.Controllers
                HttpContext.Request.Query["Authority"] != "")
             {
                 var authority = HttpContext.Request.Query["Authority"].ToString();
-                var order = await _orderRepository.GetOrderById(orderId);
+                var order = await _orderRepository.GetOrderByIdAsync(orderId);
                 var verification = await _payment.Verification(new DtoVerification
                 {
                     Amount = (int)order.PriceToPay,
@@ -85,7 +85,7 @@ namespace API.Controllers
                 order.Status = true;
                 order.PaymentReceipt = verification.RefId.ToString();
 
-                var salesperson = await _userRepository.GetSalespersonByCouponCode(order.SalespersonCouponCode);
+                var salesperson = await _userRepository.GetSalespersonByCouponCodeAsync(order.SalespersonCouponCode);
                 if (salesperson != null)
                 {
                     var salespersonShare = (order.PriceToPay * salesperson.SalePercentageOfSalesperson) / 100;
@@ -93,7 +93,7 @@ namespace API.Controllers
                     salesperson.CurrentSalesOfSalesperson += salespersonShare;
                 }
 
-                var coupon = await _couponRepository.GetCouponByCode(order.OtherCouponCode);
+                var coupon = await _couponRepository.GetCouponByCodeAsync(order.OtherCouponCode);
                 if (coupon != null)
                 {
                     coupon.Blacklist.Add(new BlacklistItem()

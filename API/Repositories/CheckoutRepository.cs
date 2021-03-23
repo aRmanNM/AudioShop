@@ -17,7 +17,7 @@ namespace API.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Checkout>> GetCheckouts(bool status, string userName, bool includeSalespersonInfo = false)
+        public async Task<IEnumerable<Checkout>> GetCheckoutsAsync(bool status, string userName, bool includeSalespersonInfo = false)
         {
             var checkouts = _context.Checkouts.AsQueryable();
 
@@ -40,18 +40,18 @@ namespace API.Repositories
             return checkout;
         }
 
-        public async Task<Checkout> CreateCheckout(Checkout checkout)
+        public async Task<Checkout> CreateCheckoutAsync(Checkout checkout)
         {
             await _context.Checkouts.AddAsync(checkout);
             return checkout;
         }
 
-        public async Task<IEnumerable<Checkout>> GetSalespersonCheckouts(string userId)
+        public async Task<IEnumerable<Checkout>> GetSalespersonCheckoutsAsync(string userId)
         {
             return await _context.Checkouts.Where(c => c.UserId == userId).ToArrayAsync();
         }
 
-        public async Task<Checkout> GetCheckoutWithId(int checkoutId)
+        public async Task<Checkout> GetCheckoutWithIdAsync(int checkoutId)
         {
             return await _context.Checkouts
                 .Include(c => c.User)

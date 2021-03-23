@@ -35,7 +35,7 @@ namespace API.Controllers
         [HttpGet("Episodes/{userId}")]
         public async Task<ActionResult<EpisodeDto>> GetUserEpisodes(string userId)
         {
-            var episodes = await _episodeRepository.GetUserEpisodes(userId);
+            var episodes = await _episodeRepository.GetUserEpisodesAsync(userId);
             var episodeDtos = episodes.Select(e => _mapper.MapEpisodeToEpisodeDto(e)).ToArray();
             return Ok(episodeDtos);
         }
@@ -44,7 +44,7 @@ namespace API.Controllers
         public async Task<ActionResult<BasketDto>> Refinebasket(BasketDto basketDto)
         {
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var userEpisodeIds = await _episodeRepository.GetUserEpisodeIds(userId);
+            var userEpisodeIds = await _episodeRepository.GetUserEpisodeIdsAsync(userId);
 
             // TODO: Check this for validity
             var filteredEpisdeIds = basketDto.EpisodeIds.Where(epi => !userEpisodeIds.Any(uepi => uepi == epi)).ToArray();
@@ -56,7 +56,7 @@ namespace API.Controllers
         [HttpGet("CheckIfEpisodeIsRepetitive/{userId}/{episodeId}")]
         public async Task<ActionResult<bool>> CheckIfCourseIsRepetitive(string userId, int episodeId)
         {
-            var episodeIds = await _episodeRepository.GetUserEpisodeIds(userId);
+            var episodeIds = await _episodeRepository.GetUserEpisodeIdsAsync(userId);
 
             foreach(var tempEpisodeId in episodeIds)
             {
@@ -78,7 +78,7 @@ namespace API.Controllers
             // -1 means cannot
 
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var coupon = await _couponRepository.GetCouponByCode(couponCode);
+            var coupon = await _couponRepository.GetCouponByCodeAsync(couponCode);
 
             if (coupon == null)
             {
@@ -90,7 +90,7 @@ namespace API.Controllers
                 return -2;
             }
 
-            if (await _couponRepository.CheckUserIsBlacklisted(couponCode, userId))
+            if (await _couponRepository.CheckUserIsBlacklistedAsync(couponCode, userId))
             {
                 return -3;
             }
@@ -112,7 +112,7 @@ namespace API.Controllers
             var res = await _userManager.UpdateAsync(user);
             if (res.Succeeded)
             {
-                return Ok(await _mapper.MapUserToUserDto(user));
+                return Ok(await _mapper.MapUserToUserDtoAsync(user));
             }
 
             return BadRequest("failed to update user");

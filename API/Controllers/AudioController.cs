@@ -39,7 +39,7 @@ namespace API.Controllers
         [HttpPost("episodes/{episodeId}/audios")]
         public async Task<ActionResult<Audio>> UploadAudioFile(int episodeId, IFormFile file)
         {
-            var episode = await _episodeRepository.GetEpisodeById(episodeId);
+            var episode = await _episodeRepository.GetEpisodeByIdAsync(episodeId);
             if (episode == null) return NotFound();
             if (file == null) return BadRequest("null file");
             if (file.Length == 0) return BadRequest("empty file");
@@ -51,7 +51,7 @@ namespace API.Controllers
 
             try
             {
-                await _fileService.Upload(file, fileName, uploadFolderPath);
+                await _fileService.UploadAsync(file, fileName, uploadFolderPath);
             }
             catch (Exception e)
             {
@@ -75,7 +75,7 @@ namespace API.Controllers
         [HttpDelete("episodes/{episodeId}/audios")]
         public async Task<ActionResult> DeleteEpisodeAudios(int episodeId)
         {
-            var episode = await _episodeRepository.GetEpisodeById(episodeId);
+            var episode = await _episodeRepository.GetEpisodeByIdAsync(episodeId);
             var uploadFolderPath = Path.Combine(_host.WebRootPath, "Files", episode.CourseId.ToString());
             if (episode == null) return NotFound();
             try

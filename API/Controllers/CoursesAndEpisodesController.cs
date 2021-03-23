@@ -41,7 +41,7 @@ namespace API.Controllers
         public async Task<ActionResult<PaginatedResult<CourseDto>>> GetCourses(bool includeEpisodes = false,
             string search = null, bool includeInactive = false, int pageNumber = 1, int pageSize = 10)
         {
-            var result = await _courseRepository.GetCourses(includeEpisodes, search, includeInactive, pageNumber, pageSize);
+            var result = await _courseRepository.GetCoursesAsync(includeEpisodes, search, includeInactive, pageNumber, pageSize);
             var resultWithDtos = new PaginatedResult<CourseDto>();
             resultWithDtos.TotalItems = result.TotalItems;
             resultWithDtos.Items = result.Items.Select(c => _mapper.MapCourseToCourseDto(c));
@@ -51,7 +51,7 @@ namespace API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<CourseDto>> GetCourseById(int id)
         {
-            var course = await _courseRepository.GetCourseById(id);
+            var course = await _courseRepository.GetCourseByIdAsync(id);
             return Ok(_mapper.MapCourseToCourseDto(course));
         }
 
@@ -60,7 +60,7 @@ namespace API.Controllers
         public async Task<ActionResult<Course>> CreateCourse(CourseDto courseDto)
         {
             var course = _mapper.MapCourseDtoToCourse(courseDto);
-            await _courseRepository.CreateCourse(course);
+            await _courseRepository.CreateCourseAsync(course);
             await _unitOfWork.CompleteAsync();
             return Ok(_mapper.MapCourseToCourseDto(course));
         }
@@ -87,7 +87,7 @@ namespace API.Controllers
                 accepted = true;
             }
 
-            var reviews = await _reviewRepository.GetCourseReviews(courseId, accepted);
+            var reviews = await _reviewRepository.GetCourseReviewsAsync(courseId, accepted);
             return Ok(reviews);
         }
 
@@ -101,7 +101,7 @@ namespace API.Controllers
             }
 
             review.Accepted = false;
-            await _reviewRepository.AddReview(review);
+            await _reviewRepository.AddReviewAsync(review);
             await _unitOfWork.CompleteAsync();
             return Ok(review);
         }
@@ -129,7 +129,7 @@ namespace API.Controllers
         [HttpGet("reviews")]
         public async Task<ActionResult<List<Review>>> GetAllReviews([FromQuery] bool accepted)
         {
-            var reviews = await _reviewRepository.GetAllReviews(accepted);
+            var reviews = await _reviewRepository.GetAllReviewsAsync(accepted);
             return Ok(reviews);
         }
 
@@ -140,13 +140,13 @@ namespace API.Controllers
         [HttpGet("{courseId}/episodes")]
         public async Task<ActionResult<List<EpisodeDto>>> GetCourseEpisodes(int courseId)
         {
-            var course = await _courseRepository.GetCourseById(courseId);
+            var course = await _courseRepository.GetCourseByIdAsync(courseId);
             if (course == null)
             {
                 return NotFound("course not found!");
             }
 
-            var episodes = await _episodeRepository.GetCourseEpisodes(courseId);
+            var episodes = await _episodeRepository.GetCourseEpisodesAsync(courseId);
             var episodeDtos = episodes.Select(e => _mapper.MapEpisodeToEpisodeDto(e));
             return Ok(episodeDtos);
         }
@@ -154,7 +154,7 @@ namespace API.Controllers
         [HttpGet("episodes/{id}")]
         public async Task<ActionResult<EpisodeDto>> GetEpisodeById(int id)
         {
-            var episode = await _episodeRepository.GetEpisodeById(id);
+            var episode = await _episodeRepository.GetEpisodeByIdAsync(id);
             var episodeDto = _mapper.MapEpisodeToEpisodeDto(episode);
             return Ok(episodeDto);
         }
@@ -164,7 +164,7 @@ namespace API.Controllers
         public async Task<ActionResult<EpisodeDto>> CreateEpisode(EpisodeDto episodeDto)
         {
             var episode = _mapper.MapEpisodeDtoToEpisode(episodeDto);
-            await _episodeRepository.CreateEpisode(episode);
+            await _episodeRepository.CreateEpisodeAsync(episode);
             await _unitOfWork.CompleteAsync();
             return Ok(_mapper.MapEpisodeToEpisodeDto(episode));
         }

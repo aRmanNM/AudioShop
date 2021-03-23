@@ -6,11 +6,11 @@ namespace API.Interfaces
 {
     public interface ICouponRepository
     {
-        Task<Coupon> CreateCoupon(Coupon coupon);
-        Task<IEnumerable<Coupon>> GetCoupons(bool includeSalespersons = false);
-        Task<Coupon> GetCouponByCode(string code);
-        Task<bool> CheckUserIsBlacklisted(string couponCode, string userId);
-        Task<string> GenerateCouponCode();
+        Task<Coupon> CreateCouponAsync(Coupon coupon);
+        Task<IEnumerable<Coupon>> GetCouponsAsync(bool includeSalespersons = false);
+        Task<Coupon> GetCouponByCodeAsync(string code);
+        Task<bool> CheckUserIsBlacklistedAsync(string couponCode, string userId);
+        Task<string> GenerateCouponCodeAsync();
         void UpdateCoupon(Coupon coupon);
     }
 }

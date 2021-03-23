@@ -5,7 +5,7 @@ namespace API.Interfaces
 {
     public interface IFileService
     {
-        Task Upload(IFormFile file, string fileName, string folderPath);
+        Task UploadAsync(IFormFile file, string fileName, string folderPath);
         void Delete(string fileName, string folderPath);
     }
 }

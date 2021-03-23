@@ -38,7 +38,7 @@ namespace API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<SliderItemDto>>> GetSliderItems()
         {
-            var sliderItems = await _sliderRepository.GetSliderItems();
+            var sliderItems = await _sliderRepository.GetSliderItemsAsync();
             var sliderItemDtos = sliderItems.Select(s => _mapper.MapSliderItemToSliderItemDto(s));
             return Ok(sliderItemDtos);
         }
@@ -48,7 +48,7 @@ namespace API.Controllers
         public async Task<ActionResult<SliderItemDto>> CreateSliderItem(SliderItemDto sliderItemDto)
         {
             var sliderItem = _mapper.MapSliderItemDtoToSliderItem(sliderItemDto);
-            await _sliderRepository.CreateSliderItem(sliderItem);
+            await _sliderRepository.CreateSliderItemAsync(sliderItem);
             await _unitOfWork.CompleteAsync();
             return Ok(_mapper.MapSliderItemToSliderItemDto(sliderItem));
         }
@@ -66,7 +66,7 @@ namespace API.Controllers
         [HttpDelete("{sliderItemId}")]
         public async Task<ActionResult> DeleteSliderItem(int sliderItemId)
         {
-            var sliderItem = await _sliderRepository.GetSliderItemById(sliderItemId);
+            var sliderItem = await _sliderRepository.GetSliderItemByIdAsync(sliderItemId);
             if (sliderItem == null)
             {
                 return NotFound();

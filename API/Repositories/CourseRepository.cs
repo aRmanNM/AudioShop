@@ -18,7 +18,7 @@ namespace API.Repositories
             _context = context;
         }
 
-        public async Task<Course> CreateCourse(Course course)
+        public async Task<Course> CreateCourseAsync(Course course)
         {
             await _context.Courses.AddAsync(course);
             return course;
@@ -35,7 +35,7 @@ namespace API.Repositories
             return course;
         }
 
-        public async Task<PaginatedResult<Course>> GetCourses(bool includeEpisodes,
+        public async Task<PaginatedResult<Course>> GetCoursesAsync(bool includeEpisodes,
             string search, bool includeInactive = false, int pageNumber = 1, int pageSize = 10)
         {
             if (pageSize > 20 || pageSize < 1)
@@ -74,7 +74,7 @@ namespace API.Repositories
 
             return result;
         }
-        public async Task<Course> GetCourseById(int id)
+        public async Task<Course> GetCourseByIdAsync(int id)
         {
             return await _context.Courses
                 .Include(c => c.Episodes)

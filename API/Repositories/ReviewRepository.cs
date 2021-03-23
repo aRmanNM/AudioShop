@@ -18,7 +18,7 @@ namespace API.Repositories
             _context = context;
         }
 
-        public async Task<ICollection<Review>> GetCourseReviews(int courseId, Boolean accepted)
+        public async Task<ICollection<Review>> GetCourseReviewsAsync(int courseId, Boolean accepted)
         {
             var reviews = _context.Reviews.AsQueryable();
 
@@ -29,7 +29,7 @@ namespace API.Repositories
                 .ToArrayAsync();
         }
 
-        public async Task<Review> AddReview(Review review)
+        public async Task<Review> AddReviewAsync(Review review)
         {
             await _context.Reviews.AddAsync(review);
             return review;
@@ -41,7 +41,7 @@ namespace API.Repositories
             return review;
         }
 
-        public async Task<ICollection<Review>> GetAllReviews(bool accepted)
+        public async Task<ICollection<Review>> GetAllReviewsAsync(bool accepted)
         {
             return await _context.Reviews
                 .Where(r => r.Accepted == accepted)

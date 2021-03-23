@@ -18,13 +18,13 @@ namespace API.Repositories
             _context = context;
         }
 
-        public async Task<Coupon> CreateCoupon(Coupon coupon)
+        public async Task<Coupon> CreateCouponAsync(Coupon coupon)
         {
             await _context.Coupons.AddAsync(coupon);
             return coupon;
         }
 
-        public async Task<Coupon> GetCouponByCode(string couponCode)
+        public async Task<Coupon> GetCouponByCodeAsync(string couponCode)
         {
             if (string.IsNullOrEmpty(couponCode))
             {
@@ -34,13 +34,13 @@ namespace API.Repositories
             return await _context.Coupons.FirstOrDefaultAsync(c => c.Code == couponCode);
         }
 
-        public async Task<bool> CheckUserIsBlacklisted(string couponCode, string userId)
+        public async Task<bool> CheckUserIsBlacklistedAsync(string couponCode, string userId)
         {
             return await _context.Blacklist.FirstOrDefaultAsync(i =>
                 i.CouponCode == couponCode && i.UserId == userId) != null;
         }
 
-        public async Task<IEnumerable<Coupon>> GetCoupons(bool includeSalespersons = false)
+        public async Task<IEnumerable<Coupon>> GetCouponsAsync(bool includeSalespersons = false)
         {
             if (includeSalespersons)
             {
@@ -50,7 +50,7 @@ namespace API.Repositories
             return await _context.Coupons.Where(c => string.IsNullOrEmpty(c.UserId)).ToArrayAsync();
         }
 
-        public async Task<string> GenerateCouponCode()
+        public async Task<string> GenerateCouponCodeAsync()
         {
             string code;
             do

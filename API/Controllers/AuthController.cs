@@ -55,7 +55,7 @@ namespace API.Controllers
                 }
             }
 
-            var configs = await _configRepository.GetConfigsByGroup("General");
+            var configs = await _configRepository.GetConfigsByGroupAsync("General");
             var user = _mapper.MapRegisterDtoToUser(registerDto);
 
             if (registerDto.SalespersonCouponCode != null && role.ToUpper() != "SALESPERSON")
@@ -68,7 +68,7 @@ namespace API.Controllers
                 {
                     DiscountPercentage = int.Parse(configs.First(c => c.TitleEn == "DefaultDiscountPercentage").Value),
                     Description = "salesperson coupon",
-                    Code = await _couponRepository.GenerateCouponCode(),
+                    Code = await _couponRepository.GenerateCouponCodeAsync(),
                     IsActive = true,
                 };
 
@@ -87,7 +87,7 @@ namespace API.Controllers
                 _ => null
             };
 
-            var userDto = await _mapper.MapUserToUserDto(user);
+            var userDto = await _mapper.MapUserToUserDtoAsync(user);
             return Ok(userDto);
         }
 
@@ -124,7 +124,7 @@ namespace API.Controllers
                 var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, true);
                 if (result.IsLockedOut) return Unauthorized("account locked");
                 if (!result.Succeeded) return Unauthorized("not authorized");
-                var userDto = await _mapper.MapUserToUserDto(user);
+                var userDto = await _mapper.MapUserToUserDtoAsync(user);
                 return Ok(userDto);
             }
         }
@@ -178,7 +178,7 @@ namespace API.Controllers
             if (!string.IsNullOrEmpty(user.PhoneNumber))
             {
                 await _userManager.UpdateAsync(user);
-                var userDto = await _mapper.MapUserToUserDto(user);
+                var userDto = await _mapper.MapUserToUserDtoAsync(user);
                 return Ok(userDto);
             }
 
@@ -216,8 +216,8 @@ namespace API.Controllers
         }
 
         // TODO: Don't keep this bullshit.
-        [HttpGet("resetadminpassword")]
-        public async Task<ActionResult> ResetAdminPassword([FromQuery] string userName ,[FromQuery] string secret)
+        [HttpGet("resetpassword")]
+        public async Task<ActionResult> ResetPassword([FromQuery] string userName ,[FromQuery] string secret)
         {
             if (secret != _config["Pass:Secret"])
             {

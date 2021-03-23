@@ -34,7 +34,7 @@ namespace API.Controllers
         [HttpPost("app/upload")]
         public async Task<ActionResult> UploadApp(IFormFile file)
         {
-            var mobileAppConfig = await _configRepository.GetConfig("LatestMobileAppName");
+            var mobileAppConfig = await _configRepository.GetConfigAsync("LatestMobileAppName");
             if (file == null) return BadRequest("null file");
             if (file.Length == 0) return BadRequest("empty file");
 
@@ -43,7 +43,7 @@ namespace API.Controllers
             try
             {
                 // _fileService.Delete(mobileAppConfig.Value, uploadFolderPath);
-                await _fileService.Upload(file, file.FileName, uploadFolderPath);
+                await _fileService.UploadAsync(file, file.FileName, uploadFolderPath);
             }
             catch (Exception e)
             {
@@ -59,7 +59,7 @@ namespace API.Controllers
         [HttpGet("app/latest")]
         public async Task<ActionResult<Config>> GetLatestAppVersion()
         {
-            var mobileAppConfig = await _configRepository.GetConfig("LatestMobileAppName");
+            var mobileAppConfig = await _configRepository.GetConfigAsync("LatestMobileAppName");
             return Ok(mobileAppConfig);
         }
     }

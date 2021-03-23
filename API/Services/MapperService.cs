@@ -36,11 +36,11 @@ namespace API.Services
             };
         }
 
-        public async Task<UserDto> MapUserToUserDto(User user)
+        public async Task<UserDto> MapUserToUserDtoAsync(User user)
         {
             return new UserDto
             {
-                Token = await _tokenService.CreateToken(user),
+                Token = await _tokenService.CreateTokenAsync(user),
                 HasPhoneNumber = user.PhoneNumber != null,
                 SalespersonCouponCode = user.CouponCode
             };
@@ -102,14 +102,14 @@ namespace API.Services
             };
         }
 
-        public async Task<Coupon> MapCouponDtoToCoupon(CouponToCreateDto couponDto)
+        public async Task<Coupon> MapCouponDtoToCouponAsync(CouponToCreateDto couponDto)
         {
-            var config = await _configRepository.GetConfig("DefaultDiscountPercentage");
+            var config = await _configRepository.GetConfigAsync("DefaultDiscountPercentage");
             return new Coupon
             {
                 Description = couponDto.Description,
                 DiscountPercentage = couponDto.DiscountPercentage ?? int.Parse(config.Value),
-                Code = await _couponRepository.GenerateCouponCode(),
+                Code = await _couponRepository.GenerateCouponCodeAsync(),
                 IsActive = couponDto.IsActive
             };
         }

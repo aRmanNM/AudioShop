@@ -57,14 +57,14 @@ namespace API.Controllers
         [HttpGet("checkouts")]
         public async Task<ActionResult<IEnumerable<Checkout>>> GetCheckouts(bool status, string userName = null, bool includeSalespersonInfo = false)
         {
-            var checkouts = await _checkoutRepository.GetCheckouts(status, userName, includeSalespersonInfo);
+            var checkouts = await _checkoutRepository.GetCheckoutsAsync(status, userName, includeSalespersonInfo);
             return Ok(checkouts);
         }
 
         [HttpGet("checkouts/{checkoutId}")]
         public async Task<ActionResult<Checkout>> GetCheckoutWithInfo(int checkoutId)
         {
-            var checkout = await _checkoutRepository.GetCheckoutWithId(checkoutId);
+            var checkout = await _checkoutRepository.GetCheckoutWithIdAsync(checkoutId);
             if (checkout == null)
             {
                 return NotFound("cehckout not found");
@@ -86,7 +86,7 @@ namespace API.Controllers
         public async Task<ActionResult<PaginatedResult<SalespersonDto>>> GetAllSalespersons(string search = null,
             bool onlyShowUsersWithUnacceptedCred = false, int pageNumber = 1, int pageSize = 10)
         {
-            var result = await _userRepository.GetAllSalespersons(search, onlyShowUsersWithUnacceptedCred, pageNumber, pageSize);
+            var result = await _userRepository.GetSalespersonsAsync(search, onlyShowUsersWithUnacceptedCred, pageNumber, pageSize);
             var resultWithDtos = new PaginatedResult<SalespersonDto>();
             resultWithDtos.TotalItems = result.TotalItems;
             resultWithDtos.Items = result.Items.Select(s => _mapper.MapUserToSalespersonDto(s));
@@ -96,7 +96,7 @@ namespace API.Controllers
         [HttpGet("salespersons/{userId}")]
         public async Task<ActionResult<SalespersonDto>> GetSalesperson(string userId)
         {
-            var salesperson = await _userRepository.FindUserById(userId);
+            var salesperson = await _userRepository.FindUserByIdAsync(userId);
             return Ok(_mapper.MapUserToSalespersonDto(salesperson));
         }
 
