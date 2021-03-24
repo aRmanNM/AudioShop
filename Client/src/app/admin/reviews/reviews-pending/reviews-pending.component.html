@@ -1,18 +1,9 @@
 <mat-toolbar>
-  <input type="text" class="form-control" style="width: 150px;" min="1" [(ngModel)]="courseId" placeholder="شناسه دوره">
-  <button mat-flat-button color="primary" style="margin-right: 6px;" (click)="getReviews()">
-    انتخاب
-  </button>
-  <button mat-stroked-button color="basic" style="margin-right: 6px;" (click)="courseId='' ; getReviews()">
-    همه موارد
-  </button>
-
   <span class="spacer"></span>
   <button mat-raised-button color="primary" style="margin-right: 6px;" (click)="refreshReviews()">
     بررسی مجدد
   </button>
 </mat-toolbar>
-
 <span *ngIf="!dialogActive">
   <mat-progress-bar color="accent" mode="indeterminate" *ngIf="spinnerService.visibility | async"></mat-progress-bar>
 </span>
@@ -52,3 +43,9 @@
   <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
   <tr mat-row *matRowDef="let reviews; columns: columnsToDisplay"></tr>
 </table>
+<mat-paginator [length]="totalItems"
+               [pageSize]="pageSize"
+               [pageIndex]="pageIndex"
+               [pageSizeOptions]="[5, 10, 20]"
+               (page)="changePage()">
+</mat-paginator>

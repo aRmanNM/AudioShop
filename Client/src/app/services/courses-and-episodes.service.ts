@@ -81,9 +81,12 @@ export class CoursesAndEpisodesService {
     return this.http.put<Episode[]>(this.baseUrl + '/' + courseId + '/episodes', episodes);
   }
 
-  getAllReviews(accepted: boolean): Observable<Review[]> {
-    return this.http.get<Review[]>(this.baseUrl + '/reviews', {
-      params: new HttpParams().set('accepted', `${accepted}`)
+  getAllReviews(accepted: boolean, pageIndex: number, pageSize: number): Observable<PaginatedResult<Review>> {
+    return this.http.get<PaginatedResult<Review>>(this.baseUrl + '/reviews', {
+      params: new HttpParams()
+        .set('accepted', `${accepted}`)
+        .set('pageNumber', `${pageIndex + 1}`)
+        .set('pageSize', `${pageSize}`)
     });
   }
 

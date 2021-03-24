@@ -1,9 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {SpinnerService} from '../../../services/spinner.service';
 import {Review} from '../../../models/review';
 import {CoursesAndEpisodesService} from '../../../services/courses-and-episodes.service';
 import {ReviewsEditComponent} from '../reviews-edit/reviews-edit.component';
 import {MatDialog} from '@angular/material/dialog';
+import {MatPaginator} from '@angular/material/paginator';
 
 @Component({
   selector: 'app-reviews-done',
@@ -11,10 +12,13 @@ import {MatDialog} from '@angular/material/dialog';
   styleUrls: ['./reviews-done.component.scss']
 })
 export class ReviewsDoneComponent implements OnInit {
-  courseId = '';
   dialogActive = false;
   reviews: Review[];
   columnsToDisplay = ['id', 'text', 'rating', 'date', 'courseName', 'actions'];
+  totalItems: number;
+  pageSize = 10;
+  pageIndex = 0;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(public spinnerService: SpinnerService,
               private coursesAndEpisodesService: CoursesAndEpisodesService,
@@ -30,15 +34,10 @@ export class ReviewsDoneComponent implements OnInit {
   }
 
   getReviews(): void {
-    if (this.courseId) {
-      this.coursesAndEpisodesService.getCourseReviews(Number(this.courseId), true).subscribe((res) => {
-        this.reviews = res;
-      });
-    } else {
-      this.coursesAndEpisodesService.getAllReviews(true).subscribe((res) => {
-        this.reviews = res;
-      });
-    }
+    this.coursesAndEpisodesService.getAllReviews(true, this.pageIndex, this.pageSize).subscribe((res) => {
+      this.reviews = res.items;
+      this.totalItems = res.totalItems;
+    });
   }
 
   openAddOrEditDialog(review: Review): void {
@@ -51,5 +50,11 @@ export class ReviewsDoneComponent implements OnInit {
     dialogRef.afterClosed().subscribe(res => {
       this.dialogActive = false;
     });
+  }
+
+  changePage(): void {
+    this.pageIndex = this.paginator.pageIndex;
+    this.pageSize = this.paginator.pageSize;
+    this.coursesAndEpisodesService.onReviewsUpdate();
   }
 }

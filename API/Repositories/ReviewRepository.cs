@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Data;
+using API.Dtos;
 using API.Interfaces;
 using API.Models;
 using Microsoft.EntityFrameworkCore;
@@ -41,12 +42,27 @@ namespace API.Repositories
             return review;
         }
 
-        public async Task<ICollection<Review>> GetAllReviewsAsync(bool accepted)
+        public async Task<PaginatedResult<Review>> GetAllReviewsAsync(bool accepted, int pageNumber = 1, int pageSize = 10)
         {
-            return await _context.Reviews
-                .Where(r => r.Accepted == accepted)
-                .OrderByDescending(r => r.Date)
+            if (pageSize > 20 || pageSize < 1)
+            {
+                pageSize = 10;
+            }
+
+            if (pageNumber < 1)
+            {
+                pageNumber = 1;
+            }
+
+            var reviews = _context.Reviews.Where(r => r.Accepted == accepted);
+            var result = new PaginatedResult<Review>();
+            result.TotalItems = await reviews.CountAsync();
+            result.Items = await reviews.OrderByDescending(r => r.Date)
+                .AsNoTracking()
+                .Skip((pageNumber - 1) * pageSize).Take(pageSize)
                 .ToArrayAsync();
+
+            return result;
         }
     }
 }

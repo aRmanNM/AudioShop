@@ -74,6 +74,7 @@ namespace API.Repositories
 
             return result;
         }
+
         public async Task<Course> GetCourseByIdAsync(int id)
         {
             return await _context.Courses

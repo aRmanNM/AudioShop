@@ -127,10 +127,10 @@ namespace API.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpGet("reviews")]
-        public async Task<ActionResult<List<Review>>> GetAllReviews([FromQuery] bool accepted)
+        public async Task<ActionResult<PaginatedResult<Review>>> GetAllReviews([FromQuery] bool accepted, int pageNumber = 1, int pageSize = 10)
         {
-            var reviews = await _reviewRepository.GetAllReviewsAsync(accepted);
-            return Ok(reviews);
+            var result = await _reviewRepository.GetAllReviewsAsync(accepted, pageNumber, pageSize);
+            return Ok(result);
         }
 
         //
