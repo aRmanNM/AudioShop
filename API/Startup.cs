@@ -15,6 +15,8 @@ using API.Models;
 using API.Models.Options;
 using API.Repositories;
 using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.AspNetCore.Http;
+using System;
 
 namespace API
 {
@@ -28,6 +30,8 @@ namespace API
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddResponseCaching();
+
             services.AddControllersWithViews().AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
@@ -110,6 +114,23 @@ namespace API
 
 
             app.UseCors();
+
+            app.UseResponseCaching();
+            app.Use(async (context, next) =>
+            {
+                context.Response.GetTypedHeaders().CacheControl =
+                    new Microsoft.Net.Http.Headers.CacheControlHeaderValue()
+                    {
+                        Public = true,
+                        MaxAge = TimeSpan.FromSeconds(10)
+                    };
+                context.Response.Headers[Microsoft.Net.Http.Headers.HeaderNames.Vary] =
+                    new string[] { "Accept-Encoding" };
+
+                await next();
+            });
+
+
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
