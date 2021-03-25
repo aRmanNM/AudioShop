@@ -33,7 +33,7 @@
         </mat-form-field>
       </div>
 
-      <mat-slide-toggle class="mt-2 mb-3" [(ngModel)]="salesperson.credentialAccepted" (toggleChange)="toggleCredential()">فعال بودن امکان تسویه حساب</mat-slide-toggle>
+      <mat-slide-toggle *ngIf="salesperson.salespersonCredential" class="mt-2 mb-3" [(ngModel)]="salesperson.credentialAccepted" (toggleChange)="toggleCredential()">فعال بودن امکان تسویه حساب</mat-slide-toggle>
 
     </mat-tab>
     <mat-tab label="تصویر کارت ملی">

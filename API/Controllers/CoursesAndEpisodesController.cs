@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -6,6 +7,7 @@ using API.Dtos;
 using API.Interfaces;
 using API.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -19,18 +21,24 @@ namespace API.Controllers
         private readonly IMapperService _mapper;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IReviewRepository _reviewRepository;
+        private readonly IWebHostEnvironment _host;
+        private readonly IFileService _fileService;
 
         public CoursesController(ICourseRepository courseRepository,
             IEpisodeRepository episodeRepository,
             IMapperService mapper,
             IUnitOfWork unitOfWork,
-            IReviewRepository reviewRepository)
+            IReviewRepository reviewRepository,
+            IWebHostEnvironment host,
+            IFileService fileService)
         {
             _courseRepository = courseRepository;
             _episodeRepository = episodeRepository;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _reviewRepository = reviewRepository;
+            _host = host;
+            _fileService = fileService;
         }
 
         //
@@ -171,8 +179,40 @@ namespace API.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpDelete("episodes/{id}")]
-        public async Task<ActionResult> DeleteEpisode(Episode episode)
+        public async Task<ActionResult> DeleteEpisode(int id)
         {
+            /*
+                - check if episode is bought by someone
+                - delete audio files
+                - delete episode
+            */
+
+            var episode = await _episodeRepository.GetEpisodeByIdAsync(id);
+            if (episode == null)
+            {
+                return NotFound();
+            }
+
+            var isBought = await _episodeRepository.CheckIfAlreadyBoughtAsync(episode);
+
+            if (isBought)
+            {
+                return BadRequest("already bought");
+            }
+
+            var uploadFolderPath = Path.Combine(_host.WebRootPath, "Files", episode.CourseId.ToString());
+            try
+            {
+                foreach (var item in episode.Audios)
+                {
+                    _fileService.Delete(item.FileName, uploadFolderPath);
+                }
+            }
+            catch (System.Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
             _episodeRepository.DeleteEpisode(episode);
             await _unitOfWork.CompleteAsync();
             return Ok();

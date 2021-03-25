@@ -1,6 +1,7 @@
 <mat-toolbar>
   <span class="spacer"></span>
   <button mat-raised-button color="primary" style="margin-right: 6px;" (click)="refreshReviews()">
+    <mat-icon>refresh</mat-icon>
     بررسی مجدد
   </button>
 </mat-toolbar>
@@ -36,6 +37,7 @@
     <td mat-cell *matCellDef="let review">
       <button class="action" mat-flat-button color="primary" style="float: left;"
               (click)="openAddOrEditDialog(review)">
+        <mat-icon>edit</mat-icon>
         ویرایش
       </button>
     </td>

@@ -1,13 +1,16 @@
 <mat-toolbar>
   <input type="text" class="form-control" style="width: 150px;" min="1" [(ngModel)]="userName" placeholder="نام کاربری">
   <button mat-flat-button color="primary" style="margin-right: 6px;" (click)="getCheckouts()">
+    <mat-icon>toc</mat-icon>
     انتخاب
   </button>
   <button mat-stroked-button color="basic" style="margin-right: 6px;" (click)="clearUserName()">
+    <mat-icon>keyboard_return</mat-icon>
     همه موارد
   </button>
   <span class="spacer"></span>
   <button mat-raised-button color="primary" style="margin-right: 6px;" (click)="refreshCheckouts()">
+    <mat-icon>refresh</mat-icon>
     بررسی مجدد
   </button>
 </mat-toolbar>
@@ -50,6 +53,7 @@
     <td mat-cell *matCellDef="let checkout">
       <button class="action" mat-flat-button color="primary" style="float: left;"
               (click)="openAddOrEditDialog(checkout.id)">
+        <mat-icon>receipt</mat-icon>
         پردازش
       </button>
     </td>

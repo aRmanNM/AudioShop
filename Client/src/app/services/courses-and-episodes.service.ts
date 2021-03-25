@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {environment} from '../../environments/environment';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Course} from '../models/course';
-import {Observable, Subject} from 'rxjs';
+import {Observable, of, Subject} from 'rxjs';
 import {Episode} from '../models/episode';
 import {Review} from '../models/review';
 import {PaginatedResult} from '../models/paginated-result';
@@ -98,5 +98,9 @@ export class CoursesAndEpisodesService {
 
   updateReview(courseId: number, reviewId: number, review: Review): Observable<Review> {
     return this.http.put<Review>(`${this.baseUrl}/${courseId}/reviews/${reviewId}`, review);
+  }
+
+  deleteEpisode(episodeId: number): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/episodes/${episodeId}`);
   }
 }

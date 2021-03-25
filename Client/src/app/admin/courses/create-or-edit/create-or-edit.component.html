@@ -31,6 +31,8 @@
         color="primary"
         [disabled]="!courseForm.valid"
         type="submit">
+        <mat-icon *ngIf="data.course">edit</mat-icon>
+        <mat-icon *ngIf="!data.course">add</mat-icon>
         <span *ngIf="data.course">ویرایش</span>
         <span *ngIf="!data.course">درج دوره جدید</span>
       </button>
@@ -42,7 +44,10 @@
     <div class="d-flex flex-column align-items-start">
       <img src="{{ imgUrl }}" *ngIf="data.course.photoFileName">
       <input type="file" class="form-control-file mt-2" value="انتخاب فایل" #fileInput>
-      <button class="mt-2" mat-raised-button color="primary" type="submit" (click)="uploadPhoto()">اپلود</button>
+      <button class="mt-2" mat-raised-button color="primary" type="submit" (click)="uploadPhoto()">
+        <mat-icon>upload</mat-icon>
+        اپلود
+      </button>
     </div>
   </mat-tab>
 </mat-tab-group>

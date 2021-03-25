@@ -25,6 +25,8 @@
         color="primary"
         [disabled]="!episodeForm.valid"
         type="submit">
+        <mat-icon *ngIf="data.episode">edit</mat-icon>
+        <mat-icon *ngIf="!data.episode">add</mat-icon>
         <span *ngIf="data.episode">ویرایش</span>
         <span *ngIf="!data.episode">درج اپیزود جدید</span>
       </button>
@@ -38,8 +40,14 @@
     </div>
     <input type="file" class="form-control-file mt-2" value="انتخاب فایل" #fileInput multiple>
     <div class="d-flex justify-content-between">
-      <button class="mt-2" mat-raised-button color="primary" type="submit" (click)="uploadAudios()">اپلود</button>
-      <button class="mt-2" mat-raised-button color="warn" type="submit" (click)="deleteEpisodeAudios()">حذف کامل</button>
+      <button class="mt-2" mat-raised-button color="primary" type="submit" (click)="uploadAudios()">
+        <mat-icon>upload</mat-icon>
+        اپلود
+      </button>
+      <button class="mt-2" mat-raised-button color="warn" type="submit" (click)="deleteEpisodeAudios()">
+        <mat-icon>delete</mat-icon>
+        حذف فایل ها
+      </button>
     </div>
     <mat-progress-bar *ngIf="showProgressBar" mode="indeterminate"></mat-progress-bar>
     {{uploadCounter}}

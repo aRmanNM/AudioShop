@@ -16,9 +16,11 @@
   <span class="spacer"></span>
   <button class="mx-1" mat-raised-button color="primary" (click)="createCheckout()"
           [disabled]="salesAmount < checkoutThreshold || !credentialAccepted">
+    <mat-icon>create</mat-icon>
     ثبت درخواست تسویه حساب
   </button>
-  <button mat-stroked-button color="primary" (click)="refresh()">
+  <button mat-flat-button color="primary" (click)="refresh()">
+    <mat-icon>refresh</mat-icon>
     بررسی مجدد
   </button>
 </mat-toolbar>

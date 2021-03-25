@@ -98,4 +98,22 @@ export class EpisodesComponent implements OnInit {
     }
   }
 
+  deleteEpisode(episodeId: number): void {
+    const result = confirm('آیا از انجام این عملیات اطمینان دارید؟');
+    if (result) {
+      this.coursesAndEpisodesService.deleteEpisode(episodeId).subscribe(() => {
+        this.snackBar.open('اپیزود با موفقیت حذف شد', null, {
+          duration: 2000,
+        });
+        this.getEpisodes();
+      }, e => {
+        if (e.error === 'already bought') {
+          this.snackBar.open('این اپیزود قبلا خریداری شده و امکان حذف آن وجود ندارد', null, {
+            duration: 3000,
+          });
+        }
+      });
+    }
+  }
+
 }

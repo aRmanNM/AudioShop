@@ -14,5 +14,6 @@ namespace API.Interfaces
         void DeleteEpisode(Episode episode);
         Task<IEnumerable<Episode>> GetUserEpisodesAsync(string userId);
         Task<IEnumerable<int>>  GetUserEpisodeIdsAsync(string userId);
+        Task<bool> CheckIfAlreadyBoughtAsync(Episode episode);
     }
 }

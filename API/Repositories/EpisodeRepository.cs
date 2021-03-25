@@ -73,5 +73,13 @@ namespace API.Repositories
         {
             _context.Episodes.UpdateRange(episodes);
         }
+
+        public async Task<bool> CheckIfAlreadyBoughtAsync(Episode episode)
+        {
+            return await _context.OrderEpisodes
+                .Include(oe => oe.Order)
+                .FirstOrDefaultAsync(oe => oe.EpisodeId == episode.Id && oe.Order.Status == true) != null;
+
+        }
     }
 }

@@ -23,6 +23,8 @@
         color="primary"
         [disabled]="!couponForm.valid"
         type="submit">
+        <mat-icon *ngIf="data.coupon">edit</mat-icon>
+        <mat-icon *ngIf="!data.coupon">add</mat-icon>
         <span *ngIf="data.coupon">ویرایش</span>
         <span *ngIf="!data.coupon">درج دوره جدید</span>
       </button>

@@ -1,14 +1,17 @@
 <mat-toolbar>
   <button mat-raised-button color="primary" style="margin-left: 2em;" (click)="refresh()">
+    <mat-icon>refresh</mat-icon>
     بررسی مجدد
   </button>
   <mat-slide-toggle [(ngModel)]="onlyShowUsersWithUnacceptedCred" (toggleChange)="toggleAccepted()">تنها موارد غیرفعال را نشان بده</mat-slide-toggle>
   <span class="spacer"></span>
   <input type="text" class="form-control" style="width: 300px;" [(ngModel)]="searchString" placeholder="جستجو">
   <button mat-flat-button color="primary" style="margin-right: 6px;" (click)="search()">
+    <mat-icon>search</mat-icon>
     جستجو
   </button>
   <button mat-stroked-button color="basic" style="margin-right: 6px;" (click)="clearSearch()">
+    <mat-icon>keyboard_return</mat-icon>
     بازگشت
   </button>
 </mat-toolbar>
@@ -55,7 +58,8 @@
       <!--        <button class="action" mat-stroked-button color="primary" (click)="openDetailDialog(salesperson)">-->
       <!--          جزئیات-->
       <!--        </button>-->
-      <button class="action" mat-stroked-button color="primary" style="float: left;" (click)="openAddOrEditDialog(salesperson)">
+      <button class="action" mat-flat-button color="primary" style="float: left;" (click)="openAddOrEditDialog(salesperson)">
+        <mat-icon>perm_identity</mat-icon>
         مشاهده اطلاعات هویتی
       </button>
     </td>

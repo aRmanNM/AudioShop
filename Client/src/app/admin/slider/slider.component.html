@@ -1,5 +1,6 @@
 <mat-toolbar>
   <button mat-raised-button color="primary" (click)="openAddOrEditDialog(null)">
+    <mat-icon>add</mat-icon>
     افزودن
   </button>
   <span class="spacer"></span>
@@ -45,10 +46,12 @@
     <td mat-cell *matCellDef="let sliderItem">
       <button class="action" mat-flat-button color="warn" style="float: left;"
               (click)="deleteSliderItem(sliderItem.id)">
-حذف
+        <mat-icon>delete</mat-icon>
+        حذف
       </button>
       <button class="action" mat-flat-button color="primary" style="float: left;"
               (click)="openAddOrEditDialog(sliderItem)">
+        <mat-icon>edit</mat-icon>
         ویرایش
       </button>
     </td>

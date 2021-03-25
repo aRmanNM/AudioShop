@@ -1,5 +1,6 @@
 <mat-toolbar>
   <button mat-raised-button color="primary" (click)="openAddOrEditDialog(null)">
+    <mat-icon>add</mat-icon>
     افزودن
   </button>
 
@@ -7,9 +8,11 @@
 
   <input type="text" class="form-control" style="width: 300px;" [(ngModel)]="searchString" placeholder="جستجوی عنوان">
   <button mat-flat-button color="primary" style="margin-right: 6px;" (click)="search()">
+    <mat-icon>search</mat-icon>
     جستجو
   </button>
   <button mat-stroked-button color="basic" style="margin-right: 6px;" (click)="clearSearch()">
+    <mat-icon>keyboard_return</mat-icon>
     بازگشت
   </button>
 </mat-toolbar>
@@ -56,9 +59,11 @@
     <th mat-header-cell *matHeaderCellDef></th>
     <td mat-cell *matCellDef="let course">
       <button class="action" mat-flat-button color="primary" style="float: left;" [routerLink]="['../episodes', course.id]">
+        <mat-icon>sort</mat-icon>
         اپیزودها
       </button>
       <button class="action" mat-flat-button color="primary" style="float: left;" (click)="openAddOrEditDialog(course)">
+        <mat-icon>edit</mat-icon>
         ویرایش
       </button>
     </td>

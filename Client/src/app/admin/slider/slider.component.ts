@@ -52,17 +52,20 @@ export class SliderComponent implements OnInit {
   }
 
   deleteSliderItem(sliderItemId: number): void {
-    this.sliderService.deleteSliderItem(sliderItemId).subscribe(() => {
-      this.snackBar.open('اسلایدر حذف شد', null, {
-        duration: 2000,
-      });
+    const result = confirm('آیا از انجام این عملیات اطمینان دارید؟');
+    if (result) {
+      this.sliderService.deleteSliderItem(sliderItemId).subscribe(() => {
+        this.snackBar.open('اسلایدر حذف شد', null, {
+          duration: 2000,
+        });
 
-      this.sliderService.onSliderUpdate();
-    }, error => {
-      this.snackBar.open('عملیات موفق نبود', null, {
-        duration: 2000,
+        this.sliderService.onSliderUpdate();
+      }, error => {
+        this.snackBar.open('عملیات موفق نبود', null, {
+          duration: 2000,
+        });
       });
-    });
+    }
   }
 
 }
