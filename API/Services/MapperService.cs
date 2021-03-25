@@ -32,7 +32,8 @@ namespace API.Services
                 City = registerDto.City,
                 Country = registerDto.Country,
                 Age = registerDto.Age,
-                Gender = registerDto.Gender
+                Gender = registerDto.Gender,
+                Employed = registerDto.Employed
             };
         }
 
