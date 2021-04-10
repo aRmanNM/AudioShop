@@ -27,7 +27,8 @@ import {SliderEditCreateComponent} from './slider/slider-edit-create/slider-edit
 import {CouponsComponent} from './coupons/coupons.component';
 import {CouponsCreateEditComponent} from './coupons/coupons-create-edit/coupons-create-edit.component';
 import {MobileAppComponent} from './mobile-app/mobile-app.component';
-import { PasswordComponent } from './password/password.component';
+import {PasswordComponent} from './password/password.component';
+import {DurationPipe} from '../pipes/duration.pipe';
 
 
 @NgModule({
@@ -53,6 +54,7 @@ import { PasswordComponent } from './password/password.component';
     CouponsCreateEditComponent,
     MobileAppComponent,
     PasswordComponent,
+    DurationPipe
   ],
   imports: [
     CommonModule,
@@ -63,7 +65,10 @@ import { PasswordComponent } from './password/password.component';
     FormsModule,
     DragDropModule,
     SalespersonModule
-  ]
+  ],
+  exports: [
+    DurationPipe
+  ],
 })
 export class AdminModule {
 }

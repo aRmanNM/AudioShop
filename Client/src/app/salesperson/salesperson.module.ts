@@ -13,18 +13,18 @@ import {PersianDatePipe} from '../pipes/persian-date.pipe';
 
 
 @NgModule({
-    declarations: [CheckoutsComponent, OrdersComponent, SalespersonComponent, CredentialsComponent, PersianDatePipe],
-    imports: [
-        CommonModule,
-        SalespersonRoutingModule,
-        MaterialModule,
-        SharedModule,
-        ReactiveFormsModule,
-        FormsModule,
-    ],
-    exports: [
-        PersianDatePipe
-    ]
+  declarations: [CheckoutsComponent, OrdersComponent, SalespersonComponent, CredentialsComponent, PersianDatePipe],
+  imports: [
+    CommonModule,
+    SalespersonRoutingModule,
+    MaterialModule,
+    SharedModule,
+    ReactiveFormsModule,
+    FormsModule,
+  ],
+  exports: [
+    PersianDatePipe
+  ]
 })
 export class SalespersonModule {
 }

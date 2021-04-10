@@ -49,7 +49,15 @@
         حذف فایل ها
       </button>
     </div>
-    <mat-progress-bar *ngIf="showProgressBar" mode="indeterminate"></mat-progress-bar>
-    {{uploadCounter}}
+    <div class="upload-bar" *ngIf="showProgressBar">
+      <span>{{ counter }}/{{ totalItems }}</span>
+      <mat-progress-bar *ngIf="showProgressBar" mode="indeterminate"></mat-progress-bar>
+      <button mat-icon-button>
+        <mat-icon (click)="cancelUpload()"
+                  *ngIf="showProgressBar">cancel
+        </mat-icon>
+      </button>
+    </div>
+
   </mat-tab>
 </mat-tab-group>

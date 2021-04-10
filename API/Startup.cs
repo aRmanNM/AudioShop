@@ -15,8 +15,6 @@ using API.Models;
 using API.Models.Options;
 using API.Repositories;
 using Microsoft.AspNetCore.StaticFiles;
-using Microsoft.AspNetCore.Http;
-using System;
 
 namespace API
 {

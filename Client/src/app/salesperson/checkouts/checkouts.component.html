@@ -1,6 +1,10 @@
 <mat-toolbar>
   <span>{{ 'مجموع درآمد شما: ' }}{{ totalSaleAmount | number }}{{ ' ریال' }}</span>
   <span class="spacer"></span>
+  <button mat-flat-button color="primary" (click)="refresh()">
+    <mat-icon>refresh</mat-icon>
+    بررسی مجدد
+  </button>
 </mat-toolbar>
 
 <mat-progress-bar color="accent" mode="indeterminate" *ngIf="spinnerService.visibility | async"></mat-progress-bar>

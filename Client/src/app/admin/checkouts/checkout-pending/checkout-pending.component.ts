@@ -48,6 +48,7 @@ export class CheckoutPendingComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(res => {
       // this.getCheckouts();
+      this.adminService.update();
       this.dialogActive = false;
     });
   }

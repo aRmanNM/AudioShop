@@ -18,12 +18,12 @@ audio {
   height: 30px;
 }
 
-audio::-webkit-media-controls-play-button,
-audio::-webkit-media-controls-panel {
-  background-color: #ffffff;
-  color: #000;
-}
-
-mat-progress-bar {
+.upload-bar {
   margin-top: 1em;
+  display: flex;
+  align-items: center;
+
+  span {
+    margin-left: 5px;
+  }
 }

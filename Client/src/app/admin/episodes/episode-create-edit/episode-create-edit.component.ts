@@ -5,9 +5,8 @@ import {CoursesAndEpisodesService} from '../../../services/courses-and-episodes.
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Episode} from '../../../models/episode';
 import {environment} from '../../../../environments/environment';
-import {concatAll, concatMap, tap} from 'rxjs/operators';
-import {concat, from, Observable, of, pipe} from 'rxjs';
-import {Audio} from '../../../models/audio';
+import {concatMap, finalize} from 'rxjs/operators';
+import {from, Subscription} from 'rxjs';
 
 interface DialogData {
   episode: Episode;
@@ -23,7 +22,9 @@ export class EpisodeCreateEditComponent implements OnInit {
   baseUrl = environment.apiUrl + 'files/';
   showProgressBar = false;
   audioFiles = [];
-  uploadCounter: string;
+  uploadSub: Subscription;
+  counter;
+  totalItems;
   @ViewChild('fileInput') fileInput: ElementRef;
 
   episodeForm = new FormGroup(
@@ -82,14 +83,24 @@ export class EpisodeCreateEditComponent implements OnInit {
   uploadAudios(): any {
     // used observable concatenation to implement sequential http requests
     // article i learned this from: https://blog.angular-university.io/rxjs-higher-order-mapping/
+    this.dialogRef.disableClose = true;
+    this.showProgressBar = true;
     const nativeElement = this.fileInput.nativeElement;
-    let counter = 1;
-    from(nativeElement.files)
+    this.counter = 1;
+    this.totalItems = nativeElement.files.length;
+    this.uploadSub = from(nativeElement.files)
       .pipe(
-        concatMap(file => this.coursesAndEpisodesService.uploadAudio(this.data.episode.id, file)))
+        concatMap(file => this.coursesAndEpisodesService.uploadAudio(this.data.episode.id, file)), finalize(() => {
+          this.showProgressBar = false;
+          this.dialogRef.disableClose = false;
+          if (this.counter > this.totalItems) {
+            this.snackBar.open('اپلود فایل ها با موفقیت انجام شد', null, {
+              duration: 2000,
+            });
+          }
+        }))
       .subscribe((res) => {
-        this.uploadCounter = `uploading ${counter} of ${nativeElement.files.length}`;
-        counter++;
+        this.counter++;
         this.data.episode.audios.push(res);
         this.getAudios();
       }, ((e) => {
@@ -113,6 +124,13 @@ export class EpisodeCreateEditComponent implements OnInit {
       });
       this.data.episode.audios = [];
       this.getAudios();
+    });
+  }
+
+  cancelUpload(): void {
+    this.uploadSub.unsubscribe();
+    this.snackBar.open('اپلود متوقف شد', null, {
+      duration: 2000,
     });
   }
 

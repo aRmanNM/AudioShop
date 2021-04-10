@@ -39,4 +39,8 @@ export class CheckoutsComponent implements OnInit {
     });
   }
 
+  refresh(): void {
+    this.salespersonService.updateCheckout();
+  }
+
 }

@@ -41,7 +41,10 @@
   </ng-container>
   <ng-container matColumnDef="duration">
     <mat-header-cell *matHeaderCellDef>زمان دوره</mat-header-cell>
-    <mat-cell *matCellDef="let episode"> {{episode.totalAudiosDuration}}</mat-cell>
+    <mat-cell *matCellDef="let episode">
+      <span *ngIf="episode.totalAudiosDuration > 0">{{episode.totalAudiosDuration | duration }}</span>
+      <span *ngIf="episode.totalAudiosDuration === 0">0</span>
+    </mat-cell>
   </ng-container>
   <ng-container matColumnDef="sort">
     <mat-header-cell *matHeaderCellDef>ترتیب نمایش</mat-header-cell>
