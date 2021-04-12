@@ -70,6 +70,7 @@ namespace API.Services
                 PhotoFileName = course.Photo?.FileName,
                 WaitingTimeBetweenEpisodes = course.WaitingTimeBetweenEpisodes,
                 IsActive = course.IsActive,
+                AverageScore = course.AverageScore,
                 Episodes = course.Episodes.Select(MapEpisodeToEpisodeDto).ToList()
             };
         }
@@ -155,6 +156,20 @@ namespace API.Services
                 Description = sliderItemDto.Description,
                 IsActive = sliderItemDto.IsActive,
                 CourseId = sliderItemDto.CourseId
+            };
+        }
+
+        public ReviewDto MapReviewToReviewDto(Review review)
+        {
+            return new ReviewDto
+            {
+                Id = review.Id,
+                Text = review.Text,
+                Rating = review.Rating,
+                Accepted = review.Accepted,
+                Date = review.Date,
+                CourseName = review.Course.Name,
+                UserFirstAndLastName = (review.User.FirstName == null && review.User.LastName == null) ? "کاربر ناشناس" : $"{review.User.FirstName} {review.User.LastName}"
             };
         }
     }

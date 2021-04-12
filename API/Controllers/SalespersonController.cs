@@ -48,7 +48,7 @@ namespace API.Controllers
         [HttpGet("orders")]
         public async Task<ActionResult<PaginatedResult<OrderForSalespersonDto>>> GetOrdersForCheckout([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
-            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value; 
             var user = await _userManager.FindByIdAsync(userId);
             var result = await _orderRepository.GetOrdersForCheckoutAsync(user.CouponCode, pageNumber, pageSize);
             return Ok(result);

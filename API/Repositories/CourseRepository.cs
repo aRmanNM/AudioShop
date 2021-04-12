@@ -77,10 +77,25 @@ namespace API.Repositories
 
         public async Task<Course> GetCourseByIdAsync(int id)
         {
-            return await _context.Courses
-                .Include(c => c.Episodes)
-                .Include(c => c.Photo)
-                .FirstOrDefaultAsync(c => c.Id == id);
+            //return await _context.Courses
+            //    .Include(c => c.Episodes)
+            //    .Include(c => c.Photo)
+            //    .Include(c => c.Reviews)                
+            //    .FirstOrDefaultAsync(c => c.Id == id);
+
+            return await _context.Courses.Select(c => new Course
+            {
+                Id = c.Id,
+                Name = c.Name,
+                Price = c.Price,
+                Description = c.Description,
+                WaitingTimeBetweenEpisodes = c.WaitingTimeBetweenEpisodes,
+                IsActive = c.IsActive,
+                Photo = c.Photo,
+                Episodes = c.Episodes,
+                Reviews = c.Reviews,
+                AverageScore = (short) c.Reviews.Select(r => (double?) r.Rating).Average()
+            }).FirstOrDefaultAsync(c => c.Id == id);
         }
     }
 }

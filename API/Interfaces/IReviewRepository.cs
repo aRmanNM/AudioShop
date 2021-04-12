@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using API.Dtos;
 using API.Models;
 
@@ -9,9 +6,10 @@ namespace API.Interfaces
 {
     public interface IReviewRepository
     {
-        Task<ICollection<Review>> GetCourseReviewsAsync(int courseId, bool accepted = true);
+        Task<PaginatedResult<ReviewDto>> GetCourseReviewsAsync(int? courseId, bool accepted = true, int pageNumber = 1, int pageSize = 10);
         Task<Review> AddReviewAsync(Review review);
-        Review UpdateReview(Review review);
-        Task<PaginatedResult<Review>> GetAllReviewsAsync(bool accepted, int pageNumber = 1, int pageSize = 10);
+        Task UpdateReview(ReviewDto reviewDto);
+        Task<PaginatedResult<ReviewDto>> GetAllReviewsAsync(bool accepted, int pageNumber = 1, int pageSize = 10);
+        Task AcceptMultipleReviews(int[] reviewIds);
     }
 }

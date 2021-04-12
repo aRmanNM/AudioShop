@@ -19,6 +19,9 @@ namespace API.Models
         public ICollection<Episode> Episodes { get; set; }
         public ICollection<Review> Reviews { get; set; }
 
+        [NotMapped]
+        public short? AverageScore { get; set; }
+
         public Course()
         {
             Episodes = new Collection<Episode>();

@@ -87,7 +87,7 @@ namespace API.Controllers
         //
 
         [HttpGet("{courseId}/reviews")]
-        public async Task<ActionResult<List<Review>>> GetCourseReviews(int courseId, bool accepted = true)
+        public async Task<ActionResult<PaginatedResult<ReviewDto>>> GetCourseReviews(int courseId, bool accepted = true, int pageNumber = 1, int pageSize = 10)
         {
             var role = HttpContext.User.FindFirst(ClaimTypes.Role)?.Value;
             if (role == null || (role != null && role.ToUpper() != "ADMIN"))
@@ -95,47 +95,48 @@ namespace API.Controllers
                 accepted = true;
             }
 
-            var reviews = await _reviewRepository.GetCourseReviewsAsync(courseId, accepted);
+            var reviews = await _reviewRepository.GetCourseReviewsAsync(courseId, accepted, pageNumber, pageSize);
             return Ok(reviews);
         }
 
         [Authorize(Roles = "Member")]
         [HttpPost("{courseId}/reviews")]
-        public async Task<ActionResult<Review>> AddCourseReview(int courseId, Review review)
+        public async Task<ActionResult<ReviewDto>> AddCourseReview(int courseId, Review review)
         {
-            if (courseId != review.CourseId)
-            {
-                return BadRequest();
-            }
+            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;            
 
             review.Accepted = false;
+            review.UserId = userId;
+            review.CourseId = courseId;
+
             await _reviewRepository.AddReviewAsync(review);
             await _unitOfWork.CompleteAsync();
-            return Ok(review);
+            
+            return Ok();
         }
 
         [Authorize(Roles = "Admin")]
         [HttpPut("{courseId}/reviews/{reviewId}")]
-        public async Task<ActionResult<Review>> UpdateCourseReview(int courseId, int reviewId, Review review)
-        {
-            if (courseId != review.CourseId)
-            {
-                return BadRequest();
-            }
-
-            if (reviewId != review.Id)
-            {
-                return BadRequest();
-            }
-
-            _reviewRepository.UpdateReview(review);
+        public async Task<ActionResult<ReviewDto>> UpdateCourseReview(int courseId, int reviewId, ReviewDto reviewDto)
+        {                        
+            await _reviewRepository.UpdateReview(reviewDto);
             await _unitOfWork.CompleteAsync();
-            return Ok(review);
+            return Ok();
         }
+
+        [Authorize(Roles ="Admin")]
+        [HttpPut("reviews")]
+        public async Task<ActionResult> AcceptMultipleReviews(int[] reviewIds)
+        {
+            await _reviewRepository.AcceptMultipleReviews(reviewIds);
+            await _unitOfWork.CompleteAsync();
+            return Ok();
+        }
+
 
         [Authorize(Roles = "Admin")]
         [HttpGet("reviews")]
-        public async Task<ActionResult<PaginatedResult<Review>>> GetAllReviews([FromQuery] bool accepted, int pageNumber = 1, int pageSize = 10)
+        public async Task<ActionResult<PaginatedResult<ReviewDto>>> GetAllReviews([FromQuery] bool accepted, int pageNumber = 1, int pageSize = 10)
         {
             var result = await _reviewRepository.GetAllReviewsAsync(accepted, pageNumber, pageSize);
             return Ok(result);

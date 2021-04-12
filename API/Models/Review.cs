@@ -10,12 +10,13 @@ namespace API.Models
         public int Id { get; set; }
         public string Text { get; set; }
         public short Rating { get; set; }
-        public Boolean Accepted { get; set; }
+        public bool Accepted { get; set; }
         public DateTime Date { get; set; } = DateTime.Now;
+        
         public int CourseId { get; set; }
-        public string CourseName { get; set; }
+        public Course Course { get; set; }
+        
         public string UserId { get; set; }
-        public string UserFirstName { get; set; }
-        public string UserLastName { get; set; }
+        public User User { get; set; }
     }
 }

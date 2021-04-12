@@ -31,12 +31,14 @@ namespace API.Models
         public ICollection<UserRole> UserRoles { get; set; }
         public ICollection<Order> Orders { get; }
         public ICollection<BlacklistItem> Blacklist { get; set; }
+        public ICollection<Review> Reviews { get; set; } 
 
         public User()
         {
             UserRoles = new Collection<UserRole>();
             Orders = new Collection<Order>();
             Blacklist = new Collection<BlacklistItem>();
+            Reviews = new Collection<Review>();
         }
     }
 
