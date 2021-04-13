@@ -6,15 +6,23 @@ mat-drawer {
   width: 230px;
 }
 
+a {font-weight: bold;}
+
 a.mat-list-item.active { background-color: lightgray; }
 
 mat-expansion-panel-header {
   margin-left: 0px;
   padding: 1em;
+  font-weight: bold;
 }
 
 ::ng-deep div.mat-expansion-panel-body {
   padding: 0 !important;
+}
+
+::ng-deep div.mat-expansion-panel-body a {
+  font-size: small;
+  font-weight: normal;
 }
 
 mat-icon {

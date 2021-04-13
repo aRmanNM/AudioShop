@@ -10,6 +10,7 @@ namespace API.Interfaces
         Task<Review> AddReviewAsync(Review review);
         Task UpdateReview(ReviewDto reviewDto);
         Task<PaginatedResult<ReviewDto>> GetAllReviewsAsync(bool accepted, int pageNumber = 1, int pageSize = 10);
-        Task AcceptMultipleReviews(int[] reviewIds);
+        Task ToggleMultipleReviews(int[] reviewIds);
+        void DeleteMultipleReviews(int[] reviewIds);
     }
 }

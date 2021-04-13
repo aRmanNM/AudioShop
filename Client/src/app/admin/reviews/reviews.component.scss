@@ -1,0 +1,55 @@
+table {
+  table-layout: fixed;
+  width: 100%;
+}
+td {
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mat-column-select {
+  width: 5%;
+}
+
+.mat-column-rating {
+  width: 15%;
+}
+
+.mat-column-date {
+  width: 10%;
+}
+
+.mat-column-courseName {
+  width: 15%;
+}
+
+.mat-column-actions {
+  width: 15%;
+}
+
+.actions {
+  float: left;
+  margin: 0px;
+}
+
+.actions button {
+  opacity: 20%;
+  transform: scale(0.6);
+}
+
+.actions button:hover {
+  opacity: 100%;
+}
+
+mat-form-field {
+  margin-top: 10px !important;
+  margin-left: 10px;
+  font-size: small;
+}
+
+.rating mat-icon {
+  padding: 0px;
+  margin: 5px 0 0;
+}

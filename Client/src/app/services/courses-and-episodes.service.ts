@@ -96,11 +96,23 @@ export class CoursesAndEpisodesService {
     });
   }
 
-  updateReview(courseId: number, reviewId: number, review: Review): Observable<Review> {
+  updateReview(courseId: number = 0, reviewId: number, review: Review): Observable<Review> {
     return this.http.put<Review>(`${this.baseUrl}/${courseId}/reviews/${reviewId}`, review);
   }
 
   deleteEpisode(episodeId: number): Observable<any> {
     return this.http.delete(`${this.baseUrl}/episodes/${episodeId}`);
+  }
+
+  ToggleMultipleReviews(Ids: number[]): Observable<any> {
+    return this.http.put(this.baseUrl + '/reviews', Ids, {
+      params: new HttpParams().set('action', 'toggle')
+    });
+  }
+
+  DeleteMultipleReviews(Ids: number[]): Observable<any> {
+    return this.http.put(this.baseUrl + '/reviews', Ids, {
+      params: new HttpParams().set('action', 'delete')
+    });
   }
 }

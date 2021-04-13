@@ -15,8 +15,6 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
 import {CheckoutEditComponent} from './checkouts/checkout-edit/checkout-edit.component';
 import {CheckoutDoneComponent} from './checkouts/checkout-done/checkout-done.component';
 import {CheckoutPendingComponent} from './checkouts/checkout-pending/checkout-pending.component';
-import {ReviewsDoneComponent} from './reviews/reviews-done/reviews-done.component';
-import {ReviewsPendingComponent} from './reviews/reviews-pending/reviews-pending.component';
 import {SalespersonModule} from '../salesperson/salesperson.module';
 import {ReviewsEditComponent} from './reviews/reviews-edit/reviews-edit.component';
 import {SalespersonsComponent} from './salespersons/salespersons.component';
@@ -29,6 +27,7 @@ import {CouponsCreateEditComponent} from './coupons/coupons-create-edit/coupons-
 import {MobileAppComponent} from './mobile-app/mobile-app.component';
 import {PasswordComponent} from './password/password.component';
 import {DurationPipe} from '../pipes/duration.pipe';
+import {ReviewsComponent} from './reviews/reviews.component';
 
 
 @NgModule({
@@ -42,8 +41,6 @@ import {DurationPipe} from '../pipes/duration.pipe';
     CheckoutEditComponent,
     CheckoutDoneComponent,
     CheckoutPendingComponent,
-    ReviewsDoneComponent,
-    ReviewsPendingComponent,
     ReviewsEditComponent,
     SalespersonsComponent,
     SalespersonEditComponent,
@@ -54,7 +51,8 @@ import {DurationPipe} from '../pipes/duration.pipe';
     CouponsCreateEditComponent,
     MobileAppComponent,
     PasswordComponent,
-    DurationPipe
+    DurationPipe,
+    ReviewsComponent,
   ],
   imports: [
     CommonModule,

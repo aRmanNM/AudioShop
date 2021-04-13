@@ -26,6 +26,8 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 @NgModule({
   providers: [
@@ -58,7 +60,9 @@ import {MatPaginatorModule} from '@angular/material/paginator';
     MatSelectModule,
     MatGridListModule,
     MatSlideToggleModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatCheckboxModule,
+    MatTooltipModule
   ]
 })
 export class MaterialModule {

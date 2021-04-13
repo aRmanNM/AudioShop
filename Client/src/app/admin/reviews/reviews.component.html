@@ -1,0 +1,101 @@
+<mat-toolbar>
+
+  <mat-form-field appearance="standard">
+    <mat-label>انتخاب نظرات</mat-label>
+    <mat-select [(value)]="accepted">
+      <mat-option value="false" >در انتظار تایید</mat-option>
+      <mat-option value="true" >تایید شده</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <button mat-flat-button color="primary" (click)="refreshReviews()">نمایش</button>
+
+  <span class="spacer"></span>
+
+  <button mat-mini-fab (click)="refreshReviews()">
+    <mat-icon>refresh</mat-icon>
+  </button>
+</mat-toolbar>
+
+<mat-toolbar>
+  <button matTooltip="تغییر وضعیت موارد انتخابی" (click)="toggleMultipleReviews()" [disabled]="selectedIds.length < 2" mat-mini-fab color="primary"
+          style="margin-left: 10px;">
+    <mat-icon>toggle_on</mat-icon>
+  </button>
+  <button matTooltip="حذف موارد انتخابی" (click)="deleteMultipleReviews()" [disabled]="selectedIds.length < 2" mat-mini-fab color="warn">
+    <mat-icon>delete_sweep</mat-icon>
+  </button>
+</mat-toolbar>
+
+<span *ngIf="!dialogActive">
+  <mat-progress-bar color="accent" mode="indeterminate" *ngIf="spinnerService.visibility | async"></mat-progress-bar>
+</span>
+
+<table mat-table [dataSource]="reviews">
+  <ng-container matColumnDef="select">
+    <th mat-header-cell *matHeaderCellDef>
+      <section>
+        <mat-checkbox (change)="updateListAll($event)"
+                      [checked]="!(selectedIds?.length < reviews?.length)"></mat-checkbox>
+      </section>
+    </th>
+    <td mat-cell *matCellDef="let review">
+      <section>
+        <mat-checkbox (change)="updateList(review, $event)" [checked]="isSelected(review)"></mat-checkbox>
+      </section>
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef>شناسه</th>
+    <td mat-cell *matCellDef="let review"> {{review.id}} </td>
+  </ng-container>
+  <ng-container matColumnDef="text">
+    <th mat-header-cell *matHeaderCellDef>متن</th>
+    <td mat-cell *matCellDef="let review" matTooltip="{{review.text}}"> {{review.text}} </td>
+  </ng-container>
+  <ng-container matColumnDef="rating">
+    <th mat-header-cell *matHeaderCellDef>امتیاز</th>
+    <td mat-cell *matCellDef="let review">
+      <div class="rating">
+        <mat-icon *ngFor="let number of [5,4,3,2,1]">
+          <span *ngIf="review.rating >= number">star</span>
+          <span *ngIf="review.rating < number">star_border</span>
+        </mat-icon>
+      </div>
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="date">
+    <th mat-header-cell *matHeaderCellDef>تاریخ</th>
+    <td mat-cell *matCellDef="let review"> {{review.date | date:'yyyy/MM/dd' | PersianDate}}</td>
+  </ng-container>
+  <ng-container matColumnDef="courseName">
+    <th mat-header-cell *matHeaderCellDef>نام دوره</th>
+    <td mat-cell *matCellDef="let review">
+      <span matTooltip="{{review.courseName}}">{{review.courseName}}</span>
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef="let review">
+      <div class="actions">
+        <button matTooltip="تغییر وضعیت" mat-mini-fab color="primary" (click)="toggleSingleReview(review.id)">
+          <mat-icon>toggle_on</mat-icon>
+        </button>
+        <button matTooltip="ویرایش" mat-mini-fab (click)="openAddOrEditDialog(review)" color="primary">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button matTooltip="حذف" mat-mini-fab color="warn" (click)="deleteSingleReview(review.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </td>
+  </ng-container>
+  <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+  <tr mat-row *matRowDef="let reviews; columns: columnsToDisplay"></tr>
+</table>
+<mat-paginator [length]="totalItems"
+               [pageSize]="pageSize"
+               [pageIndex]="pageIndex"
+               [pageSizeOptions]="[5, 10, 20]"
+               (page)="changePage()">
+</mat-paginator>

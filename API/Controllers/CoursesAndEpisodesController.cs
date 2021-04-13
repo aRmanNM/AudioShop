@@ -103,7 +103,7 @@ namespace API.Controllers
         [HttpPost("{courseId}/reviews")]
         public async Task<ActionResult<ReviewDto>> AddCourseReview(int courseId, Review review)
         {
-            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;            
+            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             review.Accepted = false;
             review.UserId = userId;
@@ -111,24 +111,37 @@ namespace API.Controllers
 
             await _reviewRepository.AddReviewAsync(review);
             await _unitOfWork.CompleteAsync();
-            
+
             return Ok();
         }
 
         [Authorize(Roles = "Admin")]
         [HttpPut("{courseId}/reviews/{reviewId}")]
         public async Task<ActionResult<ReviewDto>> UpdateCourseReview(int courseId, int reviewId, ReviewDto reviewDto)
-        {                        
+        {
             await _reviewRepository.UpdateReview(reviewDto);
             await _unitOfWork.CompleteAsync();
             return Ok();
         }
 
-        [Authorize(Roles ="Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPut("reviews")]
-        public async Task<ActionResult> AcceptMultipleReviews(int[] reviewIds)
+        public async Task<ActionResult> BulkActionOnReviews(int[] reviewIds, string action)
         {
-            await _reviewRepository.AcceptMultipleReviews(reviewIds);
+            if (string.IsNullOrEmpty(action))
+            {
+                return BadRequest();
+            }
+
+            switch (action)
+            {
+                case "toggle": await _reviewRepository.ToggleMultipleReviews(reviewIds);
+                    break;
+                case "delete": _reviewRepository.DeleteMultipleReviews(reviewIds);
+                    break;
+                default: break;
+            }
+
             await _unitOfWork.CompleteAsync();
             return Ok();
         }

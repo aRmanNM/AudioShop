@@ -86,13 +86,18 @@ namespace API.Repositories
             return await GetCourseReviewsAsync(null, accepted, pageNumber, pageSize);
         }
 
-        public async Task AcceptMultipleReviews(int[] reviewIds)
+        public async Task ToggleMultipleReviews(int[] reviewIds)
         {
             var reviews = await _context.Reviews.Where(r => reviewIds.Any(p => p == r.Id)).ToArrayAsync();
             foreach (var review in reviews)
             {
-                review.Accepted = true;
+                review.Accepted = !review.Accepted;
             }
+        }
+
+        public void DeleteMultipleReviews(int[] reviewIds)
+        {
+            _context.Reviews.RemoveRange(_context.Reviews.Where(r => reviewIds.Contains(r.Id)));
         }
     }
 }
