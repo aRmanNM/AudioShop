@@ -1,13 +1,13 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {environment} from '../../../../environments/environment';
+import {Salesperson} from '../../../models/salesperson';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {AdminService} from '../../../services/admin.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {SpinnerService} from '../../../services/spinner.service';
-import {AdminService} from '../../../services/admin.service';
-import {Salesperson} from '../../../models/salesperson';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 
 interface DialogData {
-  salespersonId: string;
+  salesperson: Salesperson;
 }
 
 @Component({
@@ -16,8 +16,14 @@ interface DialogData {
   styleUrls: ['./salesperson-edit.component.scss']
 })
 export class SalespersonEditComponent implements OnInit {
-  baseUrl = environment.apiUrl + 'Credentials/';
-  salesperson: Salesperson;
+
+  spForm = new FormGroup(
+    {
+      id: new FormControl(''),
+      discountPercentageOfSalesperson: new FormControl('', [Validators.required, Validators.min(1), Validators.max(100)]),
+      salePercentageOfSalesperson: new FormControl('', [Validators.required, Validators.min(1), Validators.max(100)])
+    }
+  );
 
   constructor(public dialogRef: MatDialogRef<SalespersonEditComponent>,
               @Inject(MAT_DIALOG_DATA) public data: DialogData,
@@ -27,24 +33,23 @@ export class SalespersonEditComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getSalesperson();
+    if (this.data.salesperson) {
+      this.spForm.setValue({
+        id: this.data.salesperson.id,
+        discountPercentageOfSalesperson: this.data.salesperson.discountPercentageOfSalesperson,
+        salePercentageOfSalesperson: this.data.salesperson.salePercentageOfSalesperson
+      });
+    }
   }
 
   closeDialog(): void {
     this.dialogRef.close();
   }
 
-  getSalesperson(): void {
-    this.adminService.getSalesperson(this.data.salespersonId).subscribe((res) => {
-      this.salesperson = res;
-    });
-  }
-
-  toggleCredential(): void {
-    this.adminService.updateSalesperson(this.data.salespersonId).subscribe((res) => {
-      this.salesperson.credentialAccepted = !this.salesperson.credentialAccepted;
-      this.snackBar.open('اطلاعات هویتی تایید شد', null, {
-        duration: 2000,
+  updateSalesperson(): void {
+    this.adminService.updateSalesperson(this.spForm.value.id, this.spForm.value).subscribe(() => {
+      this.snackBar.open('اطلاعات فروشنده ویرایش شد', null, {
+        duration: 3000,
       });
 
       this.adminService.onSalespersonsUpdate();

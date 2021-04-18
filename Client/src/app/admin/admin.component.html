@@ -33,8 +33,14 @@
           <mat-icon>payment</mat-icon>
           پرداخت های فروشندگان
         </mat-expansion-panel-header>
-        <a mat-list-item [routerLink]="['./checkouts/pending']" routerLinkActive="active">در انتظار</a>
-        <a mat-list-item [routerLink]="['./checkouts/done']" routerLinkActive="active">انجام شده</a>
+        <a mat-list-item [routerLink]="['./checkouts/pending']" routerLinkActive="active">
+          <mat-icon>pending</mat-icon>
+          در انتظار
+        </a>
+        <a mat-list-item [routerLink]="['./checkouts/done']" routerLinkActive="active">
+          <mat-icon>task_alt</mat-icon>
+          انجام شده
+        </a>
       </mat-expansion-panel>
       <a mat-list-item [routerLink]="['./reviews']" routerLinkActive="active">
         <mat-icon>comment</mat-icon>

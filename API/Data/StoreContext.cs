@@ -22,6 +22,8 @@ namespace API.Data
         public DbSet<SliderItem> SliderItems { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<SalespersonCredential> SalespersonCredentials { get; set; }
+        public DbSet<Favorite> Favorites { get; set; }
+        public DbSet<Progress> Progresses { get; set; }
 
         public StoreContext(DbContextOptions<StoreContext> options) : base(options)
         {

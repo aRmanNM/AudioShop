@@ -12,4 +12,5 @@ export interface Credential {
   phone: number;
   idCardPhoto: Photo;
   bankCardPhoto: Photo;
+  message: string;
 }

@@ -5,4 +5,5 @@ export interface SliderItem {
   courseId: number;
   isActive: boolean;
   photoFileName: string;
+  link: string;
 }

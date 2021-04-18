@@ -16,9 +16,8 @@
       <mat-form-field appearance="fill">
         <mat-label>ترتیب پخش</mat-label>
         <mat-select formControlName="waitingTimeBetweenEpisodes">
-          <mat-option value="0">بدون محدودیت</mat-option>
-          <mat-option value="1">یک روز در میان</mat-option>
-          <mat-option value="2">دو روز در میان</mat-option>
+          <mat-option value="0">بدون محدودیت زمانی</mat-option>
+          <mat-option value="1">هر روز یک اپیزود</mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field appearance="fill">
@@ -31,8 +30,6 @@
         color="primary"
         [disabled]="!courseForm.valid"
         type="submit">
-        <mat-icon *ngIf="data.course">edit</mat-icon>
-        <mat-icon *ngIf="!data.course">add</mat-icon>
         <span *ngIf="data.course">ویرایش</span>
         <span *ngIf="!data.course">درج دوره جدید</span>
       </button>

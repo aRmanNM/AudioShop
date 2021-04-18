@@ -1,18 +1,33 @@
 <mat-toolbar>
-  <button mat-raised-button color="primary" style="margin-left: 2em;" (click)="refresh()">
-    <mat-icon>refresh</mat-icon>
-    بررسی مجدد
-  </button>
-  <mat-slide-toggle [(ngModel)]="onlyShowUsersWithUnacceptedCred" (toggleChange)="toggleAccepted()">تنها موارد غیرفعال را نشان بده</mat-slide-toggle>
+  <mat-form-field appearance="standard" class="select-input">
+    <mat-label>فیلتر</mat-label>
+    <mat-select [(value)]="credStatus">
+      <mat-option value="" selected>همه</mat-option>
+      <mat-option value="unaccepted">غیرفعال</mat-option>
+      <mat-option value="pending">در انتظار</mat-option>
+      <mat-option value="accepted">فعال</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <button mat-flat-button color="primary" (click)="refresh()">نمایش</button>
+
   <span class="spacer"></span>
-  <input type="text" class="form-control" style="width: 300px;" [(ngModel)]="searchString" placeholder="جستجو">
-  <button mat-flat-button color="primary" style="margin-right: 6px;" (click)="search()">
+
+  <mat-form-field appearance="outline" class="search-input">
+    <mat-label>جستجو</mat-label>
+    <input matInput [(ngModel)]="searchString" placeholder="نام کاربری، نام و نام خانوادگی و ..">
+  </mat-form-field>
+
+  <button mat-mini-fab color="primary" style="transform: scale(0.6);" (click)="search()">
     <mat-icon>search</mat-icon>
-    جستجو
   </button>
-  <button mat-stroked-button color="basic" style="margin-right: 6px;" (click)="clearSearch()">
+  <button mat-mini-fab color="basic" style="transform: scale(0.6)" (click)="clearSearch()">
     <mat-icon>keyboard_return</mat-icon>
-    بازگشت
+  </button>
+
+  <span class="spacer"></span>
+
+  <button mat-mini-fab color="accent" (click)="refresh()">
+    <mat-icon>refresh</mat-icon>
   </button>
 </mat-toolbar>
 
@@ -37,12 +52,16 @@
     <th mat-header-cell *matHeaderCellDef>سهم از فروش</th>
     <td mat-cell *matCellDef="let salesperson"> {{salesperson.salePercentageOfSalesperson}}%</td>
   </ng-container>
+  <ng-container matColumnDef="couponDiscount">
+    <th mat-header-cell *matHeaderCellDef>تخفیف کوپن</th>
+    <td mat-cell *matCellDef="let salesperson"> {{salesperson.discountPercentageOfSalesperson}}%</td>
+  </ng-container>
   <ng-container matColumnDef="currentSale">
-    <th mat-header-cell *matHeaderCellDef>حساب</th>
+    <th mat-header-cell *matHeaderCellDef>حساب (ریال)</th>
     <td mat-cell *matCellDef="let salesperson"> {{salesperson.currentSalesOfSalesperson | number}}</td>
   </ng-container>
   <ng-container matColumnDef="totalSale">
-    <th mat-header-cell *matHeaderCellDef>تصفیه شده</th>
+    <th mat-header-cell *matHeaderCellDef>تصفیه شده (ریال)</th>
     <td mat-cell *matCellDef="let salesperson"> {{salesperson.totalSalesOfSalesperson | number}}</td>
   </ng-container>
   <ng-container matColumnDef="accepted">
@@ -55,13 +74,16 @@
   <ng-container matColumnDef="actions">
     <th mat-header-cell *matHeaderCellDef></th>
     <td mat-cell *matCellDef="let salesperson">
-      <!--        <button class="action" mat-stroked-button color="primary" (click)="openDetailDialog(salesperson)">-->
-      <!--          جزئیات-->
-      <!--        </button>-->
-      <button class="action" mat-flat-button color="primary" style="float: left;" (click)="openAddOrEditDialog(salesperson)">
-        <mat-icon>perm_identity</mat-icon>
-        مشاهده اطلاعات هویتی
-      </button>
+      <div class="actions">
+        <button matTooltip="ویرایش درصدها" class="action" mat-mini-fab color="primary" style="transform: scale(0.6);"
+                (click)="openEditDialog(salesperson)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button matTooltip="مشخصات هویتی" class="action" mat-mini-fab color="primary" style="transform: scale(0.6);"
+                (click)="openCredsDialog(salesperson)">
+          <mat-icon>perm_identity</mat-icon>
+        </button>
+      </div>
     </td>
   </ng-container>
   <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>

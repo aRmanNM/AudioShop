@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Dtos;
+using API.Helpers;
 using API.Interfaces;
 using API.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -83,10 +84,10 @@ namespace API.Controllers
         }
 
         [HttpGet("salespersons")]
-        public async Task<ActionResult<PaginatedResult<SalespersonDto>>> GetAllSalespersons(string search = null,
-            bool onlyShowUsersWithUnacceptedCred = false, int pageNumber = 1, int pageSize = 10)
+        public async Task<ActionResult<PaginatedResult<SalespersonDto>>> GetAllSalespersons(string search,
+            SalespersonCredStatus? status, int pageNumber = 1, int pageSize = 10)
         {
-            var result = await _userRepository.GetSalespersonsAsync(search, onlyShowUsersWithUnacceptedCred, pageNumber, pageSize);
+            var result = await _userRepository.GetSalespersonsAsync(search, status, pageNumber, pageSize);
             var resultWithDtos = new PaginatedResult<SalespersonDto>();
             resultWithDtos.TotalItems = result.TotalItems;
             resultWithDtos.Items = result.Items.Select(s => _mapper.MapUserToSalespersonDto(s));
@@ -100,11 +101,23 @@ namespace API.Controllers
             return Ok(_mapper.MapUserToSalespersonDto(salesperson));
         }
 
-        [HttpPut("salespersons/{userId}")]
-        public async Task<ActionResult<SalespersonDto>> UpdateCredential(string userId)
+        [HttpPut("salespersons/{userId}/credential")]
+        public async Task<ActionResult<SalespersonDto>> UpdateCredential(string userId, bool accepted, string message)
         {
-            var salesperson = await _userManager.FindByIdAsync(userId);
-            salesperson.CredentialAccepted = !salesperson.CredentialAccepted;
+            // var salesperson = await _userManager.FindByIdAsync(userId);
+            var salesperson = await _userRepository.FindUserByIdAsync(userId);
+            salesperson.CredentialAccepted = accepted;
+            salesperson.SalespersonCredential.Message = message;
+            await _userManager.UpdateAsync(salesperson);
+            return Ok();
+        }
+
+        [HttpPut("salespersons/{userId}")]
+        public async Task<ActionResult<SalespersonDto>> UpdateSalesperson(string userId, SalespersonDto salespersonDto)
+        {
+            var salesperson = await _userRepository.FindUserByIdAsync(userId);
+            salesperson.SalePercentageOfSalesperson = salespersonDto.SalePercentageOfSalesperson;
+            salesperson.Coupon.DiscountPercentage = salespersonDto.DiscountPercentageOfSalesperson;
             await _userManager.UpdateAsync(salesperson);
             return Ok();
         }

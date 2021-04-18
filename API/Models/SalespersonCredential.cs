@@ -13,5 +13,6 @@ namespace API.Models
         public string Phone { get; set; }
         public Photo IdCardPhoto { get; set; }
         public Photo BankCardPhoto { get; set; }
+        public string Message { get; set; }
     }
 }

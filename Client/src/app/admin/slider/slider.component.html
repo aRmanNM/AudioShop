@@ -1,7 +1,6 @@
 <mat-toolbar>
   <button mat-raised-button color="primary" (click)="openAddOrEditDialog(null)">
-    <mat-icon>add</mat-icon>
-    افزودن
+    افزودن اسلایدر جدید
   </button>
   <span class="spacer"></span>
 </mat-toolbar>
@@ -25,7 +24,17 @@
   </ng-container>
   <ng-container matColumnDef="courseId">
     <th mat-header-cell *matHeaderCellDef>کد دوره</th>
-    <td mat-cell *matCellDef="let sliderItem">{{ sliderItem.courseId }}</td>
+    <td mat-cell *matCellDef="let sliderItem">
+      <span *ngIf="sliderItem.courseId">{{ sliderItem.courseId }}</span>
+      <span *ngIf="!sliderItem.courseId">ندارد</span>
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="link">
+    <th mat-header-cell *matHeaderCellDef>لینک خروجی</th>
+    <td mat-cell *matCellDef="let sliderItem">
+      <span *ngIf="sliderItem.link">{{ sliderItem.link }}</span>
+      <span *ngIf="!sliderItem.link">ندارد</span>
+    </td>
   </ng-container>
   <ng-container matColumnDef="isActive">
     <th mat-header-cell *matHeaderCellDef>وضعیت نمایش</th>
@@ -44,16 +53,16 @@
   <ng-container matColumnDef="actions">
     <th mat-header-cell *matHeaderCellDef></th>
     <td mat-cell *matCellDef="let sliderItem">
-      <button class="action" mat-flat-button color="warn" style="float: left;"
-              (click)="deleteSliderItem(sliderItem.id)">
-        <mat-icon>delete</mat-icon>
-        حذف
-      </button>
-      <button class="action" mat-flat-button color="primary" style="float: left;"
-              (click)="openAddOrEditDialog(sliderItem)">
-        <mat-icon>edit</mat-icon>
-        ویرایش
-      </button>
+      <div class="actions">
+        <button matTooltip="ویرایش" mat-mini-fab color="primary" style="transform: scale(0.6);"
+                (click)="openAddOrEditDialog(sliderItem)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button matTooltip="حذف" class="action" mat-mini-fab color="warn" style="transform: scale(0.6);"
+                (click)="deleteSliderItem(sliderItem.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
     </td>
   </ng-container>
   <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>

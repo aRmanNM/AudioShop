@@ -1,7 +1,10 @@
-img {
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   width: 100%;
 }
 
 mat-form-field {
-  font-size: smaller;
+  width: 100%;
 }

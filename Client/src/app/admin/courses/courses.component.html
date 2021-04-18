@@ -1,19 +1,19 @@
 <mat-toolbar>
   <button mat-raised-button color="primary" (click)="openAddOrEditDialog(null)">
-    <mat-icon>add</mat-icon>
-    افزودن
+    افزودن دوره جدید
   </button>
 
   <span class="spacer"></span>
 
-  <input type="text" class="form-control" style="width: 300px;" [(ngModel)]="searchString" placeholder="جستجوی عنوان">
-  <button mat-flat-button color="primary" style="margin-right: 6px;" (click)="search()">
+  <mat-form-field appearance="outline" class="search-input">
+    <mat-label>جستجو</mat-label>
+    <input matInput [(ngModel)]="searchString" placeholder="عنوان دوره">
+  </mat-form-field>
+  <button matTooltip="جستجو" mat-mini-fab color="primary" style="transform: scale(0.6);" (click)="search()">
     <mat-icon>search</mat-icon>
-    جستجو
   </button>
-  <button mat-stroked-button color="basic" style="margin-right: 6px;" (click)="clearSearch()">
+  <button matTooltip="همه موارد" mat-mini-fab color="basic" style="transform: scale(0.6);" (click)="clearSearch()">
     <mat-icon>keyboard_return</mat-icon>
-    بازگشت
   </button>
 </mat-toolbar>
 
@@ -38,7 +38,7 @@
     <th mat-header-cell *matHeaderCellDef>شیوه پخش</th>
     <td mat-cell *matCellDef="let course">
       <span *ngIf="course.waitingTimeBetweenEpisodes == 0">بدون محدودیت</span>
-      <span *ngIf="course.waitingTimeBetweenEpisodes > 0">{{course.waitingTimeBetweenEpisodes}}روز در میان</span>
+      <span *ngIf="course.waitingTimeBetweenEpisodes > 0">روزانه {{course.waitingTimeBetweenEpisodes}} اپیزود</span>
     </td>
   </ng-container>
   <ng-container matColumnDef="isActive">
@@ -58,14 +58,14 @@
   <ng-container matColumnDef="actions">
     <th mat-header-cell *matHeaderCellDef></th>
     <td mat-cell *matCellDef="let course">
-      <button class="action" mat-flat-button color="primary" style="float: left;" [routerLink]="['../episodes', course.id]">
-        <mat-icon>sort</mat-icon>
-        اپیزودها
-      </button>
-      <button class="action" mat-flat-button color="primary" style="float: left;" (click)="openAddOrEditDialog(course)">
-        <mat-icon>edit</mat-icon>
-        ویرایش
-      </button>
+      <div class="actions">
+        <button matTooltip="ویرایش" mat-mini-fab color="primary" (click)="openAddOrEditDialog(course)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button matTooltip="لیست اپیزودها" mat-mini-fab color="accent" [routerLink]="['../episodes', course.id]">
+          <mat-icon>sort</mat-icon>
+        </button>
+      </div>
     </td>
   </ng-container>
   <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>

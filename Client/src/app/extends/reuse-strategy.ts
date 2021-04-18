@@ -20,6 +20,10 @@ export class CustomRouteReuseStrategy implements RouteReuseStrategy {
     if (route.data.reuseRoute) {
       this.storedHandles[id] = handle;
     }
+
+    while (document.getElementsByTagName('mat-tooltip-component').length > 0) {
+      document.getElementsByTagName('mat-tooltip-component')[0].remove();
+    }
   }
 
   shouldAttach(route: ActivatedRouteSnapshot): boolean {

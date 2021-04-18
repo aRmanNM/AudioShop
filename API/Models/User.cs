@@ -31,7 +31,10 @@ namespace API.Models
         public ICollection<UserRole> UserRoles { get; set; }
         public ICollection<Order> Orders { get; }
         public ICollection<BlacklistItem> Blacklist { get; set; }
-        public ICollection<Review> Reviews { get; set; } 
+        public ICollection<Review> Reviews { get; set; }
+
+        public ICollection<Favorite> FavoriteCoursesAndEpisodes { get; set; }
+        public ICollection<Progress> ListeningsProgress { get; set; }
 
         public User()
         {
@@ -39,6 +42,8 @@ namespace API.Models
             Orders = new Collection<Order>();
             Blacklist = new Collection<BlacklistItem>();
             Reviews = new Collection<Review>();
+            FavoriteCoursesAndEpisodes = new Collection<Favorite>();
+            ListeningsProgress = new Collection<Progress>();
         }
     }
 

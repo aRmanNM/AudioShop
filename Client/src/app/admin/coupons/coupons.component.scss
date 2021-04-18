@@ -1,3 +1,16 @@
 table {
   width: 100%;
 }
+
+.actions {
+  float: left;
+}
+
+.actions button {
+  opacity: 70%;
+  transform: scale(0.6);
+}
+
+.actions button:hover {
+  opacity: 100%;
+}

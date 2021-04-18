@@ -4,14 +4,16 @@ using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace API.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    partial class StoreContextModelSnapshot : ModelSnapshot
+    [Migration("20210416141313_AddedFavoritesAndProgress")]
+    partial class AddedFavoritesAndProgress
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -79,9 +81,6 @@ namespace API.Data.Migrations
                     b.Property<string>("PaymentReceipt")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ReceiptPhotoId")
-                        .HasColumnType("int");
-
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
 
@@ -92,8 +91,6 @@ namespace API.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ReceiptPhotoId");
 
                     b.HasIndex("UserId");
 
@@ -451,9 +448,6 @@ namespace API.Data.Migrations
                     b.Property<int?>("IdCardPhotoId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Message")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Phone")
                         .HasColumnType("nvarchar(max)");
 
@@ -480,7 +474,7 @@ namespace API.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("CourseId")
+                    b.Property<int>("CourseId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
@@ -488,9 +482,6 @@ namespace API.Data.Migrations
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
-
-                    b.Property<string>("Link")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("PhotoId")
                         .HasColumnType("int");
@@ -738,10 +729,6 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("API.Models.Checkout", b =>
                 {
-                    b.HasOne("API.Models.Photo", "ReceiptPhoto")
-                        .WithMany()
-                        .HasForeignKey("ReceiptPhotoId");
-
                     b.HasOne("API.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");

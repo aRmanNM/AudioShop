@@ -125,6 +125,7 @@ namespace API.Services
                 Description = slideritem.Description,
                 CourseId = slideritem.CourseId,
                 IsActive = slideritem.IsActive,
+                Link = slideritem.Link,
                 PhotoFileName = slideritem.Photo?.FileName ?? null
             };
         }
@@ -143,6 +144,7 @@ namespace API.Services
                 SalePercentageOfSalesperson = user.SalePercentageOfSalesperson,
                 CurrentSalesOfSalesperson = user.CurrentSalesOfSalesperson,
                 TotalSalesOfSalesperson = user.TotalSalesOfSalesperson,
+                DiscountPercentageOfSalesperson = user.Coupon.DiscountPercentage,
                 CouponCode = user.CouponCode,
                 SalespersonCredential = user.SalespersonCredential,
                 CredentialAccepted = user.CredentialAccepted
@@ -155,7 +157,8 @@ namespace API.Services
                 Title = sliderItemDto.Title,
                 Description = sliderItemDto.Description,
                 IsActive = sliderItemDto.IsActive,
-                CourseId = sliderItemDto.CourseId
+                CourseId = sliderItemDto.CourseId,
+                Link = sliderItemDto.Link
             };
         }
 

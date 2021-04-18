@@ -47,3 +47,22 @@ table {
   position: absolute;
   left: 0;
 }
+
+.actions {
+  float: left;
+}
+
+.actions button {
+  opacity: 70%;
+  transform: scale(0.6);
+}
+
+.actions button:hover {
+  opacity: 100%;
+}
+
+.search-input {
+  margin-top: 15px !important;
+  font-size: 11px;
+  width: 300px;
+}

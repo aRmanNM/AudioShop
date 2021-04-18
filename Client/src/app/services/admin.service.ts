@@ -5,6 +5,7 @@ import {environment} from '../../environments/environment';
 import {Observable, Subject} from 'rxjs';
 import {PaginatedResult} from '../models/paginated-result';
 import {Salesperson} from '../models/salesperson';
+import {SalespersonCredStatus} from '../models/salespersonCredStatus';
 
 @Injectable({
   providedIn: 'root'
@@ -40,12 +41,12 @@ export class AdminService {
   }
 
   getAllSalespersons(search: string,
-                     onlyShowUsersWithUnacceptedCred: boolean,
+                     credSatus: SalespersonCredStatus,
                      pageNumber: number, pageSize: number): Observable<PaginatedResult<Salesperson>> {
     return this.http.get<PaginatedResult<Salesperson>>(`${this.baseUrl}/salespersons`, {
       params: new HttpParams()
         .set('search', search)
-        .set('onlyShowUsersWithUnacceptedCred', `${onlyShowUsersWithUnacceptedCred}`)
+        .set('status', `${credSatus}`)
         .set('pageNumber', `${pageNumber + 1}`)
         .set('pageSize', `${pageSize}`)
     });
@@ -55,7 +56,15 @@ export class AdminService {
     return this.http.get<Salesperson>(`${this.baseUrl}/salespersons/${userId}`);
   }
 
-  updateSalesperson(userId: string): Observable<any> {
-    return this.http.put<any>(`${this.baseUrl}/salespersons/${userId}`, null);
+  updateSalespersonCredential(userId: string, accepted: boolean, message: string): Observable<any> {
+    return this.http.put<any>(`${this.baseUrl}/salespersons/${userId}/credential`, null, {
+      params: new HttpParams()
+        .set('message', message)
+        .set('accepted', accepted.toString())
+    });
+  }
+
+  updateSalesperson(userId: string, salesperson: Salesperson): Observable<any> {
+    return this.http.put<any>(`${this.baseUrl}/salespersons/${userId}`, salesperson);
   }
 }

@@ -13,7 +13,7 @@ import {CouponsCreateEditComponent} from './coupons-create-edit/coupons-create-e
 export class CouponsComponent implements OnInit {
   coupons: Coupon[];
   dialogActive = false;
-  columnsToDisplay = ['id', 'discount', 'description', 'code', 'isActive', 'actions'];
+  columnsToDisplay = ['description', 'discount', 'code', 'isActive', 'actions'];
 
   constructor(private couponService: CouponService,
               public dialog: MatDialog,

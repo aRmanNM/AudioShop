@@ -1,6 +1,5 @@
 import {Credential} from './credential';
 
-
 export interface Salesperson {
   id: string;
   userName: string;
@@ -14,6 +13,7 @@ export interface Salesperson {
   currentSalesOfSalesperson: number;
   totalSalesOfSalesperson: number;
   couponCode: string;
+  discountPercentageOfSalesperson: number;
   salespersonCredential: Credential;
   credentialAccepted: boolean;
 }

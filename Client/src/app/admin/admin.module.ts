@@ -18,7 +18,7 @@ import {CheckoutPendingComponent} from './checkouts/checkout-pending/checkout-pe
 import {SalespersonModule} from '../salesperson/salesperson.module';
 import {ReviewsEditComponent} from './reviews/reviews-edit/reviews-edit.component';
 import {SalespersonsComponent} from './salespersons/salespersons.component';
-import {SalespersonEditComponent} from './salespersons/salesperson-edit/salesperson-edit.component';
+import {SalespersonCredsComponent} from './salespersons/salesperson-creds/salesperson-creds.component';
 import {ConfigsComponent} from './configs/configs.component';
 import {SliderComponent} from './slider/slider.component';
 import {SliderEditCreateComponent} from './slider/slider-edit-create/slider-edit-create.component';
@@ -28,6 +28,7 @@ import {MobileAppComponent} from './mobile-app/mobile-app.component';
 import {PasswordComponent} from './password/password.component';
 import {DurationPipe} from '../pipes/duration.pipe';
 import {ReviewsComponent} from './reviews/reviews.component';
+import { SalespersonEditComponent } from './salespersons/salesperson-edit/salesperson-edit.component';
 
 
 @NgModule({
@@ -43,7 +44,7 @@ import {ReviewsComponent} from './reviews/reviews.component';
     CheckoutPendingComponent,
     ReviewsEditComponent,
     SalespersonsComponent,
-    SalespersonEditComponent,
+    SalespersonCredsComponent,
     ConfigsComponent,
     SliderComponent,
     SliderEditCreateComponent,
@@ -53,6 +54,7 @@ import {ReviewsComponent} from './reviews/reviews.component';
     PasswordComponent,
     DurationPipe,
     ReviewsComponent,
+    SalespersonEditComponent,
   ],
   imports: [
     CommonModule,

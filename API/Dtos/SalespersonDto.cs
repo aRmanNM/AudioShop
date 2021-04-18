@@ -13,6 +13,7 @@ namespace API.Dtos
         public short Age { get; set; }
         public Gender Gender { get; set; }
         public int SalePercentageOfSalesperson { get; set; }
+        public int DiscountPercentageOfSalesperson { get; set; }
         public decimal CurrentSalesOfSalesperson { get; set; }
         public decimal TotalSalesOfSalesperson { get; set; }
         public string CouponCode { get; set; }

@@ -15,7 +15,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 export class SliderComponent implements OnInit {
   sliderItems: SliderItem[];
   baseUrl = environment.apiUrl + 'Slider/';
-  columnsToDisplay = ['id', 'title', 'description', 'courseId', 'isActive', 'photo', 'actions'];
+  columnsToDisplay = ['title', 'description', 'courseId', 'link', 'isActive', 'photo', 'actions'];
   dialogActive = false;
 
   constructor(private sliderService: SliderService,

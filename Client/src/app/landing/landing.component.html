@@ -1,16 +1,11 @@
 <div class="centered-container">
-  <img src="assets/landing.jpg" alt="">
-  <h3>
-    اپلیکیشن مهارت های اجتماعی
-  </h3>
-  <mat-card [dir]="'rtl'">
+<!--  <img src="assets/landing.jpg" alt="">-->
+  <mat-card [dir]="'rtl'" >
+    <mat-card-title>اپلیکیشن مهارت های اجتماعی</mat-card-title>
+    <mat-card-subtitle>آموزش های شنیداری برای یادگیری مهارت های ارتباطی</mat-card-subtitle>
     <mat-card-content>
-<!--      <button class="mb-2" mat-raised-button color="accent" [routerLink]="[latest]" target="_blank">دانلود آخرین نسخه نرم-->
-<!--        افزار</button>-->
-      <a class="btn btn-secondary mb-2" href="{{latest}}" target="_blank">دریافت آخرین نسخه نرم افزار</a>
-      <a class="btn btn-primary" [routerLink]="['/login']" routerLinkActive="$router_link-active$">همکاری
-        در فروش
-      </a>
+      <a mat-raised-button color="primary" href="{{latest}}">دریافت آخرین نسخه نرم افزار</a>
+      <a mat-stroked-button color="primary" [routerLink]="['/login']">همکاری در فروش</a>
     </mat-card-content>
   </mat-card>
 </div>

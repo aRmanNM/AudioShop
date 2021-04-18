@@ -19,7 +19,7 @@ namespace API.Controllers
         private readonly IWebHostEnvironment _host;
         private readonly IFileService _fileService;
 
-        public AppFileController(IWebHostEnvironment host, 
+        public AppFileController(IWebHostEnvironment host,
             IFileService fileService,
             IConfigRepository configRepository,
             IUnitOfWork unitOfWork)
@@ -55,7 +55,7 @@ namespace API.Controllers
             await _unitOfWork.CompleteAsync();
             return Ok();
         }
-        
+
         [HttpGet("app/latest")]
         public async Task<ActionResult<Config>> GetLatestAppVersion()
         {

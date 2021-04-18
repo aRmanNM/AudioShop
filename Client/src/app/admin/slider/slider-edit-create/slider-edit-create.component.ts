@@ -33,7 +33,8 @@ export class SliderEditCreateComponent implements OnInit {
       id: new FormControl(''),
       title: new FormControl('', [Validators.required]),
       description: new FormControl(''),
-      courseId: new FormControl('', [Validators.required]),
+      courseId: new FormControl(''),
+      link: new FormControl(''),
       isActive: new FormControl('', [Validators.required]),
     }
   );
@@ -46,6 +47,7 @@ export class SliderEditCreateComponent implements OnInit {
         description: this.data.sliderItem.description,
         courseId: this.data.sliderItem.courseId,
         isActive: this.data.sliderItem.isActive,
+        link: this.data.sliderItem.link
       });
 
       this.getImage();

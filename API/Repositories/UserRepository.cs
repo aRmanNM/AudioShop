@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using API.Data;
 using API.Dtos;
+using API.Helpers;
 using API.Interfaces;
 using API.Models;
 using Microsoft.EntityFrameworkCore;
@@ -46,11 +47,12 @@ namespace API.Repositories
             return _context.Users
                 .Include(u => u.SalespersonCredential).ThenInclude(sc => sc.IdCardPhoto)
                 .Include(u => u.SalespersonCredential).ThenInclude(sc => sc.BankCardPhoto)
+                .Include(u => u.Coupon)
                 .FirstOrDefaultAsync(u => u.Id == userId);
         }
 
         public async Task<PaginatedResult<User>> GetSalespersonsAsync(string search,
-            bool onlyShowUsersWithUnacceptedCred = false, int pageNumber = 1, int pageSize = 10)
+            SalespersonCredStatus? status, int pageNumber = 1, int pageSize = 10)
         {
             if (pageSize > 20 || pageSize < 1)
             {
@@ -65,6 +67,8 @@ namespace API.Repositories
             var salespersons = _context.Users
                 .Include(u => u.UserRoles)
                 .ThenInclude(u => u.Role)
+                .Include(u => u.Coupon)
+                .Include(u => u.SalespersonCredential)
                 .Where(u => u.UserRoles.Any(ur => ur.Role.Name == "Salesperson"));
 
             if (!string.IsNullOrEmpty(search))
@@ -72,7 +76,13 @@ namespace API.Repositories
                 salespersons = salespersons.Where(s => s.UserName.Contains(search) || s.LastName.Contains(search) || s.FirstName.Contains(search));
             }
 
-            if (onlyShowUsersWithUnacceptedCred)
+            if (status == SalespersonCredStatus.accepted)
+            {
+                salespersons = salespersons.Where(s => s.CredentialAccepted == true);
+            } else if (status == SalespersonCredStatus.pending)
+            {
+                salespersons = salespersons.Where(s => s.CredentialAccepted == false && s.SalespersonCredential != null);
+            } else if (status == SalespersonCredStatus.unaccepted)
             {
                 salespersons = salespersons.Where(s => s.CredentialAccepted == false);
             }

@@ -1,56 +1,20 @@
-<div *ngIf="salesperson">
-  <mat-tab-group animationDuration="0ms" mat-align-tabs="center" mat-stretch-tabs backgroundColor="primary" dir="rtl">
-    <mat-tab label="اطلاعات حساب">
+<mat-tab-group animationDuration="0ms" mat-align-tabs="center" mat-stretch-tabs backgroundColor="primary" dir="rtl">
+  <mat-tab label="اطلاعات فروشنده">
+    <!--    {{data.salesperson | json}}-->
+    <form [formGroup]="spForm" (ngSubmit)="updateSalesperson()">
+      <input type="text" formControlName="id" hidden/>
+      <mat-form-field appearance="fill">
+        <mat-label>درصد تخفیف کوپن</mat-label>
+        <input matInput type="number" formControlName="discountPercentageOfSalesperson"/>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>درصد سهم فروشنده از هر خرید</mat-label>
+        <input matInput type="number" formControlName="salePercentageOfSalesperson"/>
+      </mat-form-field>
+      <button mat-flat-button color="primary">ویرایش</button>
+    </form>
+  </mat-tab>
+</mat-tab-group>
 
-      <div *ngIf="salesperson.salespersonCredential" class="d-flex flex-column">
-        <mat-form-field appearance="fill">
-          <mat-label>شماره ملی</mat-label>
-          <input matInput type="text" [ngModel]="salesperson.salespersonCredential.idCardNumber"/>
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>شماره حساب بانکی</mat-label>
-          <input matInput type="text" [ngModel]="salesperson.salespersonCredential.bankAccountNumber"/>
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>شماره شبا</mat-label>
-          <input matInput type="text" [ngModel]="salesperson.salespersonCredential.bankAccountShebaNumber"/>
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>شماره کارت بانکی</mat-label>
-          <input matInput type="text" [ngModel]="salesperson.salespersonCredential.bankCardNumber"/>
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>نام صاحب حساب</mat-label>
-          <input matInput type="text" [ngModel]="salesperson.salespersonCredential.bankCardName"/>
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>نام بانک</mat-label>
-          <input matInput type="text" [ngModel]="salesperson.salespersonCredential.bankName"/>
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>شماره تماس ضروری</mat-label>
-          <input matInput type="text" [ngModel]="salesperson.salespersonCredential.phone"/>
-        </mat-form-field>
-      </div>
-
-      <mat-slide-toggle *ngIf="salesperson.salespersonCredential" class="mt-2 mb-3" [(ngModel)]="salesperson.credentialAccepted" (toggleChange)="toggleCredential()">فعال بودن امکان تسویه حساب</mat-slide-toggle>
-
-    </mat-tab>
-    <mat-tab label="تصویر کارت ملی">
-      <div *ngIf="salesperson.salespersonCredential">
-        <img
-          src="{{ baseUrl + salesperson.salespersonCredential.id + '/' + salesperson.salespersonCredential.idCardPhoto.fileName }}"
-          *ngIf="salesperson.salespersonCredential.idCardPhoto">
-      </div>
-    </mat-tab>
-    <mat-tab label="تصویر کارت بانکی">
-      <div *ngIf="salesperson.salespersonCredential">
-        <img
-          src="{{ baseUrl + salesperson.salespersonCredential.id + '/' + salesperson.salespersonCredential.bankCardPhoto.fileName }}"
-          *ngIf="salesperson.salespersonCredential.bankCardPhoto">
-      </div>
-    </mat-tab>
-  </mat-tab-group>
-</div>
-
-<mat-progress-bar color="accent" mode="indeterminate" *ngIf="spinnerService.visibility | async"></mat-progress-bar>
+<mat-progress-bar style="margin-top: 10px;" color="accent" mode="indeterminate"
+                  *ngIf="spinnerService.visibility | async"></mat-progress-bar>

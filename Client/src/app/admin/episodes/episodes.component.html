@@ -1,15 +1,18 @@
 <mat-toolbar>
-  <input type="number" class="form-control" style="width: 150px;" min="1" [(ngModel)]="courseId"
-         placeholder="شناسه دوره">
-  <button mat-flat-button color="primary" style="margin-right: 6px;" (click)="getEpisodes()" [disabled]="!courseId">
-    <mat-icon>toc</mat-icon>
-    انتخاب دوره
-  </button>
-  <span class="spacer"></span>
   <button mat-raised-button color="primary" (click)="addOrEditDialog(null)" [disabled]="!addEnabled">
-    <mat-icon>add</mat-icon>
-    اپیزود جدید
+    افزودن اپیزود جدید
   </button>
+
+  <span class="spacer"></span>
+
+  <mat-form-field appearance="outline" class="search-input">
+    <mat-label>شناسه دوره</mat-label>
+    <input type="number" matInput  min="1" [(ngModel)]="courseId" placeholder="شناسه دوره">
+  </mat-form-field>
+  <button mat-mini-fab color="primary" style="transform: scale(0.6);" (click)="getEpisodes()" [disabled]="!courseId">
+    <mat-icon>search</mat-icon>
+  </button>
+
 </mat-toolbar>
 
 <span *ngIf="!dialogActive">
@@ -37,7 +40,10 @@
   </ng-container>
   <ng-container matColumnDef="price">
     <mat-header-cell *matHeaderCellDef>مبلغ تکی</mat-header-cell>
-    <mat-cell *matCellDef="let episode"> {{episode.price | number}} ریال</mat-cell>
+    <mat-cell *matCellDef="let episode">
+      <span *ngIf="episode.price > 0">{{episode.price | number}} ریال</span>
+      <span *ngIf="episode.price == 0">رایگان</span>
+    </mat-cell>
   </ng-container>
   <ng-container matColumnDef="duration">
     <mat-header-cell *matHeaderCellDef>زمان دوره</mat-header-cell>
@@ -53,19 +59,16 @@
   <ng-container matColumnDef="actions">
     <mat-header-cell *matHeaderCellDef></mat-header-cell>
     <mat-cell *matCellDef="let episode">
-      <!--        <button class="action" mat-stroked-button color="primary" (click)="openDetailDialog(episode)">-->
-      <!--          جزئیات-->
-      <!--        </button>-->
-      <button class="action" mat-flat-button color="primary"
-              (click)="addOrEditDialog(episode)">
-        <mat-icon>edit</mat-icon>
-        ویرایش
-      </button>
-      <button class="action" mat-flat-button color="warn"
-              (click)="deleteEpisode(episode.id)" style="margin-right: 5px;">
-        <mat-icon>delete</mat-icon>
-        حذف
-      </button>
+      <div class="actions">
+        <button matTooltip="ویرایش" class="action" mat-mini-fab color="primary" style="transform: scale(0.6);"
+                (click)="addOrEditDialog(episode)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button matTooltip="حذف" class="action" mat-mini-fab color="warn"
+                (click)="deleteEpisode(episode.id)" style="transform: scale(0.6);">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
     </mat-cell>
   </ng-container>
   <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>

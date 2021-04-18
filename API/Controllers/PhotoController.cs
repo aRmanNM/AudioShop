@@ -25,6 +25,7 @@ namespace API.Controllers
         private readonly IFileService _fileService;
         private readonly ICredentialRepository _credentialRepository;
         private readonly ISliderRepository _sliderRepository;
+        private readonly ICheckoutRepository _checkoutRepository;
         private readonly PhotoOptions _photoOptions;
 
         public PhotoController(IWebHostEnvironment host,
@@ -34,7 +35,8 @@ namespace API.Controllers
             IOptions<PhotoOptions> options,
             IFileService fileService,
             ICredentialRepository credentialRepository,
-            ISliderRepository sliderRepository)
+            ISliderRepository sliderRepository,
+            ICheckoutRepository checkoutRepository)
         {
             _host = host;
             _courseRepository = courseRepository;
@@ -43,6 +45,7 @@ namespace API.Controllers
             _fileService = fileService;
             _credentialRepository = credentialRepository;
             _sliderRepository = sliderRepository;
+            _checkoutRepository = checkoutRepository;
             _photoOptions = options.Value;
         }
 
@@ -170,6 +173,44 @@ namespace API.Controllers
             }
 
             sliderItem.Photo = photo;
+            await _unitOfWork.CompleteAsync();
+            return Ok(photo);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost("checkouts/{checkoutId}/photo")]
+        public async Task<ActionResult<Photo>> UploadCheckoutReceiptPhoto(int checkoutId, IFormFile file)
+        {
+            var checkout = await _checkoutRepository.GetCheckoutWithIdAsync(checkoutId);
+            if (checkout == null) return NotFound();
+            if (file == null) return BadRequest("null file");
+            if (file.Length == 0) return BadRequest("empty file");
+            if (file.Length > _photoOptions.MaxBytes) return BadRequest("حجم فایل بیش از حد بزرگ است");
+            if (!_photoOptions.IsSupported(file.FileName)) return BadRequest("فرمت فایل درست نیست");
+
+            var uploadFolderPath = Path.Combine(_host.WebRootPath, "Checkouts", checkout.UserId);
+            var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+
+            try
+            {
+                await _fileService.UploadAsync(file, fileName, uploadFolderPath);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
+            var photo = new Photo()
+            {
+                FileName = fileName
+            };
+
+            if (checkout.ReceiptPhoto != null)
+            {
+                _fileService.Delete(checkout.ReceiptPhoto.FileName, uploadFolderPath);
+            }
+
+            checkout.ReceiptPhoto = photo;
             await _unitOfWork.CompleteAsync();
             return Ok(photo);
         }
