@@ -48,7 +48,10 @@ namespace API.Repositories
 
         public async Task<IEnumerable<Checkout>> GetSalespersonCheckoutsAsync(string userId)
         {
-            return await _context.Checkouts.Where(c => c.UserId == userId).ToArrayAsync();
+            return await _context.Checkouts
+                .Include(c => c.ReceiptPhoto)
+                .Where(c => c.UserId == userId)
+                .ToArrayAsync();
         }
 
         public async Task<Checkout> GetCheckoutWithIdAsync(int checkoutId)
@@ -60,6 +63,7 @@ namespace API.Repositories
                 .Include(c => c.User)
                 .ThenInclude(u => u.SalespersonCredential)
                 .ThenInclude(sc => sc.BankCardPhoto)
+                .Include(c => c.ReceiptPhoto)
                 .FirstOrDefaultAsync(c => c.Id == checkoutId);
         }
     }

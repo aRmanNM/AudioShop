@@ -47,14 +47,14 @@
     <mat-tab label="تصویر کارت ملی">
       <div *ngIf="salesperson.salespersonCredential">
         <img
-          src="{{ baseUrl + salesperson.salespersonCredential.id + '/' + salesperson.salespersonCredential.idCardPhoto.fileName }}"
+          src="{{ baseUrl + salesperson.salespersonCredential.userName + '/' + salesperson.salespersonCredential.idCardPhoto.fileName }}"
           *ngIf="salesperson.salespersonCredential.idCardPhoto">
       </div>
     </mat-tab>
     <mat-tab label="تصویر کارت بانکی">
       <div *ngIf="salesperson.salespersonCredential">
         <img
-          src="{{ baseUrl + salesperson.salespersonCredential.id + '/' + salesperson.salespersonCredential.bankCardPhoto.fileName }}"
+          src="{{ baseUrl + salesperson.salespersonCredential.userName + '/' + salesperson.salespersonCredential.bankCardPhoto.fileName }}"
           *ngIf="salesperson.salespersonCredential.bankCardPhoto">
       </div>
     </mat-tab>

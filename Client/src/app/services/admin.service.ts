@@ -67,4 +67,10 @@ export class AdminService {
   updateSalesperson(userId: string, salesperson: Salesperson): Observable<any> {
     return this.http.put<any>(`${this.baseUrl}/salespersons/${userId}`, salesperson);
   }
+
+  uploadReceipt(checkoutId: number, photo: any): any {
+    const formData = new FormData();
+    formData.append('file', photo);
+    return this.http.post(environment.apiUrl + 'api/checkouts/' + checkoutId + '/photo', formData);
+  }
 }

@@ -21,9 +21,8 @@
         <ng-container matColumnDef="action">
           <th mat-header-cell *matHeaderCellDef></th>
           <td mat-cell *matCellDef="let config">
-            <button style="float: left;" mat-flat-button color="primary" (click)="setConfig(config)">
+            <button style="float: left; transform: scale(0.6);" mat-mini-fab color="primary" (click)="setConfig(config)">
               <mat-icon>save</mat-icon>
-              ثبت
             </button>
           </td>
         </ng-container>

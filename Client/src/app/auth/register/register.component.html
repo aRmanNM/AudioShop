@@ -6,10 +6,14 @@
 
         <mat-form-field color="accent">
           <mat-label>نام کاربری</mat-label>
-          <input matInput type="text" formControlName="userName" maxlength="40"/>
+          <input matInput type="text" formControlName="userName" maxlength="40" />
           <mat-error
             *ngIf="registerForm.get('userName').hasError('userNameExists') && !registerForm.get('userName').hasError('required')">
             انتخاب این نام کاربری مجاز نیست
+          </mat-error>
+          <mat-error
+            *ngIf="registerForm.get('userName').hasError('pattern') && !registerForm.get('userName').hasError('required')">
+            ترکیب غیرمجاز
           </mat-error>
           <mat-error *ngIf="registerForm.get('userName').hasError('required')">وارد کردن نام کاربری ضروریست</mat-error>
         </mat-form-field>

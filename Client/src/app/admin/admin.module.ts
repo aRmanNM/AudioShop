@@ -28,7 +28,8 @@ import {MobileAppComponent} from './mobile-app/mobile-app.component';
 import {PasswordComponent} from './password/password.component';
 import {DurationPipe} from '../pipes/duration.pipe';
 import {ReviewsComponent} from './reviews/reviews.component';
-import { SalespersonEditComponent } from './salespersons/salesperson-edit/salesperson-edit.component';
+import {SalespersonEditComponent} from './salespersons/salesperson-edit/salesperson-edit.component';
+import { ReceiptInfoComponent } from './checkouts/receipt-info/receipt-info.component';
 
 
 @NgModule({
@@ -55,6 +56,7 @@ import { SalespersonEditComponent } from './salespersons/salesperson-edit/salesp
     DurationPipe,
     ReviewsComponent,
     SalespersonEditComponent,
+    ReceiptInfoComponent,
   ],
   imports: [
     CommonModule,

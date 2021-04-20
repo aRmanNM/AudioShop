@@ -1,17 +1,18 @@
 <mat-toolbar>
-  <input type="text" class="form-control" style="width: 150px;" min="1" [(ngModel)]="userName" placeholder="نام کاربری">
-  <button mat-flat-button color="primary" style="margin-right: 6px;" (click)="getCheckouts()">
-    <mat-icon>toc</mat-icon>
-    انتخاب
+  <mat-form-field appearance="outline" class="search-input">
+    <mat-label>فیلتر</mat-label>
+    <input matInput [(ngModel)]="userName" placeholder="نام کاربر بصورت کامل">
+  </mat-form-field>
+  <button mat-mini-fab color="primary" style="transform: scale(0.6);" (click)="getCheckouts()">
+    <mat-icon>sort</mat-icon>
   </button>
-  <button mat-stroked-button color="basic" style="margin-right: 6px;" (click)="clearUserName()">
+  <button mat-mini-fab color="basic" style="transform: scale(0.6)" (click)="clearUserName()">
     <mat-icon>keyboard_return</mat-icon>
-    همه موارد
   </button>
+
   <span class="spacer"></span>
-  <button mat-raised-button color="primary" style="margin-right: 6px;" (click)="refreshCheckouts()">
+  <button mat-mini-fab color="accent" (click)="refreshCheckouts()">
     <mat-icon>refresh</mat-icon>
-    بررسی مجدد
   </button>
 </mat-toolbar>
 
@@ -38,11 +39,11 @@
   </ng-container>
   <ng-container matColumnDef="createdAt">
     <th mat-header-cell *matHeaderCellDef>تاریخ ثبت درخواست</th>
-    <td mat-cell *matCellDef="let checkout"> {{checkout.createdAt | date:'yyyy/MM/dd' | PersianDate }}</td>
+    <td mat-cell *matCellDef="let checkout"> {{checkout.createdAt | date:'yyyy/MM/dd' | PersianDate }} - {{checkout.createdAt | date: "H:mm"}}</td>
   </ng-container>
   <ng-container matColumnDef="paidAt">
     <th mat-header-cell *matHeaderCellDef>تاریخ واریز</th>
-    <td mat-cell *matCellDef="let checkout"> {{checkout.paidAt | date:'yyyy/MM/dd' | PersianDate }}</td>
+    <td mat-cell *matCellDef="let checkout"> {{checkout.paidAt | date:'yyyy/MM/dd' | PersianDate }} - {{checkout.createdAt | date: "H:mm"}}</td>
   </ng-container>
   <ng-container matColumnDef="status">
     <th mat-header-cell *matHeaderCellDef>وضعیت</th>
@@ -51,11 +52,12 @@
   <ng-container matColumnDef="actions">
     <th mat-header-cell *matHeaderCellDef></th>
     <td mat-cell *matCellDef="let checkout">
-      <button class="action" mat-flat-button color="primary" style="float: left;"
-              (click)="openAddOrEditDialog(checkout.id)">
-        <mat-icon>receipt</mat-icon>
-        پردازش
-      </button>
+      <div class="actions">
+        <button matTooltip="پردازش درخواست" mat-mini-fab color="primary" style="transform: scale(0.6);"
+                (click)="openAddOrEditDialog(checkout.id)">
+          <mat-icon>receipt</mat-icon>
+        </button>
+      </div>
     </td>
   </ng-container>
   <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>

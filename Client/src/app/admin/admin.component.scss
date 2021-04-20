@@ -10,6 +10,10 @@ a {font-weight: bold;}
 
 a.mat-list-item.active { background-color: lightgray; }
 
+mat-expansion-panel {
+  border-radius: 0px;
+}
+
 mat-expansion-panel-header {
   margin-left: 0px;
   padding: 1em;
@@ -21,8 +25,6 @@ mat-expansion-panel-header {
 }
 
 ::ng-deep div.mat-expansion-panel-body a {
-  font-size: small;
-  font-weight: normal;
 }
 
 mat-icon {

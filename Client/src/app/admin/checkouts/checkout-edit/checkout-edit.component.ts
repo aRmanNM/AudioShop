@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, ElementRef, Inject, OnInit, ViewChild} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Checkout} from '../../../models/checkout';
 import {AdminService} from '../../../services/admin.service';
@@ -19,7 +19,11 @@ export class CheckoutEditComponent implements OnInit {
   paymentReceipt;
   checkout: Checkout;
   showProgressBar = false;
-  baseUrl = environment.apiUrl + 'Credentials/';
+  receiptImgUrl;
+  bankCardImgUrl;
+  baseCredsUrl = environment.apiUrl + 'Credentials/';
+  baseChecksUrl = environment.apiUrl + 'Checkouts/';
+  @ViewChild('fileInput') fileInput: ElementRef;
 
   constructor(public dialogRef: MatDialogRef<CheckoutEditComponent>,
               @Inject(MAT_DIALOG_DATA) public data: DialogData,
@@ -51,8 +55,33 @@ export class CheckoutEditComponent implements OnInit {
   getCheckoutWithInfo(): any {
     this.adminService.getCheckoutWithInfo(this.data.checkoutId).subscribe((res) => {
       this.checkout = res;
+      if (this.checkout.receiptPhoto) {
+        this.getCheckoutImage();
+      }
+
+      this.getBankCardImage();
     });
   }
 
+  uploadPhoto(): any {
+    const nativeElement = this.fileInput.nativeElement;
+    this.adminService.uploadReceipt(this.data.checkoutId, nativeElement.files[0]).subscribe((res) => {
+      this.checkout.receiptPhoto = res;
+      this.getCheckoutImage();
+    }, ((e) => {
+      this.snackBar.open(e.error, null, {
+        duration: 2000,
+      });
+    }));
+  }
+
+  getCheckoutImage(): void {
+    this.receiptImgUrl = this.baseChecksUrl + this.checkout.userName + '/' + this.checkout.receiptPhoto.fileName;
+  }
+
+  getBankCardImage(): void {
+    this.bankCardImgUrl = this.baseCredsUrl +
+      this.checkout.userName + '/' + this.checkout.user.salespersonCredential.bankCardPhoto.fileName;
+  }
 
 }

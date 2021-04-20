@@ -99,7 +99,7 @@ namespace API.Controllers
             if (file.Length > _photoOptions.MaxBytes) return BadRequest("حجم فایل بیش از حد بزرگ است");
             if (!_photoOptions.IsSupported(file.FileName)) return BadRequest("فرمت فایل درست نیست");
 
-            var uploadFolderPath = Path.Combine(_host.WebRootPath, "Credentials", credential.Id.ToString());
+            var uploadFolderPath = Path.Combine(_host.WebRootPath, "Credentials", credential.UserName);
             var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
 
             try
@@ -188,7 +188,7 @@ namespace API.Controllers
             if (file.Length > _photoOptions.MaxBytes) return BadRequest("حجم فایل بیش از حد بزرگ است");
             if (!_photoOptions.IsSupported(file.FileName)) return BadRequest("فرمت فایل درست نیست");
 
-            var uploadFolderPath = Path.Combine(_host.WebRootPath, "Checkouts", checkout.UserId);
+            var uploadFolderPath = Path.Combine(_host.WebRootPath, "Checkouts", checkout.UserName);
             var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
 
             try

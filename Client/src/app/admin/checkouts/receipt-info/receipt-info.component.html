@@ -1,0 +1,8 @@
+<mat-tab-group animationDuration="0ms" mat-align-tabs="center" mat-stretch-tabs backgroundColor="primary" dir="rtl">
+  <mat-tab label="تصویر رسید پرداخت">
+    <div class="d-flex flex-column align-items-start" *ngIf="checkout">
+      <img src="{{ receiptImgUrl }}" *ngIf="checkout.receiptPhoto">
+    </div>
+  </mat-tab>
+
+</mat-tab-group>

@@ -10,10 +10,11 @@ import {SalespersonComponent} from './salesperson.component';
 import {CredentialsComponent} from './credentials/credentials.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {PersianDatePipe} from '../pipes/persian-date.pipe';
+import {ReceiptInfoComponent} from './checkouts/receipt-info/receipt-info.component';
 
 
 @NgModule({
-  declarations: [CheckoutsComponent, OrdersComponent, SalespersonComponent, CredentialsComponent, PersianDatePipe],
+  declarations: [CheckoutsComponent, OrdersComponent, SalespersonComponent, CredentialsComponent, PersianDatePipe, ReceiptInfoComponent],
   imports: [
     CommonModule,
     SalespersonRoutingModule,

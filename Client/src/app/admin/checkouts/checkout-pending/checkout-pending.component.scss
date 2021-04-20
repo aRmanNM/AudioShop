@@ -1,7 +1,17 @@
-.action {
-  margin-left: 5px;
+.actions {
+  float: left;
+}
+
+.actions button {
+  transform: scale(0.6);
 }
 
 table {
   width: 100%;
+}
+
+.search-input {
+  margin-top: 15px !important;
+  font-size: 11px;
+  width: 300px;
 }

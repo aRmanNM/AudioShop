@@ -23,6 +23,7 @@ export class CredentialsComponent implements OnInit {
   credentialForm = new FormGroup({
     id: new FormControl('0'),
     userId: new FormControl(''),
+    userName: new FormControl(''),
     idCardNumber: new FormControl('', [Validators.required]),
     bankAccountNumber: new FormControl('', [Validators.required]),
     bankAccountShebaNumber: new FormControl('', [Validators.required]),
@@ -54,6 +55,7 @@ export class CredentialsComponent implements OnInit {
         this.credentialForm.setValue({
           id: res.id,
           userId: res.userId,
+          userName: res.userName,
           idCardNumber: res.idCardNumber,
           bankAccountNumber: res.bankAccountNumber,
           bankAccountShebaNumber: res.bankAccountShebaNumber,
@@ -103,10 +105,10 @@ export class CredentialsComponent implements OnInit {
 
   getImage(): void {
     if (this.credential.bankCardPhoto) {
-      this.bankCardPhotoUrl = this.baseUrl + this.credential.id + '/' + this.credential.bankCardPhoto.fileName;
+      this.bankCardPhotoUrl = this.baseUrl + this.credential.userName + '/' + this.credential.bankCardPhoto.fileName;
     }
     if (this.credential.idCardPhoto) {
-      this.idCardPhotoUrl = this.baseUrl + this.credential.id + '/' + this.credential.idCardPhoto.fileName;
+      this.idCardPhotoUrl = this.baseUrl + this.credential.userName + '/' + this.credential.idCardPhoto.fileName;
     }
   }
 

@@ -2,7 +2,13 @@
   height: calc(100% - 64px);
 }
 
-a.mat-list-item.active { background-color: lightgray; }
+a.mat-list-item.active {
+  background-color: lightgray;
+}
+
+a {
+  font-weight: bold;
+}
 
 mat-icon {
   margin-left: 5px;

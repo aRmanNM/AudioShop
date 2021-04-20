@@ -3,6 +3,7 @@ import {Photo} from './photo';
 export interface Credential {
   id: number;
   userId: string;
+  userName: string;
   idCardNumber: string;
   bankAccountNumber: string;
   bankAccountShebaNumber: string;

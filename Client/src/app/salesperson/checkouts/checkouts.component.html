@@ -1,9 +1,8 @@
 <mat-toolbar>
   <span>{{ 'مجموع درآمد شما: ' }}{{ totalSaleAmount | number }}{{ ' ریال' }}</span>
   <span class="spacer"></span>
-  <button mat-flat-button color="primary" (click)="refresh()">
+  <button mat-mini-fab color="accent" (click)="refresh()">
     <mat-icon>refresh</mat-icon>
-    بررسی مجدد
   </button>
 </mat-toolbar>
 
@@ -18,7 +17,7 @@
 
   <ng-container matColumnDef="createdAt">
     <th mat-header-cell *matHeaderCellDef>تاریخ ثبت درخواست</th>
-    <td mat-cell *matCellDef="let checkout"> {{checkout.createdAt | date:'yyyy/MM/dd' | PersianDate }} </td>
+    <td mat-cell *matCellDef="let checkout"> {{checkout.createdAt | date:'yyyy/MM/dd' | PersianDate }} - {{checkout.createdAt | date: "H:mm"}}</td>
   </ng-container>
 
   <ng-container matColumnDef="status">
@@ -40,8 +39,20 @@
   <ng-container matColumnDef="paidAt">
     <th mat-header-cell *matHeaderCellDef>تاریخ پرداخت</th>
     <td mat-cell *matCellDef="let checkout">
-      {{checkout.paidAt | date}}
+      {{checkout.paidAt | date:'yyyy/MM/dd' | PersianDate}} - {{checkout.paidAt | date: "H:mm"}}
       <span *ngIf="!checkout.paidAt">در انتظار پرداخت</span>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef="let checkout">
+      <div class="actions" *ngIf="checkout.status">
+        <button matTooltip="مشاهده تصویر رسید" mat-mini-fab color="primary" style="transform: scale(0.6)"
+                (click)="openReceiptInfoDialog(checkout)">
+          <mat-icon>info</mat-icon>
+        </button>
+      </div>
     </td>
   </ng-container>
 

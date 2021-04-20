@@ -5,6 +5,7 @@ import {SpinnerService} from '../../../services/spinner.service';
 import {MatDialog} from '@angular/material/dialog';
 import {ActivatedRoute} from '@angular/router';
 import {CheckoutEditComponent} from '../checkout-edit/checkout-edit.component';
+import {ReceiptInfoComponent} from '../receipt-info/receipt-info.component';
 
 @Component({
   selector: 'app-checkout-done',
@@ -17,7 +18,7 @@ export class CheckoutDoneComponent implements OnInit {
   status: boolean;
   userName = '';
   isFiltered = false;
-  columnsToDisplay = ['userName', 'paymentAmount', 'paymentReceipt', 'createdAt', 'paidAt'];
+  columnsToDisplay = ['userName', 'paymentAmount', 'paymentReceipt', 'createdAt', 'paidAt', 'actions'];
 
   constructor(private adminService: AdminService,
               public spinnerService: SpinnerService,
@@ -41,9 +42,9 @@ export class CheckoutDoneComponent implements OnInit {
 
   openAddOrEditDialog(checkout: Checkout): void {
     this.dialogActive = true;
-    const dialogRef = this.dialog.open(CheckoutEditComponent, {
+    const dialogRef = this.dialog.open(ReceiptInfoComponent, {
       width: '400px',
-      data: {checkout}
+      data: {checkoutId: checkout.id}
     });
 
     dialogRef.afterClosed().subscribe(res => {

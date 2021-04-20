@@ -1,4 +1,5 @@
 import {Salesperson} from './salesperson';
+import {Photo} from './photo';
 
 export interface  Checkout {
   id: number;
@@ -10,5 +11,6 @@ export interface  Checkout {
   createdAt: Date;
   paidAt: Date;
   user: Salesperson;
+  receiptPhoto: Photo;
 }
 

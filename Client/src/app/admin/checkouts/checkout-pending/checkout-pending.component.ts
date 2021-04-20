@@ -42,7 +42,7 @@ export class CheckoutPendingComponent implements OnInit {
   openAddOrEditDialog(checkoutId: number): void {
     this.dialogActive = true;
     const dialogRef = this.dialog.open(CheckoutEditComponent, {
-      width: '400px',
+      width: '600px',
       data: {checkoutId}
     });
 

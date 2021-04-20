@@ -26,13 +26,14 @@ export class RegisterComponent implements OnInit {
   showSpinner = false;
   matcher = new PasswordStateMatcher();
   // passwordPattern = '(?=^.{6,20}$)(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&amp;*()_+}{&quot;:;\'?/&gt;.&lt;,])(?!.*\\s).*$';
+  userNamePattern = '^(?=.{4,40}$)(?![_.-])(?!.*[_.-]{3})[a-zA-Z0-9._-]+(?<![_.-])$';
   isRegister: boolean;
 
   registerForm = new FormGroup(
     {
       userName: new FormControl(
         '',
-        [Validators.required, Validators.maxLength(40)],
+        [Validators.required, Validators.maxLength(40), Validators.pattern(this.userNamePattern)],
         [this.validateUserNameNotTaken()]
       ),
       firstName: new FormControl(''),
