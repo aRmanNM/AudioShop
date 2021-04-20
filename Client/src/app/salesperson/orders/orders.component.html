@@ -36,7 +36,7 @@
 
   <ng-container matColumnDef="date">
     <th mat-header-cell *matHeaderCellDef>تاریخ تراکنش</th>
-    <td mat-cell *matCellDef="let order"> {{order.date | date:'yyyy/MM/dd' | PersianDate }} </td>
+    <td mat-cell *matCellDef="let order"> {{order.date | PersianDate :false }} </td>
   </ng-container>
 
   <ng-container matColumnDef="salespersonShareAmount">
