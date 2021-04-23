@@ -18,7 +18,7 @@ export class CoursesComponent implements OnInit {
   pageSize = 10;
   pageIndex = 0;
   baseUrl = environment.apiUrl + 'Files/';
-  columnsToDisplay = ['id', 'name', 'price', 'watingTime', 'isActive', 'photo', 'actions'];
+  columnsToDisplay = ['id', 'name', 'instructor', 'price', 'watingTime', 'isActive', 'photo', 'actions'];
   searchString = '';
   dialogActive = false;
   @ViewChild(MatPaginator) paginator: MatPaginator;

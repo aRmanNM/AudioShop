@@ -27,8 +27,6 @@
         color="primary"
         [disabled]="!sliderItemForm.valid"
         type="submit">
-        <mat-icon *ngIf="data.sliderItem">edit</mat-icon>
-        <mat-icon *ngIf="!data.sliderItem">add</mat-icon>
         <span *ngIf="data.sliderItem">
           ویرایش
         </span>
@@ -45,7 +43,6 @@
       <img src="{{ imgUrl }}" *ngIf="data.sliderItem.photoFileName">
       <input type="file" class="form-control-file mt-2" value="انتخاب فایل" #fileInput>
       <button class="mt-2" mat-raised-button color="primary" type="submit" (click)="uploadPhoto()">
-        <mat-icon>upload</mat-icon>
         اپلود
       </button>
     </div>

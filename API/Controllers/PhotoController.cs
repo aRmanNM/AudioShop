@@ -53,7 +53,7 @@ namespace API.Controllers
         [HttpPost("courses/{courseId}/photo")]
         public async Task<ActionResult<Photo>> UploadCoursePhoto(int courseId, IFormFile file)
         {
-            var course = await _courseRepository.GetCourseByIdAsync(courseId);
+            var course = await _courseRepository.GetCourseByIdAsync(courseId, true);
             if (course == null) return NotFound();
             if (file == null) return BadRequest("null file");
             if (file.Length == 0) return BadRequest("empty file");

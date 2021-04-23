@@ -32,6 +32,7 @@ export class CreateOrEditComponent implements OnInit {
     {
       id: new FormControl(''),
       name: new FormControl('', [Validators.required]),
+      instructor: new FormControl('', [Validators.required]),
       description: new FormControl(''),
       price: new FormControl('', [Validators.required]),
       isActive: new FormControl('', [Validators.required]),
@@ -44,6 +45,7 @@ export class CreateOrEditComponent implements OnInit {
       this.courseForm.setValue({
         id: this.data.course.id,
         name: this.data.course.name,
+        instructor: this.data.course.instructor,
         description: this.data.course.description,
         price: this.data.course.price,
         isActive: this.data.course.isActive,
@@ -80,8 +82,10 @@ export class CreateOrEditComponent implements OnInit {
   }
 
   uploadPhoto(): any {
+    console.log('upload function called');
     const nativeElement = this.fileInput.nativeElement;
     this.coursesAndEpisodesService.uploadPhoto(this.data.course.id, nativeElement.files[0]).subscribe((res) => {
+      console.log('upload subscribe answered!');
       this.data.course.photoFileName = res.fileName;
       this.getImage();
       this.coursesAndEpisodesService.onUpdate();

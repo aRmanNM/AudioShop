@@ -57,7 +57,7 @@ namespace API.Repositories
 
             if (!string.IsNullOrEmpty(search))
             {
-                courses = courses.Where(c => c.Name.Contains(search));
+                courses = courses.Where(c => c.Name.Contains(search) || c.Instructor.Contains(search) || c.Description.Contains(search));
             }
 
             if (!includeInactive)
@@ -75,27 +75,32 @@ namespace API.Repositories
             return result;
         }
 
-        public async Task<Course> GetCourseByIdAsync(int id)
+        public async Task<Course> GetCourseByIdAsync(int id, bool withTracking = false)
         {
-            //return await _context.Courses
-            //    .Include(c => c.Episodes)
-            //    .Include(c => c.Photo)
-            //    .Include(c => c.Reviews)                
-            //    .FirstOrDefaultAsync(c => c.Id == id);
-
-            return await _context.Courses.Select(c => new Course
+            if (withTracking)
             {
-                Id = c.Id,
-                Name = c.Name,
-                Price = c.Price,
-                Description = c.Description,
-                WaitingTimeBetweenEpisodes = c.WaitingTimeBetweenEpisodes,
-                IsActive = c.IsActive,
-                Photo = c.Photo,
-                Episodes = c.Episodes,
-                Reviews = c.Reviews,
-                AverageScore = (short) c.Reviews.Select(r => (double?) r.Rating).Average()
-            }).FirstOrDefaultAsync(c => c.Id == id);
+                return await _context.Courses
+               .Include(c => c.Episodes)
+               .Include(c => c.Photo)
+               .Include(c => c.Reviews)
+               .FirstOrDefaultAsync(c => c.Id == id);
+            }
+            else
+            {
+                return await _context.Courses.Select(c => new Course
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    Price = c.Price,
+                    Description = c.Description,
+                    WaitingTimeBetweenEpisodes = c.WaitingTimeBetweenEpisodes,
+                    IsActive = c.IsActive,
+                    Photo = c.Photo,
+                    Episodes = c.Episodes,
+                    Reviews = c.Reviews,
+                    AverageScore = (short)c.Reviews.Select(r => (double?)r.Rating).Average()
+                }).FirstOrDefaultAsync(c => c.Id == id);
+            }
         }
     }
 }

@@ -13,6 +13,6 @@ namespace API.Interfaces
         Course UpdateCourse(Course course);
         Task<PaginatedResult<Course>> GetCoursesAsync(bool includeEpisodes,
             string search, bool includeInactive = false, int pageNumber = 1, int pageSize = 10);
-        Task<Course> GetCourseByIdAsync(int id);
+        Task<Course> GetCourseByIdAsync(int id, bool withTracking = false);
     }
 }

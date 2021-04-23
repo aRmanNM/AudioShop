@@ -7,7 +7,7 @@
 
   <mat-form-field appearance="outline" class="search-input">
     <mat-label>جستجو</mat-label>
-    <input matInput [(ngModel)]="searchString" placeholder="عنوان دوره">
+    <input matInput [(ngModel)]="searchString" placeholder="جستجو درعناوین، مدرسین یا توضیحات">
   </mat-form-field>
   <button matTooltip="جستجو" mat-mini-fab color="primary" style="transform: scale(0.6);" (click)="search()">
     <mat-icon>search</mat-icon>
@@ -29,6 +29,10 @@
   <ng-container matColumnDef="name">
     <th mat-header-cell *matHeaderCellDef>عنوان دوره</th>
     <td mat-cell *matCellDef="let course"> {{course.name}} </td>
+  </ng-container>
+  <ng-container matColumnDef="instructor">
+    <th mat-header-cell *matHeaderCellDef>مدرس دوره</th>
+    <td mat-cell *matCellDef="let course"> {{course.instructor}} </td>
   </ng-container>
   <ng-container matColumnDef="price">
     <th mat-header-cell *matHeaderCellDef>مبلغ کل</th>
