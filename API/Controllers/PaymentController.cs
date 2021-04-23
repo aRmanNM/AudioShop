@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using API.Dtos;
 using API.Interfaces;
@@ -53,11 +54,11 @@ namespace API.Controllers
             var result = await _payment.Request(new DtoRequest()
             {
                 CallbackUrl = _config["ApiUrl"] + "api/Payment/PaymentResult/" + order.Id,
-                Description = "توضیحات",
-                Amount = (int)order.PriceToPay,
+                Description = "خرید محصول جدید",
+                Amount = (int)(order.PriceToPay / 10), // zarinpal problem in non-sandbox mode
                 MerchantId = _config["MerchantId"]
-            }, Payment.Mode.sandbox); // TODO: CHANGE THIS FOR PRODUCTION
-            return Redirect($"https://sandbox.zarinpal.com/pg/StartPay/{result.Authority}");
+            }, Payment.Mode.zarinpal); // TODO: CHANGE THIS FOR PRODUCTION + REDIRECT URL
+            return Redirect($"https://zarinpal.com/pg/StartPay/{result.Authority}");
         }
 
         [HttpGet]
@@ -72,10 +73,10 @@ namespace API.Controllers
                 var order = await _orderRepository.GetOrderByIdAsync(orderId);
                 var verification = await _payment.Verification(new DtoVerification
                 {
-                    Amount = (int)order.PriceToPay,
+                    Amount = (int)(order.PriceToPay / 10), // zarinpal problem in non-sandbox mode
                     MerchantId = _config["MerchantId"],
                     Authority = authority
-                }, Payment.Mode.sandbox); // TODO: CHANGE THIS FOR PRODUCTION
+                }, Payment.Mode.zarinpal); // TODO: CHANGE THIS FOR PRODUCTION
 
                 if (verification.Status != 100)
                 {
@@ -106,11 +107,15 @@ namespace API.Controllers
                 await _unitOfWork.CompleteAsync();
                 return View(new PaymentResultDto
                 {
+                    PaymentSucceded = true,
                     RefId = verification.RefId
                 });
             }
 
-            return BadRequest();
+            return View(new PaymentResultDto {
+                PaymentSucceded = false,
+                RefId = 0
+            });
         }
     }
 }

@@ -16,11 +16,19 @@
     }
 </style>
 <body>
-    <div>
+    @if (Model.PaymentSucceded)
+    {
+        <div>
         <p>پرداخت شما موفقیت آمیز بود</p>
         <h1>رسید پرداخت @Model.RefId</h1>
         @* a link back to mobile app *@
-    </div>    
+        </div>
+    } else {
+        <div>
+        <p>عملیات پرداخت موفقیت آمیز نبود</p>
+        @* a link back to mobile app *@
+        </div>
+    }
 </body>
 </html>
 
