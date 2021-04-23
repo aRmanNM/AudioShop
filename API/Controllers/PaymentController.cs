@@ -1,12 +1,10 @@
-using System.Linq;
 using System.Threading.Tasks;
 using API.Dtos;
+using API.Helpers;
 using API.Interfaces;
 using API.Models;
-using Dto.Payment;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using ZarinPal.Class;
 
 namespace API.Controllers
 {
@@ -18,29 +16,21 @@ namespace API.Controllers
         private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ICouponRepository _couponRepository;
-
-        // zarinpal stuff
-        private readonly Payment _payment;
-        private readonly Authority _authority;
-        private readonly Transactions _transactions;
+        private readonly IZarinPalService _zarinPalService;        
 
         public PaymentController(IOrderRepository orderRepository,
             IConfiguration config,
             IUserRepository userRepository,
             IUnitOfWork unitOfWork,
-            ICouponRepository couponRepository)
+            ICouponRepository couponRepository,
+            IZarinPalService zarinPalService)
         {
             _config = config;
             _userRepository = userRepository;
             _unitOfWork = unitOfWork;
             _couponRepository = couponRepository;
-            _orderRepository = orderRepository;
-
-            // zarinpal stuff
-            var expose = new Expose();
-            _payment = expose.CreatePayment();
-            _authority = expose.CreateAuthority();
-            _transactions = expose.CreateTransactions();
+            _zarinPalService = zarinPalService;
+            _orderRepository = orderRepository;           
         }
 
         [HttpPost("payorder")]
@@ -49,16 +39,17 @@ namespace API.Controllers
             if (order.Status)
             {
                 return BadRequest();
-            }
+            }            
 
-            var result = await _payment.Request(new DtoRequest()
-            {
+           var result = await _zarinPalService.Request(new PaymentRequestDto() {
                 CallbackUrl = _config["ApiUrl"] + "api/Payment/PaymentResult/" + order.Id,
                 Description = "خرید محصول جدید",
-                Amount = (int)(order.PriceToPay / 10), // zarinpal problem in non-sandbox mode
+                Amount = (int)(order.PriceToPay),
                 MerchantId = _config["MerchantId"]
-            }, Payment.Mode.zarinpal); // TODO: CHANGE THIS FOR PRODUCTION + REDIRECT URL
-            return Redirect($"https://zarinpal.com/pg/StartPay/{result.Authority}");
+            }, PaymentMode.zarinpal); // toggle sandbox here
+
+            return Redirect($"https://zarinpal.com/pg/StartPay/{result.Data.Authority}"); // also change here for sandbox
+
         }
 
         [HttpGet]
@@ -70,21 +61,21 @@ namespace API.Controllers
                HttpContext.Request.Query["Authority"] != "")
             {
                 var authority = HttpContext.Request.Query["Authority"].ToString();
-                var order = await _orderRepository.GetOrderByIdAsync(orderId);
-                var verification = await _payment.Verification(new DtoVerification
-                {
-                    Amount = (int)(order.PriceToPay / 10), // zarinpal problem in non-sandbox mode
+                var order = await _orderRepository.GetOrderByIdAsync(orderId);                
+
+                var verification = await _zarinPalService.Verification(new PaymentVerificationDto() {
+                    Amount = (int)(order.PriceToPay),
                     MerchantId = _config["MerchantId"],
                     Authority = authority
-                }, Payment.Mode.zarinpal); // TODO: CHANGE THIS FOR PRODUCTION
+                }, PaymentMode.zarinpal); // toggle sandbox here
 
-                if (verification.Status != 100)
+                if (verification.Data.Code != 100)
                 {
                     return BadRequest();
                 }
 
                 order.Status = true;
-                order.PaymentReceipt = verification.RefId.ToString();
+                order.PaymentReceipt = verification.Data.RefId.ToString();
 
                 var salesperson = await _userRepository.GetSalespersonByCouponCodeAsync(order.SalespersonCouponCode);
                 if (salesperson != null)
@@ -108,7 +99,7 @@ namespace API.Controllers
                 return View(new PaymentResultDto
                 {
                     PaymentSucceded = true,
-                    RefId = verification.RefId
+                    RefId = verification.Data.RefId
                 });
             }
 

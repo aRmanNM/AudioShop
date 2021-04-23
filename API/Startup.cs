@@ -47,10 +47,11 @@ namespace API
             services.AddScoped<ICredentialRepository, CredentialRepository>();
             services.AddScoped<ISliderRepository, SliderRepository>();
             services.AddScoped<IProgressRepository, ProgressRepository>();
-            services.AddScoped<IFavoriteRepository, FavoriteRepository>();
+            services.AddScoped<IFavoriteRepository, FavoriteRepository>();            
 
             services.AddSingleton<ISMSService, SMSService>();
             services.AddSingleton<IFileService, FileService>();
+            services.AddSingleton<IZarinPalService, ZarinPalService>();
 
             services.Configure<SMSOptions>(_config.GetSection("SMSOptions"));
             services.Configure<PhotoOptions>(_config.GetSection("PhotoOptions"));
