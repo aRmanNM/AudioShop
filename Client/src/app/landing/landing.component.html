@@ -1,11 +1,24 @@
-<div class="landing">
-  <img src="assets/logo.webp">
-  <h4>اِستار شو ... اپلیکیشن مهارت های ارتباطی</h4>
-  <h3>با اِستار شو ستاره شو</h3>
-  <mat-card [dir]="'rtl'">
-    <mat-card-content>
-      <a mat-raised-button color="primary" href="{{latest}}">دانلود آخرین نسخه نرم افزار</a>
-      <a mat-raised-button color="accent" [routerLink]="['/login']">همکاری در فروش</a>
-    </mat-card-content>
-  </mat-card>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm buttons-half centered">
+      <div class="titles d-flex d-lg-none">
+        <img src="assets/logo.webp">
+        <h4>اِستار شو ... اپلیکیشن مهارت های ارتباطی</h4>
+        <h3>با اِستار شو ستاره شو</h3>
+      </div>
+      <div class="buttons">
+        <mat-card [dir]="'rtl'">
+          <mat-card-content>
+            <a class="dl-link" mat-raised-button href="{{latest}}">دانلود آخرین نسخه نرم افزار</a>
+            <a class="sales-link" mat-flat-button [routerLink]="['/login']">همکاری در فروش</a>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+    <div class="col-sm logo-half centered d-none d-lg-flex">
+      <img src="assets/logo.webp">
+      <h4>اِستار شو ... اپلیکیشن مهارت های ارتباطی</h4>
+      <h3>با اِستار شو ستاره شو</h3>
+    </div>
+  </div>
 </div>

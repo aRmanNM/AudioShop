@@ -16,7 +16,7 @@ namespace API.Controllers
         private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ICouponRepository _couponRepository;
-        private readonly IZarinPalService _zarinPalService;        
+        private readonly IZarinPalService _zarinPalService;
 
         public PaymentController(IOrderRepository orderRepository,
             IConfiguration config,
@@ -30,7 +30,7 @@ namespace API.Controllers
             _unitOfWork = unitOfWork;
             _couponRepository = couponRepository;
             _zarinPalService = zarinPalService;
-            _orderRepository = orderRepository;           
+            _orderRepository = orderRepository;
         }
 
         [HttpPost("payorder")]
@@ -39,7 +39,7 @@ namespace API.Controllers
             if (order.Status)
             {
                 return BadRequest();
-            }            
+            }
 
            var result = await _zarinPalService.Request(new PaymentRequestDto() {
                 CallbackUrl = _config["ApiUrl"] + "api/Payment/PaymentResult/" + order.Id,
@@ -61,7 +61,7 @@ namespace API.Controllers
                HttpContext.Request.Query["Authority"] != "")
             {
                 var authority = HttpContext.Request.Query["Authority"].ToString();
-                var order = await _orderRepository.GetOrderByIdAsync(orderId);                
+                var order = await _orderRepository.GetOrderByIdAsync(orderId);
 
                 var verification = await _zarinPalService.Verification(new PaymentVerificationDto() {
                     Amount = (int)(order.PriceToPay),
