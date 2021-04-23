@@ -1,12 +1,11 @@
-<div class="centered-container">
-<!--  <img src="assets/landing.jpg" alt="">-->
-  <mat-card [dir]="'rtl'" >
-    <mat-card-title>اپلیکیشن مهارت های اجتماعی</mat-card-title>
-    <mat-card-subtitle>آموزش های شنیداری برای یادگیری مهارت های ارتباطی</mat-card-subtitle>
+<div class="landing">
+  <img src="assets/logo.webp">
+  <h4>اِستار شو ... اپلیکیشن مهارت های ارتباطی</h4>
+  <h3>با اِستار شو ستاره شو</h3>
+  <mat-card [dir]="'rtl'">
     <mat-card-content>
-      <a mat-raised-button color="primary" href="{{latest}}">دریافت آخرین نسخه نرم افزار</a>
-      <a mat-stroked-button color="primary" [routerLink]="['/login']">همکاری در فروش</a>
+      <a mat-raised-button color="primary" href="{{latest}}">دانلود آخرین نسخه نرم افزار</a>
+      <a mat-raised-button color="accent" [routerLink]="['/login']">همکاری در فروش</a>
     </mat-card-content>
   </mat-card>
 </div>
-

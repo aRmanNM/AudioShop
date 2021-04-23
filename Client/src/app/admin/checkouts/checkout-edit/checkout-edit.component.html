@@ -1,19 +1,35 @@
 <mat-tab-group animationDuration="0ms" mat-align-tabs="center" mat-stretch-tabs backgroundColor="primary" dir="rtl">
   <mat-tab label="پردازش درخواست معرف">
-    <div *ngIf="checkout">
-      <mat-form-field appearance="fill">
-        <mat-label>شماره حساب</mat-label>
-        <input matInput [(ngModel)]="checkout.user.salespersonCredential.bankAccountNumber" disabled>
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>شماره شبا</mat-label>
-        <input matInput [(ngModel)]="checkout.user.salespersonCredential.bankAccountShebaNumber" disabled>
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>شماره تماس ضروری</mat-label>
-        <input matInput [(ngModel)]="checkout.user.salespersonCredential.phone" disabled>
-      </mat-form-field>
-    </div>
+    <table *ngIf="checkout">
+      <tr>
+        <td class="cred-info-key">نام صاحب حساب</td>
+        <td>{{checkout.user.salespersonCredential.bankCardName}}</td>
+      </tr>
+      <tr>
+        <td class="cred-info-key">شماره ملی</td>
+        <td>{{checkout.user.salespersonCredential.idCardNumber}}</td>
+      </tr>
+      <tr>
+        <td class="cred-info-key">شماره تماس ضروری</td>
+        <td>{{checkout.user.salespersonCredential.phone}}</td>
+      </tr>
+      <tr>
+        <td class="cred-info-key">نام بانک</td>
+        <td>{{checkout.user.salespersonCredential.bankName}}</td>
+      </tr>
+      <tr>
+        <td class="cred-info-key">شماره کارت بانکی</td>
+        <td>{{checkout.user.salespersonCredential.bankCardNumber}}</td>
+      </tr>
+      <tr>
+        <td class="cred-info-key">شماره حساب بانکی</td>
+        <td>{{checkout.user.salespersonCredential.bankAccountNumber}}</td>
+      </tr>
+      <tr>
+        <td class="cred-info-key">شماره شبا</td>
+        <td>{{checkout.user.salespersonCredential.bankAccountShebaNumber}}</td>
+      </tr>
+    </table>
 
     <mat-form-field appearance="fill">
       <mat-label>رسید پرداخت</mat-label>
