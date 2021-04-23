@@ -9,10 +9,11 @@ namespace API.Dtos
         public string Name { get; set; }
         public decimal Price { get; set; }
         public string Description { get; set; }
+        public string Instructor { get; set; }
         public string PhotoFileName { get; set; }
         public int WaitingTimeBetweenEpisodes { get; set; } = 0;
         public bool IsActive { get; set; }
         public short? AverageScore { get; set; }
-        public ICollection<EpisodeDto> Episodes { get; set; }        
+        public ICollection<EpisodeDto> Episodes { get; set; }
     }
 }

@@ -54,6 +54,7 @@ namespace API.Services
                 Name = courseDto.Name,
                 Price = courseDto.Price,
                 Description = courseDto.Description,
+                Instructor = courseDto.Instructor,
                 WaitingTimeBetweenEpisodes = courseDto.WaitingTimeBetweenEpisodes,
                 IsActive = courseDto.IsActive
             };
@@ -67,6 +68,7 @@ namespace API.Services
                 Id = course.Id,
                 Name = course.Name,
                 Price = course.Price,
+                Instructor = course.Instructor,
                 PhotoFileName = course.Photo?.FileName,
                 WaitingTimeBetweenEpisodes = course.WaitingTimeBetweenEpisodes,
                 IsActive = course.IsActive,

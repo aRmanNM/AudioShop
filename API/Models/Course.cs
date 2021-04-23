@@ -11,6 +11,7 @@ namespace API.Models
         [Column(TypeName = "decimal(18)")]
         public decimal Price { get; set; }
         public string Description { get; set; }
+        public string Instructor { get; set; }
 
         public int WaitingTimeBetweenEpisodes { get; set; } = 0;
         public bool IsActive { get; set; } = true;
