@@ -34,7 +34,17 @@
   </mat-tab>
   <mat-tab label="فایل های صوتی" *ngIf="data.episode">
     <div class="mt-2">
-      {{audioFiles.length}} فایل اپلود شده است
+      <p *ngIf="audioFiles.length == 0">فایلی آپلود نشده است.</p>
+      <table class="audio-files" *ngIf="audioFiles.length > 0">
+        <tr>
+          <th>عنوان فایل</th>
+          <th>زمان</th>
+        </tr>
+        <tr *ngFor="let audioFile of audioFiles">
+          <td>{{audioFile.fileName.split("_", 3)[2]}}</td>
+          <td>{{audioFile.duration | duration}}</td>
+        </tr>
+      </table>
     </div>
     <input type="file" class="form-control-file mt-2" value="انتخاب فایل" #fileInput multiple>
     <div class="d-flex justify-content-between">
