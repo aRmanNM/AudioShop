@@ -98,6 +98,7 @@ namespace API.Repositories
                     Photo = c.Photo,
                     Episodes = c.Episodes,
                     Reviews = c.Reviews,
+                    Instructor = c.Instructor,
                     AverageScore = (short)c.Reviews.Select(r => (double?)r.Rating).Average()
                 }).FirstOrDefaultAsync(c => c.Id == id);
             }

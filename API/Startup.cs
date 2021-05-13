@@ -47,7 +47,7 @@ namespace API
             services.AddScoped<ICredentialRepository, CredentialRepository>();
             services.AddScoped<ISliderRepository, SliderRepository>();
             services.AddScoped<IProgressRepository, ProgressRepository>();
-            services.AddScoped<IFavoriteRepository, FavoriteRepository>();            
+            services.AddScoped<IFavoriteRepository, FavoriteRepository>();
 
             services.AddSingleton<ISMSService, SMSService>();
             services.AddSingleton<IFileService, FileService>();
@@ -117,20 +117,6 @@ namespace API
             app.UseCors();
 
             // app.UseResponseCaching();
-            // app.Use(async (context, next) =>
-            // {
-            //     context.Response.GetTypedHeaders().CacheControl =
-            //         new Microsoft.Net.Http.Headers.CacheControlHeaderValue()
-            //         {
-            //             Public = true,
-            //             MaxAge = TimeSpan.FromSeconds(10)
-            //         };
-            //     context.Response.Headers[Microsoft.Net.Http.Headers.HeaderNames.Vary] =
-            //         new string[] { "Accept-Encoding" };
-
-            //     await next();
-            // });
-
 
             app.UseAuthentication();
             app.UseAuthorization();

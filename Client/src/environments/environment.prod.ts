@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://star-show.ir:443/'
+  apiUrl: 'https://star-show.ir/'
 };

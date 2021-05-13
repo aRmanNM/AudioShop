@@ -13,7 +13,7 @@ namespace API.Services
     {
         public async Task<RequestResult> Request(PaymentRequestDto requestDto, PaymentMode mode)
         {
-            var baseUrl = mode == PaymentMode.zarinpal ? 
+            var baseUrl = mode == PaymentMode.zarinpal ?
                 "https://api.zarinpal.com/pg" : "https://sandbox.zarinpal.com/pg";
 
             var serialized = JsonConvert.SerializeObject(requestDto);
@@ -21,7 +21,7 @@ namespace API.Services
 
             using var httpClient = new HttpClient();
             var response = await httpClient.PostAsync($"{baseUrl}/v4/payment/request.json", content);
-            var result = await response.Content.ReadAsStringAsync();            
+            var result = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<RequestResult>(result);
         }
 

@@ -217,7 +217,7 @@ namespace API.Controllers
 
         // TODO: Don't keep this bullshit.
         [HttpGet("resetpassword")]
-        public async Task<ActionResult> ResetPassword([FromQuery] string userName ,[FromQuery] string secret)
+        public async Task<ActionResult> ResetPassword([FromQuery] string userName , [FromQuery] string newPassword ,[FromQuery] string secret)
         {
             if (secret != _config["Pass:Secret"])
             {
@@ -226,7 +226,12 @@ namespace API.Controllers
 
             var user = await _userManager.FindByNameAsync(userName.ToLower());
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-            var res = await _userManager.ResetPasswordAsync(user, token, _config["Pass:Default"]);
+            var res = await _userManager.ResetPasswordAsync(user, token, newPassword ?? _config["Pass:Default"]);
+
+            if (!res.Succeeded)
+            {
+                return BadRequest("failed");
+            }
 
             return Ok();
         }

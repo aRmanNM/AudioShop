@@ -4,6 +4,7 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,22 +14,43 @@
     div {
         text-align: center;
         margin-top: 3em;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    a {
+        text-decoration: none;
+        color: black;
+        border: solid 1px black;
+        border-radius: 2px;
+        padding: 15px;
+        background: #28A745;
+        color: white;
+    }
+
+    .failed {
+        background: #6C757D;
+        color: white;
     }
 </style>
+
 <body>
     @if (Model.PaymentSucceded)
     {
         <div>
-        <p>پرداخت شما موفقیت آمیز بود</p>
-        <h1>رسید پرداخت @Model.RefId</h1>
-        @* a link back to mobile app *@
+            <p>پرداخت شما موفقیت آمیز بود</p>
+            <h1>رسید پرداخت @Model.RefId</h1>
+            <a href="starshow://main">بازگشت به نرم افزار</a>
         </div>
-    } else {
+    }
+    else
+    {
         <div>
-        <p>عملیات پرداخت موفقیت آمیز نبود</p>
-        @* a link back to mobile app *@
+            <p>عملیات پرداخت موفقیت آمیز نبود</p>
+            <a class="failed" href="starshow://main">بازگشت به نرم افزار</a>
         </div>
     }
 </body>
-</html>
 
+</html>
