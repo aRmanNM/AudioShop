@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Data;
@@ -48,12 +49,12 @@ namespace API.Repositories
                 pageNumber = 1;
             }
 
-            var courses = _context.Courses.Include(c => c.Photo).AsQueryable();
+            var courses = _context.Courses.AsQueryable();
 
-            if (includeEpisodes)
-            {
-                courses = courses.Include(c => c.Episodes);
-            }
+            // if (includeEpisodes)
+            // {
+            //     courses = courses.Include(c => c.Episodes);
+            // }
 
             if (!string.IsNullOrEmpty(search))
             {
@@ -64,6 +65,8 @@ namespace API.Repositories
             {
                 courses = courses.Where(c => c.IsActive);
             }
+
+            var emptyCollection = new Collection<Episode>();
 
             var result = new PaginatedResult<Course>();
             result.TotalItems = await courses.CountAsync();
@@ -77,7 +80,7 @@ namespace API.Repositories
                     WaitingTimeBetweenEpisodes = c.WaitingTimeBetweenEpisodes,
                     IsActive = c.IsActive,
                     Photo = c.Photo,
-                    Episodes = c.Episodes,
+                    Episodes =  includeEpisodes ? c.Episodes : emptyCollection,
                     Reviews = c.Reviews,
                     Instructor = c.Instructor,
                     AverageScore = (short)c.Reviews.Select(r => (double?)r.Rating).Average()
