@@ -67,7 +67,21 @@ namespace API.Repositories
 
             var result = new PaginatedResult<Course>();
             result.TotalItems = await courses.CountAsync();
-            result.Items = await courses.OrderByDescending(c => c.Id)
+            result.Items = await courses.OrderByDescending(c => c.LastEdited)
+                .Select(c => new Course
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    Price = c.Price,
+                    Description = c.Description,
+                    WaitingTimeBetweenEpisodes = c.WaitingTimeBetweenEpisodes,
+                    IsActive = c.IsActive,
+                    Photo = c.Photo,
+                    Episodes = c.Episodes,
+                    Reviews = c.Reviews,
+                    Instructor = c.Instructor,
+                    AverageScore = (short)c.Reviews.Select(r => (double?)r.Rating).Average()
+                })
                 .AsNoTracking()
                 .Skip((pageNumber - 1) * pageSize).Take(pageSize)
                 .ToArrayAsync();

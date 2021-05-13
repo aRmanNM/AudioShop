@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -77,6 +78,7 @@ namespace API.Controllers
         [HttpPut]
         public async Task<ActionResult<Course>> UpdateCourse(Course course)
         {
+            course.LastEdited = DateTime.Now;
             var updatedCourse = _courseRepository.UpdateCourse(course);
             await _unitOfWork.CompleteAsync();
             return updatedCourse;

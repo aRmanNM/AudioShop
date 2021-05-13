@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -15,6 +16,8 @@ namespace API.Models
 
         public int WaitingTimeBetweenEpisodes { get; set; } = 0;
         public bool IsActive { get; set; } = true;
+
+        public DateTime LastEdited { get; set; } = DateTime.Now;
 
         public Photo Photo { get; set; }
         public ICollection<Episode> Episodes { get; set; }
