@@ -83,7 +83,7 @@ namespace API.Repositories
                     Episodes =  includeEpisodes ? c.Episodes : emptyCollection,
                     Reviews = c.Reviews,
                     Instructor = c.Instructor,
-                    AverageScore = (short)c.Reviews.Select(r => (double?)r.Rating).Average()
+                    AverageScore = c.Reviews.Select(r => (double?)r.Rating).Average()
                 })
                 .AsNoTracking()
                 .Skip((pageNumber - 1) * pageSize).Take(pageSize)
@@ -116,7 +116,7 @@ namespace API.Repositories
                     Episodes = c.Episodes,
                     Reviews = c.Reviews,
                     Instructor = c.Instructor,
-                    AverageScore = (short)c.Reviews.Select(r => (double?)r.Rating).Average()
+                    AverageScore = c.Reviews.Select(r => (double?)r.Rating).Average()
                 }).FirstOrDefaultAsync(c => c.Id == id);
             }
         }

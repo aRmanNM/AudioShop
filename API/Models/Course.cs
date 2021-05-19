@@ -24,7 +24,7 @@ namespace API.Models
         public ICollection<Review> Reviews { get; set; }
 
         [NotMapped]
-        public short? AverageScore { get; set; }
+        public double? AverageScore { get; set; }
 
         public Course()
         {

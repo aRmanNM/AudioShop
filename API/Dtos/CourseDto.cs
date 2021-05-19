@@ -13,7 +13,7 @@ namespace API.Dtos
         public string PhotoFileName { get; set; }
         public int WaitingTimeBetweenEpisodes { get; set; } = 0;
         public bool IsActive { get; set; }
-        public short? AverageScore { get; set; }
+        public double? AverageScore { get; set; }
         public ICollection<EpisodeDto> Episodes { get; set; }
     }
 }
