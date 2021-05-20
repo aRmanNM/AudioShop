@@ -68,7 +68,7 @@ namespace API.Repositories
 
             if (!string.IsNullOrEmpty(category))
             {
-                courses.Where(c => c.CourseCategories.Any(cc => cc.Category.Title == category));
+                courses = courses.Where(c => c.CourseCategories.Any(cc => cc.Category.Title == category));
             }
 
             var emptyCollection = new Collection<Episode>();
