@@ -30,7 +30,7 @@ namespace API.Repositories
             _context.Courses.RemoveRange(courses);
         }
 
-        public Course UpdateCourse(Course course)
+        public async Task<Course> UpdateCourse(Course course)
         {
             _context.Courses.Update(course);
             return course;
@@ -50,11 +50,6 @@ namespace API.Repositories
             }
 
             var courses = _context.Courses.AsQueryable();
-
-            // if (includeEpisodes)
-            // {
-            //     courses = courses.Include(c => c.Episodes);
-            // }
 
             if (!string.IsNullOrEmpty(search))
             {
@@ -89,7 +84,7 @@ namespace API.Repositories
                     Reviews = c.Reviews,
                     Instructor = c.Instructor,
                     AverageScore = c.Reviews.Select(r => (double?)r.Rating).Average(),
-                    Categories = c.CourseCategories.Select(cc => cc.Category).ToList()
+                    CourseCategories = c.CourseCategories.Select(cc => new CourseCategory { CourseId = cc.CourseId, Category = cc.Category, CategoryId = cc.Category.Id }).ToList()
                 })
                 .AsNoTracking()
                 .Skip((pageNumber - 1) * pageSize).Take(pageSize)
@@ -106,11 +101,16 @@ namespace API.Repositories
                .Include(c => c.Episodes)
                .Include(c => c.Photo)
                .Include(c => c.Reviews)
+               .Include(c => c.CourseCategories)
+               .ThenInclude(c => c.Category)
                .FirstOrDefaultAsync(c => c.Id == id);
             }
             else
             {
-                return await _context.Courses.Select(c => new Course
+                return await _context.Courses
+                    .Include(c => c.CourseCategories)
+                    .ThenInclude(cc => cc.Category)
+                    .Select(c => new Course
                 {
                     Id = c.Id,
                     Name = c.Name,
@@ -122,9 +122,22 @@ namespace API.Repositories
                     Episodes = c.Episodes,
                     Reviews = c.Reviews,
                     Instructor = c.Instructor,
-                    AverageScore = c.Reviews.Select(r => (double?)r.Rating).Average()
+                    AverageScore = c.Reviews.Select(r => (double?)r.Rating).Average(),
+                    CourseCategories = c.CourseCategories.Select(cc => new CourseCategory { CourseId = cc.CourseId, Category = cc.Category, CategoryId = cc.Category.Id }).ToList()
                 }).FirstOrDefaultAsync(c => c.Id == id);
             }
+        }
+
+        public async Task DeleteCourseCategories(int courseId)
+        {
+            var courseCategories = await _context.CourseCategories.Where(c => c.CourseId == courseId).ToListAsync();
+            _context.CourseCategories.RemoveRange(courseCategories);
+        }
+
+        public async Task<IEnumerable<CourseCategory>> AdddCourseCategories(ICollection<CourseCategory> courseCategories)
+        {
+            await _context.CourseCategories.AddRangeAsync(courseCategories);
+            return courseCategories;
         }
     }
 }

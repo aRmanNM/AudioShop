@@ -27,7 +27,7 @@ namespace API.Models
         [NotMapped]
         public double? AverageScore { get; set; }
         [NotMapped]
-        public ICollection<Category> Categories { get; set; }
+        public ICollection<Category> Categories { get; set;}
 
         public Course()
         {

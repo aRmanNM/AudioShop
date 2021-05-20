@@ -6,6 +6,13 @@ import {CoursesAndEpisodesService} from '../../../services/courses-and-episodes.
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {environment} from '../../../../environments/environment';
 import {SpinnerService} from '../../../services/spinner.service';
+import {CategoryService} from '../../../services/category.service';
+import {Category} from '../../../models/category';
+import {COMMA, ENTER} from '@angular/cdk/keycodes';
+import {Observable} from 'rxjs';
+import {MatAutocomplete, MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
+import {MatChipInputEvent} from '@angular/material/chips';
+import {map, startWith} from 'rxjs/operators';
 
 interface DialogData {
   course: Course;
@@ -19,13 +26,22 @@ interface DialogData {
 export class CreateOrEditComponent implements OnInit {
   baseUrl = environment.apiUrl + 'Files/';
   imgUrl;
+  allCategories: Category[] = [];
+  categories: Category[] = [];
+  separatorKeysCodes: number[] = [ENTER, COMMA];
+  categoryCtrl = new FormControl();
+  filteredCategories: Observable<Category[]>;
+
   @ViewChild('fileInput') fileInput: ElementRef;
+  @ViewChild('categoryInput') categoryInput: ElementRef<HTMLInputElement>;
+  @ViewChild('auto') matAutocomplete: MatAutocomplete;
 
   constructor(public dialogRef: MatDialogRef<CreateOrEditComponent>,
               @Inject(MAT_DIALOG_DATA) public data: DialogData,
               private coursesAndEpisodesService: CoursesAndEpisodesService,
               private snackBar: MatSnackBar,
-              public spinnerService: SpinnerService) {
+              public spinnerService: SpinnerService,
+              private categoryService: CategoryService) {
   }
 
   courseForm = new FormGroup(
@@ -36,11 +52,15 @@ export class CreateOrEditComponent implements OnInit {
       description: new FormControl(''),
       price: new FormControl('', [Validators.required]),
       isActive: new FormControl('', [Validators.required]),
-      waitingTimeBetweenEpisodes: new FormControl('', [Validators.required])
+      waitingTimeBetweenEpisodes: new FormControl('', [Validators.required]),
+      categories: new FormControl([])
     }
   );
 
   ngOnInit(): void {
+
+    this.getCategories();
+
     if (this.data.course) {
       this.courseForm.setValue({
         id: this.data.course.id,
@@ -49,16 +69,58 @@ export class CreateOrEditComponent implements OnInit {
         description: this.data.course.description,
         price: this.data.course.price,
         isActive: this.data.course.isActive,
-        waitingTimeBetweenEpisodes: this.data.course.waitingTimeBetweenEpisodes
+        waitingTimeBetweenEpisodes: this.data.course.waitingTimeBetweenEpisodes,
+        categories: this.data.course.categories
       });
 
+      this.categories = JSON.parse(JSON.stringify(this.data.course.categories));
       this.getImage();
     }
   }
 
+  add(event: MatChipInputEvent): void {
+    this.categories.push(this.allCategories.find(c => c.title === event.value));
+
+    // // Clear the input value
+    // event.categoryInput!.clear();
+
+    this.categoryCtrl.setValue(null);
+  }
+
+  remove(category: Category): void {
+    const index = this.categories.indexOf(category);
+
+    if (index >= 0) {
+      this.categories.splice(index, 1);
+    }
+  }
+
+  selected(event: MatAutocompleteSelectedEvent): void {
+    this.categories.push(event.option.value);
+    this.categoryInput.nativeElement.value = '';
+    this.categoryCtrl.setValue(null);
+  }
+
+  private _filter(value: Category): Category[] {
+
+    return this.allCategories.filter(c => this.allCategories.indexOf(c) === 0);
+  }
+
+  getCategories(): void {
+    this.categoryService.getCategories().subscribe((res) => {
+      this.allCategories = res;
+
+      this.filteredCategories = this.categoryCtrl.valueChanges.pipe(
+        startWith(null),
+        map((category: Category | null) => category ? this._filter(category) : this.allCategories.slice()));
+    });
+  }
+
   createOrEditCourse(): void {
     if (this.data.course) {
-      this.coursesAndEpisodesService.updateCourse(this.courseForm.value).subscribe((res) => {
+      const course: Course = this.courseForm.value;
+      course.categories = this.categories;
+      this.coursesAndEpisodesService.updateCourse(course).subscribe((res) => {
         this.snackBar.open('ویرایش دوره موفقیت آمیز بود', null, {
           duration: 2000,
         });
@@ -66,7 +128,9 @@ export class CreateOrEditComponent implements OnInit {
         this.closeDialog();
       });
     } else {
-      this.coursesAndEpisodesService.createCourse(this.courseForm.value).subscribe((res) => {
+      const course: Course = this.courseForm.value;
+      course.categories = this.categories;
+      this.coursesAndEpisodesService.createCourse(course).subscribe((res) => {
         this.snackBar.open('دوره جدید با موفقیت ایجاد شد', null, {
           duration: 2000,
         });
@@ -99,4 +163,6 @@ export class CreateOrEditComponent implements OnInit {
   getImage(): void {
     this.imgUrl = this.baseUrl + this.data.course.id + '/' + this.data.course.photoFileName;
   }
+
+
 }

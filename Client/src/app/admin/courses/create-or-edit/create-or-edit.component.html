@@ -24,6 +24,34 @@
           <mat-option value="1">هر روز یک اپیزود</mat-option>
         </mat-select>
       </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>دسته بندی ها</mat-label>
+        <mat-chip-list #chipList>
+          <mat-chip
+            *ngFor="let category of categories"
+            [selectable]="'true'"
+            [removable]="'true'"
+            (removed)="remove(category)">
+            {{category.title}}
+            <mat-icon matChipRemove *ngIf="'true'">cancel</mat-icon>
+          </mat-chip>
+          <input
+            placeholder="دسته بندی جدید"
+            #categoryInput
+            [formControl]="categoryCtrl"
+            [matAutocomplete]="auto"
+            [matChipInputFor]="chipList"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            (matChipInputTokenEnd)="add($event)">
+        </mat-chip-list>
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+          <mat-option *ngFor="let category of filteredCategories | async" [value]="category">
+            {{category.title}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+
       <mat-form-field appearance="fill">
         <mat-label>مبلغ</mat-label>
         <input matInput type="number" formControlName="price"/>
@@ -53,3 +81,6 @@
 </mat-tab-group>
 
 <mat-progress-bar color="accent" mode="indeterminate" *ngIf="spinnerService.visibility | async"></mat-progress-bar>
+
+<!--{{ courseForm.value | json }}-->
+<!--{{ categories | json }}-->

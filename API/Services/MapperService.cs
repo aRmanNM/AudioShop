@@ -75,7 +75,7 @@ namespace API.Services
                 IsActive = course.IsActive,
                 AverageScore = course.AverageScore,
                 Episodes = course.Episodes.Select(MapEpisodeToEpisodeDto).ToList(),
-                Categories = course.Categories.Select(c => MapCategoryToCategoryDto(c)).ToList()
+                Categories = course.CourseCategories.Select(c => MapCategoryToCategoryDto(c.Category)).ToList()
             };
         }
 
@@ -182,6 +182,11 @@ namespace API.Services
 
         public CategoryDto MapCategoryToCategoryDto(Category category)
         {
+            if (category ==  null)
+            {
+                return null;
+            }
+
             return new CategoryDto
             {
                 Id = category.Id,

@@ -70,7 +70,7 @@ namespace API.Controllers
         {
             var course = _mapper.MapCourseDtoToCourse(courseDto);
 
-            course.CourseCategories = courseDto.Categories.Select(c => new CourseCategory {                
+            course.CourseCategories = courseDto.Categories.Select(c => new CourseCategory {
                 CourseId = course.Id,
                 CategoryId = c.Id
             }).ToList();
@@ -85,9 +85,19 @@ namespace API.Controllers
         public async Task<ActionResult<Course>> UpdateCourse(Course course)
         {
             course.LastEdited = DateTime.Now;
-            var updatedCourse = _courseRepository.UpdateCourse(course);
+            var courseToUpdate = await _courseRepository.UpdateCourse(course);
+            await _courseRepository.DeleteCourseCategories(course.Id);
             await _unitOfWork.CompleteAsync();
-            return updatedCourse;
+
+            var courseCategories = course.Categories.Select(cc => new CourseCategory {
+                CourseId = course.Id,
+                CategoryId = cc.Id
+            }).ToArray();
+
+            await _courseRepository.AdddCourseCategories(courseCategories);
+            await _unitOfWork.CompleteAsync();
+
+            return courseToUpdate;
         }
 
         //

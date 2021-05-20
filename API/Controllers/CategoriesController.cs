@@ -28,8 +28,9 @@ namespace API.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
         {
-            var categories = await _categoryRepository.GetCategories();            
-            return Ok(categories);
+            var categories = await _categoryRepository.GetCategories();
+            var categoryDtos = categories.Select(c => _mapper.MapCategoryToCategoryDto(c)).ToList();
+            return Ok(categoryDtos);
         }
 
         [HttpPost]

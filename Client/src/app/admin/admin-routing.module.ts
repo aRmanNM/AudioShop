@@ -28,7 +28,7 @@ const routes: Routes = [
       {path: 'slider', component: SliderComponent, canActivate: [AdminAuthGuard], data: {reuseRoute: true}},
       {path: 'coupons', component: CouponsComponent, canActivate: [AdminAuthGuard], data: {reuseRoute: true}},
       {path: 'app-upload', component: MobileAppComponent, canActivate: [AdminAuthGuard], data: {reuseRoute: true}},
-      {path: 'password', component: PasswordComponent, canActivate: [AdminAuthGuard]},
+      {path: 'password', component: PasswordComponent, canActivate: [AdminAuthGuard]}
     ]
   }
 ];

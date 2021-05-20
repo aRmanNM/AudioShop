@@ -2,6 +2,10 @@
   <button mat-raised-button color="primary" (click)="openAddOrEditDialog(null)">
     افزودن دوره جدید
   </button>
+  <button mat-raised-button color="primary" (click)="openCategoriesDialog()" style="margin-right: 1em;">
+    دسته بندی ها
+  </button>
+
 
   <span class="spacer"></span>
 
@@ -43,6 +47,14 @@
     <td mat-cell *matCellDef="let course">
       <span *ngIf="course.waitingTimeBetweenEpisodes == 0">بدون محدودیت</span>
       <span *ngIf="course.waitingTimeBetweenEpisodes > 0">روزانه {{course.waitingTimeBetweenEpisodes}} اپیزود</span>
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="categories">
+    <th mat-header-cell *matHeaderCellDef>دسته بندی ها</th>
+    <td mat-cell *matCellDef="let course">
+      <mat-chip-list>
+        <mat-chip *ngFor="let category of course.categories">{{category.title}}</mat-chip>
+      </mat-chip-list>
     </td>
   </ng-container>
   <ng-container matColumnDef="isActive">

@@ -28,6 +28,7 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 @NgModule({
   providers: [
@@ -62,7 +63,8 @@ import {MatTooltipModule} from '@angular/material/tooltip';
     MatSlideToggleModule,
     MatPaginatorModule,
     MatCheckboxModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatAutocompleteModule
   ]
 })
 export class MaterialModule {
