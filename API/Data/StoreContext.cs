@@ -24,6 +24,8 @@ namespace API.Data
         public DbSet<SalespersonCredential> SalespersonCredentials { get; set; }
         public DbSet<Favorite> Favorites { get; set; }
         public DbSet<Progress> Progresses { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<CourseCategory> CourseCategories { get; set; }
 
         public StoreContext(DbContextOptions<StoreContext> options) : base(options)
         {
@@ -57,6 +59,7 @@ namespace API.Data
 
             builder.Entity<OrderEpisode>().HasKey(c => new {c.EpisodeId, c.OrderId});
             builder.Entity<BlacklistItem>().HasKey(c => new { c.CouponId, c.UserId });
+            builder.Entity<CourseCategory>().HasKey(c => new { c.CourseId, c.CategoryId });
         }
     }
 

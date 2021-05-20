@@ -37,7 +37,7 @@ namespace API.Repositories
         }
 
         public async Task<PaginatedResult<Course>> GetCoursesAsync(bool includeEpisodes,
-            string search, bool includeInactive = false, int pageNumber = 1, int pageSize = 10)
+            string search, bool includeInactive = false, int pageNumber = 1, int pageSize = 10, string category = null)
         {
             if (pageSize > 20 || pageSize < 1)
             {
@@ -66,6 +66,11 @@ namespace API.Repositories
                 courses = courses.Where(c => c.IsActive);
             }
 
+            if (!string.IsNullOrEmpty(category))
+            {
+                courses.Where(c => c.CourseCategories.Any(cc => cc.Category.Title == category));
+            }
+
             var emptyCollection = new Collection<Episode>();
 
             var result = new PaginatedResult<Course>();
@@ -83,7 +88,8 @@ namespace API.Repositories
                     Episodes =  includeEpisodes ? c.Episodes : emptyCollection,
                     Reviews = c.Reviews,
                     Instructor = c.Instructor,
-                    AverageScore = c.Reviews.Select(r => (double?)r.Rating).Average()
+                    AverageScore = c.Reviews.Select(r => (double?)r.Rating).Average(),
+                    Categories = c.CourseCategories.Select(cc => cc.Category).ToList()
                 })
                 .AsNoTracking()
                 .Skip((pageNumber - 1) * pageSize).Take(pageSize)

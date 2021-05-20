@@ -22,14 +22,19 @@ namespace API.Models
         public Photo Photo { get; set; }
         public ICollection<Episode> Episodes { get; set; }
         public ICollection<Review> Reviews { get; set; }
+        public ICollection<CourseCategory> CourseCategories { get; set; }
 
         [NotMapped]
         public double? AverageScore { get; set; }
+        [NotMapped]
+        public ICollection<Category> Categories { get; set; }
 
         public Course()
         {
             Episodes = new Collection<Episode>();
             Reviews = new Collection<Review>();
+            CourseCategories = new Collection<CourseCategory>();
+            Categories = new Collection<Category>();
         }
     }
 }

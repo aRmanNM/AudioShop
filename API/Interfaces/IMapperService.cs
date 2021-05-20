@@ -12,6 +12,7 @@ namespace API.Interfaces
         SliderItemDto MapSliderItemToSliderItemDto(SliderItem sliderItem);
         SalespersonDto MapUserToSalespersonDto(User user);
         ReviewDto MapReviewToReviewDto(Review review);
+        CategoryDto MapCategoryToCategoryDto(Category category);
 
         // DTO to Model
         User MapRegisterDtoToUser(RegisterDto registerDto);

@@ -74,7 +74,8 @@ namespace API.Services
                 WaitingTimeBetweenEpisodes = course.WaitingTimeBetweenEpisodes,
                 IsActive = course.IsActive,
                 AverageScore = course.AverageScore,
-                Episodes = course.Episodes.Select(MapEpisodeToEpisodeDto).ToList()
+                Episodes = course.Episodes.Select(MapEpisodeToEpisodeDto).ToList(),
+                Categories = course.Categories.Select(c => MapCategoryToCategoryDto(c)).ToList()
             };
         }
 
@@ -176,6 +177,15 @@ namespace API.Services
                 Date = review.Date,
                 CourseName = review.Course.Name,
                 UserFirstAndLastName = (review.User.FirstName == null && review.User.LastName == null) ? "کاربر ناشناس" : $"{review.User.FirstName} {review.User.LastName}"
+            };
+        }
+
+        public CategoryDto MapCategoryToCategoryDto(Category category)
+        {
+            return new CategoryDto
+            {
+                Id = category.Id,
+                Title = category.Title
             };
         }
     }

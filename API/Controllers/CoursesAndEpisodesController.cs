@@ -48,9 +48,9 @@ namespace API.Controllers
 
         [HttpGet]
         public async Task<ActionResult<PaginatedResult<CourseDto>>> GetCourses(bool includeEpisodes = false,
-            string search = null, bool includeInactive = false, int pageNumber = 1, int pageSize = 10)
+            string search = null, bool includeInactive = false, int pageNumber = 1, int pageSize = 10, string category = null)
         {
-            var result = await _courseRepository.GetCoursesAsync(includeEpisodes, search, includeInactive, pageNumber, pageSize);
+            var result = await _courseRepository.GetCoursesAsync(includeEpisodes, search, includeInactive, pageNumber, pageSize, category);
             var resultWithDtos = new PaginatedResult<CourseDto>();
             resultWithDtos.TotalItems = result.TotalItems;
             resultWithDtos.Items = result.Items.Select(c => _mapper.MapCourseToCourseDto(c));
@@ -69,6 +69,12 @@ namespace API.Controllers
         public async Task<ActionResult<Course>> CreateCourse(CourseDto courseDto)
         {
             var course = _mapper.MapCourseDtoToCourse(courseDto);
+
+            course.CourseCategories = courseDto.Categories.Select(c => new CourseCategory {                
+                CourseId = course.Id,
+                CategoryId = c.Id
+            }).ToList();
+
             await _courseRepository.CreateCourseAsync(course);
             await _unitOfWork.CompleteAsync();
             return Ok(_mapper.MapCourseToCourseDto(course));

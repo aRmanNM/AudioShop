@@ -15,5 +15,6 @@ namespace API.Dtos
         public bool IsActive { get; set; }
         public double? AverageScore { get; set; }
         public ICollection<EpisodeDto> Episodes { get; set; }
+        public ICollection<CategoryDto> Categories { get; set; }
     }
 }
