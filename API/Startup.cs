@@ -53,6 +53,8 @@ namespace API
             services.AddSingleton<IFileService, FileService>();
             services.AddSingleton<IZarinPalService, ZarinPalService>();
 
+            services.AddHttpClient();
+
             services.Configure<SMSOptions>(_config.GetSection("SMSOptions"));
             services.Configure<PhotoOptions>(_config.GetSection("PhotoOptions"));
             services.Configure<AudioOptions>(_config.GetSection("AudioOptions"));

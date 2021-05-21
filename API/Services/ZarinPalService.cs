@@ -11,6 +11,12 @@ namespace API.Services
 {
     public class ZarinPalService : IZarinPalService
     {
+        private readonly HttpClient _httpClient;
+        public ZarinPalService(IHttpClientFactory httpClientFactory)
+        {
+            _httpClient = httpClientFactory.CreateClient();
+        }
+
         public async Task<RequestResult> Request(PaymentRequestDto requestDto, PaymentMode mode)
         {
             var baseUrl = mode == PaymentMode.zarinpal ?
@@ -19,8 +25,9 @@ namespace API.Services
             var serialized = JsonConvert.SerializeObject(requestDto);
             var content = new StringContent(serialized, Encoding.UTF8, "application/json");
 
-            using var httpClient = new HttpClient();
-            var response = await httpClient.PostAsync($"{baseUrl}/v4/payment/request.json", content);
+            // using var httpClient = new HttpClient();
+            // var httpClient = _httpClientFactory.CreateClient();
+            var response = await _httpClient.PostAsync($"{baseUrl}/v4/payment/request.json", content);
             var result = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<RequestResult>(result);
         }
@@ -33,8 +40,8 @@ namespace API.Services
             var serialized = JsonConvert.SerializeObject(verificationDto);
             var content = new StringContent(serialized, Encoding.UTF8, "application/json");
 
-            using var httpClient = new HttpClient();
-            var response = await httpClient.PostAsync($"{baseUrl}/v4/payment/verify.json", content);
+            // using var httpClient = new HttpClient();
+            var response = await _httpClient.PostAsync($"{baseUrl}/v4/payment/verify.json", content);
             var result = response.Content.ReadAsStringAsync().Result;
             return JsonConvert.DeserializeObject<VerificationResult>(result);
         }
