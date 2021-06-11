@@ -9,4 +9,5 @@ export interface Review {
   userId: string;
   userFirstName: string;
   userLastName: string;
+  adminMessage: string;
 }

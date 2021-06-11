@@ -21,6 +21,7 @@ export class ReviewsEditComponent implements OnInit {
     {
       id: new FormControl(''),
       text: new FormControl('', [Validators.required]),
+      adminMessage: new FormControl(''),
       accepted: new FormControl('', [Validators.required])
     }
   );
@@ -37,7 +38,8 @@ export class ReviewsEditComponent implements OnInit {
       this.reviewForm.setValue({
         id: this.data.review.id,
         text: this.data.review.text,
-        accepted: this.data.review.accepted
+        accepted: this.data.review.accepted,
+        adminMessage: this.data.review.adminMessage
       });
     }
   }
@@ -50,6 +52,7 @@ export class ReviewsEditComponent implements OnInit {
   updateReview(): void {
     this.data.review.text = this.reviewForm.value.text;
     this.data.review.accepted = this.reviewForm.value.accepted;
+    this.data.review.adminMessage = this.reviewForm.value.adminMessage;
     this.coursesAndEpisodesService.updateReview(this.data.review.courseId, this.data.review.id, this.data.review).subscribe((res) => {
       this.snackBar.open('ویرایش نظر انجام شد', null, {
         duration: 2000,
