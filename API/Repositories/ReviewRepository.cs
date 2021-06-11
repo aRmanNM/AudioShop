@@ -55,6 +55,7 @@ namespace API.Repositories
                     Date = r.Date,
                     CourseName = r.Course.Name,
                     Accepted = r.Accepted,
+                    AdminMessage = r.AdminMessage,
                     UserFirstAndLastName = (r.User.FirstName == null && r.User.LastName == null) ? "کاربر ناشناس" : $"{r.User.FirstName} {r.User.LastName}"
                 })
                 .OrderByDescending(r => r.Date)
@@ -66,7 +67,7 @@ namespace API.Repositories
 
         public async Task<Review> AddReviewAsync(Review review)
         {
-            await _context.Reviews.AddAsync(review);                
+            await _context.Reviews.AddAsync(review);
             return review;
         }
 
@@ -77,8 +78,9 @@ namespace API.Repositories
             review.Text = reviewDto.Text;
             review.Accepted = reviewDto.Accepted;
             review.Rating = reviewDto.Rating;
-            
-            _context.Reviews.Update(review);            
+            review.AdminMessage = reviewDto.AdminMessage;
+
+            _context.Reviews.Update(review);
         }
 
         public async Task<PaginatedResult<ReviewDto>> GetAllReviewsAsync(bool accepted, int pageNumber = 1, int pageSize = 10)

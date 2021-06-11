@@ -12,7 +12,8 @@ namespace API.Models
         public short Rating { get; set; }
         public bool Accepted { get; set; }
         public DateTime Date { get; set; } = DateTime.Now;
-        
+        public string AdminMessage { get; set; }
+
         public int CourseId { get; set; }
         public Course Course { get; set; }
         

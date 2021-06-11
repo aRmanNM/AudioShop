@@ -174,6 +174,7 @@ namespace API.Services
                 Rating = review.Rating,
                 Accepted = review.Accepted,
                 Date = review.Date,
+                AdminMessage = review.AdminMessage,
                 CourseName = review.Course.Name,
                 UserFirstAndLastName = (review.User.FirstName == null && review.User.LastName == null) ? "کاربر ناشناس" : $"{review.User.FirstName} {review.User.LastName}"
             };
