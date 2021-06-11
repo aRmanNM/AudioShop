@@ -109,4 +109,46 @@ mat-card-content {
   }
 }
 
+mat-drawer-container {
+  height: calc(100% - 64px);
+}
 
+.sidenav {
+  width: 45%;
+  max-width: 500px;
+}
+
+.sidenav-mobile {
+  width: 100%;
+}
+
+a {font-weight: bold;}
+
+a.mat-list-item.active { background-color: lightgray; }
+
+mat-expansion-panel {
+  border-radius: 0px;
+}
+
+mat-expansion-panel-header {
+  margin-left: 0px;
+  padding: 1em;
+  font-weight: bold;
+}
+
+mat-icon {
+  margin-left: 5px;
+}
+
+mat-toolbar {
+  background-color: white;
+}
+
+mat-drawer {
+  //height: 100%;
+}
+
+.social-icon {
+  width: 100px;
+  height: 100px;
+}

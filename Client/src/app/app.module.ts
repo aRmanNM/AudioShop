@@ -18,6 +18,7 @@ import {CustomRouteReuseStrategy} from './extends/reuse-strategy';
 import {CustomMatPaginatorIntl} from './extends/paginatorInt';
 import {MatPaginatorIntl} from '@angular/material/paginator';
 import {LandingComponent} from './landing/landing.component';
+import {SharedModule} from './shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import {LandingComponent} from './landing/landing.component';
     MaterialModule,
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SharedModule
   ],
   providers: [
     {provide: MatPaginatorIntl, useClass: CustomMatPaginatorIntl},

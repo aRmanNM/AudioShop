@@ -1,24 +1,43 @@
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-sm buttons-half centered">
-      <div class="titles d-flex d-lg-none">
-        <img src="assets/logo.webp">
-        <h4>اِستار شو ... اپلیکیشن مهارت های ارتباطی</h4>
-        <h3>با اِستار شو ستاره شو</h3>
-      </div>
-      <div class="buttons">
-        <mat-card [dir]="'rtl'">
-          <mat-card-content>
-            <a class="dl-link" target="_blank" mat-raised-button href="{{latest}}" >دانلود آخرین نسخه نرم افزار</a>
-            <a class="sales-link" mat-flat-button [routerLink]="['/login']">همکاری در فروش</a>
-          </mat-card-content>
-        </mat-card>
+<mat-toolbar [dir]="'rtl'">
+  <button mat-icon-button (click)="drawer.toggle()">
+    <mat-icon>menu</mat-icon>
+  </button>
+</mat-toolbar>
+<mat-drawer-container [dir]="'rtl'">
+  <mat-drawer [opened]="opened" #drawer mode="over"
+              [ngClass]="{sidenav: !mobileQuery.matches,'sidenav-mobile': mobileQuery.matches}">
+    <div class="h-100 d-flex flex-column justify-content-center align-items-center">
+      <h3>در شبکه های اجتماعی</h3>
+      <h4>همراه ما باشید</h4>
+      <a href="https://instagram.com/starshow_ir?utm_medium=copy_link">
+        <img class="social-icon" src="../../assets/instagram.png" alt="">
+      </a>
+    </div>
+  </mat-drawer>
+  <mat-drawer-content [class.close]="!opened">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm buttons-half centered">
+          <div class="titles d-flex d-lg-none">
+            <img src="assets/logo.webp">
+            <h4>اِستار شو ... اپلیکیشن مهارت های ارتباطی</h4>
+            <h3>با اِستار شو ستاره شو</h3>
+          </div>
+          <div class="buttons">
+            <mat-card [dir]="'rtl'">
+              <mat-card-content>
+                <a class="dl-link" target="_blank" mat-raised-button href="{{latest}}">دانلود آخرین نسخه نرم افزار</a>
+                <a class="sales-link" mat-flat-button [routerLink]="['/login']">همکاری در فروش</a>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </div>
+        <div class="col-sm logo-half centered d-none d-lg-flex">
+          <img src="assets/logo.webp">
+          <h4>اِستار شو ... اپلیکیشن مهارت های ارتباطی</h4>
+          <h3>با اِستار شو ستاره شو</h3>
+        </div>
       </div>
     </div>
-    <div class="col-sm logo-half centered d-none d-lg-flex">
-      <img src="assets/logo.webp">
-      <h4>اِستار شو ... اپلیکیشن مهارت های ارتباطی</h4>
-      <h3>با اِستار شو ستاره شو</h3>
-    </div>
-  </div>
-</div>
+  </mat-drawer-content>
+</mat-drawer-container>

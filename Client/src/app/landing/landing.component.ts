@@ -1,6 +1,7 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {AppFileService} from '../services/app-file.service';
 import {environment} from '../../environments/environment';
+import {MediaMatcher} from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-landing',
@@ -10,8 +11,17 @@ import {environment} from '../../environments/environment';
 export class LandingComponent implements OnInit {
   latest: string;
   baseUrl = environment.apiUrl;
+  opened = false;
+  mobileQuery: MediaQueryList;
 
-  constructor(private appFileService: AppFileService) {
+  private _mobileQueryListener: () => void;
+
+  constructor(private appFileService: AppFileService,
+              private changeDetectorRef: ChangeDetectorRef,
+              private media: MediaMatcher) {
+    this.mobileQuery = media.matchMedia('(max-width: 600px)');
+    this._mobileQueryListener = () => changeDetectorRef.detectChanges();
+    this.mobileQuery.addEventListener('change', this._mobileQueryListener);
   }
 
   ngOnInit(): void {
