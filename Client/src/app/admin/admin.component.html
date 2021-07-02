@@ -32,10 +32,14 @@
         <mat-icon>local_offer</mat-icon>
         کد های تخفیف
       </a>
+      <a mat-list-item [routerLink]="['./orders']" routerLinkActive="active">
+        <mat-icon>receipt</mat-icon>
+        فاکتور دستی
+      </a>
       <mat-expansion-panel [class.mat-elevation-z0]="true">
         <mat-expansion-panel-header>
           <mat-icon>payment</mat-icon>
-          پرداخت های فروشندگان
+          تسویه فروشندگان
         </mat-expansion-panel-header>
         <a mat-list-item [routerLink]="['./checkouts/pending']" routerLinkActive="active">
 <!--          <mat-icon>pending</mat-icon>-->

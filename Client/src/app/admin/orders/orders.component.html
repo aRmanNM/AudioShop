@@ -1,0 +1,43 @@
+<mat-toolbar>
+  <mat-form-field appearance="outline" class="search-input">
+    <mat-label>شناسه فاکتور خرید</mat-label>
+    <input type="number" matInput  min="1" [(ngModel)]="orderId" placeholder="شناسه فاکتور">
+  </mat-form-field>
+  <button mat-mini-fab color="primary" style="transform: scale(0.6);" (click)="getOrder()" [disabled]="!orderId">
+    <mat-icon>sort</mat-icon>
+  </button>
+</mat-toolbar>
+
+<span *ngIf="!dialogActive">
+  <mat-progress-bar color="accent" mode="indeterminate" *ngIf="spinnerService.visibility | async"></mat-progress-bar>
+</span>
+
+<mat-card *ngIf="order" style="margin: 2em;">
+  <mat-card-title>
+    <span>{{order.memberName}} - {{order.userName}}</span>
+  </mat-card-title>
+  <mat-card-content>
+    <p>مبلغ کل فاکتور: {{order.totalPrice}}</p>
+    <p>مبلغ پرداخت شده: {{order.priceToPay}}</p>
+    <p>کد تخفیف فروشنده: {{order.salespersonCouponCode}}</p>
+    <p>کد تخفیف سایر: {{order.otherCouponCode}}</p>
+    <p>وضعیت:
+      <button mat-stroked-button color="warn" *ngIf="!order.status">عدم تایید</button>
+      <button mat-stroked-button color="primary" *ngIf="order.status">تایید شده</button>
+    </p>
+    <p>رسید پرداخت: {{order.paymentReceipt}}</p>
+    <p>تاریخ ثبت: {{order.date | PersianDate}}</p>
+
+  </mat-card-content>
+
+  <mat-card-actions>
+    <mat-form-field appearance="outline" class="search-input">
+      <mat-label>درج شماره رسید پرداخت</mat-label>
+      <input matInput [(ngModel)]="receipt" placeholder="شناسه پرداخت">
+    </mat-form-field>
+    <button mat-raised-button color="primary" (click)="addReceiptAndToggle()">
+      ویرایش
+    </button>
+  </mat-card-actions>
+
+</mat-card>

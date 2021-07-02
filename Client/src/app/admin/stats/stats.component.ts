@@ -11,8 +11,11 @@ import {SpinnerService} from '../../services/spinner.service';
 })
 export class StatsComponent implements OnInit {
   type1 = 'line';
+  type2 = 'line';
   data1;
+  data2;
   options1;
+  options2;
   start: Date;
   end: Date;
   statsTotalGroup: Stat[];
@@ -118,7 +121,12 @@ export class StatsComponent implements OnInit {
         }, {
           label: 'تعداد پرداخت های ناموفق',
           data: failedOrdersCount
-        }, {
+        }]
+      };
+
+      this.data2 = {
+        labels: datelabels,
+        datasets: [{
           label: 'مجموع پرداخت های موفق',
           data: successfulOrdersSum
         }, {

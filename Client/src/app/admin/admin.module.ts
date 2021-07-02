@@ -32,6 +32,7 @@ import {SalespersonEditComponent} from './salespersons/salesperson-edit/salesper
 import {ReceiptInfoComponent} from './checkouts/receipt-info/receipt-info.component';
 import {StatsComponent} from './stats/stats.component';
 import {ChartModule} from 'angular2-chartjs';
+import {OrdersComponent} from './orders/orders.component';
 
 
 @NgModule({
@@ -60,6 +61,7 @@ import {ChartModule} from 'angular2-chartjs';
     SalespersonEditComponent,
     ReceiptInfoComponent,
     StatsComponent,
+    OrdersComponent,
   ],
   imports: [
     CommonModule,

@@ -14,6 +14,7 @@ import {MobileAppComponent} from './mobile-app/mobile-app.component';
 import {PasswordComponent} from './password/password.component';
 import {ReviewsComponent} from './reviews/reviews.component';
 import {StatsComponent} from './stats/stats.component';
+import {OrdersComponent} from './orders/orders.component';
 
 const routes: Routes = [
   {
@@ -30,7 +31,8 @@ const routes: Routes = [
       {path: 'coupons', component: CouponsComponent, canActivate: [AdminAuthGuard], data: {reuseRoute: true}},
       {path: 'app-upload', component: MobileAppComponent, canActivate: [AdminAuthGuard], data: {reuseRoute: true}},
       {path: 'password', component: PasswordComponent, canActivate: [AdminAuthGuard]},
-      {path: 'stats', component: StatsComponent, canActivate: [AdminAuthGuard], data: {reuseRoute: true}}
+      {path: 'stats', component: StatsComponent, canActivate: [AdminAuthGuard], data: {reuseRoute: true}},
+      {path: 'orders', component: OrdersComponent, canActivate: [AdminAuthGuard], data: {reuseRoute: true}}
     ]
   }
 ];

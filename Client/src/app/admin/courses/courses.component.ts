@@ -38,6 +38,9 @@ export class CoursesComponent implements OnInit {
 
   getCourses(): void {
     this.coursesAndEpisodesService.getCourses(this.searchString, this.pageIndex, this.pageSize).subscribe((res) => {
+
+      console.log(res);
+
       this.courses = res.items;
       this.totalItems = res.totalItems;
     });
