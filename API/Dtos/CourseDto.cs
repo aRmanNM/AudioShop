@@ -14,6 +14,7 @@ namespace API.Dtos
         public int WaitingTimeBetweenEpisodes { get; set; } = 0;
         public bool IsActive { get; set; }
         public double? AverageScore { get; set; }
+        public int Visits { get; set; }
         public ICollection<EpisodeDto> Episodes { get; set; }
     }
 }

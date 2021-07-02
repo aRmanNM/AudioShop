@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -22,6 +23,8 @@ namespace API.Models
         public decimal TotalSalesOfSalesperson { get; set; }
 
         public string VerificationToken { get; set; }
+
+        public DateTime CreatedAt { get; set; } = DateTime.Today;
 
         public string CouponCode { get; set; }
         public Coupon Coupon { get; set; }

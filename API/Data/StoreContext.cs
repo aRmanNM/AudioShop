@@ -24,6 +24,7 @@ namespace API.Data
         public DbSet<SalespersonCredential> SalespersonCredentials { get; set; }
         public DbSet<Favorite> Favorites { get; set; }
         public DbSet<Progress> Progresses { get; set; }
+        public DbSet<Stat> Stats { get; set; }
 
         public StoreContext(DbContextOptions<StoreContext> options) : base(options)
         {

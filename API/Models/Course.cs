@@ -16,6 +16,7 @@ namespace API.Models
 
         public int WaitingTimeBetweenEpisodes { get; set; } = 0;
         public bool IsActive { get; set; } = true;
+        public int Visits { get; set; }
 
         public DateTime LastEdited { get; set; } = DateTime.Now;
 

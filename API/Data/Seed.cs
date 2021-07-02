@@ -369,7 +369,8 @@ namespace API.Data
             await context.Courses.AddRangeAsync(courses);
         }
 
-        public static async Task SeedConfigs(StoreContext context) {
+        public static async Task SeedConfigs(StoreContext context)
+        {
             if (context.Configs.Any())
             {
                 return;
@@ -393,6 +394,21 @@ namespace API.Data
             };
 
             await context.Configs.AddRangeAsync(configs);
+        }
+
+        public static async Task SeedStats(StoreContext context)
+        {
+            if (context.Stats.Any())
+            {
+                return;
+            }
+
+            var stats = new List<Stat> {
+                new Stat { TitleEn = "IPG", TitleFa = "آمار روزانه ورود به درگاه پرداخت" },
+                new Stat { TitleEn = "AppFirstPage", TitleFa = "آمار روزانه ورود به صفحه راهنمای برنامه" },
+            };
+
+            await context.Stats.AddRangeAsync(stats);
         }
     }
 }
