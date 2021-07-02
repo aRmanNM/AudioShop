@@ -82,6 +82,7 @@ namespace API.Repositories
                     Photo = c.Photo,
                     Episodes =  includeEpisodes ? c.Episodes : emptyCollection,
                     Reviews = c.Reviews,
+                    Visits = c.Visits,
                     Instructor = c.Instructor,
                     AverageScore = c.Reviews.Select(r => (double?)r.Rating).Average()
                 })
@@ -115,6 +116,7 @@ namespace API.Repositories
                     Photo = c.Photo,
                     Episodes = c.Episodes,
                     Reviews = c.Reviews,
+                    Visits = c.Visits,
                     Instructor = c.Instructor,
                     AverageScore = c.Reviews.Select(r => (double?)r.Rating).Average()
                 }).FirstOrDefaultAsync(c => c.Id == id);
