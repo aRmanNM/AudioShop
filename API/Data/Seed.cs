@@ -404,8 +404,8 @@ namespace API.Data
             }
 
             var stats = new List<Stat> {
-                new Stat { TitleEn = "IPG", TitleFa = "آمار روزانه ورود به درگاه پرداخت" },
-                new Stat { TitleEn = "AppFirstPage", TitleFa = "آمار روزانه ورود به صفحه راهنمای برنامه" },
+                new Stat { TitleEn = "IPG", TitleFa = "ورود به درگاه پرداخت" },
+                new Stat { TitleEn = "AppFirstPage", TitleFa = "ورود به صفحه راهنمای برنامه" },
             };
 
             await context.Stats.AddRangeAsync(stats);

@@ -190,5 +190,22 @@ namespace API.Services
                 DateOfStat = stat.DateOfStat
             };
         }
+
+        public OrderWithUserInfo MapOrderToOrderWithUserInfo(Order order)
+        {
+            return new OrderWithUserInfo {
+                Id = order.Id,
+                UserName = order.User.UserName,
+                Status = order.Status,
+                Date = order.Date,
+                Discount = order.Discount,
+                MemberName = order.User.FirstName + ' ' + order.User.LastName,
+                OtherCouponCode = order.OtherCouponCode,
+                PaymentReceipt = order.PaymentReceipt,
+                PriceToPay = order.PriceToPay,
+                SalespersonCouponCode = order.SalespersonCouponCode,
+                TotalPrice = order.TotalPrice
+            };
+        }
     }
 }

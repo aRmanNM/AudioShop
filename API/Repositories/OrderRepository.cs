@@ -28,12 +28,23 @@ namespace API.Repositories
         //     await _context.AddRangeAsync(basketItems);
         // }
 
-        public async Task<Order> GetOrderByIdAsync(int orderId)
+        public async Task<Order> GetOrderByIdAsync(int orderId, bool withUserInfo = false)
         {
-            return await _context.Orders
-                .Include(o => o.OrderEpisodes)
-                .ThenInclude(oe => oe.Episode)
-                .FirstOrDefaultAsync(o => o.Id == orderId);
+            var orders = _context.Orders.AsQueryable();
+
+            if (withUserInfo)
+            {
+                return await orders
+                    .Include(o => o.User)
+                    .FirstOrDefaultAsync(o => o.Id == orderId);
+            }
+            else
+            {
+                return await orders
+                    .Include(o => o.OrderEpisodes)
+                    .ThenInclude(oe => oe.Episode)
+                    .FirstOrDefaultAsync(o => o.Id == orderId);
+            }
         }
 
         public async Task<PaginatedResult<OrderForSalespersonDto>> GetOrdersForCheckoutAsync(string couponCode, int pageNumber = 1, int pageSize = 10)
@@ -57,7 +68,7 @@ namespace API.Repositories
             var totlaItems = orders.Count();
             var result = await orders.Skip((pageNumber - 1) * pageSize).Take(pageSize)
                 .Select(o => new { o.PriceToPay, o.Date, o.SalespersonShare, o.OrderEpisodes })
-                .AsNoTracking()                
+                .AsNoTracking()
                 .ToArrayAsync();
 
             var OrderForSalespersonDtos = result.Select(o => new OrderForSalespersonDto

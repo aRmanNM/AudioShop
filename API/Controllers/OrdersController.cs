@@ -66,5 +66,51 @@ namespace API.Controllers
 
             return Ok(order);
         }
+
+        [HttpGet("{orderId}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetOrder(int orderId)
+        {
+            var order = await _orderRepository.GetOrderByIdAsync(orderId, true);
+
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(_mapper.MapOrderToOrderWithUserInfo(order));
+        }
+
+        [HttpPut("{orderId}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> UpdateOrder(int orderId, [FromBody] OrderWithUserInfo orderWithInfo)
+        {
+            var order = await _orderRepository.GetOrderByIdAsync(orderId, true);
+
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            order.Status = !order.Status;
+            order.PaymentReceipt = orderWithInfo.PaymentReceipt;
+
+            if (order.Status && !string.IsNullOrEmpty(order.OtherCouponCode))
+            {
+                var coupon = await _couponRepository.GetCouponByCodeAsync(order.OtherCouponCode);
+                if (coupon != null)
+                {
+                    coupon.Blacklist.Add(new BlacklistItem()
+                    {
+                        CouponCode = order.OtherCouponCode,
+                        UserId = order.UserId
+                    });
+                }
+            }
+
+            await _unitOfWork.CompleteAsync();
+
+            return Ok(_mapper.MapOrderToOrderWithUserInfo(order));
+        }
     }
 }

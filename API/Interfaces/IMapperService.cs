@@ -13,6 +13,7 @@ namespace API.Interfaces
         SalespersonDto MapUserToSalespersonDto(User user);
         ReviewDto MapReviewToReviewDto(Review review);
         StatDto MapStatToStatDto(Stat stat);
+        OrderWithUserInfo MapOrderToOrderWithUserInfo(Order order);
 
         // DTO to Model
         User MapRegisterDtoToUser(RegisterDto registerDto);
