@@ -27,11 +27,15 @@
     <td mat-cell *matCellDef="let course"> {{course.id}} </td>
   </ng-container>
   <ng-container matColumnDef="name">
-    <th mat-header-cell *matHeaderCellDef>عنوان دوره</th>
+    <th mat-header-cell *matHeaderCellDef>عنوان</th>
     <td mat-cell *matCellDef="let course"> {{course.name}} </td>
   </ng-container>
+  <ng-container matColumnDef="visits">
+    <th mat-header-cell *matHeaderCellDef>بازدید</th>
+    <td mat-cell *matCellDef="let course"> {{course.visits}} </td>
+  </ng-container>
   <ng-container matColumnDef="instructor">
-    <th mat-header-cell *matHeaderCellDef>مدرس دوره</th>
+    <th mat-header-cell *matHeaderCellDef>مدرس</th>
     <td mat-cell *matCellDef="let course"> {{course.instructor}} </td>
   </ng-container>
   <ng-container matColumnDef="price">

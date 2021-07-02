@@ -1,0 +1,71 @@
+<mat-progress-bar color="accent" mode="indeterminate" *ngIf="spinnerService.visibility | async"></mat-progress-bar>
+
+<mat-toolbar>
+
+<!--  <mat-form-field appearance="standard">-->
+<!--    <mat-label>انتخاب نظرات</mat-label>-->
+<!--    <mat-select [(value)]="accepted">-->
+<!--      <mat-option value="false" >در انتظار تایید</mat-option>-->
+<!--      <mat-option value="true" >تایید شده</mat-option>-->
+<!--    </mat-select>-->
+<!--  </mat-form-field>-->
+
+  <span class="spacer"></span>
+  <button mat-mini-fab (click)="refresh()">
+    <mat-icon>refresh</mat-icon>
+  </button>
+</mat-toolbar>
+
+<div>
+  <mat-tab-group animationDuration="0ms" mat-align-tabs="center" mat-stretch-tabs backgroundColor="basic" dir="rtl">
+    <mat-tab label="اطلاعات روزانه">
+
+      <mat-toolbar>
+
+        <mat-form-field appearance="outline" class="date-input">
+          <mat-label>انتخاب محدوده نمایش آمار</mat-label>
+          <mat-date-range-input [rangePicker]="picker">
+            <input matStartDate placeholder="Start date" [(ngModel)]="start">
+            <input matEndDate placeholder="End date" [(ngModel)]="end">
+          </mat-date-range-input>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-date-range-picker #picker></mat-date-range-picker>
+        </mat-form-field>
+
+        <button mat-flat-button color="primary" (click)="getAllStatsInRange()">نمایش</button>
+
+      </mat-toolbar>
+
+      <div class="container">
+        <chart [type]="type1" [data]="data1" [options]="options1"></chart>
+<!--        <div class="row">-->
+<!--          <div class="col-sm">-->
+<!--            <chart [type]="type2" [data]="data2" [options]="options2"></chart>-->
+<!--          </div>-->
+<!--          <div class="col-sm">-->
+<!--            <chart [type]="type3" [data]="data3" [options]="options3"></chart>-->
+<!--          </div>-->
+<!--        </div>-->
+      </div>
+    </mat-tab>
+    <mat-tab label="اطلاعات کل">
+
+      <table mat-table [dataSource]="statsTotalGroup" >
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>عنوان رکورد آماری</th>
+          <td mat-cell *matCellDef="let stat"> {{stat.titleFa}} </td>
+        </ng-container>
+        <ng-container matColumnDef="value">
+          <th mat-header-cell *matHeaderCellDef>مقدار کل</th>
+          <td mat-cell *matCellDef="let stat"> {{stat.counter}} </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="['name', 'value']"></tr>
+        <tr mat-row *matRowDef="let course; columns: ['name', 'value']"></tr>
+      </table>
+
+    </mat-tab>
+  </mat-tab-group>
+</div>
+
+
+

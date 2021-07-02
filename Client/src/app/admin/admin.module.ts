@@ -29,7 +29,9 @@ import {PasswordComponent} from './password/password.component';
 import {DurationPipe} from '../pipes/duration.pipe';
 import {ReviewsComponent} from './reviews/reviews.component';
 import {SalespersonEditComponent} from './salespersons/salesperson-edit/salesperson-edit.component';
-import { ReceiptInfoComponent } from './checkouts/receipt-info/receipt-info.component';
+import {ReceiptInfoComponent} from './checkouts/receipt-info/receipt-info.component';
+import {StatsComponent} from './stats/stats.component';
+import {ChartModule} from 'angular2-chartjs';
 
 
 @NgModule({
@@ -57,6 +59,7 @@ import { ReceiptInfoComponent } from './checkouts/receipt-info/receipt-info.comp
     ReviewsComponent,
     SalespersonEditComponent,
     ReceiptInfoComponent,
+    StatsComponent,
   ],
   imports: [
     CommonModule,
@@ -66,7 +69,8 @@ import { ReceiptInfoComponent } from './checkouts/receipt-info/receipt-info.comp
     ReactiveFormsModule,
     FormsModule,
     DragDropModule,
-    SalespersonModule
+    SalespersonModule,
+    ChartModule
   ],
   exports: [
     DurationPipe

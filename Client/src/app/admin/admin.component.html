@@ -8,6 +8,10 @@
   <mat-drawer opened #drawer mode="side">
 
     <app-sidebar>
+      <a mat-list-item [routerLink]="['./stats']" routerLinkActive="active">
+        <mat-icon>analytics</mat-icon>
+        آمار
+      </a>
       <a mat-list-item [routerLink]="['./courses']" routerLinkActive="active">
         <mat-icon>school</mat-icon>
         دوره ها

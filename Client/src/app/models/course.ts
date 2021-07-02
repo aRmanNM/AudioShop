@@ -9,5 +9,6 @@ export interface Course {
   instructor: string;
   isActive: boolean;
   waitingTimeBetweenEpisodes: number;
+  visits: number;
   episodes: Episode[];
 }
