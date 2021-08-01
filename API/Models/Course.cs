@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations.Schema;
+using API.Helpers;
 
 namespace API.Models
 {
@@ -28,6 +29,9 @@ namespace API.Models
         public double? AverageScore { get; set; }
         [NotMapped]
         public ICollection<Category> Categories { get; set;}
+
+        public CourseType CourseType { get; set; }
+        public bool IsFeatured { get; set; }
 
         public Course()
         {

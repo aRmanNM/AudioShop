@@ -57,7 +57,9 @@ namespace API.Services
                 Description = courseDto.Description,
                 Instructor = courseDto.Instructor,
                 WaitingTimeBetweenEpisodes = courseDto.WaitingTimeBetweenEpisodes,
-                IsActive = courseDto.IsActive
+                IsActive = courseDto.IsActive,
+                CourseType = courseDto.CourseType,
+                IsFeatured = courseDto.IsFeatured
             };
         }
 
@@ -75,7 +77,9 @@ namespace API.Services
                 IsActive = course.IsActive,
                 AverageScore = course.AverageScore,
                 Episodes = course.Episodes.Select(MapEpisodeToEpisodeDto).ToList(),
-                Categories = course.CourseCategories.Select(c => MapCategoryToCategoryDto(c.Category)).ToList()
+                Categories = course.CourseCategories.Select(c => MapCategoryToCategoryDto(c.Category)).ToList(),
+                CourseType = course.CourseType,
+                IsFeatured = course.IsFeatured
             };
         }
 

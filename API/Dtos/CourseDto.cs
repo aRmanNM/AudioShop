@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using API.Helpers;
 using API.Models;
 
 namespace API.Dtos
@@ -16,5 +17,7 @@ namespace API.Dtos
         public double? AverageScore { get; set; }
         public ICollection<EpisodeDto> Episodes { get; set; }
         public ICollection<CategoryDto> Categories { get; set; }
+        public CourseType CourseType { get; set; }
+        public bool IsFeatured { get; set; }
     }
 }

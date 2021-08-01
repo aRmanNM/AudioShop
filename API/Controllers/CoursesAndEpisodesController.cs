@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using API.Dtos;
+using API.Helpers;
 using API.Interfaces;
 using API.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -48,7 +49,7 @@ namespace API.Controllers
 
         [HttpGet]
         public async Task<ActionResult<PaginatedResult<CourseDto>>> GetCourses(bool includeEpisodes = false,
-            string search = null, bool includeInactive = false, int pageNumber = 1, int pageSize = 10, string category = null)
+            string search = null, bool includeInactive = false, int pageNumber = 1, int pageSize = 10, string category = null, CourseType courseType = CourseType.None)
         {
             var result = await _courseRepository.GetCoursesAsync(includeEpisodes, search, includeInactive, pageNumber, pageSize, category);
             var resultWithDtos = new PaginatedResult<CourseDto>();

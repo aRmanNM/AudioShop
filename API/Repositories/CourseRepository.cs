@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.Data;
 using API.Dtos;
+using API.Helpers;
 using API.Interfaces;
 using API.Models;
 using Microsoft.EntityFrameworkCore;
@@ -37,7 +38,7 @@ namespace API.Repositories
         }
 
         public async Task<PaginatedResult<Course>> GetCoursesAsync(bool includeEpisodes,
-            string search, bool includeInactive = false, int pageNumber = 1, int pageSize = 10, string category = null)
+            string search, bool includeInactive = false, int pageNumber = 1, int pageSize = 10, string category = null, CourseType courseType = CourseType.None)
         {
             if (pageSize > 20 || pageSize < 1)
             {
@@ -66,6 +67,11 @@ namespace API.Repositories
                 courses = courses.Where(c => c.CourseCategories.Any(cc => cc.Category.Title == category));
             }
 
+            if (courseType != CourseType.None)
+            {
+                courses = courses.Where(c => c.CourseType == courseType);
+            }
+
             var emptyCollection = new Collection<Episode>();
 
             var result = new PaginatedResult<Course>();
@@ -83,8 +89,10 @@ namespace API.Repositories
                     Episodes =  includeEpisodes ? c.Episodes : emptyCollection,
                     Reviews = c.Reviews,
                     Instructor = c.Instructor,
-                    AverageScore = c.Reviews.Select(r => (double?)r.Rating).Average(),
-                    CourseCategories = c.CourseCategories.Select(cc => new CourseCategory { CourseId = cc.CourseId, Category = cc.Category, CategoryId = cc.Category.Id }).ToList()
+                    AverageScore = c.Reviews.Select(r => (double?)r.Rating).Average(), // TODO: find a better solution.
+                    CourseCategories = c.CourseCategories.Select(cc => new CourseCategory { CourseId = cc.CourseId, Category = cc.Category, CategoryId = cc.Category.Id }).ToList(),
+                    CourseType = c.CourseType,
+                    IsFeatured = c.IsFeatured
                 })
                 .AsNoTracking()
                 .Skip((pageNumber - 1) * pageSize).Take(pageSize)
@@ -122,8 +130,10 @@ namespace API.Repositories
                     Episodes = c.Episodes,
                     Reviews = c.Reviews,
                     Instructor = c.Instructor,
-                    AverageScore = c.Reviews.Select(r => (double?)r.Rating).Average(),
-                    CourseCategories = c.CourseCategories.Select(cc => new CourseCategory { CourseId = cc.CourseId, Category = cc.Category, CategoryId = cc.Category.Id }).ToList()
+                    AverageScore = c.Reviews.Select(r => (double?)r.Rating).Average(), // TODO: find a better solution.
+                    CourseCategories = c.CourseCategories.Select(cc => new CourseCategory { CourseId = cc.CourseId, Category = cc.Category, CategoryId = cc.Category.Id }).ToList(),
+                    CourseType = c.CourseType,
+                    IsFeatured = c.IsFeatured
                 }).FirstOrDefaultAsync(c => c.Id == id);
             }
         }
@@ -138,6 +148,43 @@ namespace API.Repositories
         {
             await _context.CourseCategories.AddRangeAsync(courseCategories);
             return courseCategories;
+        }
+
+        public async Task<IEnumerable<Course>> GetFeaturedCoursesAsync(CourseType courseType = CourseType.None, int count = 10)
+        {
+            return await _context.Courses.OrderByDescending(c => c.LastEdited)
+                .Where(c => c.IsFeatured)
+                .Select(c => new Course
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    Price = c.Price,
+                    Description = c.Description,
+                    WaitingTimeBetweenEpisodes = c.WaitingTimeBetweenEpisodes,
+                    IsActive = c.IsActive,
+                    Photo = c.Photo,
+                    Reviews = c.Reviews,
+                    Instructor = c.Instructor,
+                    AverageScore = c.Reviews.Select(r => (double?)r.Rating).Average(), // TODO: find a better solution.
+                    CourseCategories = c.CourseCategories.Select(cc => new CourseCategory { CourseId = cc.CourseId, Category = cc.Category, CategoryId = cc.Category.Id }).ToList(),
+                    CourseType = c.CourseType,
+                    IsFeatured = c.IsFeatured
+                })
+                .AsNoTracking()
+                .Take(count)
+                .ToArrayAsync();
+        }
+
+        public Task<IEnumerable<Course>> GetTopSellersCoursesAsync(CourseType courseType = CourseType.None, int count = 10)
+        {
+            // TODO: IMplment after merge.
+            throw new System.NotImplementedException();
+        }
+
+        public Task<IEnumerable<Course>> GetTopٰClickedCoursesAsync(CourseType courseType = CourseType.None, int count = 10)
+        {
+            // TODO: Implement after merge.
+            throw new System.NotImplementedException();
         }
     }
 }
