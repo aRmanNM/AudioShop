@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.Data;
 using API.Dtos;
+using API.Helpers;
 using API.Interfaces;
 using API.Models;
 using Microsoft.EntityFrameworkCore;
@@ -30,14 +31,14 @@ namespace API.Repositories
             _context.Courses.RemoveRange(courses);
         }
 
-        public Course UpdateCourse(Course course)
+        public async Task<Course> UpdateCourse(Course course)
         {
             _context.Courses.Update(course);
             return course;
         }
 
         public async Task<PaginatedResult<Course>> GetCoursesAsync(bool includeEpisodes,
-            string search, bool includeInactive = false, int pageNumber = 1, int pageSize = 10)
+            string search, bool includeInactive = false, int pageNumber = 1, int pageSize = 10, string category = null, CourseType courseType = CourseType.None)
         {
             if (pageSize > 20 || pageSize < 1)
             {
@@ -51,11 +52,6 @@ namespace API.Repositories
 
             var courses = _context.Courses.AsQueryable();
 
-            // if (includeEpisodes)
-            // {
-            //     courses = courses.Include(c => c.Episodes);
-            // }
-
             if (!string.IsNullOrEmpty(search))
             {
                 courses = courses.Where(c => c.Name.Contains(search) || c.Instructor.Contains(search) || c.Description.Contains(search));
@@ -64,6 +60,16 @@ namespace API.Repositories
             if (!includeInactive)
             {
                 courses = courses.Where(c => c.IsActive);
+            }
+
+            if (!string.IsNullOrEmpty(category))
+            {
+                courses = courses.Where(c => c.CourseCategories.Any(cc => cc.Category.Title == category));
+            }
+
+            if (courseType != CourseType.None)
+            {
+                courses = courses.Where(c => c.CourseType == courseType);
             }
 
             var emptyCollection = new Collection<Episode>();
@@ -84,7 +90,10 @@ namespace API.Repositories
                     Reviews = c.Reviews,
                     Visits = c.Visits,
                     Instructor = c.Instructor,
-                    AverageScore = c.Reviews.Select(r => (double?)r.Rating).Average()
+                    AverageScore = c.Reviews.Select(r => (double?)r.Rating).Average(), // TODO: find a better solution.
+                    CourseCategories = c.CourseCategories.Select(cc => new CourseCategory { CourseId = cc.CourseId, Category = cc.Category, CategoryId = cc.Category.Id }).ToList(),
+                    CourseType = c.CourseType,
+                    IsFeatured = c.IsFeatured
                 })
                 .AsNoTracking()
                 .Skip((pageNumber - 1) * pageSize).Take(pageSize)
@@ -101,11 +110,16 @@ namespace API.Repositories
                .Include(c => c.Episodes)
                .Include(c => c.Photo)
                .Include(c => c.Reviews)
+               .Include(c => c.CourseCategories)
+               .ThenInclude(c => c.Category)
                .FirstOrDefaultAsync(c => c.Id == id);
             }
             else
             {
-                return await _context.Courses.Select(c => new Course
+                return await _context.Courses
+                    .Include(c => c.CourseCategories)
+                    .ThenInclude(cc => cc.Category)
+                    .Select(c => new Course
                 {
                     Id = c.Id,
                     Name = c.Name,
@@ -118,9 +132,61 @@ namespace API.Repositories
                     Reviews = c.Reviews,
                     Visits = c.Visits,
                     Instructor = c.Instructor,
-                    AverageScore = c.Reviews.Select(r => (double?)r.Rating).Average()
+                    AverageScore = c.Reviews.Select(r => (double?)r.Rating).Average(), // TODO: find a better solution.
+                    CourseCategories = c.CourseCategories.Select(cc => new CourseCategory { CourseId = cc.CourseId, Category = cc.Category, CategoryId = cc.Category.Id }).ToList(),
+                    CourseType = c.CourseType,
+                    IsFeatured = c.IsFeatured
                 }).FirstOrDefaultAsync(c => c.Id == id);
             }
+        }
+
+        public async Task DeleteCourseCategories(int courseId)
+        {
+            var courseCategories = await _context.CourseCategories.Where(c => c.CourseId == courseId).ToListAsync();
+            _context.CourseCategories.RemoveRange(courseCategories);
+        }
+
+        public async Task<IEnumerable<CourseCategory>> AdddCourseCategories(ICollection<CourseCategory> courseCategories)
+        {
+            await _context.CourseCategories.AddRangeAsync(courseCategories);
+            return courseCategories;
+        }
+
+        public async Task<IEnumerable<Course>> GetFeaturedCoursesAsync(CourseType courseType = CourseType.None, int count = 10)
+        {
+            return await _context.Courses.OrderByDescending(c => c.LastEdited)
+                .Where(c => c.IsFeatured)
+                .Select(c => new Course
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    Price = c.Price,
+                    Description = c.Description,
+                    WaitingTimeBetweenEpisodes = c.WaitingTimeBetweenEpisodes,
+                    IsActive = c.IsActive,
+                    Photo = c.Photo,
+                    Reviews = c.Reviews,
+                    Instructor = c.Instructor,
+                    AverageScore = c.Reviews.Select(r => (double?)r.Rating).Average(), // TODO: find a better solution.
+                    CourseCategories = c.CourseCategories.Select(cc => new CourseCategory { CourseId = cc.CourseId, Category = cc.Category, CategoryId = cc.Category.Id }).ToList(),
+                    CourseType = c.CourseType,
+                    IsFeatured = c.IsFeatured
+                })
+                .AsNoTracking()
+                .Take(count)
+                .ToArrayAsync();
+        }
+
+        public Task<IEnumerable<Course>> GetTopSellersCoursesAsync(CourseType courseType = CourseType.None, int count = 10)
+        {
+            // TODO: IMplment after merge.
+            throw new System.NotImplementedException();
+        }
+
+        public Task<IEnumerable<Course>> GetTopٰClickedCoursesAsync(CourseType courseType = CourseType.None, int count = 10)
+        {
+            // TODO: Implement after merge.
+            throw new System.NotImplementedException();
         }
     }
 }

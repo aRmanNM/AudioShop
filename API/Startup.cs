@@ -48,6 +48,7 @@ namespace API
             services.AddScoped<ISliderRepository, SliderRepository>();
             services.AddScoped<IProgressRepository, ProgressRepository>();
             services.AddScoped<IFavoriteRepository, FavoriteRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IStatRepository, StatRepository>();
             services.AddScoped<IStatService, StatService>();
 

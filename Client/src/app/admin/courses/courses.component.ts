@@ -6,6 +6,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {CreateOrEditComponent} from './create-or-edit/create-or-edit.component';
 import {SpinnerService} from '../../services/spinner.service';
 import {MatPaginator} from '@angular/material/paginator';
+import {CategoriesComponent} from './categories/categories.component';
 
 @Component({
   selector: 'app-admin-courses',
@@ -18,7 +19,7 @@ export class CoursesComponent implements OnInit {
   pageSize = 10;
   pageIndex = 0;
   baseUrl = environment.apiUrl + 'Files/';
-  columnsToDisplay = ['id', 'name', 'visits', 'instructor', 'price', 'watingTime', 'isActive', 'photo', 'actions'];
+  columnsToDisplay = ['id', 'name', 'instructor', 'price', 'watingTime', 'categories', 'isActive', 'photo', 'actions'];
   searchString = '';
   dialogActive = false;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -38,9 +39,6 @@ export class CoursesComponent implements OnInit {
 
   getCourses(): void {
     this.coursesAndEpisodesService.getCourses(this.searchString, this.pageIndex, this.pageSize).subscribe((res) => {
-
-      console.log(res);
-
       this.courses = res.items;
       this.totalItems = res.totalItems;
     });
@@ -56,6 +54,15 @@ export class CoursesComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(res => {
       this.dialogActive = false;
+    });
+  }
+
+  openCategoriesDialog(): void {
+    this.dialogActive = true;
+    const dialogRef = this.dialog.open(CategoriesComponent, {
+      width: '500px',
+      height: '650px',
+      data: 'nothing yet'
     });
   }
 

@@ -1,4 +1,5 @@
 import {Episode} from './episode';
+import {Category} from './category';
 
 export interface Course {
   id: number;
@@ -11,4 +12,5 @@ export interface Course {
   waitingTimeBetweenEpisodes: number;
   visits: number;
   episodes: Episode[];
+  categories: Category[];
 }

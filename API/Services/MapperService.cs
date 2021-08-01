@@ -57,7 +57,9 @@ namespace API.Services
                 Description = courseDto.Description,
                 Instructor = courseDto.Instructor,
                 WaitingTimeBetweenEpisodes = courseDto.WaitingTimeBetweenEpisodes,
-                IsActive = courseDto.IsActive
+                IsActive = courseDto.IsActive,
+                CourseType = courseDto.CourseType,
+                IsFeatured = courseDto.IsFeatured
             };
         }
 
@@ -74,8 +76,11 @@ namespace API.Services
                 WaitingTimeBetweenEpisodes = course.WaitingTimeBetweenEpisodes,
                 IsActive = course.IsActive,
                 AverageScore = course.AverageScore,
+                Episodes = course.Episodes.Select(MapEpisodeToEpisodeDto).ToList(),
+                Categories = course.CourseCategories.Select(c => MapCategoryToCategoryDto(c.Category)).ToList(),
+                CourseType = course.CourseType,
+                IsFeatured = course.IsFeatured
                 Visits = course.Visits,
-                Episodes = course.Episodes.Select(MapEpisodeToEpisodeDto).ToList()
             };
         }
 
@@ -178,33 +183,6 @@ namespace API.Services
                 AdminMessage = review.AdminMessage,
                 CourseName = review.Course.Name,
                 UserFirstAndLastName = (review.User.FirstName == null && review.User.LastName == null) ? "کاربر ناشناس" : $"{review.User.FirstName} {review.User.LastName}"
-            };
-        }
-
-        public StatDto MapStatToStatDto(Stat stat)
-        {
-            return new StatDto {
-                TitleEn = stat.TitleEn,
-                TitleFa = stat.TitleFa,
-                Counter = stat.Counter,
-                DateOfStat = stat.DateOfStat
-            };
-        }
-
-        public OrderWithUserInfo MapOrderToOrderWithUserInfo(Order order)
-        {
-            return new OrderWithUserInfo {
-                Id = order.Id,
-                UserName = order.User.UserName,
-                Status = order.Status,
-                Date = order.Date,
-                Discount = order.Discount,
-                MemberName = order.User.FirstName + ' ' + order.User.LastName,
-                OtherCouponCode = order.OtherCouponCode,
-                PaymentReceipt = order.PaymentReceipt,
-                PriceToPay = order.PriceToPay,
-                SalespersonCouponCode = order.SalespersonCouponCode,
-                TotalPrice = order.TotalPrice
             };
         }
     }
