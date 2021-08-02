@@ -13,4 +13,6 @@ export interface Course {
   visits: number;
   episodes: Episode[];
   categories: Category[];
+  courseType: number;
+  isFeatured: boolean;
 }

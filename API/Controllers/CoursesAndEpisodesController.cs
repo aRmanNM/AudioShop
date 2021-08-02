@@ -43,20 +43,42 @@ namespace API.Controllers
             _fileService = fileService;
         }
 
-        //
-        // COURSES
-        //
+        #region Courses
 
         [HttpGet]
         public async Task<ActionResult<PaginatedResult<CourseDto>>> GetCourses(bool includeEpisodes = false,
-            string search = null, bool includeInactive = false, int pageNumber = 1, int pageSize = 10, string category = null, CourseType courseType = CourseType.None)
+            string search = null, bool includeInactive = false, int pageNumber = 1, int pageSize = 10,
+            string category = null, CourseType courseType = CourseType.None, bool onlyFeatured = false)
         {
-            var result = await _courseRepository.GetCoursesAsync(includeEpisodes, search, includeInactive, pageNumber, pageSize, category);
+            var result = await _courseRepository.GetCoursesAsync(includeEpisodes, search, includeInactive, pageNumber, pageSize, category, courseType, onlyFeatured);
             var resultWithDtos = new PaginatedResult<CourseDto>();
             resultWithDtos.TotalItems = result.TotalItems;
             resultWithDtos.Items = result.Items.Select(c => _mapper.MapCourseToCourseDto(c));
             return Ok(resultWithDtos);
         }
+
+        [HttpGet("featured")]
+        public async Task<ActionResult<CourseDto>> GetFeaturedCourses(CourseType courseType = CourseType.Course, int count = 10)
+        {
+            var courses = await _courseRepository.GetFeaturedCoursesAsync(courseType, count);
+            return Ok(courses.Select(c => _mapper.MapCourseToCourseDto(c)));
+        }
+
+        [HttpGet("topsellers")]
+        public async Task<ActionResult<CourseDto>> GetTopSellersCourses(CourseType courseType = CourseType.Course, int count = 10)
+        {
+            var courses = await _courseRepository.GetTopSellersCoursesAsync(courseType, count);
+            return Ok(courses.Select(c => _mapper.MapCourseToCourseDto(c)));
+        }
+
+
+        [HttpGet("topclicked")]
+        public async Task<ActionResult<CourseDto>> GetTopٰClickedCoursesAsync(CourseType courseType = CourseType.Course, int count = 10)
+        {
+            var courses = await _courseRepository.GetTopٰClickedCoursesAsync(courseType, count);
+            return Ok(courses.Select(c => _mapper.MapCourseToCourseDto(c)));
+        }
+
 
         [HttpGet("{id}")]
         public async Task<ActionResult<CourseDto>> GetCourseById(int id)
@@ -71,7 +93,8 @@ namespace API.Controllers
         {
             var course = _mapper.MapCourseDtoToCourse(courseDto);
 
-            course.CourseCategories = courseDto.Categories.Select(c => new CourseCategory {
+            course.CourseCategories = courseDto.Categories.Select(c => new CourseCategory
+            {
                 CourseId = course.Id,
                 CategoryId = c.Id
             }).ToList();
@@ -90,7 +113,8 @@ namespace API.Controllers
             await _courseRepository.DeleteCourseCategories(course.Id);
             await _unitOfWork.CompleteAsync();
 
-            var courseCategories = course.Categories.Select(cc => new CourseCategory {
+            var courseCategories = course.Categories.Select(cc => new CourseCategory
+            {
                 CourseId = course.Id,
                 CategoryId = cc.Id
             }).ToArray();
@@ -101,9 +125,9 @@ namespace API.Controllers
             return courseToUpdate;
         }
 
-        //
-        // REVIEWS
-        //
+        #endregion
+
+        #region Reviews
 
         [HttpGet("{courseId}/reviews")]
         public async Task<ActionResult<PaginatedResult<ReviewDto>>> GetCourseReviews(int courseId, bool accepted = true, int pageNumber = 1, int pageSize = 10)
@@ -154,9 +178,11 @@ namespace API.Controllers
 
             switch (action)
             {
-                case "toggle": await _reviewRepository.ToggleMultipleReviews(reviewIds);
+                case "toggle":
+                    await _reviewRepository.ToggleMultipleReviews(reviewIds);
                     break;
-                case "delete": _reviewRepository.DeleteMultipleReviews(reviewIds);
+                case "delete":
+                    _reviewRepository.DeleteMultipleReviews(reviewIds);
                     break;
                 default: break;
             }
@@ -174,9 +200,9 @@ namespace API.Controllers
             return Ok(result);
         }
 
-        //
-        // EPISODES
-        //
+        #endregion
+
+        #region Episodes
 
         [HttpGet("{courseId}/episodes")]
         public async Task<ActionResult<List<EpisodeDto>>> GetCourseEpisodes(int courseId)
@@ -268,5 +294,7 @@ namespace API.Controllers
             await _unitOfWork.CompleteAsync();
             return Ok();
         }
+
+        #endregion
     }
 }

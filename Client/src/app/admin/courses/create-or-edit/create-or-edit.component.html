@@ -25,6 +25,14 @@
         </mat-select>
       </mat-form-field>
 
+      <mat-form-field appearance="fill">
+        <mat-label>نوع محتوا</mat-label>
+        <mat-select formControlName="courseType">
+          <mat-option value="1">دوره</mat-option>
+          <mat-option value="2">کتاب صوتی</mat-option>
+        </mat-select>
+      </mat-form-field>
+
       <mat-form-field>
         <mat-label>دسته بندی ها</mat-label>
         <mat-chip-list #chipList>
@@ -56,6 +64,7 @@
         <mat-label>مبلغ</mat-label>
         <input matInput type="number" formControlName="price"/>
       </mat-form-field>
+      <mat-slide-toggle class="mt-2 mb-3" formControlName="isFeatured">فعال کردن دوره منتخب</mat-slide-toggle>
       <mat-slide-toggle class="mt-2 mb-3" formControlName="isActive">فعال برای خرید</mat-slide-toggle>
       <button
         mat-raised-button

@@ -6,7 +6,6 @@
     دسته بندی ها
   </button>
 
-
   <span class="spacer"></span>
 
   <mat-form-field appearance="outline" class="search-input">
@@ -19,6 +18,24 @@
   <button matTooltip="همه موارد" mat-mini-fab color="basic" style="transform: scale(0.6);" (click)="clearSearch()">
     <mat-icon>keyboard_return</mat-icon>
   </button>
+</mat-toolbar>
+
+<mat-toolbar>
+  <mat-form-field appearance="standard" class="select-input">
+    <mat-label>نوع محتوا</mat-label>
+    <mat-select [(value)]="courseType">
+      <mat-option value="0" selected>همه</mat-option>
+      <mat-option value="1">دوره صوتی</mat-option>
+      <mat-option value="2">کتاب صوتی</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <button mat-flat-button color="primary" (click)="filterType()">نمایش</button>
+
+  <span class="spacer"></span>
+
+  <mat-slide-toggle class="mt-2 mb-3" (toggleChange)="toggleFeatured()">
+    <span style="font-size: smaller;">تنها نمایش منتخب ها</span>
+  </mat-slide-toggle>
 </mat-toolbar>
 
 <span *ngIf="!dialogActive">

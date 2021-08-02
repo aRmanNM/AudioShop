@@ -38,7 +38,7 @@ namespace API.Repositories
         }
 
         public async Task<PaginatedResult<Course>> GetCoursesAsync(bool includeEpisodes,
-            string search, bool includeInactive = false, int pageNumber = 1, int pageSize = 10, string category = null, CourseType courseType = CourseType.None)
+            string search, bool includeInactive = false, int pageNumber = 1, int pageSize = 10, string category = null, CourseType courseType = CourseType.None, bool onlyFeatured = false)
         {
             if (pageSize > 20 || pageSize < 1)
             {
@@ -54,7 +54,7 @@ namespace API.Repositories
 
             if (!string.IsNullOrEmpty(search))
             {
-                courses = courses.Where(c => c.Name.Contains(search) || c.Instructor.Contains(search) || c.Description.Contains(search));
+                courses = courses.Where(c => c.Name.Contains(search) || c.Instructor.Contains(search) || c.Description.Contains(search) || c.CourseCategories.Any(cc => cc.Category.Title == search));
             }
 
             if (!includeInactive)
@@ -72,6 +72,11 @@ namespace API.Repositories
                 courses = courses.Where(c => c.CourseType == courseType);
             }
 
+            if (onlyFeatured)
+            {
+                courses = courses.Where(c => c.IsFeatured);
+            }
+
             var emptyCollection = new Collection<Episode>();
 
             var result = new PaginatedResult<Course>();
@@ -86,7 +91,7 @@ namespace API.Repositories
                     WaitingTimeBetweenEpisodes = c.WaitingTimeBetweenEpisodes,
                     IsActive = c.IsActive,
                     Photo = c.Photo,
-                    Episodes =  includeEpisodes ? c.Episodes : emptyCollection,
+                    Episodes = includeEpisodes ? c.Episodes : emptyCollection,
                     Reviews = c.Reviews,
                     Visits = c.Visits,
                     Instructor = c.Instructor,
@@ -120,23 +125,23 @@ namespace API.Repositories
                     .Include(c => c.CourseCategories)
                     .ThenInclude(cc => cc.Category)
                     .Select(c => new Course
-                {
-                    Id = c.Id,
-                    Name = c.Name,
-                    Price = c.Price,
-                    Description = c.Description,
-                    WaitingTimeBetweenEpisodes = c.WaitingTimeBetweenEpisodes,
-                    IsActive = c.IsActive,
-                    Photo = c.Photo,
-                    Episodes = c.Episodes,
-                    Reviews = c.Reviews,
-                    Visits = c.Visits,
-                    Instructor = c.Instructor,
-                    AverageScore = c.Reviews.Select(r => (double?)r.Rating).Average(), // TODO: find a better solution.
-                    CourseCategories = c.CourseCategories.Select(cc => new CourseCategory { CourseId = cc.CourseId, Category = cc.Category, CategoryId = cc.Category.Id }).ToList(),
-                    CourseType = c.CourseType,
-                    IsFeatured = c.IsFeatured
-                }).FirstOrDefaultAsync(c => c.Id == id);
+                    {
+                        Id = c.Id,
+                        Name = c.Name,
+                        Price = c.Price,
+                        Description = c.Description,
+                        WaitingTimeBetweenEpisodes = c.WaitingTimeBetweenEpisodes,
+                        IsActive = c.IsActive,
+                        Photo = c.Photo,
+                        Episodes = c.Episodes,
+                        Reviews = c.Reviews,
+                        Visits = c.Visits,
+                        Instructor = c.Instructor,
+                        AverageScore = c.Reviews.Select(r => (double?)r.Rating).Average(), // TODO: find a better solution.
+                        CourseCategories = c.CourseCategories.Select(cc => new CourseCategory { CourseId = cc.CourseId, Category = cc.Category, CategoryId = cc.Category.Id }).ToList(),
+                        CourseType = c.CourseType,
+                        IsFeatured = c.IsFeatured
+                    }).FirstOrDefaultAsync(c => c.Id == id);
             }
         }
 
@@ -152,10 +157,10 @@ namespace API.Repositories
             return courseCategories;
         }
 
-        public async Task<IEnumerable<Course>> GetFeaturedCoursesAsync(CourseType courseType = CourseType.None, int count = 10)
+        public async Task<IEnumerable<Course>> GetFeaturedCoursesAsync(CourseType courseType = CourseType.Course, int count = 10)
         {
             return await _context.Courses.OrderByDescending(c => c.LastEdited)
-                .Where(c => c.IsFeatured)
+                .Where(c => c.IsFeatured && c.CourseType == courseType)
                 .Select(c => new Course
                 {
                     Id = c.Id,
@@ -177,16 +182,34 @@ namespace API.Repositories
                 .ToArrayAsync();
         }
 
-        public Task<IEnumerable<Course>> GetTopSellersCoursesAsync(CourseType courseType = CourseType.None, int count = 10)
+        public async Task<IEnumerable<Course>> GetTopSellersCoursesAsync(CourseType courseType = CourseType.Course, int count = 10)
         {
-            // TODO: IMplment after merge.
-            throw new System.NotImplementedException();
+            return await GetTopٰClickedCoursesAsync(courseType, count); // TODO: implement this! or maybe dont ;)
         }
 
-        public Task<IEnumerable<Course>> GetTopٰClickedCoursesAsync(CourseType courseType = CourseType.None, int count = 10)
+        public async Task<IEnumerable<Course>> GetTopٰClickedCoursesAsync(CourseType courseType = CourseType.Course, int count = 10)
         {
-            // TODO: Implement after merge.
-            throw new System.NotImplementedException();
+            return await _context.Courses.OrderByDescending(c => c.Visits)
+                .Where(c => c.CourseType == courseType)
+                .Select(c => new Course
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    Price = c.Price,
+                    Description = c.Description,
+                    WaitingTimeBetweenEpisodes = c.WaitingTimeBetweenEpisodes,
+                    IsActive = c.IsActive,
+                    Photo = c.Photo,
+                    Reviews = c.Reviews,
+                    Instructor = c.Instructor,
+                    AverageScore = c.Reviews.Select(r => (double?)r.Rating).Average(), // TODO: find a better solution.
+                    CourseCategories = c.CourseCategories.Select(cc => new CourseCategory { CourseId = cc.CourseId, Category = cc.Category, CategoryId = cc.Category.Id }).ToList(),
+                    CourseType = c.CourseType,
+                    IsFeatured = c.IsFeatured
+                })
+                .AsNoTracking()
+                .Take(count)
+                .ToArrayAsync();
         }
     }
 }

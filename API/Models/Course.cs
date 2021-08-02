@@ -31,7 +31,7 @@ namespace API.Models
         [NotMapped]
         public ICollection<Category> Categories { get; set;}
 
-        public CourseType CourseType { get; set; }
+        public CourseType CourseType { get; set; } = CourseType.Course;
         public bool IsFeatured { get; set; }
 
         public Course()

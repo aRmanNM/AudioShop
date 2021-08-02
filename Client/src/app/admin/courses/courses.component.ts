@@ -21,6 +21,9 @@ export class CoursesComponent implements OnInit {
   baseUrl = environment.apiUrl + 'Files/';
   columnsToDisplay = ['id', 'name', 'instructor', 'price', 'watingTime', 'categories', 'isActive', 'photo', 'actions'];
   searchString = '';
+  courseType: number = 0;
+  courseCategory: '';
+  onlyFeatured = false;
   dialogActive = false;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -38,7 +41,7 @@ export class CoursesComponent implements OnInit {
   }
 
   getCourses(): void {
-    this.coursesAndEpisodesService.getCourses(this.searchString, this.pageIndex, this.pageSize).subscribe((res) => {
+    this.coursesAndEpisodesService.getCourses(this.searchString, this.pageIndex, this.pageSize, '', this.courseType, this.onlyFeatured).subscribe((res) => {
       this.courses = res.items;
       this.totalItems = res.totalItems;
     });
@@ -70,6 +73,10 @@ export class CoursesComponent implements OnInit {
     this.coursesAndEpisodesService.onUpdate();
   }
 
+  filterType(): void {
+    this.coursesAndEpisodesService.onUpdate();
+  }
+
   clearSearch(): void {
     this.searchString = '';
     this.coursesAndEpisodesService.onUpdate();
@@ -78,6 +85,11 @@ export class CoursesComponent implements OnInit {
   changePage(): void {
     this.pageIndex = this.paginator.pageIndex;
     this.pageSize = this.paginator.pageSize;
+    this.coursesAndEpisodesService.onUpdate();
+  }
+
+  toggleFeatured(): void {
+    this.onlyFeatured = !this.onlyFeatured;
     this.coursesAndEpisodesService.onUpdate();
   }
 }

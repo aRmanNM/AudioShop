@@ -30,7 +30,7 @@ import {DurationPipe} from '../pipes/duration.pipe';
 import {ReviewsComponent} from './reviews/reviews.component';
 import {SalespersonEditComponent} from './salespersons/salesperson-edit/salesperson-edit.component';
 import {ReceiptInfoComponent} from './checkouts/receipt-info/receipt-info.component';
-import { CategoriesComponent } from './courses/categories/categories.component';
+import {CategoriesComponent} from './courses/categories/categories.component';
 import {StatsComponent} from './stats/stats.component';
 import {ChartModule} from 'angular2-chartjs';
 import {OrdersComponent} from './orders/orders.component';
@@ -61,6 +61,9 @@ import {OrdersComponent} from './orders/orders.component';
     ReviewsComponent,
     SalespersonEditComponent,
     ReceiptInfoComponent,
+    CategoriesComponent,
+    StatsComponent,
+    OrdersComponent
   ],
   imports: [
     CommonModule,

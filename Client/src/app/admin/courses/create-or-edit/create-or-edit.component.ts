@@ -53,7 +53,9 @@ export class CreateOrEditComponent implements OnInit {
       price: new FormControl('', [Validators.required]),
       isActive: new FormControl('', [Validators.required]),
       waitingTimeBetweenEpisodes: new FormControl('', [Validators.required]),
-      categories: new FormControl([])
+      categories: new FormControl([]),
+      isFeatured: new FormControl(''),
+      courseType: new FormControl('')
     }
   );
 
@@ -69,8 +71,10 @@ export class CreateOrEditComponent implements OnInit {
         description: this.data.course.description,
         price: this.data.course.price,
         isActive: this.data.course.isActive,
-        waitingTimeBetweenEpisodes: this.data.course.waitingTimeBetweenEpisodes,
-        categories: this.data.course.categories
+        waitingTimeBetweenEpisodes: this.data.course.waitingTimeBetweenEpisodes.toString(),
+        categories: this.data.course.categories,
+        isFeatured: this.data.course.isFeatured,
+        courseType: this.data.course.courseType.toString()
       });
 
       this.categories = JSON.parse(JSON.stringify(this.data.course.categories));

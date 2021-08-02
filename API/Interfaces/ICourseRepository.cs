@@ -13,14 +13,14 @@ namespace API.Interfaces
         Task<Course> CreateCourseAsync(Course course);
         Task<Course> UpdateCourse(Course course);
         Task<PaginatedResult<Course>> GetCoursesAsync(bool includeEpisodes,
-            string search, bool includeInactive = false, int pageNumber = 1, int pageSize = 10, string category = null, CourseType courseType = CourseType.None);
+            string search, bool includeInactive = false, int pageNumber = 1, int pageSize = 10, string category = null, CourseType courseType = CourseType.None, bool onlyFeatured = false);
         Task<Course> GetCourseByIdAsync(int id, bool withTracking = false);
         Task DeleteCourseCategories(int courseId);
         Task<IEnumerable<CourseCategory>> AdddCourseCategories(ICollection<CourseCategory> courseCategories);
 
-        Task<IEnumerable<Course>> GetFeaturedCoursesAsync(CourseType courseType = CourseType.None, int count = 10);
-        Task<IEnumerable<Course>> GetTopSellersCoursesAsync(CourseType courseType = CourseType.None, int count = 10);
-        Task<IEnumerable<Course>> GetTopٰClickedCoursesAsync(CourseType courseType = CourseType.None, int count = 10);
+        Task<IEnumerable<Course>> GetFeaturedCoursesAsync(CourseType courseType = CourseType.Course, int count = 10);
+        Task<IEnumerable<Course>> GetTopSellersCoursesAsync(CourseType courseType = CourseType.Course, int count = 10);
+        Task<IEnumerable<Course>> GetTopٰClickedCoursesAsync(CourseType courseType = CourseType.Course, int count = 10);
 
     }
 }

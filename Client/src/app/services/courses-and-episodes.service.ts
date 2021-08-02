@@ -26,7 +26,7 @@ export class CoursesAndEpisodesService {
     this.reviewsUpdatedEmitter.next();
   }
 
-  getCourses(search: string, pageIndex: number, pageSize: number, category: string): Observable<PaginatedResult<Course>> {
+  getCourses(search: string, pageIndex: number, pageSize: number, category: string, courseType: number = 0, onlyFeatured = false): Observable<PaginatedResult<Course>> {
     return this.http.get<PaginatedResult<Course>>(this.baseUrl, {
       params: new HttpParams()
         .set('search', search)
@@ -35,6 +35,8 @@ export class CoursesAndEpisodesService {
         .set('pageNumber', `${pageIndex + 1}`)
         .set('pageSize', `${pageSize}`)
         .set('category', category)
+        .set('courseType', `${courseType}`)
+        .set('onlyFeatured', `${onlyFeatured}`)
     });
   }
 
