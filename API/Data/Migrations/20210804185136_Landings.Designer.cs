@@ -4,14 +4,16 @@ using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace API.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    partial class StoreContextModelSnapshot : ModelSnapshot
+    [Migration("20210804185136_Landings")]
+    partial class Landings
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,21 +60,6 @@ namespace API.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Blacklist");
-                });
-
-            modelBuilder.Entity("API.Models.Category", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("API.Models.Checkout", b =>
@@ -198,9 +185,6 @@ namespace API.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CourseType")
-                        .HasColumnType("int");
-
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -208,9 +192,6 @@ namespace API.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsFeatured")
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("LastEdited")
@@ -236,21 +217,6 @@ namespace API.Data.Migrations
                     b.HasIndex("PhotoId");
 
                     b.ToTable("Courses");
-                });
-
-            modelBuilder.Entity("API.Models.CourseCategory", b =>
-                {
-                    b.Property<int>("CourseId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CourseId", "CategoryId");
-
-                    b.HasIndex("CategoryId");
-
-                    b.ToTable("CourseCategories");
                 });
 
             modelBuilder.Entity("API.Models.Episode", b =>
@@ -936,21 +902,6 @@ namespace API.Data.Migrations
                     b.HasOne("API.Models.Photo", "Photo")
                         .WithMany()
                         .HasForeignKey("PhotoId");
-                });
-
-            modelBuilder.Entity("API.Models.CourseCategory", b =>
-                {
-                    b.HasOne("API.Models.Category", "Category")
-                        .WithMany("CourseCategories")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("API.Models.Course", "Course")
-                        .WithMany("CourseCategories")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("API.Models.Episode", b =>

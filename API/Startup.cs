@@ -51,6 +51,7 @@ namespace API
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IStatRepository, StatRepository>();
             services.AddScoped<IStatService, StatService>();
+            services.AddScoped<ILandingRepository, LandingRepository>();
 
             services.AddSingleton<ISMSService, SMSService>();
             services.AddSingleton<IFileService, FileService>();
