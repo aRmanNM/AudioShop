@@ -4,14 +4,16 @@ using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace API.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    partial class StoreContextModelSnapshot : ModelSnapshot
+    [Migration("20210805180231_LandingClickCount")]
+    partial class LandingClickCount
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -322,9 +324,6 @@ namespace API.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("BackgroundId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Button")
                         .HasColumnType("nvarchar(max)");
 
@@ -335,12 +334,6 @@ namespace API.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("ButtonLink")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ButtonsColor")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Gift")
@@ -383,8 +376,6 @@ namespace API.Data.Migrations
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BackgroundId");
 
                     b.HasIndex("LogoId");
 
@@ -993,10 +984,6 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("API.Models.Landing.Landing", b =>
                 {
-                    b.HasOne("API.Models.Photo", "Background")
-                        .WithMany()
-                        .HasForeignKey("BackgroundId");
-
                     b.HasOne("API.Models.Photo", "Logo")
                         .WithMany()
                         .HasForeignKey("LogoId");

@@ -1,15 +1,11 @@
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using API.Models;
 
-namespace API.Models.Landing
+namespace API.Dtos
 {
-    public class Landing
+    public class LandingDto
     {
         public int Id { get; set; }
-
         public string Description { get; set; }
-
-
         public Photo Logo { get; set; }
         public bool LogoEnabled { get; set; }
 
@@ -25,6 +21,7 @@ namespace API.Models.Landing
         public string Button { get; set; }
         public string ButtonLink { get; set; }
         public bool ButtonEnabled { get; set; }
+        public int ButtonClickCount { get; set; }
 
         public string Text2 { get; set; }
         public bool Text2Enabled { get; set; }
@@ -34,16 +31,9 @@ namespace API.Models.Landing
 
         public bool PhoneBoxEnabled { get; set; }
 
-        public int ButtonClickCount { get; set; }
+        public int PhoneNumberCounts { get; set; }
 
         public string ButtonsColor { get; set; }
         public Photo Background { get; set; }
-
-        public ICollection<LandingPhoneNumber> PhoneNumbers { get; set; }
-
-        public Landing()
-        {
-            PhoneNumbers = new Collection<LandingPhoneNumber>();
-        }
     }
 }

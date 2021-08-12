@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
+using API.Dtos;
 using API.Interfaces;
 using API.Models;
 using API.Models.Landing;
+using CsvHelper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -34,10 +37,17 @@ namespace API.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Landing>>> GetLandings()
+        public async Task<ActionResult<IEnumerable<LandingDto>>> GetLandings()
         {
             var landings = await _landingRepository.GetLandings();
             return Ok(landings);
+        }
+
+        [HttpGet("{landingId}")]
+        public async Task<ActionResult<LandingDto>> GetLanding(int landingId)
+        {
+            var landingDto = await _landingRepository.GetLandingDtoById(landingId);
+            return Ok(landingDto);
         }
 
         [Authorize(Roles = "Admin")]
@@ -58,12 +68,34 @@ namespace API.Controllers
             return Ok(landing);
         }
 
+        [HttpPut("{landingId}/updatestat")]
+        public async Task<ActionResult> UpdateStat(int landingId)
+        {
+            await _landingRepository.UpdateLandingStat(landingId);
+            await _unitOfWork.CompleteAsync();
+            return Ok();
+        }
+
         [HttpPost("{landingId}/phonenumber")]
         public async Task<ActionResult<LandingPhoneNumber>> CreateLandingPhoneNumber(int landingId, [FromBody] LandingPhoneNumber landingPhoneNumber)
         {
             await _landingRepository.CreateLandingPhoneNumber(landingPhoneNumber);
             await _unitOfWork.CompleteAsync();
             return Ok(landingPhoneNumber);
+        }
+
+        [HttpGet("{landingId}/phonenumber")]
+        public async Task<ActionResult> GetLandingPhoneNumbers(int landingId)
+        {
+            var res = await _landingRepository.GetLandingPhoneNumbers(landingId);
+            var stream = new MemoryStream();
+            using (var writeFile = new StreamWriter(stream, leaveOpen: true))
+            {
+                var csv = new CsvWriter(writeFile, CultureInfo.CurrentCulture, true);;
+                csv.WriteRecords(res);
+            }
+            stream.Position = 0; //reset stream
+            return File(stream, "application/octet-stream", $"landing${landingId}_phonenumbers.csv");
         }
 
         [Authorize(Roles = "Admin")]
@@ -87,6 +119,8 @@ namespace API.Controllers
                 return BadRequest(e.Message);
             }
 
+            Object res = null;
+
             if (field.ToLower() == "logo")
             {
                 var logo = new Photo
@@ -95,6 +129,7 @@ namespace API.Controllers
                 };
 
                 landing.Logo = logo;
+                res = logo;
             }
             else if (field.ToLower() == "media")
             {
@@ -104,10 +139,21 @@ namespace API.Controllers
                 };
 
                 landing.Media = media;
+                res = media;
+            }
+            else if (field.ToLower() == "background")
+            {
+                var background = new Photo
+                {
+                    FileName = fileName
+                };
+
+                landing.Background = background;
+                res = background;
             }
 
             await _unitOfWork.CompleteAsync();
-            return Ok();
+            return Ok(res);
         }
 
         // TODO: method to export phonenumbers

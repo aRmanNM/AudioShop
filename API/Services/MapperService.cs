@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using API.Dtos;
 using API.Interfaces;
 using API.Models;
+using API.Models.Landing;
 
 namespace API.Services
 {
@@ -141,7 +142,8 @@ namespace API.Services
 
         public SalespersonDto MapUserToSalespersonDto(User user)
         {
-            return new SalespersonDto {
+            return new SalespersonDto
+            {
                 Id = user.Id,
                 UserName = user.UserName,
                 FirstName = user.FirstName,
@@ -162,7 +164,8 @@ namespace API.Services
 
         public SliderItem MapSliderItemDtoToSliderItem(SliderItemDto sliderItemDto)
         {
-            return new SliderItem {
+            return new SliderItem
+            {
                 Title = sliderItemDto.Title,
                 Description = sliderItemDto.Description,
                 IsActive = sliderItemDto.IsActive,
@@ -197,7 +200,8 @@ namespace API.Services
 
         public StatDto MapStatToStatDto(Stat stat)
         {
-            return new StatDto {
+            return new StatDto
+            {
                 TitleEn = stat.TitleEn,
                 TitleFa = stat.TitleFa,
                 Counter = stat.Counter,
@@ -207,7 +211,8 @@ namespace API.Services
 
         public OrderWithUserInfo MapOrderToOrderWithUserInfo(Order order)
         {
-            return new OrderWithUserInfo {
+            return new OrderWithUserInfo
+            {
                 Id = order.Id,
                 UserName = order.User.UserName,
                 Status = order.Status,
@@ -219,6 +224,33 @@ namespace API.Services
                 PriceToPay = order.PriceToPay,
                 SalespersonCouponCode = order.SalespersonCouponCode,
                 TotalPrice = order.TotalPrice
+            };
+        }
+
+        public Landing MapLandingDtoToLanding(LandingDto landingDto)
+        {
+            return new Landing
+            {
+                Id = landingDto.Id,
+                Description = landingDto.Description,
+                Button = landingDto.Button,
+                ButtonClickCount = landingDto.ButtonClickCount,
+                ButtonEnabled = landingDto.ButtonEnabled,
+                ButtonLink = landingDto.ButtonLink,
+                GiftEnabled = landingDto.GiftEnabled,
+                Gift = landingDto.Gift,
+                Logo = landingDto.Logo,
+                LogoEnabled = landingDto.LogoEnabled,
+                Media = landingDto.Media,
+                MediaEnabled = landingDto.MediaEnabled,
+                PhoneBoxEnabled = landingDto.PhoneBoxEnabled,
+                Text1 = landingDto.Text1,
+                Text1Enabled = landingDto.Text1Enabled,
+                Text2 = landingDto.Text2,
+                Text2Enabled = landingDto.Text2Enabled,
+                Title = landingDto.Title,
+                TitleEnabled = landingDto.TitleEnabled,
+                ButtonsColor = landingDto.ButtonsColor
             };
         }
     }

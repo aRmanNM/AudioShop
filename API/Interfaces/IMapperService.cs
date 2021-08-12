@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using API.Dtos;
 using API.Models;
+using API.Models.Landing;
 
 namespace API.Interfaces
 {
@@ -23,5 +24,6 @@ namespace API.Interfaces
         Episode MapEpisodeDtoToEpisode(EpisodeDto episodeDto);
         Task<Coupon> MapCouponDtoToCouponAsync(CouponToCreateDto couponDto);
         SliderItem MapSliderItemDtoToSliderItem(SliderItemDto sliderItemDto);
+        Landing MapLandingDtoToLanding(LandingDto landingDto);
     }
 }
