@@ -1,4 +1,5 @@
 using API.Models;
+using API.Models.Landing;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +18,7 @@ namespace API.Data
         public DbSet<Coupon> Coupons { get; set; }
         public DbSet<Photo> Photos { get; set; }
         public DbSet<Audio> Audios { get; set; }
+        public DbSet<ContentFile> ContentFiles { get; set; }
         public DbSet<OrderEpisode> OrderEpisodes { get; set; }
         public DbSet<BlacklistItem> Blacklist { get; set; }
         public DbSet<SliderItem> SliderItems { get; set; }
@@ -27,6 +29,8 @@ namespace API.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<CourseCategory> CourseCategories { get; set; }
         public DbSet<Stat> Stats { get; set; }
+        public DbSet<Landing> Landings { get; set; }
+        public DbSet<LandingPhoneNumber> LandingPhoneNumbers { get; set; }
 
         public StoreContext(DbContextOptions<StoreContext> options) : base(options)
         {

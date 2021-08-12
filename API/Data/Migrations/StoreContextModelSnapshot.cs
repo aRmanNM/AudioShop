@@ -145,6 +145,21 @@ namespace API.Data.Migrations
                     b.ToTable("Configs");
                 });
 
+            modelBuilder.Entity("API.Models.ContentFile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("FileName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ContentFiles");
+                });
+
             modelBuilder.Entity("API.Models.Coupon", b =>
                 {
                     b.Property<int>("Id")
@@ -298,6 +313,104 @@ namespace API.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Favorites");
+                });
+
+            modelBuilder.Entity("API.Models.Landing.Landing", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("BackgroundId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Button")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ButtonClickCount")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("ButtonEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ButtonLink")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ButtonsColor")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Gift")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("GiftEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("LogoEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("LogoId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("MediaEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("MediaId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("PhoneBoxEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Text1")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Text1Enabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Text2")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Text2Enabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TitleEnabled")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BackgroundId");
+
+                    b.HasIndex("LogoId");
+
+                    b.HasIndex("MediaId");
+
+                    b.ToTable("Landings");
+                });
+
+            modelBuilder.Entity("API.Models.Landing.LandingPhoneNumber", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("LandingId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LandingId");
+
+                    b.ToTable("LandingPhoneNumbers");
                 });
 
             modelBuilder.Entity("API.Models.Order", b =>
@@ -876,6 +989,30 @@ namespace API.Data.Migrations
                     b.HasOne("API.Models.User", "User")
                         .WithMany("FavoriteCoursesAndEpisodes")
                         .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("API.Models.Landing.Landing", b =>
+                {
+                    b.HasOne("API.Models.Photo", "Background")
+                        .WithMany()
+                        .HasForeignKey("BackgroundId");
+
+                    b.HasOne("API.Models.Photo", "Logo")
+                        .WithMany()
+                        .HasForeignKey("LogoId");
+
+                    b.HasOne("API.Models.ContentFile", "Media")
+                        .WithMany()
+                        .HasForeignKey("MediaId");
+                });
+
+            modelBuilder.Entity("API.Models.Landing.LandingPhoneNumber", b =>
+                {
+                    b.HasOne("API.Models.Landing.Landing", null)
+                        .WithMany("PhoneNumbers")
+                        .HasForeignKey("LandingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("API.Models.Order", b =>

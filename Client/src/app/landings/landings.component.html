@@ -1,0 +1,56 @@
+<div class="body" *ngIf="landing">
+  <header *ngIf="landing">
+    <!------------- [ top-header] -------------->
+    <section class="container">
+      <a href="#" class="logo" *ngIf="this.landing.logoEnabled">
+        <img src="{{ this.baseUrl + this.landing.id + '/' + this.landing.logo?.fileName }}" alt="">
+      </a>
+      <figure class="title" *ngIf="this.landing.titleEnabled">
+        <img src="../../assets/landings/images/G-bg.png" alt="">
+        <figcaption>
+          {{this.landing.title}}
+        </figcaption>
+      </figure>
+      <div class="media-box" *ngIf="this.landing.mediaEnabled">
+        <video id="video" controls autoplay loop>
+          <source src="{{ this.baseUrl + this.landing.id + '/' + this.landing.media?.fileName }}">
+        </video>
+      </div>
+
+    </section>
+  </header>
+  <main>
+    <section class="container" *ngIf="landing">
+      <div class="main-txt">
+        <p *ngIf="this.landing.text1Enabled">
+          {{ this.landing.text1 }}
+        </p>
+        <a (click)="updateStat()" *ngIf="this.landing.buttonEnabled" class="btn radius"
+           href="{{this.landing.buttonLink}}" >{{ this.landing.button }}</a>
+        <span *ngIf="this.landing.text2Enabled" class="character">{{ this.landing.text2 }}</span>
+        <div class="gift" *ngIf="this.landing.giftEnabled">
+          <img src="../../assets/landings/images/2.png" alt="">
+          <span>{{ this.landing.gift }}</span>
+          <img src="../../assets/landings/images/2.png" alt="">
+        </div>
+        <form (ngSubmit)="createLandingPhoneNumber()" *ngIf="this.landing.phoneBoxEnabled">
+          <label>
+            <span>شماره تماس</span>
+            <input [(ngModel)]="phoneNumber" name="phoneNumber" class="radius" type="text" placeholder="09120212700">
+          </label>
+          <div class="submit radius">
+            <input type="submit" value="ثبت شماره تماس">
+            <div class="arrow">
+              <img src="../../assets/landings/images/icon.svg" alt="">
+            </div>
+          </div>
+        </form>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<div *ngIf="!landing">
+  <p style="direction: rtl; text-align: left; margin: 2em;">چیزی پیدا نشد :(</p>
+</div>

@@ -1,0 +1,107 @@
+<mat-tab-group animationDuration="0ms" mat-align-tabs="center" mat-stretch-tabs backgroundColor="primary" dir="rtl">
+  <mat-tab label="اطلاعات پایه">
+    <form [formGroup]="landingForm" (ngSubmit)="createOrEditLanding()">
+      <mat-form-field color="accent" hidden>
+        <mat-label>شناسه</mat-label>
+        <input matInput type="text" formControlName="id"/>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>توضیح</mat-label>
+        <input matInput type="text" formControlName="description"/>
+      </mat-form-field>
+
+      <div class="form-group">
+        <mat-form-field appearance="fill">
+          <mat-label>عنوان بالای صفحه</mat-label>
+          <input matInput type="text" formControlName="title"/>
+        </mat-form-field>
+        <mat-slide-toggle formControlName="titleEnabled"></mat-slide-toggle>
+      </div>
+
+      <div class="form-group">
+        <mat-form-field appearance="fill">
+          <mat-label>متن زیر مدیا</mat-label>
+          <input matInput type="text" formControlName="text1"/>
+        </mat-form-field>
+        <mat-slide-toggle formControlName="text1Enabled"></mat-slide-toggle>
+      </div>
+
+      <div class="form-group">
+        <mat-form-field appearance="fill">
+          <mat-label>عنوان کلید</mat-label>
+          <input matInput type="text" formControlName="button"/>
+        </mat-form-field>
+        <mat-slide-toggle formControlName="buttonEnabled"></mat-slide-toggle>
+      </div>
+      <mat-form-field appearance="fill">
+        <mat-label>لینک متصل به کلید</mat-label>
+        <input matInput type="text" formControlName="buttonLink"/>
+      </mat-form-field>
+
+      <div class="form-group">
+        <mat-form-field appearance="fill">
+          <mat-label>متن زیر کلید</mat-label>
+          <input matInput type="text" formControlName="text2"/>
+        </mat-form-field>
+        <mat-slide-toggle formControlName="text2Enabled"></mat-slide-toggle>
+      </div>
+
+      <div class="form-group">
+        <mat-form-field appearance="fill">
+          <mat-label>متن پروموت</mat-label>
+          <input matInput type="text" formControlName="gift"/>
+        </mat-form-field>
+        <mat-slide-toggle formControlName="giftEnabled"></mat-slide-toggle>
+      </div>
+
+      <mat-form-field appearance="fill" hidden>
+        <mat-label>رنگ تم صفحه</mat-label>
+        <input matInput type="text" formControlName="buttonsColor" placeholder="مثلا #FFFFFF"/>
+      </mat-form-field>
+
+      <mat-slide-toggle formControlName="phoneBoxEnabled">فعال بودن باکس درج شماره تماس</mat-slide-toggle>
+      <mat-slide-toggle formControlName="logoEnabled">فعال بودن نمایش لوگو</mat-slide-toggle>
+      <mat-slide-toggle formControlName="mediaEnabled">فعال بودن نمایش مدیا</mat-slide-toggle>
+
+      <button
+        mat-raised-button
+        color="primary"
+        [disabled]="!landingForm.valid"
+        type="submit">
+        <span *ngIf="data.landing">ویرایش</span>
+        <span *ngIf="!data.landing">درج لندینگ جدید</span>
+      </button>
+
+    </form>
+
+  </mat-tab>
+  <mat-tab label="لوگو" *ngIf="data.landing">
+    <div class="d-flex flex-column align-items-start">
+      <img src="{{ logoImgUrl }}" *ngIf="data.landing.logo">
+      <input type="file" class="form-control-file mt-2" value="انتخاب فایل" #logoInput>
+      <button class="mt-2" mat-raised-button color="primary" type="submit" (click)="uploadFile('logo')">
+        اپلود
+      </button>
+    </div>
+  </mat-tab>
+  <mat-tab label="مدیا" *ngIf="data.landing">
+    <div class="d-flex flex-column align-items-start">
+      <img src="{{ mediaUrl }}" *ngIf="data.landing.media">
+      <input type="file" class="form-control-file mt-2" value="انتخاب فایل" #mediaInput>
+      <button class="mt-2" mat-raised-button color="primary" type="submit" (click)="uploadFile('media')">
+        اپلود
+      </button>
+    </div>
+  </mat-tab>
+  <mat-tab label="پس زمینه" *ngIf="data.landing">
+    <div class="d-flex flex-column align-items-start">
+      <img src="{{ backgroundImgUrl }}" *ngIf="data.landing.background">
+      <input type="file" class="form-control-file mt-2" value="انتخاب فایل" #backgroundInput>
+      <button class="mt-2" mat-raised-button color="primary" type="submit" (click)="uploadFile('background')">
+        اپلود
+      </button>
+    </div>
+  </mat-tab>
+</mat-tab-group>
+
+<mat-progress-bar color="accent" mode="indeterminate" *ngIf="spinnerService.visibility | async"></mat-progress-bar>

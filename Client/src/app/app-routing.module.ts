@@ -22,6 +22,10 @@ const routes: Routes = [
     loadChildren: () => import ('./salesperson/salesperson.module').then(m => m.SalespersonModule),
     canActivate: [AuthGuard, SalespersonAuthGuard]
   },
+  {
+    path: 'l',
+    loadChildren: () => import ('./landings/landings.module').then(m => m.LandingsModule)
+  },
   {path: '**', redirectTo: 'landing', pathMatch: 'full'}
 ];
 

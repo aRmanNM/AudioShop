@@ -1,0 +1,50 @@
+<mat-toolbar>
+  <button mat-raised-button color="primary" (click)="openAddOrEditDialog(null)">
+    افزودن لندینگ جدید
+  </button>
+  <span class="spacer"></span>
+  <button mat-mini-fab (click)="refreshLandings()">
+    <mat-icon>refresh</mat-icon>
+  </button>
+</mat-toolbar>
+
+<span *ngIf="!dialogActive">
+  <mat-progress-bar color="accent" mode="indeterminate" *ngIf="spinnerService.visibility | async"></mat-progress-bar>
+</span>
+
+<table mat-table [dataSource]="landings">
+  <ng-container matColumnDef="description">
+    <th mat-header-cell *matHeaderCellDef>توضیح</th>
+    <td mat-cell *matCellDef="let landing"> {{landing.description}} </td>
+  </ng-container>
+  <ng-container matColumnDef="visits">
+    <th mat-header-cell *matHeaderCellDef>آمار کلیک</th>
+    <td mat-cell *matCellDef="let landing"> {{landing.buttonClickCount}} </td>
+  </ng-container>
+  <ng-container matColumnDef="phoneNumbersCount">
+    <th mat-header-cell *matHeaderCellDef>تعداد شماره های ثبت شده</th>
+    <td mat-cell *matCellDef="let landing"> {{landing.phoneNumberCounts}} </td>
+  </ng-container>
+  <ng-container matColumnDef="title">
+    <th mat-header-cell *matHeaderCellDef>عنوان اصلی</th>
+    <td mat-cell *matCellDef="let landing" style="font-size: small;"> {{landing.title}} </td>
+  </ng-container>
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef="let landing">
+      <div class="actions">
+        <button matTooltip="خروجی شماره های تماس" mat-mini-fab color="primary" (click)="exportPhoneNumbers(landing.id)">
+          <mat-icon>security_update</mat-icon>
+        </button>
+        <button matTooltip="ویرایش" mat-mini-fab color="primary" (click)="openAddOrEditDialog(landing)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <a target="_blank" matTooltip="نمایش لندینگ" mat-mini-fab color="accent" [routerLink]="['../../l', landing.id]">
+          <mat-icon>article</mat-icon>
+        </a>
+      </div>
+    </td>
+  </ng-container>
+  <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+  <tr mat-row *matRowDef="let landing; columns: columnsToDisplay"></tr>
+</table>

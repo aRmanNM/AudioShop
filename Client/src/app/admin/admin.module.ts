@@ -34,6 +34,8 @@ import {CategoriesComponent} from './courses/categories/categories.component';
 import {StatsComponent} from './stats/stats.component';
 import {ChartModule} from 'angular2-chartjs';
 import {OrdersComponent} from './orders/orders.component';
+import {LandingsComponent} from './landings/landings.component';
+import {LandingsCreateOrEditComponent} from './landings/landings-create-or-edit/landings-create-or-edit.component';
 
 
 @NgModule({
@@ -63,7 +65,9 @@ import {OrdersComponent} from './orders/orders.component';
     ReceiptInfoComponent,
     CategoriesComponent,
     StatsComponent,
-    OrdersComponent
+    OrdersComponent,
+    LandingsComponent,
+    LandingsCreateOrEditComponent
   ],
   imports: [
     CommonModule,
