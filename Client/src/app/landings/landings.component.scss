@@ -1,0 +1,631 @@
+//@import url(../../assets/landings/css/style.css);
+
+/*==============================================  css Reset ==============================================*/
+* { direction: rtl; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; padding: 0; margin: 0;} *:focus {outline: none !important;} audio, video {display: inline-block;}  audio:not([controls]) {display: none;height: 0;}  h1 {font-size: 1.5rem;}  h2 {font-size: 1.25rem;}  h3 {font-size: 1.125rem;}  h4 {font-size: 1rem;}  h5 {font-size: 0.8125rem;}  h6 {font-size: 0.9375rem;}  p {margin: 0;padding: 0;}  blockquote {font-size: 1.125rem;font-style: italic;line-height: 1.7;margin: 0;overflow: hidden;padding: 0;}  blockquote cite {display: block;font-style: normal;font-weight: 600;margin-top: 0.5em;}  address {margin: 0 0 1.5em;}  pre {background: #eee;font-family: "Courier 10 Pitch", Courier, monospace;font-size: 0.9375rem;line-height: 1.6;margin-bottom: 1.6em;max-width: 100%;overflow: auto;padding: 1.6em;}  code, kbd, tt, var {font-family: Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace;font-size: 0.9375rem;}  abbr, acronym {border-bottom: 1px dotted #666;cursor: help;}  mark, ins {background: #eee;text-decoration: none;}  big {font-size: 125%;}  blockquote {quotes: "" "";}  q {quotes: "“" "”" "‘" "’";}  blockquote:before, blockquote:after {content: "";}  label {color: #333;display: block;font-weight: 800;margin-bottom: 0.5em;}  fieldset {margin-bottom: 1em;}  select {border: 1px solid #bbb;-webkit-border-radius: 3px;border-radius: 3px;height: 3em;max-width: 100%;}  b, strong {font-weight: bold;} html {overflow-x: hidden;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;-ms-overflow-style: scrollbar;}
+.body {
+  font-family: iranyekan;
+  direction: rtl;
+  line-height: 1.5;
+  font-weight: 500;
+  position: relative;
+}
+input, button{ font-family: iranyekan;transition: 0.3s;  -webkit-transition: .3s; -moz-transition: .3s; -o-transition: .3s;}
+button , input[type=submit]{  cursor: pointer;}
+a {text-decoration: none; transition: 0.3s;-webkit-transition:.3s;-moz-transition:.3s; -o-transition:.3s;}
+/*===================== [ color (sass) ] ===========================*/
+$dark-gray: #f8f8f8;
+/*===================== [ import ] =================================*/
+@import url(../../assets/landings/css/font.scss);
+/*======================= [ mixed-in (sass) ] ============================*/
+/*_ mixed-in for ( display=flex;)_*/
+@mixin flex {
+  display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6 */
+  display: -moz-box; /* OLD - Firefox 19- (buggy but mostly works) */
+  display: -moz-flex;
+  display: -ms-flexbox; /* TWEENER - IE 10 */
+  display: -webkit-flex; /* NEW - Chrome */
+  display: flex;
+}
+/*_ mixed-in for ( display=flex; - up to down = center , right to left = center )_*/
+@mixin flex-center-center {
+  @include flex;
+  @include align-items(center);
+  @include justify-content(center);
+}
+@mixin flex-direction($direction: row) {
+  @if $direction==row-reverse {
+    -webkit-box-direction: reverse;
+    -webkit-box-orient: horizontal;
+    -moz-box-direction: reverse;
+    -moz-box-orient: horizontal;
+  }
+
+  @else if $direction==column {
+    -webkit-box-direction: normal;
+    -webkit-box-orient: vertical;
+    -moz-box-direction: normal;
+    -moz-box-orient: vertical;
+  }
+
+  @else if $direction==column-reverse {
+    -webkit-box-direction: reverse;
+    -webkit-box-orient: vertical;
+    -moz-box-direction: reverse;
+    -moz-box-orient: vertical;
+  }
+
+  @else {
+    -webkit-box-direction: normal;
+    -webkit-box-orient: horizontal;
+    -moz-box-direction: normal;
+    -moz-box-orient: horizontal;
+  }
+
+  -webkit-flex-direction: $direction;
+  -ms-flex-direction: $direction;
+  flex-direction: $direction;
+}
+@mixin justify-content($value: flex-start) {
+  @if $value==flex-start {
+    -webkit-box-pack: start;
+    -moz-box-pack: start;
+    -ms-flex-pack: start;
+  }
+
+  @else if $value==flex-end {
+    -webkit-box-pack: end;
+    -moz-box-pack: end;
+    -ms-flex-pack: end;
+  }
+
+  @else if $value==space-between {
+    -webkit-box-pack: justify;
+    -moz-box-pack: justify;
+    -ms-flex-pack: justify;
+  }
+
+  @else if $value==space-around {
+    -ms-flex-pack: distribute;
+  }
+
+  @else {
+    -webkit-box-pack: $value;
+    -moz-box-pack: $value;
+    -ms-flex-pack: $value;
+  }
+  -webkit-justify-content: $value;
+  justify-content: $value;
+}
+@mixin align-items($value: stretch) {
+  @if $value==flex-start {
+    -webkit-box-align: start;
+    -moz-box-align: start;
+    -ms-flex-align: start;
+  }
+
+  @else if $value==flex-end {
+    -webkit-box-align: end;
+    -moz-box-align: end;
+    -ms-flex-align: end;
+  }
+
+  @else {
+    -webkit-box-align: $value;
+    -moz-box-align: $value;
+    -ms-flex-align: $value;
+  }
+
+  -webkit-align-items: $value;
+  -moz-box-align: $value;
+  -ms-flex-align: $value;
+  align-items: $value;
+}
+@mixin transform($property) {
+  -webkit-transform: $property;
+  -ms-transform: $property;
+  -moz-transform: $property;
+  -o-transform: $property;
+  transform: $property;
+
+}
+/*_ mixed-in for ( transition effect )_*/
+@mixin transition3 {
+  -webkit-transition: .3s;
+  -moz-transition: .3s;
+  -o-transition: .3s;
+  transition: .3s;
+}
+@mixin inline-flex {
+  display: -webkit-inline-flex; /* OLD - iOS 6-, Safari 3.1-6 *//* NEW - Chrome */
+  //display: -webkit-i/nline-box; /* dont delet ! this is important for safari */
+  display: -moz-inline-box; /* OLD - Firefox 19- (buggy but mostly works) */
+  display: -ms-inline-flexbox; /* TWEENER - IE 10 */
+  display: inline-flex;
+}
+/*============================ [ breakpoints for responsive in sass ] ==================================*/
+/* 2xsm--Extra small  (smart phones, portrait iPhone, portrait 480x320 phones (Android)) */
+$break-5xsm:"(max-width:348px)";
+/* 2xsm--Extra small  (smart phones, portrait iPhone, portrait 480x320 phones (Android)) */
+$break-4xsm:"(max-width:390px)";
+/* 2xsm--Extra small  (smart phones, portrait iPhone, portrait 480x320 phones (Android)) */
+$break-3xsm:"(max-width:420px)";
+/* 2xsm--Extra small  (smart phones, portrait iPhone, portrait 480x320 phones (Android)) */
+$break-2xsm:"(max-width: 460px)";
+/* sm--smart phones, Android phones, landscape iPhone */
+$break-xsm:"(max-width: 480px)";
+/* sm--smart phones, Android phones, landscape iPhone */
+$break-sm:"(max-width:  546px)";
+/* md-- tablet, landscape iPad, lo-res laptops ands desktops */
+$break-md:"(max-width: 600px)";
+/* lg-- hi-res laptops and desktops */
+$break-lg:"(max-width:  992px)";
+/*=====================<< slick style >>======================*/
+/*====================== [ media query - container ] ==========================*/
+.container {
+  width: 30%;
+  margin: 0 auto;
+
+  @media #{$break-lg} {
+    width: 85%;
+  }
+}
+/*<< Start Code : >>*/
+/*====================== [ body ] ==========================*/
+.body{
+  background: rgba(150, 150, 150, 0.2);
+  background-image: radial-gradient(white 85%, transparent 25%);
+  background-size: 10px 10px;
+  color: #505050;
+  @media #{$break-lg} {
+    background-size: 8px 8px;
+  }
+}
+
+/*====================== [ header ] ==========================*/
+header{
+  position: relative;
+  padding-top:18px;
+  background: url("../../assets/landings/images/bg.png") no-repeat bottom center/cover;
+  height: 45vh;
+  width: 100vw;
+  @media #{$break-md} {
+    height: 43vh;
+  }
+  @media #{$break-sm} {
+    height: 41vh;
+  }
+  @media #{$break-3xsm} {
+    background: url("../../assets/landings/images/bg.png") no-repeat bottom center/cover;
+    height: 39vh;
+  }
+  @media #{$break-4xsm} {
+    height:38vh;
+  }
+  @media #{$break-5xsm} {
+    height:37vh;
+  }
+}
+
+/*== [ logo ] ==*/
+.logo{
+  max-width: 37%;
+  max-height: 105px;
+  display: inline-block;
+  img{
+    width: 100%;height: 100%;object-fit: contain;
+  }
+}
+/*== [ title in red dialog ] ==*/
+.title{
+  position: relative;
+  img{
+    width: 100%;
+    max-height: 100px;
+  }
+  margin-top: 22px;
+  figcaption{
+    position: absolute;
+    width: 100%;
+    top: 10px;
+    left: 50%;
+    @include transform(translateX(-50%));
+    text-align: center;
+    font-weight: bold;
+    color: white;
+    font-size: 25px;
+    overflow: hidden;
+    height: 40px;
+    @media #{$break-lg} {
+      font-size: 35px;
+      height: 45px;
+    }
+    @media #{$break-md} {
+      font-size: 28px;
+    }
+    @media #{$break-sm} {
+      font-size: 25px;
+      height: 40px;
+    }
+    @media #{$break-xsm} {
+      font-size: 22px;
+      height: 36px;
+    }
+    @media #{$break-2xsm} {
+      font-size: 20px;
+      height: 32px;
+    }
+    @media #{$break-3xsm} {
+      font-size: 18px;
+      height: 29px;
+    }
+    @media #{$break-4xsm} {
+      font-size: 17px;
+      height: 26px;
+      top: 5px;
+    }
+    @media #{$break-5xsm} {
+      font-size: 15px;
+      height: 25px;
+    }
+  }
+}
+/*== [ media-box -- video ] ==*/
+.media-box{
+  width:30%;
+  height: 30vh;
+  border-radius: 13px;
+  position: absolute;
+  bottom: -70px;
+  left: 50%;
+  @include transform(translateX(-50%));
+  background-color: #252525;
+  video , img{
+    width: 100%;height: 100%;border-radius: 13px;
+    object-fit: cover;
+  }
+  @media #{$break-lg} {
+    width:85%;
+  }
+  @media #{$break-sm} {
+    height: 27vh;
+    bottom: -60px;
+  }
+  @media #{$break-xsm} {
+    height: 28vh;
+    bottom: -60px;
+  }
+  @media #{$break-3xsm} {
+    height: 25vh;
+    bottom: -55px;
+  }
+  @media #{$break-4xsm} {
+    height: 26vh;
+    bottom: -60px;
+  }
+  @media #{$break-5xsm} {
+    height: 25vh;
+  }
+}
+/*====================== [ main ] ==========================*/
+/*== [ main-txt ] ==*/
+.main-txt{
+  width: 100%;
+  @include flex();
+  @include flex-direction(column);
+  @include align-items(flex-end);
+  margin-top:90px;
+  text-align: center;
+  @media #{$break-sm} {
+    margin-top:70px;
+  }
+  /*== [ main-txt > p ] ==*/
+  p , .character{
+    font-size: 22px;
+    width: 100%;
+    font-weight: bold;
+    text-shadow:0 1px 0 rgba(0, 0, 0, .12);
+    @media #{$break-md} {
+      font-size: 18px;
+    }
+    @media #{$break-sm} {
+      font-size: 17px;
+    }
+    @media #{$break-xsm} {
+      font-size: 16.2px;
+      line-height: 1.7;
+    }
+    @media #{$break-2xsm} {
+      font-size: 16px;
+    }
+    @media #{$break-3xsm} {
+      font-size: 14px;
+    }
+    @media #{$break-4xsm} {
+      font-size: 13px;
+    }
+    @media #{$break-5xsm} {
+      font-size: 12px;
+    }
+  }
+  /*== [ main-txt > span.character ] ==*/
+  .character{
+    font-size: 21px;
+    @media #{$break-md} {
+      font-size: 18px;
+    }
+    @media #{$break-sm} {
+      font-size: 17px;
+    }
+    @media #{$break-xsm} {
+      font-size: 15px;
+      line-height: 1.5;
+    }
+    @media #{$break-2xsm} {
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    @media #{$break-3xsm} {
+      font-size: 13px;
+    }
+    @media #{$break-4xsm} {
+      font-size: 11px;
+    }
+    @media #{$break-5xsm} {
+      font-size: 10px;
+    }
+  }
+  /*== [ main-txt > gift ] ==*/
+  .gift{
+    width: auto;
+    color: #e51532;
+    border-bottom: 1px solid #e51532;
+    margin: 20px 0 40px 0;
+    padding-bottom: 3px;
+    @include flex-center-center();
+    text-align: center;
+    margin: 20px auto 40px auto;
+    font-weight: bold;
+    @media #{$break-sm} {
+      margin:10px auto 30px auto;
+    }
+    @media #{$break-4xsm} {
+      margin:10px auto 20px auto;
+    }
+    span {
+      font-size: 30px;
+      text-shadow: 0 2px 0 rgba(229, 21, 50, .12);
+
+      @media #{$break-md} {
+        font-size: 25px;
+      }
+      @media #{$break-sm} {
+        font-size: 24px;
+      }
+      @media #{$break-xsm} {
+        font-size: 21px;
+      }
+      @media #{$break-2xsm} {
+        font-size: 19px;
+      }
+      @media #{$break-3xsm} {
+        font-size: 18px;
+      }
+      @media #{$break-4xsm} {
+        font-size: 16px;
+      }
+      @media #{$break-5xsm} {
+        font-size: 13px;
+      }
+
+    }
+    img{
+      width: 22px;height: 22px;
+      &:first-child{
+        margin-left: 10px;
+      }
+      &:last-child{
+        margin-right: 10px;
+      }
+      @media #{$break-xsm} {
+        width: 20px;height: 20px;
+      }
+      @media #{$break-4xsm} {
+        width: 17px;height: 17px;
+      }
+    }
+  }
+}
+/*== [ main-txt > btn & submit & label] ==*/
+.btn {
+  font-size: 23px;
+  @media #{$break-md} {
+    font-size: 22px;
+  }
+  @media #{$break-sm} {
+    font-size: 20px;
+  }
+  @media #{$break-sm} {
+    font-size: 18px;
+  }
+  @media #{$break-2xsm} {
+    font-size: 16px;
+  }
+  @media #{$break-3xsm} {
+    font-size: 15px;
+  }
+  @media #{$break-4xsm} {
+    font-size: 14px;
+  }
+}
+
+.submit{
+  @include flex-center-center();
+  cursor: pointer;
+  position: relative;
+  .arrow{
+    background-color: #066836;
+    height: 20px;width: 20px;
+    @include flex-center-center();
+    @include inline-flex();
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 26%;
+    @include transform(translateY(-50%));
+    @media #{$break-3xsm} {
+      height: 15px;width: 15px;
+    }
+  }
+  img{
+    height: 40%;width:40%;
+  }
+}
+
+input[type=submit] {
+  content: '';
+  border: none;
+  font-size: 20px;
+  background-color: transparent;
+  color: white;
+  width: 100%;
+  z-index: 4;
+
+  @media #{$break-md} {
+    font-size: 18px;
+  }
+  @media #{$break-sm} {
+    font-size: 15px;
+    margin: 15px 0;
+  }
+  @media #{$break-4xsm} {
+    font-size: 13px;
+  }
+
+}
+.btn , .submit{
+  width:100%;
+  height: 70px;
+  background-color: #00a651;
+  box-shadow:0px 2px 0 #6cc286;
+  color: white;
+  font-weight: 500;
+  @include flex-center-center();
+  @include inline-flex();
+  margin: 30px 0;
+  border-bottom: 5px solid #108147;
+  position: relative;
+  &::before{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    content: '';
+    top: 0;
+    left: 0;
+    right: 0;
+    //box-shadow:0px -2px 0 #6cc286;
+    border-radius: 12px;
+    @media #{$break-5xsm} {
+      border-radius: 8px;
+    }
+  }
+  @media #{$break-md} {
+    height: 55px;
+    margin: 20px 0;
+
+  }
+  @media #{$break-sm} {
+    height: 50px;
+  }
+  @media #{$break-3xsm} {
+    height: 45px;
+  }
+  @media #{$break-4xsm} {
+    height: 40px;
+    margin: 15px 0;
+  }
+  @media #{$break-5xsm} {
+    height: 33px;
+    margin: 10px 0;
+  }
+}
+
+/*=== [ form ] ===*/
+form {
+  width: 100%;
+}
+/*=== [ form > label] ===*/
+form > label {
+  position: relative;
+  font-weight: 400;
+  width: 100%;
+  height: 65px;
+  @media #{$break-md} {
+    height: 50px;
+  }
+  @media #{$break-sm} {
+    height: 45px;
+  }
+  @media #{$break-3xsm} {
+    height: 40px;
+  }
+  @media #{$break-4xsm} {
+    height: 35px;
+  }
+}
+form > label > span{
+  position: absolute;
+  top: -10px;
+  right: 20px;
+  background-color: white;
+  font-weight: 400;
+  font-size: 15px;
+  color: #7a7a7a;
+  padding: 0 10px;
+  @media #{$break-sm} {
+    font-size: 12px;
+  }
+  @media #{$break-2xsm} {
+    font-size: 11px;
+  }
+  @media #{$break-4xsm} {
+    font-size: 10px;
+  }
+}
+/*=== [ form > input[type=text] ] ===*/
+input[type=text]{
+  width: 100%;
+  height: 100%;
+  border: 1px solid #afafaf;
+  box-shadow: 0 4px 0 #afafaf;
+  padding: 0 10px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 400;
+  letter-spacing: 4px;
+  &:focus{
+    border: 1px solid #7a7a7a;
+    box-shadow: 0 5px 0 #7a7a7a;
+  }
+  @media #{$break-sm} {
+    font-size: 15px;
+  }
+  @media #{$break-2xsm} {
+    font-size: 14px;
+    letter-spacing: 3px;
+  }
+  @media #{$break-4xsm} {
+    font-size: 13px;
+  }
+}
+
+.radius{
+  border-radius: 12px;
+  @media #{$break-5xsm} {
+    border-radius:8px;
+  }
+}
+
+
+
+
+
