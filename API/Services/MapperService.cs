@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using API.Dtos;
 using API.Interfaces;
 using API.Models;
+using API.Models.Ads;
 using API.Models.Landing;
 
 namespace API.Services
@@ -251,6 +252,34 @@ namespace API.Services
                 Title = landingDto.Title,
                 TitleEnabled = landingDto.TitleEnabled,
                 ButtonsColor = landingDto.ButtonsColor
+            };
+        }
+
+        public Ad MapAdDtoToAd(AdDto adDto)
+        {
+            return new Ad
+            {
+                Id = adDto.Id,
+                AdType = adDto.AdType,
+                Description = adDto.Description,
+                IsEnabled = adDto.IsEnabled,
+                Link = adDto.Link,
+                Title = adDto.Title
+            };
+        }
+
+        public AdDto MapAdToAdDto(Ad ad)
+        {
+            return new AdDto
+            {
+                Id = ad.Id,
+                AdType = ad.AdType,
+                Description = ad.Description,
+                IsEnabled = ad.IsEnabled,
+                Link = ad.Link,
+                Places = ad.AdPlaces.Select(ap => ap.Place).ToList(),
+                Title = ad.Title,
+                File = ad.File
             };
         }
     }

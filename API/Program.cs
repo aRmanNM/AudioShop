@@ -31,6 +31,7 @@ namespace API
                     await Seed.SeedCourses(context);
                     await Seed.SeedConfigs(context);
                     await Seed.SeedStats(context);
+                    await Seed.SeedPlaces(context);
                     await context.SaveChangesAsync();
                 }
                 catch(Exception ex)

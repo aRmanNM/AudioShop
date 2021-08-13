@@ -1,4 +1,5 @@
 using API.Models;
+using API.Models.Ads;
 using API.Models.Landing;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -31,6 +32,9 @@ namespace API.Data
         public DbSet<Stat> Stats { get; set; }
         public DbSet<Landing> Landings { get; set; }
         public DbSet<LandingPhoneNumber> LandingPhoneNumbers { get; set; }
+        public DbSet<Place> Places { get; set; }
+        public DbSet<Ad> Ads { get; set; }
+        public DbSet<AdPlace> AdPlaces { get; set; }
 
         public StoreContext(DbContextOptions<StoreContext> options) : base(options)
         {
@@ -65,6 +69,7 @@ namespace API.Data
             builder.Entity<OrderEpisode>().HasKey(c => new {c.EpisodeId, c.OrderId});
             builder.Entity<BlacklistItem>().HasKey(c => new { c.CouponId, c.UserId });
             builder.Entity<CourseCategory>().HasKey(c => new { c.CourseId, c.CategoryId });
+            builder.Entity<AdPlace>().HasKey(c => new { c.AdId, c.PlaceId });
         }
     }
 

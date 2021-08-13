@@ -52,10 +52,12 @@ namespace API
             services.AddScoped<IStatRepository, StatRepository>();
             services.AddScoped<IStatService, StatService>();
             services.AddScoped<ILandingRepository, LandingRepository>();
+            services.AddScoped<IAdRepository, AdRepository>();
 
             services.AddSingleton<ISMSService, SMSService>();
             services.AddSingleton<IFileService, FileService>();
             services.AddSingleton<IZarinPalService, ZarinPalService>();
+            services.AddSingleton<RandomService>();
 
             services.AddHttpClient();
 

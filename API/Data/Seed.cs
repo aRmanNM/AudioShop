@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Identity;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Models;
+using API.Models.Ads;
+using API.Helpers;
 
 namespace API.Data
 {
@@ -409,6 +411,42 @@ namespace API.Data
             };
 
             await context.Stats.AddRangeAsync(stats);
+        }
+
+        public static async Task SeedPlaces(StoreContext context)
+        {
+            if (context.Places.Any())
+            {
+                return;
+            }
+
+            var places = new List<Place> {
+                // Fullscreen
+                new Place { TitleEn = "HomePage", TitleFa = "صفحه خانه", AdType = AdType.Fullscreen, IsEnabled = true },
+                new Place { TitleEn = "CoursePreview", TitleFa = "نمایش دوره یا کتاب", AdType = AdType.Fullscreen, IsEnabled = true },
+                new Place { TitleEn = "CoursePage", TitleFa = "صفحه دوره یا کتاب", AdType = AdType.Fullscreen, IsEnabled = true },
+                new Place { TitleEn = "Login-Cart", TitleFa = "صفحه لاگین سبد خرید", AdType = AdType.Fullscreen, IsEnabled = true },
+                new Place { TitleEn = "Login-Favorites", TitleFa = "صفحه لاگین علاقه مندی ها", AdType = AdType.Fullscreen, IsEnabled = true },
+                new Place { TitleEn = "Login-Profile", TitleFa = "صفحه لاگین پروفایل", AdType = AdType.Fullscreen, IsEnabled = true },
+                new Place { TitleEn = "NowPlaying", TitleFa = "صفحه پخش فایل", AdType = AdType.Fullscreen, IsEnabled = true },
+                new Place { TitleEn = "SignUp", TitleFa = "صفحه ثبت نام", AdType = AdType.Fullscreen, IsEnabled = true },
+                new Place { TitleEn = "AddSalesPersonCuponCode", TitleFa = "صفحه افزودن کوپن فروشنده", AdType = AdType.Fullscreen, IsEnabled = true },
+                new Place { TitleEn = "SupportPage", TitleFa = "صفحه فروشنده", AdType = AdType.Fullscreen, IsEnabled = true },
+                new Place { TitleEn = "PsycologicalTests", TitleFa = "صفحه تست های روانشناسی", AdType = AdType.Fullscreen, IsEnabled = true },
+                // Native
+                new Place { TitleEn = "Loading-up", TitleFa = "صفحه لودینگ - بالا", AdType = AdType.Native, IsEnabled = true },
+                new Place { TitleEn = "Loading-down", TitleFa = "صفحه لودینگ - پایین", AdType = AdType.Native, IsEnabled = true },
+                new Place { TitleEn = "HomePage", TitleFa = "صفحه خانه", AdType = AdType.Native, IsEnabled = true },
+                new Place { TitleEn = "Library", TitleFa = "صفحه کتابخانه", AdType = AdType.Native, IsEnabled = true },
+                new Place { TitleEn = "Profile", TitleFa = "صفحه پروفایل", AdType = AdType.Native, IsEnabled = true },
+                // Banner
+                new Place { TitleEn = "HomePage-BelowSlider", TitleFa = "صفحه اصلی زیر اسلایدر", AdType = AdType.Banner, IsEnabled = true },
+                new Place { TitleEn = "CoursePreview-Top", TitleFa = "صفحه نمایش دوره یا کتاب - بالا", AdType = AdType.Banner, IsEnabled = true },
+                new Place { TitleEn = "CoursePreview-BelowAddToFavorite", TitleFa = "صفحه نمایش دوره یا کتاب - زیر علاقه مندی", AdType = AdType.Banner, IsEnabled = true },
+                new Place { TitleEn = "HomePage-TopOfSilder", TitleFa = "صفحه اصلی بالا اسلایدر", AdType = AdType.Banner, IsEnabled = true },
+            };
+
+            await context.Places.AddRangeAsync(places);
         }
     }
 }

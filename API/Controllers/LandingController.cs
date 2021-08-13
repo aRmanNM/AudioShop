@@ -155,7 +155,5 @@ namespace API.Controllers
             await _unitOfWork.CompleteAsync();
             return Ok(res);
         }
-
-        // TODO: method to export phonenumbers
     }
 }

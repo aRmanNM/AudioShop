@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using API.Dtos;
 using API.Models;
+using API.Models.Ads;
 using API.Models.Landing;
 
 namespace API.Interfaces
@@ -16,6 +17,7 @@ namespace API.Interfaces
         CategoryDto MapCategoryToCategoryDto(Category category);
         StatDto MapStatToStatDto(Stat stat);
         OrderWithUserInfo MapOrderToOrderWithUserInfo(Order order);
+        AdDto MapAdToAdDto(Ad ad);
 
         // DTO to Model
         User MapRegisterDtoToUser(RegisterDto registerDto);
@@ -25,5 +27,6 @@ namespace API.Interfaces
         Task<Coupon> MapCouponDtoToCouponAsync(CouponToCreateDto couponDto);
         SliderItem MapSliderItemDtoToSliderItem(SliderItemDto sliderItemDto);
         Landing MapLandingDtoToLanding(LandingDto landingDto);
+        Ad MapAdDtoToAd(AdDto adDto);
     }
 }
