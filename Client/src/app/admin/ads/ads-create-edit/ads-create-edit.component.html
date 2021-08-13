@@ -1,0 +1,93 @@
+<mat-tab-group animationDuration="0ms" mat-align-tabs="center" mat-stretch-tabs backgroundColor="primary" dir="rtl">
+  <mat-tab label="اطلاعات پایه">
+    <form [formGroup]="adForm" (ngSubmit)="createOrEditAd()">
+      <mat-form-field color="accent" hidden>
+        <mat-label>شناسه</mat-label>
+        <input matInput type="text" formControlName="id"/>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>عنوان</mat-label>
+        <input matInput type="text" formControlName="title"/>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>توضیحات</mat-label>
+        <textarea rows="5" matInput formControlName="description"></textarea>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>لینک</mat-label>
+        <input matInput type="text" formControlName="link"/>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>نوع تبلیغ</mat-label>
+        <mat-select (selectionChange)="getPlaces($event.value)" formControlName="adType">
+          <mat-option value="0">تمام صفحه</mat-option>
+          <mat-option value="1">نیتیو</mat-option>
+          <mat-option value="2">بنری</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>مکان های نمایش</mat-label>
+        <mat-chip-list #chipList>
+          <mat-chip
+            *ngFor="let place of places"
+            [selectable]="'true'"
+            [removable]="'true'"
+            (removed)="remove(place)">
+            {{place.titleEn}}
+            <mat-icon matChipRemove *ngIf="'true'">cancel</mat-icon>
+          </mat-chip>
+          <input
+            placeholder="مکان جدید"
+            #placeInput
+            [formControl]="placeCtrl"
+            [matAutocomplete]="auto"
+            [matChipInputFor]="chipList"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            (matChipInputTokenEnd)="add($event)">
+        </mat-chip-list>
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+          <mat-option *ngFor="let place of filteredPlaces | async" [value]="place">
+            {{place.titleEn}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+
+      <mat-slide-toggle class="mt-2 mb-3" formControlName="isEnabled">فعال برای نمایش</mat-slide-toggle>
+      <button
+        mat-raised-button
+        color="primary"
+        [disabled]="!adForm.valid"
+        type="submit">
+        <span *ngIf="data.ad">ویرایش</span>
+        <span *ngIf="!data.ad">درج دوره جدید</span>
+      </button>
+    </form>
+
+  </mat-tab>
+  <mat-tab label="فایل" *ngIf="data.ad">
+    <p>تبلیغات تمام صفحه: عکس یا فیلم (mp4)</p>
+    <p>تبلیغات نیتیو: عکس</p>
+    <p>تبلیغات بنری: عکس</p>
+    <div class="d-flex flex-column align-items-start">
+      <img src="{{ fileUrl }}" *ngIf="data.ad.file?.fileName.toLowerCase().includes('jpg') || data.ad.file?.fileName.toLowerCase().includes('png') || data.ad.file?.fileName.toLowerCase().includes('gif')">
+      <video width="320" height="240" controls *ngIf="data.ad.file?.fileName.toLowerCase().includes('mp4')">
+        <source src="{{ fileUrl }}" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <input type="file" class="form-control-file mt-2" value="انتخاب فایل" #fileInput>
+      <button class="mt-2" mat-raised-button color="primary" type="submit" (click)="uploadFile()">
+        اپلود
+      </button>
+    </div>
+  </mat-tab>
+</mat-tab-group>
+
+<mat-progress-bar color="accent" mode="indeterminate" *ngIf="spinnerService.visibility | async"></mat-progress-bar>
+<button mat-icon-button>
+  <mat-icon (click)="cancelUpload()"
+            *ngIf="spinnerService.visibility | async">cancel
+  </mat-icon>
+</button>
+
+<!--{{ allPlaces | json }}-->
+

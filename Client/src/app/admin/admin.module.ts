@@ -36,6 +36,9 @@ import {ChartModule} from 'angular2-chartjs';
 import {OrdersComponent} from './orders/orders.component';
 import {LandingsComponent} from './landings/landings.component';
 import {LandingsCreateOrEditComponent} from './landings/landings-create-or-edit/landings-create-or-edit.component';
+import {AdsComponent} from './ads/ads.component';
+import {AdsCreateEditComponent} from './ads/ads-create-edit/ads-create-edit.component';
+import {PlacesComponent} from './ads/places/places.component';
 
 
 @NgModule({
@@ -67,7 +70,10 @@ import {LandingsCreateOrEditComponent} from './landings/landings-create-or-edit/
     StatsComponent,
     OrdersComponent,
     LandingsComponent,
-    LandingsCreateOrEditComponent
+    LandingsCreateOrEditComponent,
+    AdsComponent,
+    AdsCreateEditComponent,
+    PlacesComponent
   ],
   imports: [
     CommonModule,

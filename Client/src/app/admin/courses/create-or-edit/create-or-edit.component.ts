@@ -85,8 +85,8 @@ export class CreateOrEditComponent implements OnInit {
   add(event: MatChipInputEvent): void {
     this.categories.push(this.allCategories.find(c => c.title === event.value));
 
-    // // Clear the input value
-    // event.categoryInput!.clear();
+    // Clear the input value
+    // event.categoryInput?.clear();
 
     this.categoryCtrl.setValue(null);
   }
@@ -124,6 +124,7 @@ export class CreateOrEditComponent implements OnInit {
     if (this.data.course) {
       const course: Course = this.courseForm.value;
       course.categories = this.categories;
+      console.log('course', course);
       this.coursesAndEpisodesService.updateCourse(course).subscribe((res) => {
         this.snackBar.open('ویرایش دوره موفقیت آمیز بود', null, {
           duration: 2000,
@@ -134,6 +135,7 @@ export class CreateOrEditComponent implements OnInit {
     } else {
       const course: Course = this.courseForm.value;
       course.categories = this.categories;
+      console.log('course', course);
       this.coursesAndEpisodesService.createCourse(course).subscribe((res) => {
         this.snackBar.open('دوره جدید با موفقیت ایجاد شد', null, {
           duration: 2000,

@@ -21,6 +21,7 @@ export class LandingsCreateOrEditComponent implements OnInit {
   logoImgUrl;
   mediaUrl;
   backgroundImgUrl;
+  uploadSub;
 
   @ViewChild('logoInput') logoInput: ElementRef;
   @ViewChild('mediaInput') mediaInput: ElementRef;
@@ -137,7 +138,7 @@ export class LandingsCreateOrEditComponent implements OnInit {
         break;
       }
     }
-    this.landingService.uploadFile(this.data.landing.id, field, nativeElement.files[0]).subscribe((res) => {
+    this.uploadSub = this.landingService.uploadFile(this.data.landing.id, field, nativeElement.files[0]).subscribe((res) => {
       // console.log('upload subscribe answered!');
       this.data.landing[field] = res;
       this.getImages();
@@ -147,5 +148,12 @@ export class LandingsCreateOrEditComponent implements OnInit {
         duration: 2000,
       });
     }));
+  }
+
+  cancelUpload(): void {
+    this.uploadSub.unsubscribe();
+    this.snackBar.open('اپلود متوقف شد', null, {
+      duration: 2000,
+    });
   }
 }

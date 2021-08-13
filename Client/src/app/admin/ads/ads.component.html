@@ -1,0 +1,60 @@
+<mat-toolbar>
+  <button mat-raised-button color="primary" (click)="openAddOrEditDialog(null)">
+    افزودن تبلیغ جدید
+  </button>
+  <button mat-raised-button color="primary" (click)="openPlacesDialog()" style="margin-right: 1em;">
+    تنظیمات نمایش
+  </button>
+
+  <span class="spacer"></span>
+</mat-toolbar>
+
+<span *ngIf="!dialogActive">
+  <mat-progress-bar color="accent" mode="indeterminate" *ngIf="spinnerService.visibility | async"></mat-progress-bar>
+</span>
+
+<table mat-table [dataSource]="ads">
+  <ng-container matColumnDef="title">
+    <th mat-header-cell *matHeaderCellDef>عنوان</th>
+    <td mat-cell *matCellDef="let ad"> {{ad.title}} </td>
+  </ng-container>
+  <ng-container matColumnDef="link">
+    <th mat-header-cell *matHeaderCellDef>لینک</th>
+    <td mat-cell *matCellDef="let ad"> {{ad.link}} </td>
+  </ng-container>
+  <ng-container matColumnDef="adType">
+    <th mat-header-cell *matHeaderCellDef>نوع تبلیغ</th>
+    <td mat-cell *matCellDef="let ad">
+      <button mat-stroked-button *ngIf="ad.adType === 0">تمام صفحه</button>
+      <button mat-stroked-button *ngIf="ad.adType === 1">نیتیو</button>
+      <button mat-stroked-button *ngIf="ad.adType === 2">بنری</button>
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="adPlaces">
+    <th mat-header-cell *matHeaderCellDef>مکان نمایش</th>
+    <td mat-cell *matCellDef="let ad">
+      <mat-chip-list>
+        <mat-chip *ngFor="let adPlace of ad.places">{{adPlace.titleEn}}</mat-chip>
+      </mat-chip-list>
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="isEnabled">
+    <th mat-header-cell *matHeaderCellDef>وضعیت فعال بودن</th>
+    <td mat-cell *matCellDef="let ad">
+      <button mat-stroked-button color="primary" *ngIf="ad.isEnabled">فعال</button>
+      <button mat-stroked-button color="warn" *ngIf="!ad.isEnabled">غیر فعال</button>
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef="let ad">
+      <div class="actions">
+        <button matTooltip="ویرایش" mat-mini-fab color="primary" (click)="openAddOrEditDialog(ad)">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </div>
+    </td>
+  </ng-container>
+  <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+  <tr mat-row *matRowDef="let ad; columns: columnsToDisplay"></tr>
+</table>

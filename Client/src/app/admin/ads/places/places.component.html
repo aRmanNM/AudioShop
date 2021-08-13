@@ -1,0 +1,26 @@
+<mat-tab-group animationDuration="0ms" mat-align-tabs="center" mat-stretch-tabs backgroundColor="primary" dir="rtl">
+  <mat-tab label="تبلیغ تمام صفحه">
+    <div *ngIf="this.fullScreens" style="padding: 1em;">
+      <div class="form-group" *ngFor="let place of fullScreens">
+        <mat-label>{{place.titleFa}}({{place.titleEn}})</mat-label>
+        <mat-slide-toggle [checked]="place.isEnabled" (toggleChange)="editPlace(place)"></mat-slide-toggle>
+      </div>
+    </div>
+  </mat-tab>
+  <mat-tab label="نیتیو">
+    <div *ngIf="this.natives" style="padding: 1em;">
+      <div class="form-group" *ngFor="let place of natives">
+        <mat-label>{{place.titleFa}}({{place.titleEn}})</mat-label>
+        <mat-slide-toggle [checked]="place.isEnabled" (toggleChange)="editPlace(place)"></mat-slide-toggle>
+      </div>
+    </div>
+  </mat-tab>
+  <mat-tab label="بنری">
+    <div *ngIf="this.banners" style="padding: 1em;">
+      <div class="form-group" *ngFor="let place of banners">
+        <mat-label>{{place.titleFa}}({{place.titleEn}})</mat-label>
+        <mat-slide-toggle [checked]="place.isEnabled" (toggleChange)="editPlace(place)"></mat-slide-toggle>
+      </div>
+    </div>
+  </mat-tab>
+</mat-tab-group>

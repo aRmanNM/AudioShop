@@ -16,6 +16,7 @@ import {ReviewsComponent} from './reviews/reviews.component';
 import {StatsComponent} from './stats/stats.component';
 import {OrdersComponent} from './orders/orders.component';
 import {LandingsComponent} from './landings/landings.component';
+import {AdsComponent} from './ads/ads.component';
 
 const routes: Routes = [
   {
@@ -34,7 +35,8 @@ const routes: Routes = [
       {path: 'password', component: PasswordComponent, canActivate: [AdminAuthGuard]},
       {path: 'stats', component: StatsComponent, canActivate: [AdminAuthGuard], data: {reuseRoute: true}},
       {path: 'orders', component: OrdersComponent, canActivate: [AdminAuthGuard], data: {reuseRoute: true}},
-      {path: 'landings', component: LandingsComponent, canActivate: [AdminAuthGuard], data: {reuseRoute: true}}
+      {path: 'landings', component: LandingsComponent, canActivate: [AdminAuthGuard], data: {reuseRoute: true}},
+      {path: 'ads', component: AdsComponent, canActivate: [AdminAuthGuard], data: {reuseRoute: true}}
     ]
   }
 ];

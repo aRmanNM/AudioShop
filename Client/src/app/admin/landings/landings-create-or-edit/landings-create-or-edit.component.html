@@ -85,8 +85,13 @@
     </div>
   </mat-tab>
   <mat-tab label="مدیا" *ngIf="data.landing">
+    <p>برای نمایش صحیح فایل ویدیو با فرمت mp4 اپلود گردد</p>
     <div class="d-flex flex-column align-items-start">
-      <img src="{{ mediaUrl }}" *ngIf="data.landing.media">
+      <img src="{{ mediaUrl }}" *ngIf="data.landing.media?.fileName.toLowerCase().includes('jpg') || data.landing.media?.fileName.toLowerCase().includes('png') || data.landing.media?.fileName.toLowerCase().includes('gif')">
+      <video width="320" height="240" controls *ngIf="data.landing.media?.fileName.toLowerCase().includes('mp4')">
+        <source src="{{ mediaUrl }}" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
       <input type="file" class="form-control-file mt-2" value="انتخاب فایل" #mediaInput>
       <button class="mt-2" mat-raised-button color="primary" type="submit" (click)="uploadFile('media')">
         اپلود
@@ -105,3 +110,8 @@
 </mat-tab-group>
 
 <mat-progress-bar color="accent" mode="indeterminate" *ngIf="spinnerService.visibility | async"></mat-progress-bar>
+<button mat-icon-button>
+  <mat-icon (click)="cancelUpload()"
+            *ngIf="spinnerService.visibility | async">cancel
+  </mat-icon>
+</button>
