@@ -26,7 +26,28 @@ namespace API.Services
             return new string(Enumerable.Repeat(chars, 6).Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
-        public bool SendSMS(string receptor, string authToken)
+        public bool SendMessageSMS(string receptor, string message)
+        {
+            try
+            {
+                var api = new KavenegarApi(_options.SMSAPIKey);
+                api.Send(_options.SMSSender, receptor, message);
+            }
+            catch (Kavenegar.Exceptions.ApiException ex)
+            {
+                _logger.LogError("warning", ex.Message);
+                return false;
+            }
+            catch (Kavenegar.Exceptions.HttpException ex)
+            {
+                _logger.LogError("warning", ex.Message);
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool SendVerificationSMS(string receptor, string authToken)
         {
             try
             {

@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using API.Data;
 using API.Interfaces;
@@ -12,6 +13,11 @@ namespace API.Repositories
         public ProgressRepository(StoreContext context)
         {
             _context = context;
+        }
+
+        public async Task<bool> CheckIfAlreadyListenedAsync(int courseId, string userId)
+        {
+            return await _context.Progresses.AnyAsync(p => p.CourseId == courseId && p.UserId == userId);
         }
 
         public async Task<Progress> CreateProgress(Progress progress)

@@ -211,5 +211,13 @@ namespace API.Repositories
                 .Take(count)
                 .ToArrayAsync();
         }
+
+        public async Task<bool> CheckIfAlreadyBoughtAsync(int courseId, string userId)
+        {
+            return await _context.OrderEpisodes
+                .Include(op => op.Episode)
+                .Include(op => op.Order)
+                .AnyAsync(op => op.Episode.CourseId == courseId && op.Order.UserId == userId && op.Order.Status == true);
+        }
     }
 }

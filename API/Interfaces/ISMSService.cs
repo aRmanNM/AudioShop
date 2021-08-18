@@ -5,7 +5,8 @@ namespace API.Interfaces
 {
     public interface ISMSService
     {
-        bool SendSMS(string receptor, string authToken);
+        bool SendVerificationSMS(string receptor, string authToken);
+        bool SendMessageSMS(string receptor, string message);
         string GenerateAuthToken();
     }
 }

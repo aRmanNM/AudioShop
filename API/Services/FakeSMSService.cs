@@ -21,9 +21,15 @@ namespace API.Services
             return new string(Enumerable.Repeat(chars, 6).Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
-        public bool SendSMS(string receptor, string authToken)
+        public bool SendVerificationSMS(string receptor, string authToken)
         {
             _logger.LogInformation(authToken);
+            return true;
+        }
+
+        public bool SendMessageSMS(string receptor, string message)
+        {
+            _logger.LogInformation(message);
             return true;
         }
     }

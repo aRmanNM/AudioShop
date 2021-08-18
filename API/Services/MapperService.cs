@@ -6,6 +6,7 @@ using API.Interfaces;
 using API.Models;
 using API.Models.Ads;
 using API.Models.Landing;
+using API.Models.Messages;
 
 namespace API.Services
 {
@@ -281,6 +282,31 @@ namespace API.Services
                 Title = ad.Title,
                 File = ad.File
             };
+        }
+
+        public MessageDto MapMessageToMessageDto(Message message)
+        {
+            return new MessageDto
+            {
+                Id = message.Id,
+                Body = message.Body,
+                Link = message.Link,
+                CourseId = message.CourseId,
+                Title = message.Title,
+                ClockRangeBegin = message.ClockRangeBegin,
+                ClockRangeEnd = message.ClockRangeEnd,
+                CreatedAt = message.CreatedAt,
+                IsRepeatable = message.IsRepeatable,
+                MessageType = message.MessageType,
+                SendPush = message.SendPush,
+                SendSMS = message.SendSMS,
+                UserId = message.UserId
+            };
+        }
+
+        public Message MapMessageDtoToMessage(MessageDto messageDto)
+        {
+            throw new NotImplementedException();
         }
     }
 }

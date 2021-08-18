@@ -103,7 +103,7 @@ namespace API.Controllers
                 }
 
                 var authToken = _smsService.GenerateAuthToken();
-                var res = _smsService.SendSMS(user.PhoneNumber, authToken);
+                var res = _smsService.SendVerificationSMS(user.PhoneNumber, authToken);
                 if (!res)
                 {
                     return BadRequest("failed to send sms");
@@ -145,7 +145,7 @@ namespace API.Controllers
             }
 
             var authToken = _smsService.GenerateAuthToken();
-            var res = _smsService.SendSMS(verificationDto.PhoneNumber, authToken);
+            var res = _smsService.SendVerificationSMS(verificationDto.PhoneNumber, authToken);
             if (!res)
             {
                 return BadRequest("failed to send sms");

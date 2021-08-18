@@ -3,6 +3,7 @@ using API.Dtos;
 using API.Models;
 using API.Models.Ads;
 using API.Models.Landing;
+using API.Models.Messages;
 
 namespace API.Interfaces
 {
@@ -18,6 +19,7 @@ namespace API.Interfaces
         StatDto MapStatToStatDto(Stat stat);
         OrderWithUserInfo MapOrderToOrderWithUserInfo(Order order);
         AdDto MapAdToAdDto(Ad ad);
+        MessageDto MapMessageToMessageDto(Message message);
 
         // DTO to Model
         User MapRegisterDtoToUser(RegisterDto registerDto);
@@ -28,5 +30,6 @@ namespace API.Interfaces
         SliderItem MapSliderItemDtoToSliderItem(SliderItemDto sliderItemDto);
         Landing MapLandingDtoToLanding(LandingDto landingDto);
         Ad MapAdDtoToAd(AdDto adDto);
+        Message MapMessageDtoToMessage(MessageDto messageDto);
     }
 }

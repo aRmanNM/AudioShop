@@ -10,5 +10,6 @@ namespace API.Interfaces
         Task<Progress> CreateProgress(Progress progress);
         void UpdateProgress(Progress progress);
         Task DeleteProgress(int progressId);
+        Task<bool> CheckIfAlreadyListenedAsync(int courseId, string userId);
     }
 }
