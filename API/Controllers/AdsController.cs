@@ -71,7 +71,6 @@ namespace API.Controllers
             return Ok(_mapper.MapAdToAdDto(randomAd));
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpGet("places")]
         public async Task<ActionResult<IEnumerable<Place>>> GetPlaces()
         {
