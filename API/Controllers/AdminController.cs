@@ -36,6 +36,18 @@ namespace API.Controllers
             _userRepository = userRepository;
         }
 
+        [HttpGet("users")]
+        public async Task<ActionResult<User>> GetInfoByUserName([FromQuery] string userName)
+        {
+            var user = await _userRepository.FindUserByUserNameAsync(userName);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(user);
+        }
+
         [HttpGet("members")]
         public async Task<ActionResult<IEnumerable<User>>> GetMembers()
         {

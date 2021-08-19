@@ -320,7 +320,21 @@ namespace API.Services
 
         public Message MapMessageDtoToMessage(MessageDto messageDto)
         {
-            throw new NotImplementedException();
+            return new Message {
+                Id = messageDto.Id,
+                Body = messageDto.Body,
+                Link = messageDto.Link,
+                CourseId = messageDto.CourseId,
+                Title = messageDto.Title,
+                ClockRangeBegin = messageDto.ClockRangeBegin,
+                ClockRangeEnd = messageDto.ClockRangeEnd,
+                CreatedAt = messageDto.CreatedAt,
+                IsRepeatable = messageDto.IsRepeatable,
+                MessageType = messageDto.MessageType,
+                SendPush = messageDto.SendPush,
+                SendSMS = messageDto.SendSMS,
+                UserId = messageDto.UserId
+            };
         }
     }
 }

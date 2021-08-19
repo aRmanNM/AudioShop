@@ -6,6 +6,7 @@ using API.Dtos;
 using API.Helpers;
 using API.Interfaces;
 using API.Models.Messages;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Repositories
@@ -26,16 +27,16 @@ namespace API.Repositories
             if (message.MessageType == MessageType.User)
             {
                await _context.UserMessages.AddAsync(new UserMessage {
-                    MessageId = message.Id,
+                    Message = message,
                     UserId = message.UserId,
-                    IsSeen = true
+                    IsSeen = false
                 });
             }
 
             return message;
         }
 
-        public async Task SetUserMessageToSeen(string userId, int messageId)
+        public async Task SetUserMessageToSeen(string userId, [FromQuery] int messageId)
         {
             var userMessage = await _context.UserMessages.FirstOrDefaultAsync(um => um.MessageId == messageId && um.UserId == userId);
             if (userMessage == null)
@@ -45,19 +46,23 @@ namespace API.Repositories
                     UserId = userId,
                     IsSeen = true
                 });
+            } else {
+                userMessage.IsSeen = true;
             }
-
-            userMessage.IsSeen = true;
         }
 
-        public Message DeleteMessage(int messageId)
+        public async Task DeleteMessage(int messageId)
         {
-            throw new System.NotImplementedException();
+            var message = await GetMessageByIdAsync(messageId);
+            _context.Messages.Remove(message);
+            var userMessages = await _context.UserMessages.Where(um => um.MessageId == messageId).ToListAsync();
+            _context.UserMessages.RemoveRange(userMessages);
         }
 
         public Message EditMessage(Message message)
         {
-            throw new System.NotImplementedException();
+            _context.Messages.Update(message);
+            return message;
         }
 
         public async Task<IEnumerable<Message>> GetGeneralMessagesAsync()
@@ -65,12 +70,13 @@ namespace API.Repositories
             return await _context.Messages
                 .Where(m => m.MessageType == MessageType.General ||
                             m.MessageType == MessageType.FreeEpisode ||
-                            m.MessageType == MessageType.BuyCourse).ToListAsync();
+                            m.MessageType == MessageType.BuyCourse ||
+                            m.MessageType == MessageType.Coupon).ToListAsync();
         }
 
-        public Task<Message> GetMessageByIdAsync(int id)
+        public async Task<Message> GetMessageByIdAsync(int id)
         {
-            throw new System.NotImplementedException();
+            return await _context.Messages.FirstOrDefaultAsync(m => m.Id == id);
         }
 
         public async Task<IEnumerable<MessageDto>> GetUserMessagesAsync(string userId, bool onlyUnseen = false)

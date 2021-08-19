@@ -96,5 +96,10 @@ namespace API.Repositories
 
             return result;
         }
+
+        public async Task<User> FindUserByUserNameAsync(string userName)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.UserName.ToLower() == userName.ToLower());
+        }
     }
 }

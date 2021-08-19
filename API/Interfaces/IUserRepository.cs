@@ -12,6 +12,7 @@ namespace API.Interfaces
     {
         Task<User> GetSalespersonByCouponCodeAsync(string couponCode);
         Task<User> FindUserByPhoneNumberAsync(string phoneNumber);
+        Task<User> FindUserByUserNameAsync(string userName);
         Task<User> FindUserByIdAsync(string userId);
         Task<PaginatedResult<User>> GetSalespersonsAsync(string search, SalespersonCredStatus? status, int pageNumber = 1, int pageSize = 10);
     }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -51,9 +52,18 @@ namespace API.Controllers
         [HttpGet("users/{userId}")]
         public async Task<ActionResult<IEnumerable<MessageDto>>> GetUserMessages(string userId, bool onlyUnseen = false)
         {
-            var messages = (await _messageRepository.GetUserMessagesAsync(userId, onlyUnseen)).ToList();
-
+            //
             // TODO: Following codes needs serious refactoring!
+            //
+
+            var userMessageDtos = (await _messageRepository.GetUserMessagesAsync(userId, onlyUnseen)).ToList();
+            var generalMessages = await _messageRepository.GetGeneralMessagesAsync();
+            var generalMessageDtos = generalMessages.Select(gm => _mapperService.MapMessageToMessageDto(gm)).ToList();
+
+            var messages = new List<MessageDto>();
+            messages.AddRange(generalMessageDtos);
+            messages.AddRange(userMessageDtos);
+            messages = messages.OrderByDescending(m => m.CreatedAt).ToList();
 
             // filter course messages and coupon messages if user already bought atleast one episode of course
             var courseMessages = messages.Where(m => m.MessageType == MessageType.BuyCourse &&
@@ -93,6 +103,7 @@ namespace API.Controllers
         public async Task<ActionResult<MessageDto>> CreateMessage(MessageDto messageDto)
         {
             var message = _mapperService.MapMessageDtoToMessage(messageDto);
+            message.CreatedAt = DateTime.Now;
             await _messageRepository.CreateMessageAsync(message);
             await _unitOfWork.CompleteAsync();
 
@@ -108,6 +119,7 @@ namespace API.Controllers
             return Ok(_mapperService.MapMessageToMessageDto(message));
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut]
         public async Task<ActionResult> EditMessage(MessageDto messageDto)
         {
@@ -117,11 +129,28 @@ namespace API.Controllers
             return Ok();
         }
 
+        [Authorize(Roles = "Admin")]
+        [HttpDelete]
+        public async Task<ActionResult> DeleteMessage(int messageId)
+        {
+            await _messageRepository.DeleteMessage(messageId);
+            await _unitOfWork.CompleteAsync();
+            return Ok();
+        }
+
         [HttpPut("users/{userId}")]
         public async Task<ActionResult> SetMessageAsSeen(string userId, int messageId)
         {
-            await _messageRepository.SetUserMessageToSeen(userId, messageId);
-            await _unitOfWork.CompleteAsync();
+            try
+            {
+                await _messageRepository.SetUserMessageToSeen(userId, messageId);
+                await _unitOfWork.CompleteAsync();
+            }
+            catch (System.Exception)
+            {
+                return BadRequest();
+            }
+
             return Ok();
         }
     }

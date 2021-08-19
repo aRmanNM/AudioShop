@@ -14,7 +14,7 @@ namespace API.Models.Messages
         public int ClockRangeBegin { get; set; }
         public int ClockRangeEnd { get; set; }
         public bool IsRepeatable { get; set; }
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
         public bool SendSMS { get; set; }
         public bool SendPush { get; set; }
         public MessageType MessageType { get; set; }

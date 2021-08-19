@@ -12,7 +12,7 @@ namespace API.Interfaces
         Task<IEnumerable<MessageDto>> GetUserMessagesAsync(string userId, bool onlyUnseen = false);
         Task<Message> CreateMessageAsync(Message message);
         Message EditMessage(Message message);
-        Message DeleteMessage(int messageId);
+        Task DeleteMessage(int messageId);
         Task SetUserMessageToSeen(string userId, int messageId);
     }
 }
