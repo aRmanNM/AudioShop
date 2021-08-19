@@ -61,7 +61,14 @@ namespace API.Services
             {
                 Token = await _tokenService.CreateTokenAsync(user),
                 HasPhoneNumber = user.PhoneNumber != null,
-                SalespersonCouponCode = user.CouponCode
+                SalespersonCouponCode = user.CouponCode,
+                PhoneNumber = user.PhoneNumber,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                City = user.City,
+                Age = user.Age,
+                Gender = user.Gender,
+                Employed = user.Employed
             };
         }
 

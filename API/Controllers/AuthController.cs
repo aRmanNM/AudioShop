@@ -178,7 +178,7 @@ namespace API.Controllers
         }
 
         [HttpPost("verifyToken")]
-        public async Task<ActionResult> VerifyToken(VerificationDto verificationDto)
+        public async Task<ActionResult<UserDto>> VerifyToken(VerificationDto verificationDto)
         {
             var user = !string.IsNullOrEmpty(verificationDto.UserId) ?
                 await _userManager.FindByIdAsync(verificationDto.UserId) :
@@ -196,17 +196,12 @@ namespace API.Controllers
 
             user.VerificationToken = "";
 
-            if (!string.IsNullOrEmpty(user.PhoneNumber))
-            {
-                await _userManager.UpdateAsync(user);
-                var userDto = await _mapper.MapUserToUserDtoAsync(user);
-                return Ok(userDto);
-            }
+            var userDto = await _mapper.MapUserToUserDtoAsync(user);
 
             user.PhoneNumber = verificationDto.PhoneNumber;
             user.PhoneNumberConfirmed = true;
             await _userManager.UpdateAsync(user);
-            return Ok();
+            return Ok(userDto);
         }
 
         [HttpGet("phoneexists")]
