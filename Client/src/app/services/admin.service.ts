@@ -73,4 +73,12 @@ export class AdminService {
     formData.append('file', photo);
     return this.http.post(environment.apiUrl + 'api/checkouts/' + checkoutId + '/photo', formData);
   }
+
+  getUserInfo(userName: string): Observable<any> {
+    return this.http.get(this.baseUrl + '/users', {
+      params: {
+        userName
+      }
+    });
+  }
 }

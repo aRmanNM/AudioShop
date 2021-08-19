@@ -1,0 +1,73 @@
+<mat-tab-group animationDuration="0ms" mat-align-tabs="center" mat-stretch-tabs backgroundColor="primary" dir="rtl">
+  <mat-tab label="اطلاعات پایه">
+<!--    <div style="height: 500px; font-size: small;">-->
+      <form [formGroup]="messageForm" (ngSubmit)="createOrEditMessage()">
+        <mat-form-field color="accent" hidden>
+          <mat-label>شناسه</mat-label>
+          <input matInput type="text" formControlName="id"/>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>عنوان</mat-label>
+          <input matInput type="text" formControlName="title"/>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>بدنه اعلان</mat-label>
+          <textarea rows="5" matInput formControlName="body"></textarea>
+        </mat-form-field>
+        <div class="form-group">
+          <mat-form-field appearance="fill">
+            <mat-label>لینک</mat-label>
+            <input matInput type="text" formControlName="link"/>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>شناسه دوره</mat-label>
+            <input matInput type="number" formControlName="courseId"/>
+          </mat-form-field>
+        </div>
+        <mat-form-field appearance="fill">
+          <mat-label>شناسه کاربر (با پر کردن این فیلد نوع اعلان را روی اعلان کاربر تنظیم کنید)</mat-label>
+          <input matInput type="text" formControlName="userId"/>
+        </mat-form-field>
+        <div class="form-group">
+          <mat-form-field appearance="fill">
+            <mat-label>محدوده ارسال اعلان (شروع)</mat-label>
+            <input matInput type="number" formControlName="clockRangeBegin" min="0" max="24"/>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>محدوده ارسال اعلان (پایان)</mat-label>
+            <input matInput type="number" formControlName="clockRangeEnd" min="0" max="24"/>
+          </mat-form-field>
+        </div>
+        <mat-form-field appearance="fill">
+          <mat-label>نوع اعلان</mat-label>
+          <mat-select formControlName="messageType">
+            <mat-option value="0">اعلان عمومی</mat-option>
+            <mat-option value="1">اعلان کاربر</mat-option>
+            <mat-option value="2">پروموت دوره های رایگان</mat-option>
+            <mat-option value="3">پروموت خرید دوره</mat-option>
+            <mat-option value="4">پروموت تخفیف</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <div class="form-group">
+          <mat-slide-toggle [disabled]="messageForm.value.messageType != 1" class="mt-2 mb-3" formControlName="sendSMS">اس ام اس (ارسال بعد از ساخت)</mat-slide-toggle>
+          <mat-slide-toggle class="mt-2 mb-3" formControlName="sendPush">ارسال پوش</mat-slide-toggle>
+          <mat-slide-toggle class="mt-2 mb-3" formControlName="isRepeatable">تکرارپذیری</mat-slide-toggle>
+        </div>
+        <button
+          mat-raised-button
+          color="primary"
+          [disabled]="!messageForm.valid"
+          type="submit">
+          <span *ngIf="data.message">ویرایش</span>
+          <span *ngIf="!data.message">درج اعلان جدید</span>
+        </button>
+
+      </form>
+<!--    </div>-->
+  </mat-tab>
+</mat-tab-group>
+
+<mat-progress-bar color="accent" mode="indeterminate" *ngIf="spinnerService.visibility | async"></mat-progress-bar>
+
+<!--{{ courseForm.value | json }}-->
+<!--{{ categories | json }}-->

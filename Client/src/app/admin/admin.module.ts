@@ -39,6 +39,10 @@ import {LandingsCreateOrEditComponent} from './landings/landings-create-or-edit/
 import {AdsComponent} from './ads/ads.component';
 import {AdsCreateEditComponent} from './ads/ads-create-edit/ads-create-edit.component';
 import {PlacesComponent} from './ads/places/places.component';
+import {MessagesComponent} from './messages/messages.component';
+import {MessagesCreateEditComponent} from './messages/messages-create-edit/messages-create-edit.component';
+import { UsersComponent } from './users/users.component';
+import { UserMessagesComponent } from './messages/user-messages/user-messages.component';
 
 
 @NgModule({
@@ -73,7 +77,11 @@ import {PlacesComponent} from './ads/places/places.component';
     LandingsCreateOrEditComponent,
     AdsComponent,
     AdsCreateEditComponent,
-    PlacesComponent
+    PlacesComponent,
+    MessagesComponent,
+    MessagesCreateEditComponent,
+    UsersComponent,
+    UserMessagesComponent
   ],
   imports: [
     CommonModule,

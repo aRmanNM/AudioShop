@@ -1,0 +1,31 @@
+
+<mat-toolbar>
+  <mat-form-field appearance="outline" class="search-input">
+    <mat-label>نام کاربری</mat-label>
+    <input type="text" matInput  min="1" [(ngModel)]="userName" placeholder="نام کاربری">
+  </mat-form-field>
+  <button mat-mini-fab color="primary" style="transform: scale(0.6);" (click)="getUser()" [disabled]="!userName">
+    <mat-icon>sort</mat-icon>
+  </button>
+</mat-toolbar>
+
+<mat-card *ngIf="user" style="margin: 2em;">
+<!--  <mat-card-title>-->
+  <!--    <span>{{user.userName}}</span>-->
+  <!--    <span></span>-->
+  <!--  </mat-card-title>-->
+  <mat-card-content>
+    <p>نام کاربری: {{user.userName}}</p>
+    <p>نام و نام خانوادگی: {{user.firstName}} - {{user.lastName}}</p>
+    <p>شهر: {{user.city}}</p>
+    <p>کشور: {{user.country}}</p>
+    <p>سن: {{user.age}}</p>
+    <p>جنسیت:
+      <button mat-stroked-button color="primary" *ngIf="!user.gender == 0">مونث</button>
+      <button mat-stroked-button color="primary" *ngIf="user.gender == 1">مذکر</button>
+    </p>
+    <p>وضعیت اشتغال: {{user.employed}}</p>
+    <p>تاریخ ثبت: {{user.createdAt | PersianDate}}</p>
+    <p>شناسه کاربر: {{user.id}}</p>
+  </mat-card-content>
+</mat-card>
