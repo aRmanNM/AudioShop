@@ -196,10 +196,10 @@ namespace API.Controllers
 
             user.VerificationToken = "";
 
-            var userDto = await _mapper.MapUserToUserDtoAsync(user);
-
             user.PhoneNumber = verificationDto.PhoneNumber;
             user.PhoneNumberConfirmed = true;
+            var userDto = await _mapper.MapUserToUserDtoAsync(user);
+
             await _userManager.UpdateAsync(user);
             return Ok(userDto);
         }
