@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -86,6 +87,26 @@ namespace API.Controllers
                 "SALESPERSON" => await _userManager.AddToRoleAsync(user, "Salesperson"),
                 _ => null
             };
+
+            var userDto = await _mapper.MapUserToUserDtoAsync(user);
+            return Ok(userDto);
+        }
+
+        [HttpPost("updateUser")]
+        public async Task<ActionResult<UserDto>> UpdateUser(UserUpdateDto userUpdateDto, [FromQuery] string role = "member")
+        {
+            var configs = await _configRepository.GetConfigsByGroupAsync("General");
+            var user = await _userRepository.FindUserByIdAsync(userUpdateDto.UserId);
+
+            var updateProps = userUpdateDto.GetType().GetProperties();
+            foreach (var prop in updateProps)
+            {
+                user.GetType().GetProperty(prop.Name)?.SetValue(user, prop.GetValue(userUpdateDto));
+            }
+
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded) return BadRequest("failed to create user");
+
 
             var userDto = await _mapper.MapUserToUserDtoAsync(user);
             return Ok(userDto);

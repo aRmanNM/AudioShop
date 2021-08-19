@@ -23,6 +23,7 @@ namespace API.Interfaces
 
         // DTO to Model
         User MapRegisterDtoToUser(RegisterDto registerDto);
+        User MapUserUpdateDtoToUser(UserUpdateDto userUpdateDto);
         Task<UserDto> MapUserToUserDtoAsync(User user);
         Course MapCourseDtoToCourse(CourseDto courseDto);
         Episode MapEpisodeDtoToEpisode(EpisodeDto episodeDto);

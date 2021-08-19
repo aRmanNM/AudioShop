@@ -41,6 +41,20 @@ namespace API.Services
             };
         }
 
+        public User MapUserUpdateDtoToUser(UserUpdateDto userUpdateDto)
+        {
+            return new User()
+            {
+                Id = userUpdateDto.UserId,
+                FirstName = userUpdateDto.FirstName,
+                LastName = userUpdateDto.LastName,
+                City = userUpdateDto.City,
+                Age = userUpdateDto.Age,
+                Gender = userUpdateDto.Gender,
+                Employed = userUpdateDto.Employed
+            };
+        }
+
         public async Task<UserDto> MapUserToUserDtoAsync(User user)
         {
             return new UserDto
