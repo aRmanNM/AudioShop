@@ -1,4 +1,6 @@
-﻿using API.Models;
+﻿using System;
+using API.Helpers;
+using API.Models;
 
 namespace API.Dtos
 {
@@ -14,5 +16,7 @@ namespace API.Dtos
         public short Age { get; set; }
         public Gender Gender { get; set; }
         public bool Employed { get; set; }
+        public DateTime SubscriptionExpirationDate { get; set; }
+        public SubscriptionType SubscriptionType { get; set; }
     }
 }

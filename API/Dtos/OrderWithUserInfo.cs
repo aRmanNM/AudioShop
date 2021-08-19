@@ -1,4 +1,5 @@
 using System;
+using API.Helpers;
 using API.Models;
 
 namespace API.Dtos
@@ -16,5 +17,6 @@ namespace API.Dtos
         public string SalespersonCouponCode { get; set; }
         public string OtherCouponCode { get; set; }
         public string MemberName { get; set; }
+        public OrderType OrderType { get; set; }
     }
 }

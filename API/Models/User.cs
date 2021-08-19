@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations.Schema;
+using API.Helpers;
 using Microsoft.AspNetCore.Identity;
 
 namespace API.Models
@@ -38,6 +39,9 @@ namespace API.Models
 
         public ICollection<Favorite> FavoriteCoursesAndEpisodes { get; set; }
         public ICollection<Progress> ListeningsProgress { get; set; }
+
+        public DateTime SubscriptionExpirationDate { get; set; }
+        public SubscriptionType SubscriptionType { get; set; }
 
         public User()
         {

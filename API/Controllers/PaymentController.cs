@@ -1,8 +1,10 @@
+using System;
 using System.Threading.Tasks;
 using API.Dtos;
 using API.Helpers;
 using API.Interfaces;
 using API.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 
@@ -17,19 +19,22 @@ namespace API.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly ICouponRepository _couponRepository;
         private readonly IZarinPalService _zarinPalService;
+        private readonly UserManager<User> _userManager;
 
         public PaymentController(IOrderRepository orderRepository,
             IConfiguration config,
             IUserRepository userRepository,
             IUnitOfWork unitOfWork,
             ICouponRepository couponRepository,
-            IZarinPalService zarinPalService)
+            IZarinPalService zarinPalService,
+            UserManager<User> userManager)
         {
             _config = config;
             _userRepository = userRepository;
             _unitOfWork = unitOfWork;
             _couponRepository = couponRepository;
             _zarinPalService = zarinPalService;
+            _userManager = userManager;
             _orderRepository = orderRepository;
         }
 
@@ -41,9 +46,20 @@ namespace API.Controllers
                 return BadRequest();
             }
 
-           var result = await _zarinPalService.Request(new PaymentRequestDto() {
+            string description = order.OrderType switch
+            {
+                OrderType.Episode => "خرید قسمت جدید",
+                OrderType.Course => "خرید دوره جدید",
+                OrderType.MonthlySub => "خرید اشتراک ماهیانه",
+                OrderType.HalfYearlySub => "خرید اشتراک شش ماهه",
+                OrderType.YearlySub => "خرید اشتراک سالیانه",
+                _ => "خرید محصول جدید"
+            };
+
+            var result = await _zarinPalService.Request(new PaymentRequestDto()
+            {
                 CallbackUrl = _config["ApiUrl"] + "api/Payment/PaymentResult/" + order.Id,
-                Description = "خرید محصول جدید",
+                Description = description,
                 Amount = (int)(order.PriceToPay),
                 MerchantId = _config["MerchantId"]
             }, PaymentMode.zarinpal); // toggle sandbox here
@@ -63,7 +79,8 @@ namespace API.Controllers
                 var authority = HttpContext.Request.Query["Authority"].ToString();
                 var order = await _orderRepository.GetOrderByIdAsync(orderId);
 
-                var verification = await _zarinPalService.Verification(new PaymentVerificationDto() {
+                var verification = await _zarinPalService.Verification(new PaymentVerificationDto()
+                {
                     Amount = (int)(order.PriceToPay),
                     MerchantId = _config["MerchantId"],
                     Authority = authority
@@ -95,6 +112,35 @@ namespace API.Controllers
                     });
                 }
 
+                if (order.OrderType == OrderType.MonthlySub ||
+                    order.OrderType == OrderType.HalfYearlySub ||
+                    order.OrderType == OrderType.YearlySub)
+                {
+                    var user = await _userManager.FindByIdAsync(order.UserId);
+                    switch (order.OrderType)
+                    {
+                        case OrderType.MonthlySub:
+                            user.SubscriptionType = SubscriptionType.Monthly;
+                            user.SubscriptionExpirationDate = DateTime.Today.AddMonths(1);
+                            break;
+
+                        case OrderType.HalfYearlySub:
+                            user.SubscriptionType = SubscriptionType.HalfYearly;
+                            user.SubscriptionExpirationDate = DateTime.Today.AddMonths(6);
+                            break;
+
+                        case OrderType.YearlySub:
+                            user.SubscriptionType = SubscriptionType.Yearly;
+                            user.SubscriptionExpirationDate = DateTime.Today.AddMonths(12);
+                            break;
+
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    };
+
+                    await _userManager.UpdateAsync(user);
+                }
+
                 await _unitOfWork.CompleteAsync();
                 return View(new PaymentResultDto
                 {
@@ -103,7 +149,8 @@ namespace API.Controllers
                 });
             }
 
-            return View(new PaymentResultDto {
+            return View(new PaymentResultDto
+            {
                 PaymentSucceded = false,
                 RefId = 0
             });

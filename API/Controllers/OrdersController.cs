@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Dtos;
+using API.Helpers;
 using API.Interfaces;
 using API.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -40,21 +41,34 @@ namespace API.Controllers
         {
             var user = await _userManager.FindByIdAsync(basketDto.UserId);
 
+            if (user == null)
+            {
+                return NotFound("user not found!");
+            }
+
             // TODO: Create mapper
             var order = new Order
             {
-                UserId = basketDto.UserId,
+                UserId = user.Id,
                 TotalPrice = basketDto.TotalPrice,
                 Status = false,
                 Date = DateTime.Now,
                 Discount = basketDto.Discount,
                 PriceToPay = basketDto.PriceToPay,
                 OtherCouponCode = basketDto.OtherCouponCode,
-                SalespersonCouponCode = basketDto.SalespersonCouponCode
+                SalespersonCouponCode = basketDto.SalespersonCouponCode,
+                OrderType = basketDto.OrderType
             };
 
+            if (user.SubscriptionExpirationDate >= DateTime.Today &&
+                (order.OrderType == OrderType.EpisodeWithSub || order.OrderType == OrderType.CourseWithSub))
+            {
+                order.Status = true;
+            }
+
             // TODO: maybe we should create order episode items when order is successfull
-            order.OrderEpisodes = basketDto.EpisodeIds.Select(e => new OrderEpisode {
+            order.OrderEpisodes = basketDto.EpisodeIds.Select(e => new OrderEpisode
+            {
                 OrderId = order.Id,
                 EpisodeId = e
             }).ToArray();

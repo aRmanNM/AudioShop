@@ -68,7 +68,9 @@ namespace API.Services
                 City = user.City,
                 Age = user.Age,
                 Gender = user.Gender,
-                Employed = user.Employed
+                Employed = user.Employed,
+                SubscriptionExpirationDate = user.SubscriptionExpirationDate,
+                SubscriptionType = user.SubscriptionType
             };
         }
 
@@ -246,7 +248,8 @@ namespace API.Services
                 PaymentReceipt = order.PaymentReceipt,
                 PriceToPay = order.PriceToPay,
                 SalespersonCouponCode = order.SalespersonCouponCode,
-                TotalPrice = order.TotalPrice
+                TotalPrice = order.TotalPrice,
+                OrderType = order.OrderType
             };
         }
 
@@ -327,7 +330,8 @@ namespace API.Services
 
         public Message MapMessageDtoToMessage(MessageDto messageDto)
         {
-            return new Message {
+            return new Message
+            {
                 Id = messageDto.Id,
                 Body = messageDto.Body,
                 Link = messageDto.Link,

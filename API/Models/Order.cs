@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations.Schema;
+using API.Helpers;
 
 namespace API.Models
 {
@@ -30,6 +31,8 @@ namespace API.Models
 
         public string SalespersonCouponCode { get; set; }
         public string OtherCouponCode { get; set; }
+
+        public OrderType OrderType { get; set; }
 
         public ICollection<OrderEpisode> OrderEpisodes { get; set; }
 

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using API.Helpers;
 
 namespace API.Dtos
 {
@@ -11,6 +12,7 @@ namespace API.Dtos
         public string UserId { get; set; }
         public string SalespersonCouponCode { get; set; }
         public string OtherCouponCode { get; set; }
+        public OrderType OrderType { get; set; } = OrderType.Episode;
         public ICollection<int> EpisodeIds { get; set; }
 
         public BasketDto()
