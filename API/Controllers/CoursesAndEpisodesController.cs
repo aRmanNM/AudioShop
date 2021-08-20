@@ -109,7 +109,7 @@ namespace API.Controllers
         public async Task<ActionResult<Course>> UpdateCourse(Course course)
         {
             course.LastEdited = DateTime.Now;
-            var courseToUpdate = await _courseRepository.UpdateCourse(course);
+            var courseToUpdate = _courseRepository.UpdateCourse(course);
             await _courseRepository.DeleteCourseCategories(course.Id);
             await _unitOfWork.CompleteAsync();
 

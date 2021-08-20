@@ -31,7 +31,7 @@ namespace API.Repositories
             _context.Courses.RemoveRange(courses);
         }
 
-        public async Task<Course> UpdateCourse(Course course)
+        public Course UpdateCourse(Course course)
         {
             _context.Courses.Update(course);
             return course;
