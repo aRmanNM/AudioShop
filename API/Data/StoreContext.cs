@@ -2,6 +2,7 @@ using API.Models;
 using API.Models.Ads;
 using API.Models.Landing;
 using API.Models.Messages;
+using API.Models.Tickets;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -38,6 +39,8 @@ namespace API.Data
         public DbSet<AdPlace> AdPlaces { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<UserMessage> UserMessages { get; set; }
+        public DbSet<Ticket> Tickets { get; set; }
+        public DbSet<TicketResponse> TicketResponses { get; set; }
 
         public StoreContext(DbContextOptions<StoreContext> options) : base(options)
         {

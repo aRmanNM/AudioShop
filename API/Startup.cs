@@ -15,6 +15,7 @@ using API.Models;
 using API.Models.Options;
 using API.Repositories;
 using Microsoft.AspNetCore.StaticFiles;
+using System;
 
 namespace API
 {
@@ -54,8 +55,13 @@ namespace API
             services.AddScoped<ILandingRepository, LandingRepository>();
             services.AddScoped<IAdRepository, AdRepository>();
             services.AddScoped<IMessageRepository, MessageRepository>();
+            services.AddScoped<ITicketRepository, TicketRepository>();
 
-            services.AddSingleton<ISMSService, SMSService>();
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+                services.AddSingleton<ISMSService, FakeSMSService>();
+            else
+                services.AddSingleton<ISMSService, SMSService>();
+
             services.AddSingleton<IFileService, FileService>();
             services.AddSingleton<IZarinPalService, ZarinPalService>();
             services.AddSingleton<RandomService>();

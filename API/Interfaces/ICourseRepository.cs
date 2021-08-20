@@ -17,7 +17,6 @@ namespace API.Interfaces
         Task<Course> GetCourseByIdAsync(int id, bool withTracking = false);
         Task DeleteCourseCategories(int courseId);
         Task<IEnumerable<CourseCategory>> AdddCourseCategories(ICollection<CourseCategory> courseCategories);
-
         Task<IEnumerable<Course>> GetFeaturedCoursesAsync(CourseType courseType = CourseType.Course, int count = 10);
         Task<IEnumerable<Course>> GetTopSellersCoursesAsync(CourseType courseType = CourseType.Course, int count = 10);
         Task<IEnumerable<Course>> GetTopٰClickedCoursesAsync(CourseType courseType = CourseType.Course, int count = 10);
