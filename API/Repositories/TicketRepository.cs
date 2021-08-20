@@ -48,9 +48,15 @@ namespace API.Repositories
             return await _context.Tickets.FirstOrDefaultAsync(t => t.Id == ticketId);
         }
 
-        public async Task<IEnumerable<Ticket>> GetTickets(TicketStatus ticketStatus = TicketStatus.Pending)
+        public async Task<IEnumerable<Ticket>> GetTickets(bool finished = false)
         {
-            return await _context.Tickets.Where(t => t.TicketStatus == ticketStatus).ToListAsync();
+            if (finished)
+            {
+                return await _context.Tickets.Where(t => t.TicketStatus == TicketStatus.Finished).ToListAsync();
+            }
+
+            return await _context.Tickets.Where(t => t.TicketStatus == TicketStatus.Pending ||
+                t.TicketStatus == TicketStatus.AdminAnswered || t.TicketStatus == TicketStatus.MemberAnswered).ToListAsync();
         }
 
         public async Task<Ticket> GetTicketWithResponsesById(int ticketId)

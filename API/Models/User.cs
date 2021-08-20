@@ -43,6 +43,8 @@ namespace API.Models
         public DateTime SubscriptionExpirationDate { get; set; }
         public SubscriptionType SubscriptionType { get; set; }
 
+        public UserType UserType { get; set; }
+
         public User()
         {
             UserRoles = new Collection<UserRole>();

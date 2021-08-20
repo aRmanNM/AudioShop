@@ -41,6 +41,20 @@ namespace API.Controllers
             _progressRepository = progressRepository;
         }
 
+        [HttpGet("info")]
+        public async Task<ActionResult<User>> GetMemberInfo()
+        {
+            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var userDto = await _mapper.MapUserToUserDtoAsync(user);
+            return Ok(userDto);
+        }
+
         [HttpGet("Episodes/{userId}")]
         public async Task<ActionResult<EpisodeDto>> GetUserEpisodes(string userId)
         {

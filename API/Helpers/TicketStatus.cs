@@ -3,6 +3,8 @@ namespace API.Helpers
     public enum TicketStatus
     {
         Pending,
-        Answered
+        AdminAnswered,
+        MemberAnswered,
+        Finished
     }
 }

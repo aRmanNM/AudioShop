@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -26,7 +27,8 @@ namespace API.Repositories
 
             if (message.MessageType == MessageType.User)
             {
-               await _context.UserMessages.AddAsync(new UserMessage {
+                await _context.UserMessages.AddAsync(new UserMessage
+                {
                     Message = message,
                     UserId = message.UserId,
                     IsSeen = false
@@ -36,17 +38,20 @@ namespace API.Repositories
             return message;
         }
 
-        public async Task SetUserMessageToSeen(string userId, [FromQuery] int messageId)
+        public async Task SetUserMessageToSeen(string userId, int messageId)
         {
             var userMessage = await _context.UserMessages.FirstOrDefaultAsync(um => um.MessageId == messageId && um.UserId == userId);
             if (userMessage == null)
             {
-                await _context.UserMessages.AddAsync(new UserMessage {
+                await _context.UserMessages.AddAsync(new UserMessage
+                {
                     MessageId = messageId,
                     UserId = userId,
                     IsSeen = true
                 });
-            } else {
+            }
+            else
+            {
                 userMessage.IsSeen = true;
             }
         }

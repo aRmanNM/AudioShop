@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using API.Helpers;
 using API.Interfaces;
@@ -13,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class TicketsController : ControllerBase
@@ -48,12 +50,10 @@ namespace API.Controllers
         public async Task<ActionResult<TicketResponse>> CreateTicketResponse(TicketResponse ticketResponse)
         {
             await _ticketRepository.CreateResponse(ticketResponse);
-            await _unitOfWork.CompleteAsync();
 
-
+            var ticket = await _ticketRepository.GetTicketById(ticketResponse.TicketId);
             if (ticketResponse.IssuedByAdmin)
             {
-                var ticket = await _ticketRepository.GetTicketById(ticketResponse.TicketId);
                 var user = await _userManager.FindByIdAsync(ticket.UserId);
                 string messageBody = "تیکت با عنوان «" + ticket.Title + "» از طرف ادمین پاسخ داده شد";
                 var message = new Message
@@ -73,23 +73,29 @@ namespace API.Controllers
                 };
 
                 await _messageRepository.CreateMessageAsync(message);
-                await _unitOfWork.CompleteAsync();
+
+                ticket.TicketStatus = TicketStatus.AdminAnswered;
 
                 if (message.SendSMS && user.PhoneNumberConfirmed)
                 {
                     _smsService.SendMessageSMS(user.PhoneNumber, message.Body);
                 }
             }
+            else
+            {
+                ticket.TicketStatus = TicketStatus.MemberAnswered;
+            }
 
+            await _unitOfWork.CompleteAsync();
             return Ok(ticketResponse);
         }
 
 
         [HttpGet]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<Ticket>> GetTickets(TicketStatus ticketStatus = TicketStatus.Pending)
+        public async Task<ActionResult<Ticket>> GetTickets(bool isFinished = false)
         {
-            var tickets = await _ticketRepository.GetTickets(ticketStatus);
+            var tickets = await _ticketRepository.GetTickets(isFinished);
             if (!tickets.Any())
             {
                 return NoContent();
@@ -123,8 +129,17 @@ namespace API.Controllers
         }
 
         [HttpPut("{ticketId}")]
-        public async Task<ActionResult<Ticket>> EditTicket(int ticketId, Ticket ticket)
+        public async Task<ActionResult<Ticket>> FinishTicket(int ticketId)
         {
+            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var ticket = await _ticketRepository.GetTicketById(ticketId);
+
+            if (userId == null || ticket.UserId != userId)
+            {
+                return BadRequest();
+            }
+
+            ticket.TicketStatus = TicketStatus.Finished;
             _ticketRepository.EditTicket(ticket);
             await _unitOfWork.CompleteAsync();
 

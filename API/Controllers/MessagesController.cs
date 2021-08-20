@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 using API.Dtos;
 using API.Helpers;
 using API.Interfaces;
+using API.Models;
 using API.Models.Messages;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -51,19 +53,38 @@ namespace API.Controllers
         }
 
         [HttpGet("users/{userId}")]
-        public async Task<ActionResult<IEnumerable<MessageDto>>> GetMessagesForUser(string userId, bool onlyUnseen = false)
+        public async Task<ActionResult<IEnumerable<MessageDto>>> GetMessagesForUser(string userId, bool onlyUnseen = false, bool onlyUserMessages = false)
         {
+            // A hack to enable entering userName :|
+            Guid something;
+            if (!Guid.TryParse(userId, out something))
+            {
+                var user = await _userRepository.FindUserByUserNameAsync(userId);
+                if (user == null)
+                {
+                    return NotFound();
+                }
+
+                userId = user.Id;
+            }
+
+
             //
             // TODO: Following codes needs serious refactoring!
             //
 
-            var userMessageDtos = (await _messageRepository.GetUserMessagesAsync(userId, onlyUnseen)).ToList();
-            var generalMessages = await _messageRepository.GetGeneralMessagesAsync();
-            var generalMessageDtos = generalMessages.Select(gm => _mapperService.MapMessageToMessageDto(gm)).ToList();
-
             var messages = new List<MessageDto>();
-            messages.AddRange(generalMessageDtos);
+
+            var userMessageDtos = (await _messageRepository.GetUserMessagesAsync(userId, onlyUnseen)).ToList();
             messages.AddRange(userMessageDtos);
+
+            if (!onlyUserMessages)
+            {
+                var generalMessages = await _messageRepository.GetGeneralMessagesAsync();
+                var generalMessageDtos = generalMessages.Select(gm => _mapperService.MapMessageToMessageDto(gm)).ToList();
+                messages.AddRange(generalMessageDtos);
+            }
+
             messages = messages.OrderByDescending(m => m.CreatedAt).ToList();
 
             // filter course messages and coupon messages if user already bought atleast one episode of course

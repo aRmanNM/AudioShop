@@ -7,7 +7,7 @@ namespace API.Interfaces
 {
     public interface ITicketRepository
     {
-        Task<IEnumerable<Ticket>> GetTickets(TicketStatus ticketStatus = TicketStatus.Pending);
+        Task<IEnumerable<Ticket>> GetTickets(bool finished = false);
         Task<Ticket> GetTicketWithResponsesById(int ticketId);
         Task<Ticket> GetTicketById(int ticketId);
         Task<Ticket> CreateTicket(Ticket ticket);

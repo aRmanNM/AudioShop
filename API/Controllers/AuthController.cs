@@ -3,6 +3,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using API.Dtos;
+using API.Helpers;
 using API.Interfaces;
 using API.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -58,6 +59,12 @@ namespace API.Controllers
 
             var configs = await _configRepository.GetConfigsByGroupAsync("General");
             var user = _mapper.MapRegisterDtoToUser(registerDto);
+            user.UserType = role.ToUpper() switch
+            {
+                "SALESPERSON" => UserType.Salesperson,
+                "MEMBER" => UserType.Member,
+                _ => UserType.Other
+            };
 
             if (registerDto.SalespersonCouponCode != null && role.ToUpper() != "SALESPERSON")
             {
@@ -233,7 +240,7 @@ namespace API.Controllers
 
         // TODO: Don't keep this bullshit.
         [HttpGet("resetpassword")]
-        public async Task<ActionResult> ResetPassword([FromQuery] string userName , [FromQuery] string newPassword ,[FromQuery] string secret)
+        public async Task<ActionResult> ResetPassword([FromQuery] string userName, [FromQuery] string newPassword, [FromQuery] string secret)
         {
             if (secret != _config["Pass:Secret"])
             {
