@@ -41,6 +41,7 @@ namespace API.Controllers
             _mapperService = mapperService;
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MessageDto>>> GetGeneralMessages()
         {
@@ -50,7 +51,7 @@ namespace API.Controllers
         }
 
         [HttpGet("users/{userId}")]
-        public async Task<ActionResult<IEnumerable<MessageDto>>> GetUserMessages(string userId, bool onlyUnseen = false)
+        public async Task<ActionResult<IEnumerable<MessageDto>>> GetMessagesForUser(string userId, bool onlyUnseen = false)
         {
             //
             // TODO: Following codes needs serious refactoring!

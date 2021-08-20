@@ -81,7 +81,10 @@ namespace API.Repositories
 
         public async Task<IEnumerable<MessageDto>> GetUserMessagesAsync(string userId, bool onlyUnseen = false)
         {
-            var userMessages = _context.UserMessages.AsQueryable();
+            var userMessages = _context.UserMessages
+                .Include(um => um.Message)
+                .Where(um => um.UserId == userId && um.Message.MessageType == MessageType.User)
+                .AsQueryable();
 
             if (onlyUnseen)
             {
