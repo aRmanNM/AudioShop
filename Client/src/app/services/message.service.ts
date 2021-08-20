@@ -38,8 +38,13 @@ export class MessageService {
     });
   }
 
-  getUserMessages(userId: string): Observable<Message[]> {
-    return this.http.get<Message[]>(this.baseUrl + '/users/' + userId);
+  getMessagesForUser(userId: string, onlyUnseen: boolean = false, onlyUserMessages: boolean = false): Observable<Message[]> {
+    return this.http.get<Message[]>(this.baseUrl + '/users/' + userId, {
+      params: {
+        onlyUnseen: onlyUnseen.toString(),
+        onlyUserMessages: onlyUserMessages.toString()
+      }
+    });
   }
 
 }

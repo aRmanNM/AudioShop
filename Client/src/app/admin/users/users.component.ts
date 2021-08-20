@@ -16,6 +16,7 @@ export class UsersComponent implements OnInit {
   }
 
   getUser(): void {
+    this.user = null;
     this.adminService.getUserInfo(this.userName).subscribe((res) => {
       this.user = res;
     });

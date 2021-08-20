@@ -51,7 +51,7 @@ export class CoursesComponent implements OnInit {
   openAddOrEditDialog(course: Course): void {
     this.dialogActive = true;
     const dialogRef = this.dialog.open(CreateOrEditComponent, {
-      width: '400px',
+      width: '700px',
       data: {course}
     });
 

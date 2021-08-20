@@ -1,14 +1,13 @@
 <mat-tab-group animationDuration="0ms" mat-align-tabs="center" mat-stretch-tabs backgroundColor="primary" dir="rtl">
   <mat-tab label="اعلان های کاربر">
     <mat-form-field appearance="outline" class="search-input">
-      <mat-label>شناسه کاربر</mat-label>
+      <mat-label>شناسه کاربر یا نام کاربری</mat-label>
       <input type="text" matInput min="1" [(ngModel)]="userId" placeholder="شناسه کاربر">
     </mat-form-field>
-    <button mat-mini-fab color="primary" style="transform: scale(0.6);" (click)="getUserMessages()"
+    <button mat-mini-fab color="primary" style="transform: scale(0.6);" (click)="getMessagesForUser()"
             [disabled]="!userId">
       <mat-icon>sort</mat-icon>
     </button>
-
     <!--<p *ngIf="messages">messages found!</p>-->
     <div style="height: 500px;">
 
@@ -32,9 +31,9 @@
             <button mat-stroked-button color="accent" *ngIf="message.messageType == 1">اعلان کاربر</button>
           </td>
         </ng-container>
-        <ng-container matColumnDef="courseId">
-          <th mat-header-cell *matHeaderCellDef>شناسه دوره</th>
-          <td mat-cell *matCellDef="let message"> {{message.courseId}}</td>
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef>تاریخ</th>
+          <td mat-cell *matCellDef="let message"> {{message.createdAt | PersianDate}}</td>
         </ng-container>
         <ng-container matColumnDef="clockRange">
           <th mat-header-cell *matHeaderCellDef>محدوده ارسال نوتیف</th>

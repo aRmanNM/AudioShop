@@ -1,0 +1,58 @@
+<mat-toolbar>
+  <mat-form-field appearance="standard">
+    <mat-label>انتخاب تیکت ها</mat-label>
+    <mat-select [(value)]="isFinished">
+      <mat-option value="false">فعال</mat-option>
+      <mat-option value="true" >اتمام یافته</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <button mat-flat-button color="primary" (click)="refreshTickets()">نمایش</button>
+  <span class="spacer"></span>
+  <button mat-mini-fab (click)="refreshTickets()">
+    <mat-icon>refresh</mat-icon>
+  </button>
+</mat-toolbar>
+
+<span *ngIf="!dialogActive">
+  <mat-progress-bar color="accent" mode="indeterminate" *ngIf="spinnerService.visibility | async"></mat-progress-bar>
+</span>
+
+<table mat-table [dataSource]="tickets">
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef>شناسه</th>
+    <td mat-cell *matCellDef="let ticket"> {{ticket.id}} </td>
+  </ng-container>
+  <ng-container matColumnDef="userName">
+    <th mat-header-cell *matHeaderCellDef>نام کاربری</th>
+    <td mat-cell *matCellDef="let ticket"> {{ticket.userName}} </td>
+  </ng-container>
+  <ng-container matColumnDef="title">
+    <th mat-header-cell *matHeaderCellDef>عنوان تیکت</th>
+    <td mat-cell *matCellDef="let ticket"> {{ticket.title}} </td>
+  </ng-container>
+  <ng-container matColumnDef="createdAt">
+    <th mat-header-cell *matHeaderCellDef>تاریخ درج</th>
+    <td mat-cell *matCellDef="let ticket"> {{ticket.createdAt | PersianDate}} </td>
+  </ng-container>
+  <ng-container matColumnDef="ticketStatus">
+    <th mat-header-cell *matHeaderCellDef>وضعیت</th>
+    <td mat-cell *matCellDef="let ticket">
+      <button mat-stroked-button color="warn" *ngIf="ticket.ticketStatus == 0">در انتظار پاسخ</button>
+      <button mat-stroked-button color="primary" *ngIf="ticket.ticketStatus == 1">پاسخ داده شده</button>
+      <button mat-stroked-button color="warn" *ngIf="ticket.ticketStatus == 2">در انتظار پاسخ</button>
+      <button mat-stroked-button color="accent" *ngIf="ticket.ticketStatus == 3">اتمام یافته</button>
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef="let ticket">
+      <div class="actions">
+        <button matTooltip="پاسخ ها" mat-mini-fab color="primary" (click)="openResponseDialog(ticket.id)">
+          <mat-icon>chats</mat-icon>
+        </button>
+      </div>
+    </td>
+  </ng-container>
+  <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+  <tr mat-row *matRowDef="let ticket; columns: columnsToDisplay"></tr>
+</table>

@@ -11,7 +11,7 @@ import {SpinnerService} from '../../../services/spinner.service';
 export class UserMessagesComponent implements OnInit {
   userId: string;
   messages: any[] = [];
-  columnsToDisplay = ['id', 'title', 'messageType', 'courseId', 'clockRange', 'sendPush', 'sendSMS'];
+  columnsToDisplay = ['id', 'title', 'messageType', 'date', 'clockRange', 'sendPush', 'sendSMS'];
 
   constructor(private messageService: MessageService,
               private snackBar: MatSnackBar,
@@ -21,8 +21,8 @@ export class UserMessagesComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  getUserMessages(): void {
-    this.messageService.getUserMessages(this.userId).subscribe((res) => {
+  getMessagesForUser(): void {
+    this.messageService.getMessagesForUser(this.userId, false, true).subscribe((res) => {
       this.messages = res;
     });
   }
@@ -34,7 +34,7 @@ export class UserMessagesComponent implements OnInit {
         this.snackBar.open('پیام با موفقیت حذف شد', null, {
           duration: 3000,
         });
-        this.getUserMessages();
+        this.getMessagesForUser();
       }, error => {
         this.snackBar.open('حذف پیام با خطا روبرو شد', null, {
           duration: 3000,

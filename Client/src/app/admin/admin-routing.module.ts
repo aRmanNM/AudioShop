@@ -19,6 +19,7 @@ import {LandingsComponent} from './landings/landings.component';
 import {AdsComponent} from './ads/ads.component';
 import {MessagesComponent} from './messages/messages.component';
 import {UsersComponent} from './users/users.component';
+import {TicketsComponent} from './tickets/tickets.component';
 
 const routes: Routes = [
   {
@@ -40,7 +41,8 @@ const routes: Routes = [
       {path: 'landings', component: LandingsComponent, canActivate: [AdminAuthGuard], data: {reuseRoute: true}},
       {path: 'ads', component: AdsComponent, canActivate: [AdminAuthGuard], data: {reuseRoute: true}},
       {path: 'messages', component: MessagesComponent, canActivate: [AdminAuthGuard], data: {reuseRoute: true}},
-      {path: 'users', component: UsersComponent, canActivate: [AdminAuthGuard], data: {reuseRoute: true}}
+      {path: 'users', component: UsersComponent, canActivate: [AdminAuthGuard], data: {reuseRoute: true}},
+      {path: 'tickets', component: TicketsComponent, canActivate: [AdminAuthGuard], data: {reuseRoute: true}}
     ]
   }
 ];

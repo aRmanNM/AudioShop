@@ -1,0 +1,42 @@
+<mat-tab-group animationDuration="0ms" mat-align-tabs="center" mat-stretch-tabs backgroundColor="primary" dir="rtl">
+  <mat-tab label="صفحه اختصاصی تیکت">
+    <div style="margin-top: 10px; height: 400px; overflow: auto;">
+      <mat-card style="background-color: lightgrey;" >
+        <mat-card-content style="text-align: right;">
+          <p style="float: left; position: sticky;">{{ticketWithResponses.createdAt | PersianDate}}</p>
+          <p style="text-align: right; font-weight: bold;">- {{ticketWithResponses.title}}</p>
+          <p style="text-align: right;">- {{ticketWithResponses.description}}</p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card [class.admin-response]="response.issuedByAdmin" [class.user-response]="!response.issuedByAdmin"
+                style="margin-top: 1em;" *ngFor="let response of ticketWithResponses.ticketResponses">
+        <mat-card-content>
+          <p style="position: sticky; float: left;" *ngIf="response.issuedByAdmin">ادمین - {{response.createdAt | PersianDate}}</p>
+          <p style="position: sticky; float: left;" *ngIf="!response.issuedByAdmin">کاربر - {{response.createdAt | PersianDate}}</p>
+          <p>- {{response.body}}</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <form [formGroup]="responseForm" (ngSubmit)="createResponse()">
+      <mat-form-field color="accent" hidden>
+        <mat-label>شناسه</mat-label>
+        <input matInput type="text" formControlName="id"/>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>متن پاسخ</mat-label>
+        <textarea rows="5" matInput formControlName="body"></textarea>
+      </mat-form-field>
+      <button
+        mat-raised-button
+        color="primary"
+        [disabled]="!responseForm.valid"
+        type="submit">
+        درج پاسخ
+      </button>
+    </form>
+
+
+  </mat-tab>
+</mat-tab-group>
+<mat-progress-bar color="accent" mode="indeterminate" *ngIf="spinnerService.visibility | async"></mat-progress-bar>

@@ -10,10 +10,6 @@
 </mat-toolbar>
 
 <mat-card *ngIf="user" style="margin: 2em;">
-<!--  <mat-card-title>-->
-  <!--    <span>{{user.userName}}</span>-->
-  <!--    <span></span>-->
-  <!--  </mat-card-title>-->
   <mat-card-content>
     <p>نام کاربری: {{user.userName}}</p>
     <p>نام و نام خانوادگی: {{user.firstName}} - {{user.lastName}}</p>
@@ -21,11 +17,22 @@
     <p>کشور: {{user.country}}</p>
     <p>سن: {{user.age}}</p>
     <p>جنسیت:
-      <button mat-stroked-button color="primary" *ngIf="!user.gender == 0">مونث</button>
+      <button mat-stroked-button color="primary" *ngIf="user.gender == 0">مونث</button>
       <button mat-stroked-button color="primary" *ngIf="user.gender == 1">مذکر</button>
     </p>
     <p>وضعیت اشتغال: {{user.employed}}</p>
     <p>تاریخ ثبت: {{user.createdAt | PersianDate}}</p>
+    <p>آخرین اشتراک ثبت شده کاربر:
+      <button mat-stroked-button color="primary" *ngIf="user.subscriptionType == 1">یک ماهه</button>
+      <button mat-stroked-button color="primary" *ngIf="user.subscriptionType == 2">شش ماهه</button>
+      <button mat-stroked-button color="primary" *ngIf="user.subscriptionType == 3">یکساله</button>
+    </p>
+    <p>انقضای اشتراک: {{user.subscriptionExpirationDate | PersianDate}}</p>
+    <p>نوع حساب:
+      <button mat-stroked-button color="primary" *ngIf="user.userType == 0">کاربر</button>
+      <button mat-stroked-button color="primary" *ngIf="user.userType == 1">فروشنده</button>
+      <button mat-stroked-button color="primary" *ngIf="user.userType == 2">سایر</button>
+    </p>
     <p>شناسه کاربر: {{user.id}}</p>
   </mat-card-content>
 </mat-card>

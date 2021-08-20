@@ -41,8 +41,10 @@ import {AdsCreateEditComponent} from './ads/ads-create-edit/ads-create-edit.comp
 import {PlacesComponent} from './ads/places/places.component';
 import {MessagesComponent} from './messages/messages.component';
 import {MessagesCreateEditComponent} from './messages/messages-create-edit/messages-create-edit.component';
-import { UsersComponent } from './users/users.component';
-import { UserMessagesComponent } from './messages/user-messages/user-messages.component';
+import {UsersComponent} from './users/users.component';
+import {UserMessagesComponent} from './messages/user-messages/user-messages.component';
+import {TicketsComponent} from './tickets/tickets.component';
+import { TicketResponsesComponent } from './tickets/ticket-responses/ticket-responses.component';
 
 
 @NgModule({
@@ -81,7 +83,9 @@ import { UserMessagesComponent } from './messages/user-messages/user-messages.co
     MessagesComponent,
     MessagesCreateEditComponent,
     UsersComponent,
-    UserMessagesComponent
+    UserMessagesComponent,
+    TicketsComponent,
+    TicketResponsesComponent
   ],
   imports: [
     CommonModule,

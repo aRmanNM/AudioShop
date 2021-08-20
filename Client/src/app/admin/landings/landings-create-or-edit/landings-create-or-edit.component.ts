@@ -51,9 +51,9 @@ export class LandingsCreateOrEditComponent implements OnInit {
       giftEnabled: new FormControl(true),
       phoneBoxEnabled: new FormControl(true),
       buttonsColor: new FormControl(''),
-      buttonClickCount: new FormControl(''),
-      logoEnabled: new FormControl(''),
-      mediaEnabled: new FormControl(''),
+      buttonClickCount: new FormControl(0),
+      logoEnabled: new FormControl(false),
+      mediaEnabled: new FormControl(false),
     }
   );
 

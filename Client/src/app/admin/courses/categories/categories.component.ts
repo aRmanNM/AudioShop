@@ -4,6 +4,7 @@ import {CategoryService} from '../../../services/category.service';
 import {SpinnerService} from '../../../services/spinner.service';
 import {ActivatedRoute} from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {CoursesAndEpisodesService} from '../../../services/courses-and-episodes.service';
 
 @Component({
   selector: 'app-categories',
@@ -19,7 +20,8 @@ export class CategoriesComponent implements OnInit {
 
   constructor(private categoryService: CategoryService,
               public spinnerService: SpinnerService,
-              private snackBar: MatSnackBar) {
+              private snackBar: MatSnackBar,
+              private courseService: CoursesAndEpisodesService) {
   }
 
   ngOnInit(): void {
@@ -53,6 +55,7 @@ export class CategoriesComponent implements OnInit {
         this.newCategoryTitle = '';
         this.mode = 'add';
         this.getCategories();
+        this.courseService.onUpdate();
         this.snackBar.open('دسته بندی با موفقیت بروزرسانی شد', null, {
           duration: 1000,
         });
@@ -71,6 +74,7 @@ export class CategoriesComponent implements OnInit {
     if (result) {
       this.categoryService.deleteCategory(categoryId).subscribe((res) => {
         this.getCategories();
+        this.courseService.onUpdate();
         this.snackBar.open('دسته بندی با موفقیت حذف شد', null, {
           duration: 1000,
         });

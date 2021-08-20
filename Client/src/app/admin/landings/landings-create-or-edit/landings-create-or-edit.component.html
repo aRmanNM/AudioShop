@@ -109,9 +109,11 @@
   </mat-tab>
 </mat-tab-group>
 
-<mat-progress-bar color="accent" mode="indeterminate" *ngIf="spinnerService.visibility | async"></mat-progress-bar>
-<button mat-icon-button>
-  <mat-icon (click)="cancelUpload()"
-            *ngIf="spinnerService.visibility | async">cancel
-  </mat-icon>
-</button>
+<div class="form-group" >
+  <mat-progress-bar color="accent" mode="indeterminate" *ngIf="spinnerService.visibility | async"></mat-progress-bar>
+  <button mat-icon-button>
+    <mat-icon (click)="cancelUpload()"
+              *ngIf="spinnerService.visibility | async">cancel
+    </mat-icon>
+  </button>
+</div>

@@ -1,0 +1,30 @@
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+mat-progress-bar {
+  margin-top: 1em;
+}
+
+p {
+  font-size: smaller;
+  margin: 0px;
+}
+
+.admin-response {
+  background-color: darkgrey;
+}
+
+.user-response {
+  background-color: lightgrey;
+}
+mat-card {
+  margin: 0px;
+}
