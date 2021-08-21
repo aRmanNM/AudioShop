@@ -46,6 +46,7 @@ export class TicketResponsesComponent implements OnInit {
   createResponse(): void {
     const ticketResponse: TicketResponse = this.responseForm.value;
     ticketResponse.ticketId = this.data.ticketId;
+    ticketResponse.issuedByAdmin = true;
     this.ticketService.createTicketResponse(ticketResponse).subscribe((res) => {
       this.getTicketResponses();
       this.snackBar.open('درج پاسخ موفقیت آمیز بود', null, {
