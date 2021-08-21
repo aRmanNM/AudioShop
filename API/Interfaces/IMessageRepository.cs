@@ -8,6 +8,7 @@ namespace API.Interfaces
     public interface IMessageRepository
     {
         Task<IEnumerable<Message>> GetGeneralMessagesAsync();
+        Task<IEnumerable<MessageDto>> SetUserIsSeenForGeneralMessagesAsync(string userId, IEnumerable<MessageDto> messageDtos);
         Task<Message> GetMessageByIdAsync(int id);
         Task<IEnumerable<MessageDto>> GetUserMessagesAsync(string userId, bool onlyUnseen = false);
         Task<Message> CreateMessageAsync(Message message);

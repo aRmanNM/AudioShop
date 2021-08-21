@@ -55,6 +55,11 @@ namespace API.Controllers
             if (ticketResponse.IssuedByAdmin)
             {
                 var user = await _userManager.FindByIdAsync(ticket.UserId);
+                if (user == null)
+                {
+                    return BadRequest();
+                }
+
                 string messageBody = "تیکت با عنوان «" + ticket.Title + "» از طرف ادمین پاسخ داده شد";
                 var message = new Message
                 {

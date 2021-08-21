@@ -82,6 +82,7 @@ namespace API.Controllers
             {
                 var generalMessages = await _messageRepository.GetGeneralMessagesAsync();
                 var generalMessageDtos = generalMessages.Select(gm => _mapperService.MapMessageToMessageDto(gm)).ToList();
+                generalMessageDtos = (await _messageRepository.SetUserIsSeenForGeneralMessagesAsync(userId, generalMessageDtos)).ToList();
                 messages.AddRange(generalMessageDtos);
             }
 

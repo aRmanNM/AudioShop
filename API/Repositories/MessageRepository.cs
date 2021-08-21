@@ -114,5 +114,21 @@ namespace API.Repositories
                 SendSMS = um.Message.SendSMS
             }).ToListAsync();
         }
+
+        public async Task<IEnumerable<MessageDto>> SetUserIsSeenForGeneralMessagesAsync(string userId, IEnumerable<MessageDto> messageDtos)
+        {
+            var messageIds = messageDtos.Select(m => m.Id).ToList();
+            var userMessages = await _context.UserMessages
+                .Where(um => messageIds.Any(mi => mi == um.MessageId) && um.UserId == userId)
+                .AsNoTracking()
+                .ToListAsync();
+
+            foreach (var item in userMessages)
+            {
+                messageDtos.FirstOrDefault(m => m.Id == item.MessageId).IsSeen = item.IsSeen;
+            }
+
+            return messageDtos;
+        }
     }
 }
