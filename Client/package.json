@@ -25,6 +25,7 @@
     "angular2-chartjs": "^0.5.1",
     "jalali-moment": "^3.3.9",
     "lodash": "^4.17.20",
+    "ngx-color": "^6.2.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.2"

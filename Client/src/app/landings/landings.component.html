@@ -1,5 +1,5 @@
 <div class="body" *ngIf="landing">
-  <header *ngIf="landing">
+  <header *ngIf="landing" [style.--background]="backgroundCSSVariable">
     <!------------- [ top-header] -------------->
     <section class="container">
       <a href="#" class="logo" *ngIf="this.landing.logoEnabled">
@@ -26,6 +26,7 @@
           {{ this.landing.text1 }}
         </p>
         <a (click)="updateStat()" *ngIf="this.landing.buttonEnabled" class="btn radius"
+           [ngStyle]="{ 'background-color': backgroundColor, 'box-shadow': boxShadow, 'border-bottom': borderBottom}"
            href="{{this.landing.buttonLink}}" >{{ this.landing.button }}</a>
         <span *ngIf="this.landing.text2Enabled" class="character">{{ this.landing.text2 }}</span>
         <div class="gift" *ngIf="this.landing.giftEnabled">
@@ -38,11 +39,11 @@
             <span>شماره تماس</span>
             <input [(ngModel)]="phoneNumber" name="phoneNumber" class="radius" type="text" placeholder="09120212700">
           </label>
-          <div class="submit radius">
+          <div class="submit radius" [ngStyle]="{ 'background-color': backgroundColor, 'box-shadow': boxShadow, 'border-bottom': borderBottom}">
             <input type="submit" value="ثبت شماره تماس">
-            <div class="arrow">
-              <img src="../../assets/landings/images/icon.svg" alt="">
-            </div>
+<!--            <div class="arrow">-->
+<!--              <img src="../../assets/landings/images/icon.svg" alt="">-->
+<!--            </div>-->
           </div>
         </form>
       </div>

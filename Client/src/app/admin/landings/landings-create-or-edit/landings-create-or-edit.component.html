@@ -54,10 +54,13 @@
         <mat-slide-toggle formControlName="giftEnabled"></mat-slide-toggle>
       </div>
 
-      <mat-form-field appearance="fill" hidden>
-        <mat-label>رنگ تم صفحه</mat-label>
-        <input matInput type="text" formControlName="buttonsColor" placeholder="مثلا #FFFFFF"/>
-      </mat-form-field>
+      <div class="form-group">
+        <mat-form-field appearance="fill">
+          <mat-label>رنگ تم صفحه</mat-label>
+          <input matInput formControlName="buttonsColor" type="text" placeholder="مثلا #FFFFFF"/>
+<!--          <color-sketch [color]="themeColor" (onChangeComplete)="changeColor($event)"></color-sketch>-->
+        </mat-form-field>
+      </div>
 
       <mat-slide-toggle formControlName="phoneBoxEnabled">فعال بودن باکس درج شماره تماس</mat-slide-toggle>
       <mat-slide-toggle formControlName="logoEnabled">فعال بودن نمایش لوگو</mat-slide-toggle>

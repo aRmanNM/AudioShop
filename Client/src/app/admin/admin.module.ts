@@ -1,5 +1,8 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
+import {ColorSketchModule} from 'ngx-color/sketch';
+import {ChartModule} from 'angular2-chartjs';
+import {SalespersonModule} from '../salesperson/salesperson.module';
 
 import {AdminRoutingModule} from './admin-routing.module';
 import {MaterialModule} from '../material/material.module';
@@ -15,7 +18,6 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
 import {CheckoutEditComponent} from './checkouts/checkout-edit/checkout-edit.component';
 import {CheckoutDoneComponent} from './checkouts/checkout-done/checkout-done.component';
 import {CheckoutPendingComponent} from './checkouts/checkout-pending/checkout-pending.component';
-import {SalespersonModule} from '../salesperson/salesperson.module';
 import {ReviewsEditComponent} from './reviews/reviews-edit/reviews-edit.component';
 import {SalespersonsComponent} from './salespersons/salespersons.component';
 import {SalespersonCredsComponent} from './salespersons/salesperson-creds/salesperson-creds.component';
@@ -32,7 +34,6 @@ import {SalespersonEditComponent} from './salespersons/salesperson-edit/salesper
 import {ReceiptInfoComponent} from './checkouts/receipt-info/receipt-info.component';
 import {CategoriesComponent} from './courses/categories/categories.component';
 import {StatsComponent} from './stats/stats.component';
-import {ChartModule} from 'angular2-chartjs';
 import {OrdersComponent} from './orders/orders.component';
 import {LandingsComponent} from './landings/landings.component';
 import {LandingsCreateOrEditComponent} from './landings/landings-create-or-edit/landings-create-or-edit.component';
@@ -44,7 +45,7 @@ import {MessagesCreateEditComponent} from './messages/messages-create-edit/messa
 import {UsersComponent} from './users/users.component';
 import {UserMessagesComponent} from './messages/user-messages/user-messages.component';
 import {TicketsComponent} from './tickets/tickets.component';
-import { TicketResponsesComponent } from './tickets/ticket-responses/ticket-responses.component';
+import {TicketResponsesComponent} from './tickets/ticket-responses/ticket-responses.component';
 
 
 @NgModule({
@@ -96,7 +97,8 @@ import { TicketResponsesComponent } from './tickets/ticket-responses/ticket-resp
     FormsModule,
     DragDropModule,
     SalespersonModule,
-    ChartModule
+    ChartModule,
+    ColorSketchModule
   ],
   exports: [
     DurationPipe

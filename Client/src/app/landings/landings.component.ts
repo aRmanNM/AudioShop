@@ -16,6 +16,11 @@ export class LandingsComponent implements OnInit {
   phoneNumber = '';
   baseUrl = environment.apiUrl + 'Landings/';
 
+  backgroundCSSVariable;
+  backgroundColor;
+  boxShadow;
+  borderBottom;
+
   constructor(private route: ActivatedRoute,
               private landingService: LandingsService) {
   }
@@ -31,7 +36,13 @@ export class LandingsComponent implements OnInit {
   getLanding(): void {
     this.landingService.getLanding(this.landingId).subscribe((res) => {
       this.landing = res;
-      // console.log(res);
+      this.backgroundCSSVariable = `url(${this.baseUrl + this.landing.id + '/' + this.landing.background?.fileName})`;
+
+      this.backgroundColor = this.landing.buttonsColor;
+      this.boxShadow = `0px 2px 0 ${this.landing.buttonsColor}`;
+      this.borderBottom = `5px solid ${this.landing.buttonsColor}`;
+
+      console.log(res);
     });
   }
 

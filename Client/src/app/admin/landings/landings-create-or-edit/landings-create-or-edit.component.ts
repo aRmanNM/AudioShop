@@ -6,6 +6,7 @@ import {SpinnerService} from '../../../services/spinner.service';
 import {LandingsService} from '../../../services/landings.service';
 import {FormControl, FormGroup} from '@angular/forms';
 import {environment} from '../../../../environments/environment';
+import {Color} from 'ngx-color';
 
 interface DialogData {
   landing: Landing;
@@ -22,6 +23,7 @@ export class LandingsCreateOrEditComponent implements OnInit {
   mediaUrl;
   backgroundImgUrl;
   uploadSub;
+  // themeColor: Color;
 
   @ViewChild('logoInput') logoInput: ElementRef;
   @ViewChild('mediaInput') mediaInput: ElementRef;
@@ -94,6 +96,7 @@ export class LandingsCreateOrEditComponent implements OnInit {
   createOrEditLanding(): void {
     if (this.data.landing) {
       const landing: Landing = this.landingForm.value;
+      // landing.buttonsColor = this.themeColor.hex;
       this.landingService.updateLanding(landing).subscribe((res) => {
         this.snackBar.open('ویرایش صفحه لندینگ موفقیت آمیز بود', null, {
           duration: 2000,
@@ -103,6 +106,7 @@ export class LandingsCreateOrEditComponent implements OnInit {
       });
     } else {
       const landing: Landing = this.landingForm.value;
+      // landing.buttonsColor = this.themeColor.hex;
       this.landingService.createLanding(landing).subscribe((res) => {
         this.snackBar.open('لندینگ جدید با موفقیت ایجاد شد', null, {
           duration: 2000,
@@ -156,4 +160,8 @@ export class LandingsCreateOrEditComponent implements OnInit {
       duration: 2000,
     });
   }
+
+  // changeColor(event): void {
+  //   this.themeColor = event.color.hex;
+  // }
 }
