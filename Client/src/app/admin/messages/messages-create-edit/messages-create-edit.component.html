@@ -51,7 +51,7 @@
         <div class="form-group">
           <mat-slide-toggle [disabled]="messageForm.value.messageType != 1" class="mt-2 mb-3" formControlName="sendSMS">اس ام اس (ارسال بعد از ساخت)</mat-slide-toggle>
           <mat-slide-toggle class="mt-2 mb-3" formControlName="sendPush">ارسال پوش</mat-slide-toggle>
-          <mat-slide-toggle class="mt-2 mb-3" formControlName="isRepeatable">تکرارپذیری</mat-slide-toggle>
+          <mat-slide-toggle hidden class="mt-2 mb-3" formControlName="isRepeatable">تکرارپذیری</mat-slide-toggle>
         </div>
         <button
           mat-raised-button

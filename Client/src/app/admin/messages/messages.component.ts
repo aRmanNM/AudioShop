@@ -14,7 +14,7 @@ import {UserMessagesComponent} from './user-messages/user-messages.component';
 })
 export class MessagesComponent implements OnInit {
   messages: Message[];
-  columnsToDisplay = ['id', 'title', 'messageType', 'courseId', 'clockRange', 'isRepeatable', 'sendPush', 'actions'];
+  columnsToDisplay = ['id', 'title', 'messageType', 'courseId', 'clockRange', 'sendPush', 'actions'];
   dialogActive = false;
 
   constructor(public dialog: MatDialog,
