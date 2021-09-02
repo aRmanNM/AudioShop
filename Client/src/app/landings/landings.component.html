@@ -12,7 +12,8 @@
         </figcaption>
       </figure>
       <div class="media-box" *ngIf="this.landing.mediaEnabled">
-        <video id="video" controls autoplay loop>
+        <img src="{{ this.baseUrl + this.landing.id + '/' + this.landing.media?.fileName }}" *ngIf="this.landing.media?.fileName.toLowerCase().includes('jpg') || this.landing.media?.fileName.toLowerCase().includes('png') || this.landing.media?.fileName.toLowerCase().includes('gif')">
+        <video id="video" controls autoplay loop *ngIf="this.landing.media?.fileName.toLowerCase().includes('mp4')">
           <source src="{{ this.baseUrl + this.landing.id + '/' + this.landing.media?.fileName }}">
         </video>
       </div>

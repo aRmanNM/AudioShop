@@ -4,6 +4,7 @@ import {ContentFile} from './content-file';
 export interface Landing {
   id: number;
   description: string;
+  urlName: string;
   logo: Photo;
   logoEnabled: boolean;
   title: string;

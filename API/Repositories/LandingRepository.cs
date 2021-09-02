@@ -48,6 +48,7 @@ namespace API.Repositories
                 {
                     Id = l.Id,
                     Description = l.Description,
+                    UrlName = l.UrlName,
                     Button = l.Button,
                     ButtonClickCount = l.ButtonClickCount,
                     ButtonEnabled = l.ButtonEnabled,
@@ -71,6 +72,40 @@ namespace API.Repositories
                 })
                 .AsNoTracking()
                 .FirstOrDefaultAsync(l => l.Id == landingId);
+        }
+
+        public async Task<LandingDto> GetLandingDtoByUrlName(string urlName)
+        {
+            return await _context.Landings
+                .Include(l => l.PhoneNumbers)
+                .Select(l => new LandingDto
+                {
+                    Id = l.Id,
+                    Description = l.Description,
+                    UrlName = l.UrlName,
+                    Button = l.Button,
+                    ButtonClickCount = l.ButtonClickCount,
+                    ButtonEnabled = l.ButtonEnabled,
+                    ButtonLink = l.ButtonLink,
+                    GiftEnabled = l.GiftEnabled,
+                    Gift = l.Gift,
+                    Logo = l.Logo,
+                    LogoEnabled = l.LogoEnabled,
+                    Media = l.Media,
+                    MediaEnabled = l.MediaEnabled,
+                    PhoneBoxEnabled = l.PhoneBoxEnabled,
+                    Text1 = l.Text1,
+                    Text1Enabled = l.Text1Enabled,
+                    Text2 = l.Text2,
+                    Text2Enabled = l.Text2Enabled,
+                    Title = l.Title,
+                    TitleEnabled = l.TitleEnabled,
+                    ButtonsColor = l.ButtonsColor,
+                    Background = l.Background,
+                    PhoneNumberCounts = l.PhoneNumbers.Count(),
+                })
+                .AsNoTracking()
+                .FirstOrDefaultAsync(l => l.UrlName == urlName);
         }
 
         public async Task<Landing> GetLandingById(int landingId)
@@ -97,6 +132,7 @@ namespace API.Repositories
                 {
                     Id = l.Id,
                     Description = l.Description,
+                    UrlName = l.UrlName,
                     Button = l.Button,
                     ButtonClickCount = l.ButtonClickCount,
                     ButtonEnabled = l.ButtonEnabled,

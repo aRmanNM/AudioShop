@@ -9,6 +9,7 @@ namespace API.Models.Landing
 
         public string Description { get; set; }
 
+        public string UrlName { get; set; }
 
         public Photo Logo { get; set; }
         public bool LogoEnabled { get; set; }

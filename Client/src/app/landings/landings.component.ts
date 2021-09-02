@@ -12,7 +12,7 @@ import {LandingPhoneNumber} from '../models/landing-phone-number';
 })
 export class LandingsComponent implements OnInit {
   landing: Landing;
-  landingId;
+  urlName;
   phoneNumber = '';
   baseUrl = environment.apiUrl + 'Landings/';
 
@@ -28,13 +28,13 @@ export class LandingsComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       // console.log(params.id);
-      this.landingId = params.id;
+      this.urlName = params.id;
       this.getLanding();
     });
   }
 
   getLanding(): void {
-    this.landingService.getLanding(this.landingId).subscribe((res) => {
+    this.landingService.getLandingByUrlName(this.urlName).subscribe((res) => {
       this.landing = res;
       this.backgroundCSSVariable = `url(${this.baseUrl + this.landing.id + '/' + this.landing.background?.fileName})`;
 
@@ -49,7 +49,7 @@ export class LandingsComponent implements OnInit {
   createLandingPhoneNumber(): void {
     const landingPhoneNumber: LandingPhoneNumber = {
       id: 0,
-      landingId: this.landingId,
+      landingId: this.landing.id,
       phoneNumber: this.phoneNumber
     };
 
@@ -60,7 +60,7 @@ export class LandingsComponent implements OnInit {
   }
 
   updateStat(): void {
-    this.landingService.updateLandingStat(this.landingId).subscribe(() => {
+    this.landingService.updateLandingStat(this.landing.id).subscribe(() => {
       alert('هم اکنون به لینک انتقال داده خواهید شد');
     });
   }

@@ -9,6 +9,7 @@ namespace API.Interfaces
     {
         Task<IEnumerable<LandingDto>> GetLandings();
         Task<LandingDto> GetLandingDtoById(int landingId);
+        Task<LandingDto> GetLandingDtoByUrlName(string urlName);
         Task<Landing> GetLandingById(int landingId);
         Task<Landing> CreateLanding(Landing landing);
         Landing EditLanding(Landing landing);

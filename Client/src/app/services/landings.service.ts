@@ -27,6 +27,10 @@ export class LandingsService {
     return this.http.get<Landing>(`${this.baseUrl}/${landingId}`);
   }
 
+  getLandingByUrlName(urlName: string): Observable<Landing> {
+    return this.http.get<Landing>(`${this.baseUrl}/urlname/${urlName}`);
+  }
+
   createLanding(landing: Landing): Observable<Landing> {
     return this.http.post<Landing>(this.baseUrl, landing);
   }

@@ -259,6 +259,7 @@ namespace API.Services
             {
                 Id = landingDto.Id,
                 Description = landingDto.Description,
+                UrlName = landingDto.UrlName,
                 Button = landingDto.Button,
                 ButtonClickCount = landingDto.ButtonClickCount,
                 ButtonEnabled = landingDto.ButtonEnabled,

@@ -50,6 +50,13 @@ namespace API.Controllers
             return Ok(landingDto);
         }
 
+        [HttpGet("urlname/{urlName}")]
+        public async Task<ActionResult<LandingDto>> GetLandingByUrlName(string urlName)
+        {
+            var landingDto = await _landingRepository.GetLandingDtoByUrlName(urlName);
+            return Ok(landingDto);
+        }
+
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<Landing>> CreateLanding(Landing landing)

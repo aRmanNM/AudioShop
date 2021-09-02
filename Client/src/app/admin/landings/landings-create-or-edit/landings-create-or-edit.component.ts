@@ -40,6 +40,7 @@ export class LandingsCreateOrEditComponent implements OnInit {
     {
       id: new FormControl(0),
       description: new FormControl(''),
+      urlName: new FormControl(''),
       title: new FormControl(''),
       titleEnabled: new FormControl(true),
       text1: new FormControl(''),
@@ -64,6 +65,7 @@ export class LandingsCreateOrEditComponent implements OnInit {
       this.landingForm.setValue({
         id: this.data.landing.id,
         description: this.data.landing.description,
+        urlName: this.data.landing.urlName,
         title: this.data.landing.title,
         titleEnabled: this.data.landing.titleEnabled,
         text1: this.data.landing.text1,
