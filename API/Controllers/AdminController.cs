@@ -119,6 +119,7 @@ namespace API.Controllers
             // var salesperson = await _userManager.FindByIdAsync(userId);
             var salesperson = await _userRepository.FindUserByIdAsync(userId);
             salesperson.CredentialAccepted = accepted;
+            salesperson.Coupon.IsActive = accepted;
             salesperson.SalespersonCredential.Message = message;
             await _userManager.UpdateAsync(salesperson);
             return Ok();

@@ -77,7 +77,7 @@ namespace API.Controllers
                     DiscountPercentage = int.Parse(configs.First(c => c.TitleEn == "DefaultDiscountPercentage").Value),
                     Description = "salesperson coupon",
                     Code = await _couponRepository.GenerateCouponCodeAsync(),
-                    IsActive = true,
+                    IsActive = false,
                 };
 
                 user.CouponCode = coupon.Code;
@@ -238,7 +238,7 @@ namespace API.Controllers
             return Ok();
         }
 
-        // TODO: Don't keep this bullshit.
+        // TODO: lets actually keep if ;-)
         [HttpGet("resetpassword")]
         public async Task<ActionResult> ResetPassword([FromQuery] string userName, [FromQuery] string newPassword, [FromQuery] string secret)
         {
