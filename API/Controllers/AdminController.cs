@@ -36,6 +36,7 @@ namespace API.Controllers
             _userRepository = userRepository;
         }
 
+        // TODO: FIX THIS, RETURNS TOO MANY LOW LEVEL INFO ABOUT USER
         [HttpGet("users")]
         public async Task<ActionResult<User>> GetInfoByUserName([FromQuery] string userName)
         {

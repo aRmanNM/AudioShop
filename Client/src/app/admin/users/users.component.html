@@ -17,17 +17,31 @@
     <p>کشور: {{user.country}}</p>
     <p>سن: {{user.age}}</p>
     <p>جنسیت:
-      <button mat-stroked-button color="primary" *ngIf="user.gender == 0">مونث</button>
-      <button mat-stroked-button color="primary" *ngIf="user.gender == 1">مذکر</button>
+      <button mat-stroked-button color="primary" *ngIf="user.gender == 0">نامشخص</button>
+      <button mat-stroked-button color="primary" *ngIf="user.gender == 1">مونث</button>
+      <button mat-stroked-button color="primary" *ngIf="user.gender == 2">مذکر</button>
     </p>
-    <p>وضعیت اشتغال: {{user.employed}}</p>
-    <p>تاریخ ثبت: {{user.createdAt | PersianDate}}</p>
-    <p>آخرین اشتراک ثبت شده کاربر:
+    <p>وضعیت اشتغال
+      <button mat-stroked-button color="primary" *ngIf="user.employed">شاغل</button>
+      <button mat-stroked-button color="primary" *ngIf="!user.employed">غیرشاغل</button>
+    </p>
+    <p>تاریخ ثبت: {{user.createdAt | PersianDate:false}}</p>
+
+    <span *ngIf="!expired">
+      <p>آخرین اشتراک ثبت شده کاربر:
       <button mat-stroked-button color="primary" *ngIf="user.subscriptionType == 1">یک ماهه</button>
       <button mat-stroked-button color="primary" *ngIf="user.subscriptionType == 2">شش ماهه</button>
       <button mat-stroked-button color="primary" *ngIf="user.subscriptionType == 3">یکساله</button>
     </p>
-    <p>انقضای اشتراک: {{user.subscriptionExpirationDate | PersianDate}}</p>
+    <p>انقضای اشتراک: {{user.subscriptionExpirationDate | PersianDate: false}}</p>
+    </span>
+
+    <span *ngIf="expired">
+      <p>وضعیت اشتراک:
+        <button mat-stroked-button color="accent">اشتراک ندارد</button>
+      </p>
+    </span>
+
     <p>نوع حساب:
       <button mat-stroked-button color="primary" *ngIf="user.userType == 0">کاربر</button>
       <button mat-stroked-button color="primary" *ngIf="user.userType == 1">فروشنده</button>

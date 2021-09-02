@@ -19,7 +19,7 @@ export class CoursesComponent implements OnInit {
   pageSize = 10;
   pageIndex = 0;
   baseUrl = environment.apiUrl + 'Files/';
-  columnsToDisplay = ['id', 'name', 'instructor', 'price', 'watingTime', 'categories', 'isActive', 'photo', 'actions'];
+  columnsToDisplay = ['id', 'name', 'instructor', 'price', 'watingTime', 'categories', 'visits', 'isActive', 'photo', 'actions'];
   searchString = '';
   courseType: number = 0;
   courseCategory: '';
