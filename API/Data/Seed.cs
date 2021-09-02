@@ -387,6 +387,12 @@ namespace API.Data
                 new Config { TitleEn = "SubscriptionMonthlyFee", Value = "500000", TitleFa = "تعرفه اشتراک ماهیانه", GroupEn = "General", GroupFa = "تنظیمات کلی" , ValueType = ValueType.number },
                 new Config { TitleEn = "SubscriptionHalfYearlyFee", Value = "2500000", TitleFa = "تعرفه اشتراک شش ماهه", GroupEn = "General", GroupFa = "تنظیمات کلی" , ValueType = ValueType.number },
                 new Config { TitleEn = "SubscriptionYearlyFee", Value = "5000000", TitleFa = "تعرفه اشتراک سالیانه", GroupEn = "General", GroupFa = "تنظیمات کلی" , ValueType = ValueType.number },
+                new Config { TitleEn = "PhoneNumber", Value = "09121112222", TitleFa = "شماره تماس پشتیبانی", GroupEn = "General", GroupFa = "تنظیمات کلی" , ValueType = ValueType.text },
+                new Config { TitleEn = "IsAdsEnabled", Value = "1", TitleFa = "فعال بودن تبلیغات", GroupEn = "General", GroupFa = "تنظیمات کلی" , ValueType = ValueType.boolean },
+                new Config { TitleEn = "IsPopUpEnabled", Value = "1", TitleFa = "فعال بودن پاپ آپ تبلیغات تمام صفحه", GroupEn = "General", GroupFa = "تنظیمات کلی" , ValueType = ValueType.boolean },
+                new Config { TitleEn = "AboutUs", Value = "اینجا درباره ماست", TitleFa = "درباره ما", GroupEn = "General", GroupFa = "تنظیمات کلی" , ValueType = ValueType.text },
+                new Config { TitleEn = "SubscriptionPaidMessage", Value = "خرید اشتراک با موفقیت انجام شد", TitleFa = "پیام پیشفرض خرید اشتراک", GroupEn = "General", GroupFa = "تنظیمات کلی" , ValueType = ValueType.text },
+                new Config { TitleEn = "CoursePaidMessage", Value = "خرید محصول با موفقیت انجام شد", TitleFa = "پیام پیشفرض خرید محصول", GroupEn = "General", GroupFa = "تنظیمات کلی" , ValueType = ValueType.text },
                 // Reminder
                 new Config { TitleEn = "ReminderNotifTitle", Value = "یادآوری دوره", TitleFa = "عنوان اعلان", GroupEn = "Reminder", GroupFa = "اعلان یادآوری", ValueType = ValueType.text },
                 new Config { TitleEn = "ReminderNotifBody", Value = "برو دوره تو گوش بده ادم حسابی", TitleFa = "بدنه اعلان", GroupEn = "Reminder", GroupFa = "اعلان یادآوری", ValueType = ValueType.text },

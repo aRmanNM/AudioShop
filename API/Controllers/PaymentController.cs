@@ -1,9 +1,11 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using API.Dtos;
 using API.Helpers;
 using API.Interfaces;
 using API.Models;
+using API.Models.Messages;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -20,6 +22,9 @@ namespace API.Controllers
         private readonly ICouponRepository _couponRepository;
         private readonly IZarinPalService _zarinPalService;
         private readonly UserManager<User> _userManager;
+        private readonly IConfigRepository _configRepository;
+        private readonly IMessageRepository _messageRepository;
+        private readonly ISMSService _smsService;
 
         public PaymentController(IOrderRepository orderRepository,
             IConfiguration config,
@@ -27,7 +32,10 @@ namespace API.Controllers
             IUnitOfWork unitOfWork,
             ICouponRepository couponRepository,
             IZarinPalService zarinPalService,
-            UserManager<User> userManager)
+            UserManager<User> userManager,
+            IConfigRepository configRepository,
+            IMessageRepository messageRepository,
+            ISMSService smsService)
         {
             _config = config;
             _userRepository = userRepository;
@@ -35,6 +43,9 @@ namespace API.Controllers
             _couponRepository = couponRepository;
             _zarinPalService = zarinPalService;
             _userManager = userManager;
+            _configRepository = configRepository;
+            _messageRepository = messageRepository;
+            _smsService = smsService;
             _orderRepository = orderRepository;
         }
 
@@ -62,9 +73,11 @@ namespace API.Controllers
                 Description = description,
                 Amount = (int)(order.PriceToPay),
                 MerchantId = _config["MerchantId"]
-            }, PaymentMode.zarinpal); // toggle sandbox here
+            }, Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development" ? PaymentMode.sandbox : PaymentMode.zarinpal);
 
-            return Redirect($"https://zarinpal.com/pg/StartPay/{result.Data.Authority}"); // also change here for sandbox
+            return Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development"
+                ? Redirect($"https://sandbox.zarinpal.com/pg/StartPay/{result.Authority}")
+                : Redirect($"https://zarinpal.com/pg/StartPay/{result.Data.Authority}");
 
         }
 
@@ -76,6 +89,9 @@ namespace API.Controllers
                HttpContext.Request.Query["Status"].ToString().ToLower() == "ok" &&
                HttpContext.Request.Query["Authority"] != "")
             {
+
+                var isDev = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
+
                 var authority = HttpContext.Request.Query["Authority"].ToString();
                 var order = await _orderRepository.GetOrderByIdAsync(orderId);
 
@@ -84,15 +100,15 @@ namespace API.Controllers
                     Amount = (int)(order.PriceToPay),
                     MerchantId = _config["MerchantId"],
                     Authority = authority
-                }, PaymentMode.zarinpal); // toggle sandbox here
+                }, isDev ? PaymentMode.sandbox : PaymentMode.zarinpal);
 
-                if (verification.Data.Code != 100)
+                if (!isDev && verification.Data.Code != 100)
                 {
                     return BadRequest();
                 }
 
                 order.Status = true;
-                order.PaymentReceipt = verification.Data.RefId.ToString();
+                order.PaymentReceipt = isDev ? "123456" : verification.Data.RefId.ToString();
 
                 var salesperson = await _userRepository.GetSalespersonByCouponCodeAsync(order.SalespersonCouponCode);
                 if (salesperson != null)
@@ -112,11 +128,11 @@ namespace API.Controllers
                     });
                 }
 
+                var user = await _userManager.FindByIdAsync(order.UserId);
                 if (order.OrderType == OrderType.MonthlySub ||
                     order.OrderType == OrderType.HalfYearlySub ||
                     order.OrderType == OrderType.YearlySub)
                 {
-                    var user = await _userManager.FindByIdAsync(order.UserId);
                     switch (order.OrderType)
                     {
                         case OrderType.MonthlySub:
@@ -141,11 +157,49 @@ namespace API.Controllers
                     await _userManager.UpdateAsync(user);
                 }
 
+                // Send Message To User
+                var generalConfigs = (await _configRepository.GetConfigsByGroupAsync("General")).ToList();
+                string messageBody = "";
+                if (order.OrderType == OrderType.Course || order.OrderType == OrderType.Episode)
+                {
+                    messageBody = generalConfigs.FirstOrDefault(gc => gc.TitleEn == "CoursePaidMessage").Value
+                        + $"\nکد سفارش: {order.Id}";
+                }
+                else if (order.OrderType == OrderType.MonthlySub ||
+                    order.OrderType == OrderType.HalfYearlySub ||
+                    order.OrderType == OrderType.YearlySub)
+                {
+                    messageBody = generalConfigs.FirstOrDefault(gc => gc.TitleEn == "SubscriptionPaidMessage").Value
+                        + $"\nکد سفارش: {order.Id}";
+                }
+
+                var message = new Message
+                {
+                    Title = "اعلان خرید",
+                    Body = messageBody,
+                    ClockRangeBegin = DateTime.Now.Hour,
+                    ClockRangeEnd = DateTime.Now.Hour == 23 ? 23 : DateTime.Now.Hour + 1,
+                    MessageType = MessageType.User,
+                    IsRepeatable = false,
+                    Link = "",
+                    SendPush = true,
+                    SendSMS = true,
+                    UserId = order.UserId,
+                    CreatedAt = DateTime.Now,
+                    CourseId = 0,
+                };
+
+                await _messageRepository.CreateMessageAsync(message);
                 await _unitOfWork.CompleteAsync();
+                if (message.SendSMS && user.PhoneNumberConfirmed)
+                {
+                    _smsService.SendMessageSMS(user.PhoneNumber, message.Body);
+                }
+
                 return View(new PaymentResultDto
                 {
                     PaymentSucceded = true,
-                    RefId = verification.Data.RefId
+                    RefId = isDev ? 123456 : verification.Data.RefId
                 });
             }
 

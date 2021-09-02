@@ -9,6 +9,13 @@ namespace API.Dtos.ZarinPal
         public Data Data { get; set; }
         [JsonProperty("errors")]
         public string[] Errors { get; set; }
+
+
+        // USED IN SANDBOX
+        [JsonProperty("Authority")]
+        public string Authority { get; set; }
+        [JsonProperty("Status")]
+        public string Status { get; set; }
     }
 
     public class Data
