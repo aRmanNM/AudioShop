@@ -7,13 +7,13 @@ namespace API.Interfaces
 {
     public interface IMessageRepository
     {
-        Task<IEnumerable<Message>> GetGeneralMessagesAsync();
+        Task<IEnumerable<Message>> GetGeneralMessagesAsync(bool withDateLimit = true);
         Task<IEnumerable<MessageDto>> SetUserIsSeenForGeneralMessagesAsync(string userId, IEnumerable<MessageDto> messageDtos);
         Task<Message> GetMessageByIdAsync(int id);
-        Task<IEnumerable<MessageDto>> GetUserMessagesAsync(string userId, bool onlyUnseen = false);
+        Task<IEnumerable<MessageDto>> GetUserMessagesAsync(string userId, bool onlyUnseen = false, bool withDateLimit = true);
         Task<Message> CreateMessageAsync(Message message);
         Message EditMessage(Message message);
         Task DeleteMessage(int messageId);
-        Task SetUserMessageToSeen(string userId, int messageId);
+        Task SetUserMessagesStatus(MessagesSetStatusDto setStatusDto);
     }
 }

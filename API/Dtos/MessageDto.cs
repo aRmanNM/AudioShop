@@ -11,13 +11,15 @@ namespace API.Dtos
         public string Link { get; set; }
         public int CourseId { get; set; }
         public string UserId { get; set; }
-        public int ClockRangeBegin { get; set; }
-        public int ClockRangeEnd { get; set; }
+        public int RepeatAfterHour { get; set; }
         public bool IsRepeatable { get; set; }
         public DateTime CreatedAt { get; set; }
         public bool SendSMS { get; set; }
         public bool SendPush { get; set; }
+        public bool SendInApp { get; set; }
         public MessageType MessageType { get; set; }
-        public bool IsSeen { get; set; }
+        public bool InAppSeen { get; set; }
+        public bool SMSSent { get; set; }
+        public bool PushSent { get; set; }
     }
 }

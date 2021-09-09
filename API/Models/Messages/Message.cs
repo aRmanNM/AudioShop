@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using API.Helpers;
 
 namespace API.Models.Messages
@@ -11,12 +13,18 @@ namespace API.Models.Messages
         public string Link { get; set; }
         public int CourseId { get; set; }
         public string UserId { get; set; }
-        public int ClockRangeBegin { get; set; }
-        public int ClockRangeEnd { get; set; }
+        public int RepeatAfterHour { get; set; }
         public bool IsRepeatable { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public bool SendSMS { get; set; }
         public bool SendPush { get; set; }
+        public bool SendInApp { get; set; }
         public MessageType MessageType { get; set; }
+        public ICollection<UserMessage> UserMessages { get; set; }
+
+        public Message()
+        {
+            UserMessages = new Collection<UserMessage>();
+        }
     }
 }

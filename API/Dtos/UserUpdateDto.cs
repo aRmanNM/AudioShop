@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using API.Helpers;
 using API.Models;
 
 namespace API.Dtos
@@ -12,6 +13,6 @@ namespace API.Dtos
         public string City { get; set; }
         public short Age { get; set; }
         public Gender Gender { get; set; }
-        public bool Employed { get; set; }
+        public EmploymentStatus Employed { get; set; }
     }
 }

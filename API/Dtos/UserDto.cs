@@ -15,7 +15,7 @@ namespace API.Dtos
         public string City { get; set; }
         public short Age { get; set; }
         public Gender Gender { get; set; }
-        public bool Employed { get; set; }
+        public EmploymentStatus Employed { get; set; }
         public DateTime SubscriptionExpirationDate { get; set; }
         public SubscriptionType SubscriptionType { get; set; }
     }

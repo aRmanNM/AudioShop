@@ -318,13 +318,13 @@ namespace API.Services
                 Link = message.Link,
                 CourseId = message.CourseId,
                 Title = message.Title,
-                ClockRangeBegin = message.ClockRangeBegin,
-                ClockRangeEnd = message.ClockRangeEnd,
+                RepeatAfterHour = message.RepeatAfterHour,
                 CreatedAt = message.CreatedAt,
                 IsRepeatable = message.IsRepeatable,
                 MessageType = message.MessageType,
                 SendPush = message.SendPush,
                 SendSMS = message.SendSMS,
+                SendInApp = message.SendInApp,
                 UserId = message.UserId
             };
         }
@@ -338,13 +338,12 @@ namespace API.Services
                 Link = messageDto.Link,
                 CourseId = messageDto.CourseId,
                 Title = messageDto.Title,
-                ClockRangeBegin = messageDto.ClockRangeBegin,
-                ClockRangeEnd = messageDto.ClockRangeEnd,
-                CreatedAt = messageDto.CreatedAt,
+                RepeatAfterHour = messageDto.RepeatAfterHour,
                 IsRepeatable = messageDto.IsRepeatable,
                 MessageType = messageDto.MessageType,
                 SendPush = messageDto.SendPush,
                 SendSMS = messageDto.SendSMS,
+                SendInApp = messageDto.SendInApp,
                 UserId = messageDto.UserId
             };
         }

@@ -37,7 +37,7 @@ namespace API.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult<Order>> CreateOrder(BasketDto basketDto)
+        public async Task<ActionResult<int>> CreateOrder(BasketDto basketDto)
         {
             var user = await _userManager.FindByIdAsync(basketDto.UserId);
 
@@ -78,7 +78,7 @@ namespace API.Controllers
 
             await _userManager.UpdateAsync(user);
 
-            return Ok(order);
+            return Ok(order.Id);
         }
 
         [HttpGet("{orderId}")]

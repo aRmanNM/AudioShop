@@ -23,36 +23,52 @@ namespace API.Repositories
 
         public async Task<Message> CreateMessageAsync(Message message)
         {
-            await _context.Messages.AddRangeAsync(message);
-
-            if (message.MessageType == MessageType.User)
-            {
-                await _context.UserMessages.AddAsync(new UserMessage
-                {
-                    Message = message,
-                    UserId = message.UserId,
-                    IsSeen = false
-                });
-            }
-
+            await _context.Messages.AddAsync(message);
             return message;
         }
 
-        public async Task SetUserMessageToSeen(string userId, int messageId)
+        public async Task SetUserMessagesStatus(MessagesSetStatusDto setStatusDto)
         {
-            var userMessage = await _context.UserMessages.FirstOrDefaultAsync(um => um.MessageId == messageId && um.UserId == userId);
-            if (userMessage == null)
+            if (setStatusDto.MessageIdsForInAppStatus.Any())
             {
-                await _context.UserMessages.AddAsync(new UserMessage
+                foreach (var id in setStatusDto.MessageIdsForInAppStatus)
                 {
-                    MessageId = messageId,
-                    UserId = userId,
-                    IsSeen = true
-                });
+                    var userMessage = await _context.UserMessages.FirstOrDefaultAsync(um => um.MessageId == id && um.UserId == setStatusDto.UserId);
+                    if (userMessage == null)
+                    {
+                        await _context.UserMessages.AddAsync(new UserMessage
+                        {
+                            MessageId = id,
+                            UserId = setStatusDto.UserId,
+                            InAppSeen = true
+                        });
+                    }
+                    else
+                    {
+                        userMessage.InAppSeen = true;
+                    }
+                }
             }
-            else
+
+            if (setStatusDto.MessageIdsForPushStatus.Any())
             {
-                userMessage.IsSeen = true;
+                foreach (var id in setStatusDto.MessageIdsForPushStatus)
+                {
+                    var userMessage = await _context.UserMessages.FirstOrDefaultAsync(um => um.MessageId == id && um.UserId == setStatusDto.UserId);
+                    if (userMessage == null)
+                    {
+                        await _context.UserMessages.AddAsync(new UserMessage
+                        {
+                            MessageId = id,
+                            UserId = setStatusDto.UserId,
+                            PushSent = true
+                        });
+                    }
+                    else
+                    {
+                        userMessage.PushSent = true;
+                    }
+                }
             }
         }
 
@@ -70,13 +86,20 @@ namespace API.Repositories
             return message;
         }
 
-        public async Task<IEnumerable<Message>> GetGeneralMessagesAsync()
+        public async Task<IEnumerable<Message>> GetGeneralMessagesAsync(bool withDateLimit = true)
         {
-            return await _context.Messages
+            var messages = _context.Messages
                 .Where(m => m.MessageType == MessageType.General ||
                             m.MessageType == MessageType.FreeEpisode ||
                             m.MessageType == MessageType.BuyCourse ||
-                            m.MessageType == MessageType.Coupon).ToListAsync();
+                            m.MessageType == MessageType.Coupon).AsQueryable();
+
+            if (withDateLimit)
+            {
+                messages = messages.Where(m => m.CreatedAt > DateTime.Now.AddDays(-20));
+            }
+
+            return await messages.ToListAsync();
         }
 
         public async Task<Message> GetMessageByIdAsync(int id)
@@ -84,7 +107,7 @@ namespace API.Repositories
             return await _context.Messages.FirstOrDefaultAsync(m => m.Id == id);
         }
 
-        public async Task<IEnumerable<MessageDto>> GetUserMessagesAsync(string userId, bool onlyUnseen = false)
+        public async Task<IEnumerable<MessageDto>> GetUserMessagesAsync(string userId, bool onlyUnseen = false, bool withDateLimit = true)
         {
             var userMessages = _context.UserMessages
                 .Include(um => um.Message)
@@ -93,7 +116,12 @@ namespace API.Repositories
 
             if (onlyUnseen)
             {
-                userMessages = userMessages.Where(um => !um.IsSeen);
+                userMessages = userMessages.Where(um => !um.InAppSeen);
+            }
+
+            if (withDateLimit)
+            {
+                userMessages = userMessages.Where(um => um.Message.CreatedAt > DateTime.Now.AddDays(-20)); // TODO: AddConfig
             }
 
             return await userMessages.Select(um => new MessageDto
@@ -104,11 +132,12 @@ namespace API.Repositories
                 Link = um.Message.Link,
                 UserId = um.Message.UserId,
                 CourseId = um.Message.CourseId,
-                ClockRangeBegin = um.Message.ClockRangeBegin,
-                ClockRangeEnd = um.Message.ClockRangeEnd,
+                RepeatAfterHour = um.Message.RepeatAfterHour,
                 CreatedAt = um.Message.CreatedAt,
                 IsRepeatable = um.Message.IsRepeatable,
-                IsSeen = um.IsSeen,
+                InAppSeen = um.InAppSeen,
+                PushSent = um.PushSent,
+                SMSSent = um.SMSSent,
                 MessageType = um.Message.MessageType,
                 SendPush = um.Message.SendPush,
                 SendSMS = um.Message.SendSMS
@@ -125,7 +154,26 @@ namespace API.Repositories
 
             foreach (var item in userMessages)
             {
-                messageDtos.FirstOrDefault(m => m.Id == item.MessageId).IsSeen = item.IsSeen;
+                // check datetime for repeatable messages
+                // thats crazy, i know that :|
+                bool resetProps = false;
+                if ((DateTime.Now.DayOfYear - item.Message.CreatedAt.DayOfYear) % (item.Message.RepeatAfterHour / 24) == 0 &&
+                    item.Message.CreatedAt.AddHours(item.Message.RepeatAfterHour % 24).Hour == DateTime.Now.Hour)
+                {
+                    resetProps = true;
+                }
+
+                var message = messageDtos.FirstOrDefault(m => m.Id == item.MessageId);
+                if (message.IsRepeatable && resetProps)
+                {
+                    message.InAppSeen = false;
+                    message.PushSent = false;
+                }
+                else
+                {
+                    message.InAppSeen = item.InAppSeen;
+                    message.PushSent = item.PushSent;
+                }
             }
 
             return messageDtos;

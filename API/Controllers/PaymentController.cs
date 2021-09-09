@@ -50,8 +50,10 @@ namespace API.Controllers
         }
 
         [HttpPost("payorder")]
-        public async Task<IActionResult> PayOrder([FromBody] Order order)
+        public async Task<IActionResult> PayOrder([FromQuery] int orderId)
         {
+            var order = await _orderRepository.GetOrderByIdAsync(orderId);
+
             if (order.Status)
             {
                 return BadRequest();
@@ -177,17 +179,40 @@ namespace API.Controllers
                 {
                     Title = "اعلان خرید",
                     Body = messageBody,
-                    ClockRangeBegin = DateTime.Now.Hour,
-                    ClockRangeEnd = DateTime.Now.Hour == 23 ? 23 : DateTime.Now.Hour + 1,
                     MessageType = MessageType.User,
                     IsRepeatable = false,
                     Link = "",
                     SendPush = true,
                     SendSMS = true,
+                    SendInApp = true,
                     UserId = order.UserId,
                     CreatedAt = DateTime.Now,
                     CourseId = 0,
                 };
+
+                if (message.MessageType == MessageType.User)
+                {
+                    var userMessage = new UserMessage
+                    {
+                        MessageId = message.Id,
+                        UserId = message.UserId,
+                        PushSent = false,
+                        SMSSent = false,
+                        InAppSeen = false
+                    };
+
+                    message.UserMessages.Add(userMessage);
+
+                    if (message.SendSMS)
+                    {
+                        if (user.PhoneNumberConfirmed)
+                        {
+                            _smsService.SendMessageSMS(user.PhoneNumber, message.Body);
+                        }
+
+                        userMessage.SMSSent = true;
+                    }
+                }
 
                 await _messageRepository.CreateMessageAsync(message);
                 await _unitOfWork.CompleteAsync();

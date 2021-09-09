@@ -65,17 +65,40 @@ namespace API.Controllers
                 {
                     Title = "پاسخ تیکت",
                     Body = messageBody,
-                    ClockRangeBegin = ticket.CreatedAt.AddMinutes(5).Hour,
-                    ClockRangeEnd = ticket.CreatedAt.AddHours(1).Hour,
                     MessageType = MessageType.User,
                     IsRepeatable = false,
                     Link = ticket.Id.ToString(),
                     SendPush = true,
                     SendSMS = true,
+                    SendInApp = true,
                     UserId = user.Id,
                     CreatedAt = DateTime.Now,
                     CourseId = 0,
                 };
+
+                if (message.MessageType == MessageType.User)
+                {
+                    var userMessage = new UserMessage
+                    {
+                        MessageId = message.Id,
+                        UserId = message.UserId,
+                        PushSent = false,
+                        SMSSent = false,
+                        InAppSeen = false
+                    };
+
+                    message.UserMessages.Add(userMessage);
+
+                    if (message.SendSMS)
+                    {
+                        if (user.PhoneNumberConfirmed)
+                        {
+                            _smsService.SendMessageSMS(user.PhoneNumber, message.Body);
+                        }
+
+                        userMessage.SMSSent = true;
+                    }
+                }
 
                 await _messageRepository.CreateMessageAsync(message);
 

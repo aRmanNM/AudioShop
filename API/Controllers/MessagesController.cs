@@ -53,7 +53,7 @@ namespace API.Controllers
         }
 
         [HttpGet("users/{userId}")]
-        public async Task<ActionResult<IEnumerable<MessageDto>>> GetMessagesForUser(string userId, bool onlyUnseen = false, bool onlyUserMessages = false)
+        public async Task<ActionResult<IEnumerable<MessageDto>>> GetMessagesForUser(string userId, [FromQuery] bool onlyUnseen = false, [FromQuery] bool onlyUserMessages = false, [FromQuery] bool withDateLimit = true)
         {
             // A hack to enable entering userName :|
             Guid something;
@@ -75,15 +75,25 @@ namespace API.Controllers
 
             var messages = new List<MessageDto>();
 
-            var userMessageDtos = (await _messageRepository.GetUserMessagesAsync(userId, onlyUnseen)).ToList();
+            var userMessageDtos = (await _messageRepository.GetUserMessagesAsync(userId, onlyUnseen, withDateLimit)).ToList();
+
             messages.AddRange(userMessageDtos);
 
             if (!onlyUserMessages)
             {
-                var generalMessages = await _messageRepository.GetGeneralMessagesAsync();
+                var generalMessages = await _messageRepository.GetGeneralMessagesAsync(withDateLimit);
                 var generalMessageDtos = generalMessages.Select(gm => _mapperService.MapMessageToMessageDto(gm)).ToList();
                 generalMessageDtos = (await _messageRepository.SetUserIsSeenForGeneralMessagesAsync(userId, generalMessageDtos)).ToList();
-                messages.AddRange(generalMessageDtos);
+
+                if (onlyUnseen)
+                {
+                    var filteredGeneralMessageDtos = generalMessageDtos.Where(gmd => !gmd.InAppSeen).ToList();
+                    messages.AddRange(filteredGeneralMessageDtos);
+                }
+                else
+                {
+                    messages.AddRange(generalMessageDtos);
+                }
             }
 
             messages = messages.OrderByDescending(m => m.CreatedAt).ToList();
@@ -125,20 +135,45 @@ namespace API.Controllers
         [HttpPost]
         public async Task<ActionResult<MessageDto>> CreateMessage(MessageDto messageDto)
         {
-            var message = _mapperService.MapMessageDtoToMessage(messageDto);
-            message.CreatedAt = DateTime.Now;
-            await _messageRepository.CreateMessageAsync(message);
-            await _unitOfWork.CompleteAsync();
-
-            if (message.SendSMS)
+            if (messageDto.MessageType == MessageType.User || messageDto.SendSMS)
             {
-                var user = await _userRepository.FindUserByIdAsync(message.UserId);
-                if (user.PhoneNumberConfirmed)
+                messageDto.IsRepeatable = false;
+            }
+
+            if (messageDto.MessageType != MessageType.User)
+            {
+                messageDto.SendSMS = false;
+            }
+
+            var message = _mapperService.MapMessageDtoToMessage(messageDto);
+            await _messageRepository.CreateMessageAsync(message);
+
+            if (message.MessageType == MessageType.User)
+            {
+                var userMessage = new UserMessage
                 {
-                    _smsService.SendMessageSMS(user.PhoneNumber, message.Body);
+                    MessageId = message.Id,
+                    UserId = message.UserId,
+                    PushSent = false,
+                    SMSSent = false,
+                    InAppSeen = false
+                };
+
+                message.UserMessages.Add(userMessage);
+
+                if (message.SendSMS)
+                {
+                    var user = await _userRepository.FindUserByIdAsync(message.UserId);
+                    if (user.PhoneNumberConfirmed)
+                    {
+                        _smsService.SendMessageSMS(user.PhoneNumber, message.Body);
+                    }
+
+                    userMessage.SMSSent = true;
                 }
             }
 
+            await _unitOfWork.CompleteAsync();
             return Ok(_mapperService.MapMessageToMessageDto(message));
         }
 
@@ -162,11 +197,11 @@ namespace API.Controllers
         }
 
         [HttpPut("users/{userId}")]
-        public async Task<ActionResult> SetMessageAsSeen(string userId, int messageId)
+        public async Task<ActionResult> SetMessagesStatus(MessagesSetStatusDto setStatusDto)
         {
             try
             {
-                await _messageRepository.SetUserMessageToSeen(userId, messageId);
+                await _messageRepository.SetUserMessagesStatus(setStatusDto);
                 await _unitOfWork.CompleteAsync();
             }
             catch (System.Exception)
