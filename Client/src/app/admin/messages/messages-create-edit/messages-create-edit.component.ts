@@ -33,11 +33,11 @@ export class MessagesCreateEditComponent implements OnInit {
       link: new FormControl(''),
       courseId: new FormControl(0),
       userId: new FormControl(''),
-      clockRangeBegin: new FormControl(0),
-      clockRangeEnd: new FormControl(0),
+      repeatAfterHour: new FormControl(''),
       isRepeatable: new FormControl(false),
       sendPush: new FormControl(false),
       sendSMS: new FormControl(false),
+      sendInApp: new FormControl(false),
       messageType: new FormControl('')
     }
   );
@@ -51,11 +51,11 @@ export class MessagesCreateEditComponent implements OnInit {
         link: this.data.message.link,
         courseId: this.data.message.courseId,
         userId: this.data.message.userId,
-        clockRangeBegin: this.data.message.clockRangeBegin,
-        clockRangeEnd: this.data.message.clockRangeEnd,
+        repeatAfterHour: this.data.message.repeatAfterHour,
         isRepeatable: this.data.message.isRepeatable,
         sendPush: this.data.message.sendPush,
         sendSMS: this.data.message.sendSMS,
+        sendInApp: this.data.message.sendInApp,
         messageType: this.data.message.messageType.toString()
       });
     }

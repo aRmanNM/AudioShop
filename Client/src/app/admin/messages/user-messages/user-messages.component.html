@@ -35,9 +35,9 @@
           <th mat-header-cell *matHeaderCellDef>تاریخ</th>
           <td mat-cell *matCellDef="let message"> {{message.createdAt | PersianDate}}</td>
         </ng-container>
-        <ng-container matColumnDef="clockRange">
-          <th mat-header-cell *matHeaderCellDef>محدوده ارسال نوتیف</th>
-          <td mat-cell *matCellDef="let message"> {{message.clockRangeBegin}} - {{message.clockRangeEnd}} </td>
+        <ng-container matColumnDef="repeatAfterHour">
+          <th mat-header-cell *matHeaderCellDef>بازه ساعتی ارسال</th>
+          <td mat-cell *matCellDef="let message"> {{message.repeatAfterHour}} </td>
         </ng-container>
         <ng-container matColumnDef="isRepeatable">
           <th mat-header-cell *matHeaderCellDef>تکرار</th>
@@ -58,6 +58,13 @@
           <td mat-cell *matCellDef="let course">
             <button mat-stroked-button color="primary" *ngIf="course.sendSMS">فعال</button>
             <button mat-stroked-button color="warn" *ngIf="!course.sendSMS">غیر فعال</button>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="sendInApp">
+          <th mat-header-cell *matHeaderCellDef>ارسال داخل برنامه</th>
+          <td mat-cell *matCellDef="let course">
+            <button mat-stroked-button color="primary" *ngIf="course.sendInApp">فعال</button>
+            <button mat-stroked-button color="warn" *ngIf="!course.sendInApp">غیر فعال</button>
           </td>
         </ng-container>
         <ng-container matColumnDef="actions">

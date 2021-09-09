@@ -30,12 +30,8 @@
         </mat-form-field>
         <div class="form-group">
           <mat-form-field appearance="fill">
-            <mat-label>محدوده ارسال اعلان (شروع)</mat-label>
-            <input matInput type="number" formControlName="clockRangeBegin" min="0" max="24"/>
-          </mat-form-field>
-          <mat-form-field appearance="fill">
-            <mat-label>محدوده ارسال اعلان (پایان)</mat-label>
-            <input matInput type="number" formControlName="clockRangeEnd" min="0" max="24"/>
+            <mat-label>بازه ساعتی ارسال</mat-label>
+            <input matInput type="number" formControlName="repeatAfterHour" min="24"/>
           </mat-form-field>
         </div>
         <mat-form-field appearance="fill">
@@ -51,7 +47,8 @@
         <div class="form-group">
           <mat-slide-toggle [disabled]="messageForm.value.messageType != 1" class="mt-2 mb-3" formControlName="sendSMS">اس ام اس (ارسال بعد از ساخت)</mat-slide-toggle>
           <mat-slide-toggle class="mt-2 mb-3" formControlName="sendPush">ارسال پوش</mat-slide-toggle>
-          <mat-slide-toggle hidden class="mt-2 mb-3" formControlName="isRepeatable">تکرارپذیری</mat-slide-toggle>
+          <mat-slide-toggle class="mt-2 mb-3" formControlName="sendInApp">ارسال داخل برنامه</mat-slide-toggle>
+          <mat-slide-toggle class="mt-2 mb-3" formControlName="isRepeatable">تکرارپذیری</mat-slide-toggle>
         </div>
         <button
           mat-raised-button

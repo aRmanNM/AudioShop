@@ -5,12 +5,11 @@ export interface Message {
   link: string;
   courseId: number;
   userId: string;
-  clockRangeBegin: number;
-  clockRangeEnd: number;
+  repeatAfterHour: number;
   isRepeatable: boolean;
   createdAt: Date;
   sendSMS: boolean;
   sendPush: boolean;
+  sendInApp: boolean;
   messageType: number;
-  isSeen: boolean;
 }

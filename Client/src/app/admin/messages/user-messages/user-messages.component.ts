@@ -11,7 +11,7 @@ import {SpinnerService} from '../../../services/spinner.service';
 export class UserMessagesComponent implements OnInit {
   userId: string;
   messages: any[] = [];
-  columnsToDisplay = ['id', 'title', 'messageType', 'date', 'clockRange', 'sendPush', 'sendSMS'];
+  columnsToDisplay = ['id', 'title', 'messageType', 'date', 'sendPush', 'sendSMS', 'sendInApp'];
 
   constructor(private messageService: MessageService,
               private snackBar: MatSnackBar,

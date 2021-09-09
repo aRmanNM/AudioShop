@@ -22,8 +22,9 @@
       <button mat-stroked-button color="primary" *ngIf="user.gender == 2">مذکر</button>
     </p>
     <p>وضعیت اشتغال
-      <button mat-stroked-button color="primary" *ngIf="user.employed">شاغل</button>
-      <button mat-stroked-button color="primary" *ngIf="!user.employed">غیرشاغل</button>
+      <button mat-stroked-button color="primary" *ngIf="user.employed == 0">نامشخص</button>
+      <button mat-stroked-button color="primary" *ngIf="user.employed == 1">شاغل</button>
+      <button mat-stroked-button color="primary" *ngIf="user.employed == 2">بدون شغل</button>
     </p>
     <p>تاریخ ثبت: {{user.createdAt | PersianDate:false}}</p>
 
