@@ -28,11 +28,12 @@ namespace API.Services
             {
                 serialized = JsonConvert.SerializeObject(new
                 {
-                    merchantId = requestDto.MerchantId,
+                    merchant_id = requestDto.MerchantId,
                     amount = requestDto.Amount,
                     callback_url = requestDto.CallbackUrl,
                     description = requestDto.Description,
-                    metadata = new { mobile = requestDto.Mobile, email = requestDto.Email }
+                    mobile = requestDto.Mobile ?? "",
+                    email = requestDto.Email ?? ""
                 });
             }
             else
