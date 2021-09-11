@@ -33,7 +33,7 @@ export class MessagesCreateEditComponent implements OnInit {
       link: new FormControl(''),
       courseId: new FormControl(0),
       userId: new FormControl(''),
-      repeatAfterHour: new FormControl(''),
+      repeatAfterHour: new FormControl(24),
       isRepeatable: new FormControl(false),
       sendPush: new FormControl(false),
       sendSMS: new FormControl(false),
@@ -70,7 +70,6 @@ export class MessagesCreateEditComponent implements OnInit {
       if (message.messageType == 1) {
         message.isRepeatable = false;
       }
-      console.log('message', message);
       this.messageService.editMessage(message).subscribe((res) => {
         this.snackBar.open('ویرایش اعلان موفقیت آمیز بود', null, {
           duration: 2000,
@@ -90,7 +89,6 @@ export class MessagesCreateEditComponent implements OnInit {
       if (message.messageType == 1) {
         message.isRepeatable = false;
       }
-      console.log('message', message);
       this.messageService.createMessage(message).subscribe((res) => {
         this.snackBar.open('اعلان جدید با موفقیت ایجاد شد', null, {
           duration: 2000,

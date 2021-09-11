@@ -146,24 +146,36 @@ namespace API.Repositories
 
         public async Task<IEnumerable<MessageDto>> SetUserIsSeenForGeneralMessagesAsync(string userId, IEnumerable<MessageDto> messageDtos)
         {
+            // this method recieves all general messages
+            // and updates their flags based on userMessages table values,
+            // then returns them
             var messageIds = messageDtos.Select(m => m.Id).ToList();
             var userMessages = await _context.UserMessages
+                .Include(um => um.Message)
                 .Where(um => messageIds.Any(mi => mi == um.MessageId) && um.UserId == userId)
                 .AsNoTracking()
                 .ToListAsync();
 
+            if (!userMessages.Any())
+            {
+                return messageDtos;
+            }
+
+            bool resetProps;
+            MessageDto message;
             foreach (var item in userMessages)
             {
-                // check datetime for repeatable messages
-                // thats crazy, i know that :|
-                bool resetProps = false;
+                // logic for repeatable messages
+                // bu calculating days and hours of repeatAfterHour property
+                // and comparing ith with today's info and message creation date
+                resetProps = false;
                 if ((DateTime.Now.DayOfYear - item.Message.CreatedAt.DayOfYear) % (item.Message.RepeatAfterHour / 24) == 0 &&
                     item.Message.CreatedAt.AddHours(item.Message.RepeatAfterHour % 24).Hour == DateTime.Now.Hour)
-                {
+                {   
                     resetProps = true;
                 }
 
-                var message = messageDtos.FirstOrDefault(m => m.Id == item.MessageId);
+                message = messageDtos.FirstOrDefault(m => m.Id == item.MessageId);
                 if (message.IsRepeatable && resetProps)
                 {
                     message.InAppSeen = false;
