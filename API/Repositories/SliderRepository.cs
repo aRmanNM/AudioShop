@@ -31,6 +31,7 @@ namespace API.Repositories
         {
             return await _context.SliderItems
                 .Include(si => si.Photo)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(s => s.Id == sliderId);
         }
 
@@ -38,6 +39,7 @@ namespace API.Repositories
         {
             return await _context.SliderItems
                 .Include(s => s.Photo)
+                .AsNoTracking()
                 .ToArrayAsync();
         }
 
