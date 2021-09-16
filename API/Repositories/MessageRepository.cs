@@ -99,7 +99,7 @@ namespace API.Repositories
                 messages = messages.Where(m => m.CreatedAt > DateTime.Now.AddDays(-20));
             }
 
-            return await messages.ToListAsync();
+            return await messages.AsNoTracking().ToListAsync();
         }
 
         public async Task<Message> GetMessageByIdAsync(int id)
@@ -140,8 +140,11 @@ namespace API.Repositories
                 SMSSent = um.SMSSent,
                 MessageType = um.Message.MessageType,
                 SendPush = um.Message.SendPush,
-                SendSMS = um.Message.SendSMS
-            }).ToListAsync();
+                SendSMS = um.Message.SendSMS,
+                SendInApp = um.Message.SendInApp
+            })
+            .AsNoTracking()
+            .ToListAsync();
         }
 
         public async Task<IEnumerable<MessageDto>> SetUserIsSeenForGeneralMessagesAsync(string userId, IEnumerable<MessageDto> messageDtos)
@@ -165,20 +168,24 @@ namespace API.Repositories
             MessageDto message;
             foreach (var item in userMessages)
             {
-                // logic for repeatable messages
-                // bu calculating days and hours of repeatAfterHour property
-                // and comparing ith with today's info and message creation date
+                message = messageDtos.FirstOrDefault(m => m.Id == item.MessageId);
                 resetProps = false;
-                if ((DateTime.Now.DayOfYear - item.Message.CreatedAt.DayOfYear) % (item.Message.RepeatAfterHour / 24) == 0 &&
-                    item.Message.CreatedAt.AddHours(item.Message.RepeatAfterHour % 24).Hour == DateTime.Now.Hour)
-                {   
-                    resetProps = true;
+
+                if (message.IsRepeatable)
+                {
+                    // logic for repeatable messages:
+                    // calculating days and hours of repeatAfterHour property
+                    // and comparing with today's info and message creation date
+                    if ((DateTime.Now.DayOfYear - item.Message.CreatedAt.DayOfYear) % (item.Message.RepeatAfterHour / 24) == 0 &&
+                        item.Message.CreatedAt.AddHours(item.Message.RepeatAfterHour % 24).Hour == DateTime.Now.Hour)
+                    {
+                        resetProps = true;
+                    }
                 }
 
-                message = messageDtos.FirstOrDefault(m => m.Id == item.MessageId);
-                if (message.IsRepeatable && resetProps)
+                if (resetProps)
                 {
-                    message.InAppSeen = false;
+                    message.InAppSeen = item.InAppSeen; // in app messages is not populated by job
                     message.PushSent = false;
                 }
                 else

@@ -11,6 +11,7 @@ using API.Models.Messages;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace API.Controllers
 {
@@ -25,6 +26,7 @@ namespace API.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly ISMSService _smsService;
         private readonly IUserRepository _userRepository;
+        private readonly ILogger<MessagesController> _logger;
 
         public MessagesController(IMessageRepository messageRepository,
             IMapperService mapperService,
@@ -32,13 +34,15 @@ namespace API.Controllers
             IProgressRepository progressRepository,
             IUnitOfWork unitOfWork,
             ISMSService smsService,
-            IUserRepository userRepository)
+            IUserRepository userRepository,
+            ILogger<MessagesController> logger)
         {
             _courseRepository = courseRepository;
             _progressRepository = progressRepository;
             _unitOfWork = unitOfWork;
             _smsService = smsService;
             _userRepository = userRepository;
+            _logger = logger;
             _messageRepository = messageRepository;
             _mapperService = mapperService;
         }
@@ -128,6 +132,7 @@ namespace API.Controllers
                 }
             }
 
+            // _logger.LogInformation("messages requested for user {userId} at {datetime}", userId, DateTime.Now);
             return Ok(messages);
         }
 
@@ -135,6 +140,11 @@ namespace API.Controllers
         [HttpPost]
         public async Task<ActionResult<MessageDto>> CreateMessage(MessageDto messageDto)
         {
+            if (messageDto.RepeatAfterHour < 24)
+            {
+                messageDto.RepeatAfterHour = 24;
+            }
+
             if (messageDto.MessageType == MessageType.User || messageDto.SendSMS)
             {
                 messageDto.IsRepeatable = false;
@@ -203,6 +213,22 @@ namespace API.Controllers
             {
                 await _messageRepository.SetUserMessagesStatus(setStatusDto);
                 await _unitOfWork.CompleteAsync();
+
+                // string statusToSet = "";
+                // if (setStatusDto.MessageIdsForInAppStatus.Any())
+                // {
+                //     statusToSet = "InApp messages status";
+                // }
+                // else if (setStatusDto.MessageIdsForPushStatus.Any())
+                // {
+                //     statusToSet = "Push messages status";
+                // }
+                // else
+                // {
+                //     statusToSet = "Nothing";
+                // }
+
+                // _logger.LogInformation("{status} updated for user {userId} at {datetime}", statusToSet, setStatusDto.UserId, DateTime.Now);
             }
             catch (System.Exception)
             {
