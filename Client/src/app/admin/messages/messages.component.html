@@ -43,6 +43,13 @@
         <span *ngIf="!message.isRepeatable">-</span>
       </td>
     </ng-container>
+    <ng-container matColumnDef="createdAt">
+      <th mat-header-cell *matHeaderCellDef>تاریخ</th>
+      <td mat-cell *matCellDef="let message">
+        <span *ngIf="message.isRepeatable">{{message.createdAt | PersianDate}}</span>
+        <span *ngIf="!message.isRepeatable">{{message.createdAt | PersianDate}}</span>
+      </td>
+    </ng-container>
     <ng-container matColumnDef="isRepeatable">
       <th mat-header-cell *matHeaderCellDef>تکرار</th>
       <td mat-cell *matCellDef="let message">

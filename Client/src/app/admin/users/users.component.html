@@ -49,5 +49,10 @@
       <button mat-stroked-button color="primary" *ngIf="user.userType == 2">سایر</button>
     </p>
     <p>شناسه کاربر: {{user.id}}</p>
+    <p>شماره تماس: {{user.phoneNumber}}</p>
+    <p>تایید شماره تماس:
+      <button mat-stroked-button color="primary" *ngIf="user.phoneNumberConfirmed">تایید شده</button>
+      <button mat-stroked-button color="warn" *ngIf="!user.phoneNumberConfirmed">عدم تایید</button>
+    </p>
   </mat-card-content>
 </mat-card>
