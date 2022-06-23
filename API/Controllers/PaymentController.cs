@@ -92,7 +92,7 @@ namespace API.Controllers
                HttpContext.Request.Query["Authority"] != "")
             {
 
-                var isDev = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
+                var isDev = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Demo";
 
                 var authority = HttpContext.Request.Query["Authority"].ToString();
                 var order = await _orderRepository.GetOrderByIdAsync(orderId);

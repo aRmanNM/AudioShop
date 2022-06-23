@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://star-show.ir/'
+  apiUrl: 'https://audioshop-demo.herokuapp.com/'
 };

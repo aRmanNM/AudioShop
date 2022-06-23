@@ -72,8 +72,7 @@ namespace API
             services.Configure<PhotoOptions>(_config.GetSection("PhotoOptions"));
             services.Configure<AudioOptions>(_config.GetSection("AudioOptions"));
 
-            services.AddDbContext<StoreContext>(x =>
-                x.UseSqlServer(_config.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<StoreContext>(x => x.UseInMemoryDatabase("StoreDb"));
 
             services.AddIdentityCore<User>(opt =>
             {
@@ -109,6 +108,8 @@ namespace API
                     builder.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod(); // FOR LOCAL CLIENT DEVELOPMENT ONLY!
                 });
             });
+
+            services.AddSwaggerGen();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -116,6 +117,9 @@ namespace API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+
+                app.UseSwagger();
+                app.UseSwaggerUI();
             }
 
             app.UseHttpsRedirection();
