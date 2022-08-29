@@ -122,7 +122,7 @@ namespace API
                 app.UseSwaggerUI();
             }
 
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
             app.UseRouting();
 
             var provider = new FileExtensionContentTypeProvider();

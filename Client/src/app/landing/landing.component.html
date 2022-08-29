@@ -4,13 +4,24 @@
   </button>
 </mat-toolbar>
 <mat-drawer-container [dir]="'rtl'">
-  <mat-drawer [opened]="opened" #drawer mode="over"
-              [ngClass]="{sidenav: !mobileQuery.matches,'sidenav-mobile': mobileQuery.matches}">
-    <div class="h-100 d-flex flex-column justify-content-center align-items-center">
-      <h3>در شبکه های اجتماعی</h3>
-      <h4>همراه ما باشید</h4>
-      <a href="https://instagram.com/starshow_ir?utm_medium=copy_link">
-        <img class="social-icon" src="../../assets/instagram.png" alt="">
+  <mat-drawer
+    [opened]="opened"
+    #drawer
+    mode="over"
+    [ngClass]="{
+      sidenav: !mobileQuery.matches,
+      'sidenav-mobile': mobileQuery.matches
+    }"
+  >
+    <div
+      class="h-100 d-flex flex-column justify-content-center align-items-center"
+    >
+      <a href="https://github.com/armannm">
+        <img
+          class="social-icon"
+          src="../../assets/github.png"
+          alt="github icon"
+        />
       </a>
     </div>
   </mat-drawer>
@@ -19,23 +30,33 @@
       <div class="row">
         <div class="col-sm buttons-half centered">
           <div class="titles d-flex d-lg-none">
-            <img src="assets/logo.webp">
-            <h4>اِستار شو ... اپلیکیشن مهارت های ارتباطی</h4>
-            <h3>با اِستار شو ستاره شو</h3>
+            <img src="assets/logo.png" />
+            <h4>دموی پروژه ادمین پنل</h4>
+            <h5>
+              بخشی از فرآیند های داشبورد در محیط دمو قابل استفاده نمی باشند
+            </h5>
           </div>
           <div class="buttons">
             <mat-card [dir]="'rtl'">
               <mat-card-content>
-                <a class="dl-link" target="_blank" mat-raised-button href="{{latest}}">دانلود آخرین نسخه نرم افزار</a>
-                <a class="sales-link" mat-flat-button [routerLink]="['/login']">همکاری در فروش</a>
+                <a
+                  class="dl-link"
+                  target="_blank"
+                  mat-raised-button
+                  href="{{ latest }}"
+                  >دانلود آخرین نسخه نرم افزار</a
+                >
+                <a class="sales-link" mat-flat-button [routerLink]="['/login']"
+                  >ورود به سیستم</a
+                >
               </mat-card-content>
             </mat-card>
           </div>
         </div>
         <div class="col-sm logo-half centered d-none d-lg-flex">
-          <img src="assets/logo.webp">
-          <h4>اِستار شو ... اپلیکیشن مهارت های ارتباطی</h4>
-          <h3>با اِستار شو ستاره شو</h3>
+          <img src="assets/logo.png" />
+          <h4>دموی پروژه ادمین پنل</h4>
+          <h5>بخشی از فرآیند های داشبورد در محیط دمو قابل استفاده نمی باشند</h5>
         </div>
       </div>
     </div>

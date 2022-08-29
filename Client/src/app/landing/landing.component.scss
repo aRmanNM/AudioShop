@@ -1,8 +1,13 @@
-h4, h3 {
-  font-weight: 900;
+h4, h5 {
+  font-weight: 800;
   margin-bottom: 0.7em;
   text-align: center;
-  color: #593286;
+  // color: #593286;
+  color: black;
+}
+
+h5 {
+  color: grey ;
 }
 
 .support {
@@ -20,7 +25,7 @@ h4, h3 {
 }
 
 .buttons-half {
-  background: #A148E4;
+  background: grey;
   margin: 0px;
   padding: 0px;
 
@@ -60,7 +65,7 @@ h4, h3 {
     }
 
     .buttons {
-      background: #A148E4;
+      background: gray;
       height: 30%;
       display: flex;
       justify-content: center;
@@ -101,11 +106,11 @@ mat-card-content {
   }
 
   .dl-link {
-    background: #5935B3;
+    background: gray;
   }
 
   .sales-link {
-    background: #522C85;
+    background: black;
   }
 }
 

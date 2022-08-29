@@ -15,8 +15,8 @@ export class LoginComponent implements OnInit {
   error: string;
 
   loginForm = new FormGroup({
-    userName: new FormControl('', [Validators.required, Validators.maxLength(40)]),
-    password: new FormControl('', [Validators.required, Validators.maxLength(40)]),
+    userName: new FormControl('admin', [Validators.required, Validators.maxLength(40)]),
+    password: new FormControl('12345678910', [Validators.required, Validators.maxLength(40)]),
   });
 
   constructor(private authService: AuthService,
