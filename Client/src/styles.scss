@@ -1,6 +1,9 @@
 @import '~@angular/material/theming';
+@import url(../src/assets/landings/css/font.scss);
+@import url(../src/assets/bootstrap.min.css);
+
 $custom-typography: mat-typography-config(
-  $font-family: 'Sahel',
+  $font-family: iranyekan,
   $headline: mat-typography-level(32px, 48px, 700),
   $body-1: mat-typography-level(16px, 24px, 500)
 );
@@ -13,7 +16,7 @@ html, body {
 
 body {
   margin: 0;
-  font-family: Sahel;
+  font-family: iranyekan;
 }
 
 .spacer {

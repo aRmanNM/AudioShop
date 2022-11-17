@@ -1,4 +1,4 @@
-FROM node:lts-slim as node-build-env
+FROM node:16-slim as node-build-env
 WORKDIR /app
 
 COPY /Client/package.json /Client/package-lock.json ./
@@ -9,7 +9,7 @@ RUN npm config set fetch-retry-maxtimeout 120000
 RUN npm install
 
 COPY /Client/ ./
-RUN npm run build --prod
+RUN npm run build -- --prod
 
 FROM mcr.microsoft.com/dotnet/sdk:3.1 as dotnet-build-env
 WORKDIR /app
