@@ -95,7 +95,7 @@ namespace API.Repositories
                     Reviews = c.Reviews,
                     Visits = c.Visits,
                     Instructor = c.Instructor,
-                    AverageScore = c.Reviews.Select(r => (double?)r.Rating).Average(), // TODO: find a better solution.
+                    AverageScore = c.Reviews.Any() ? c.Reviews.Average(r => r.Rating) : 0, // TODO: find a better solution.
                     CourseCategories = c.CourseCategories.Select(cc => new CourseCategory { CourseId = cc.CourseId, Category = cc.Category, CategoryId = cc.Category.Id }).ToList(),
                     CourseType = c.CourseType,
                     IsFeatured = c.IsFeatured
@@ -137,7 +137,7 @@ namespace API.Repositories
                         Reviews = c.Reviews,
                         Visits = c.Visits,
                         Instructor = c.Instructor,
-                        AverageScore = c.Reviews.Select(r => (double?)r.Rating).Average(), // TODO: find a better solution.
+                        AverageScore = c.Reviews.Any() ? c.Reviews.Average(r => r.Rating) : 0, // TODO: find a better solution.
                         CourseCategories = c.CourseCategories.Select(cc => new CourseCategory { CourseId = cc.CourseId, Category = cc.Category, CategoryId = cc.Category.Id }).ToList(),
                         CourseType = c.CourseType,
                         IsFeatured = c.IsFeatured
@@ -172,7 +172,7 @@ namespace API.Repositories
                     Photo = c.Photo,
                     Reviews = c.Reviews,
                     Instructor = c.Instructor,
-                    AverageScore = c.Reviews.Select(r => (double?)r.Rating).Average(), // TODO: find a better solution.
+                    AverageScore = c.Reviews.Any() ? c.Reviews.Average(r => r.Rating) : 0, // TODO: find a better solution.
                     CourseCategories = c.CourseCategories.Select(cc => new CourseCategory { CourseId = cc.CourseId, Category = cc.Category, CategoryId = cc.Category.Id }).ToList(),
                     CourseType = c.CourseType,
                     IsFeatured = c.IsFeatured
@@ -202,7 +202,7 @@ namespace API.Repositories
                     Photo = c.Photo,
                     Reviews = c.Reviews,
                     Instructor = c.Instructor,
-                    AverageScore = c.Reviews.Select(r => (double?)r.Rating).Average(), // TODO: find a better solution.
+                    AverageScore = c.Reviews.Any() ? c.Reviews.Average(r => r.Rating) : 0, // TODO: find a better solution.
                     CourseCategories = c.CourseCategories.Select(cc => new CourseCategory { CourseId = cc.CourseId, Category = cc.Category, CategoryId = cc.Category.Id }).ToList(),
                     CourseType = c.CourseType,
                     IsFeatured = c.IsFeatured
