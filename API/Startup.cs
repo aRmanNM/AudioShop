@@ -72,7 +72,8 @@ namespace API
             services.Configure<PhotoOptions>(_config.GetSection("PhotoOptions"));
             services.Configure<AudioOptions>(_config.GetSection("AudioOptions"));
 
-            services.AddDbContext<StoreContext>(x => x.UseInMemoryDatabase("StoreDb"));
+            // services.AddDbContext<StoreContext>(x => x.UseInMemoryDatabase("StoreDb"));
+            services.AddDbContext<StoreContext>(x => x.UseSqlite(_config.GetConnectionString("Sqlite")));
 
             services.AddIdentityCore<User>(opt =>
             {
