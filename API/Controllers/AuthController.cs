@@ -25,8 +25,6 @@ namespace API.Controllers
         private readonly ICouponRepository _couponRepository;
         private readonly IUserRepository _userRepository;
         private readonly IConfiguration _config;
-        private readonly IStatRepository _statRepository;
-        private readonly IUnitOfWork _unitOfWork;
 
         public AuthController(UserManager<User> userManager,
             SignInManager<User> signInManager,
@@ -35,17 +33,13 @@ namespace API.Controllers
             IConfigRepository configRepository,
             ICouponRepository couponRepository,
             IUserRepository userRepository,
-            IConfiguration config,
-            IStatRepository statRepository,
-            IUnitOfWork unitOfWork)
+            IConfiguration config)
         {
             _smsService = smsService;
             _configRepository = configRepository;
             _couponRepository = couponRepository;
             _userRepository = userRepository;
             _config = config;
-            _statRepository = statRepository;
-            _unitOfWork = unitOfWork;
             _signInManager = signInManager;
             _mapper = mapper;
             _userManager = userManager;
@@ -159,10 +153,6 @@ namespace API.Controllers
                 if (result.IsLockedOut) return Unauthorized("account locked");
                 if (!result.Succeeded) return Unauthorized("not authorized");
                 var userDto = await _mapper.MapUserToUserDtoAsync(user);
-
-                await _statRepository.SetStatByCode(StatName.AppFirstPage);
-                await _unitOfWork.CompleteAsync();
-
                 return Ok(userDto);
             }
         }
