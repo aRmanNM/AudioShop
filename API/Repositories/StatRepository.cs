@@ -181,17 +181,19 @@ namespace API.Repositories
                 new Stat {
                     TitleEn = "TotalFailedOrdersSum",
                     TitleFa = "مجموع کل پرداخت های ناموفق",
-                    Counter = (int)(await _context.Orders.Where(o => !o.Status).SumAsync(o => o.PriceToPay))
+                    Counter = (int)(_context.Orders.Where(o => !o.Status)
+                        .Select(o => o.PriceToPay).ToList().Sum())
                 },
                 new Stat {
                     TitleEn = "TotalSuccessfulOrdersCount",
                     TitleFa = "تعداد کل پرداخت های موفق",
-                    Counter = await _context.Orders.Where(o => o.Status).CountAsync()
+                    Counter = _context.Orders.Where(o => o.Status).Count()
                 },
                 new Stat {
                     TitleEn = "TotalSuccessfulOrdersSum",
                     TitleFa = "مجموع کل پرداخت های موفق",
-                    Counter = (int)(await _context.Orders.Where(o => o.Status).SumAsync(o => o.PriceToPay))
+                    Counter = (int)(_context.Orders.Where(o => o.Status)
+                        .Select(o => o.PriceToPay).ToList().Sum())
                 }
             });
 
